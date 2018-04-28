@@ -1,0 +1,53 @@
+exports.run = (client, message, args) => {
+    const Discord = require("discord.js");
+    const apikey = require("./../config.json");
+    const request = require('request');
+    var usrid = message.author.id;
+        if(args.length > 0){
+            usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
+        };
+    client.fetchUser(usrid).then((user) => {
+                 
+            request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body) {
+            if (err) return;
+            const data = JSON.parse(body);
+            var xpBoostpercent = Math.floor(data.attributes.xpBoost / 10);
+            var goldBoostpercent = Math.floor(data.attributes.goldBoost / 10);
+            var trapdate = new Date(data.trap.time);
+            var playdate = Math.floor((new Date()-data.lastseen)/60000);
+            var trapelapsed = Math.round((new Date()-data.trap.time)/86400000);
+            var donator = data.donate ? `Yes` : `No` 
+                const embed = new Discord.RichEmbed()
+                .setTitle(data.name + "'s DRPG Info")
+                .setAuthor(message.author.username,message.author.avatarURL)
+                .setColor(0x00AE86)
+                .setDescription(`Donator - ${donator}\nLast seen ${playdate} mins ago.\nCurrently In ${data.location.current}`)
+                .addField(`Level - ${data.level}`,`Kills - ${data.kills} | Deaths - ${data.deaths}\nXP - ${data.xp} | XPBoost - ${xpBoostpercent}%`,false)
+                .addField(`Gold - ${data.gold}`,`Lux - ${data.lux} | Gold Boost  - ${goldBoostpercent}%`,false)
+                .addField(`Skills`,`Chop - Lvl.${data.skills.chop.level} / Fish - Lvl.${data.skills.fish.level} / Forage - Lvl.${data.skills.forage.level} / Mine - Lvl.${data.skills.mine.level}`,false)
+                .addField(`Pet - ${data.pet.name} | ${data.pet.type}`,`Level - ${data.pet.level} | Damage - ${data.pet.damage.min}-${data.pet.damage.max}\nXP - ${data.pet.xp} | XPRate - ${data.pet.xprate}%`,false)
+                .addField(`Trap Info - Set ${trapelapsed} Days Ago`,`Trap Set - ${trapdate}`,false)
+                .addField(`Quest Completed - ${data.questPoints}`,`${data.quest.completed.join(`, `)}`,false)
+                message.channel.send({embed})
+                
+        }) 
+    }).catch(err => {
+        message.reply("Error you must enter a valid UserID or User Mention")
+        })
+    };    
+    
+    
+    
+    
+        
+    
+
+
+
+     
+    
+    //message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
+     
+
+
+    
