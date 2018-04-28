@@ -1,0 +1,28 @@
+{
+  "name": "aldebaran",
+  "version": "1.0.0",
+  "description": "Utility",
+  "main": "bot.js",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "git": "^0.1.5",
+    "node.js": "^0.0.0",
+    "request": "^2.85.0",
+    "superagent": "^3.8.2",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "&ping"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nightmare2112/Aldebaran.git"
+  },
+  "author": "Nightmare1234",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nightmare2112/Aldebaran/issues"
+  },
+  "homepage": "https://github.com/Nightmare2112/Aldebaran#readme"
+}
