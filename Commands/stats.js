@@ -16,14 +16,19 @@ exports.run = (client, message, args) => {
             var trapdate = new Date(data.trap.time);
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
             var trapelapsed = Math.round((new Date()-data.trap.time)/86400000);
-            var donator = data.donate ? `Yes` : `No` 
+            var donator = data.donate ? `Yes` : `No`
+            var lux = data.lux
+            if (data.lux == undefined){
+             lux = 0
+            };
+            
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s DRPG Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
                 .setDescription(`Donator - ${donator}\nLast seen ${playdate} mins ago.\nCurrently In ${data.location.current}`)
                 .addField(`Level - ${data.level}`,`Kills - ${data.kills} | Deaths - ${data.deaths}\nXP - ${data.xp} | XPBoost - ${xpBoostpercent}%`,false)
-                .addField(`Gold - ${data.gold}`,`Lux - ${data.lux} | Gold Boost  - ${goldBoostpercent}%`,false)
+                .addField(`Gold - ${data.gold}`,`Lux - ${lux} | Gold Boost  - ${goldBoostpercent}%`,false)
                 .addField(`Skills`,`Chop - Lvl.${data.skills.chop.level} / Fish - Lvl.${data.skills.fish.level} / Forage - Lvl.${data.skills.forage.level} / Mine - Lvl.${data.skills.mine.level}`,false)
                 .addField(`Pet - ${data.pet.name} | ${data.pet.type}`,`Level - ${data.pet.level} | Damage - ${data.pet.damage.min}-${data.pet.damage.max}\nXP - ${data.pet.xp} | XPRate - ${data.pet.xprate}%`,false)
                 if (data.quest !== ''){

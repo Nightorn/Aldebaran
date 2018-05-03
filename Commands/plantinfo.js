@@ -25,12 +25,12 @@ exports.run = (client, message, args) => {
                         var plantdate = `Not yet planted`
                         if (value !== null){
 
-                        var plantdate = new Date(value.time);
-                        var planttime = Math.round((new Date()-value.time)/86400000);
-                        var plantid = value.id 
+                         plantdate = new Date(value.time);
+                         planttime = Math.round((new Date()-value.time)/86400000);
+                         var plantid = value.id 
                             for (var i = 0; i < itemlist.length; i++){
                                 if (itemlist[i].id == value.id){
-                                var plantname = itemlist[i].name  
+                                 plantname = itemlist[i].name  
                                 }
                             }
                         };    
