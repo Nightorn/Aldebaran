@@ -20,6 +20,11 @@ exports.run = (client, message, args) => {
                 .setColor(0x00AE86)
                 .setDescription(`Don't forget to water them!!`)
                     for (let [key, value] of Object.entries(data.location.saplings)){
+                        var planttime = 0
+                        var plantname = `Nothting`
+                        var plantdate = `Not yet planted`
+                        if (value !== null){
+
                         var plantdate = new Date(value.time);
                         var planttime = Math.round((new Date()-value.time)/86400000);
                         var plantid = value.id 
@@ -28,7 +33,7 @@ exports.run = (client, message, args) => {
                                 var plantname = itemlist[i].name  
                                 }
                             }
-
+                        };    
 
                         embed.addField(`__${key} - Set ${planttime} days ago.__`,`Seed Planted: **${plantname}**\nPlanted Since: ${plantdate}`,false);
                     
