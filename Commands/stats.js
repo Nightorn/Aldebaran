@@ -26,7 +26,9 @@ exports.run = (client, message, args) => {
                 .addField(`Gold - ${data.gold}`,`Lux - ${data.lux} | Gold Boost  - ${goldBoostpercent}%`,false)
                 .addField(`Skills`,`Chop - Lvl.${data.skills.chop.level} / Fish - Lvl.${data.skills.fish.level} / Forage - Lvl.${data.skills.forage.level} / Mine - Lvl.${data.skills.mine.level}`,false)
                 .addField(`Pet - ${data.pet.name} | ${data.pet.type}`,`Level - ${data.pet.level} | Damage - ${data.pet.damage.min}-${data.pet.damage.max}\nXP - ${data.pet.xp} | XPRate - ${data.pet.xprate}%`,false)
-                .addField(`Quest Completed - ${data.questPoints}`,`${data.quest.completed.join(`, `)}`,false)
+                if (data.quest !== ''){
+                embed.addField(`Quest Completed - ${data.questPoints}`,`${data.quest.completed.join(`, `)}`,false)
+            };
                 message.channel.send({embed})
                 
         }) 
