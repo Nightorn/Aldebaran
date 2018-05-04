@@ -13,9 +13,7 @@ exports.run = (client, message, args) => {
             const data = JSON.parse(body);
             var xpBoostpercent = Math.floor(data.attributes.xpBoost / 10);
             var goldBoostpercent = Math.floor(data.attributes.goldBoost / 10);
-            var trapdate = new Date(data.trap.time);
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
-            var trapelapsed = Math.round((new Date()-data.trap.time)/86400000);
             var donator = data.donate ? `Yes` : `No`
             var lux = data.lux
             if (data.lux == undefined){
