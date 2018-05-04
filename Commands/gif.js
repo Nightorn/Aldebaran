@@ -6,6 +6,7 @@ exports.run = (client, message, args) => {
     headers: {} }, function(err, response, body) {
         if (err) return;
         const gifdata = JSON.parse(body);
+        
         message.channel.send({embed:{
             author:{
             name: message.author.username,
@@ -21,8 +22,8 @@ exports.run = (client, message, args) => {
             timestamp: new Date()
             
         }})
-
-    })
+            
+    });
     
         
     };
