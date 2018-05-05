@@ -11,12 +11,14 @@ exports.run = (client, message, args) => {
                  
             request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body) {
             if (err) return;
-            const data = JSON.parse(body);            
+            const data = JSON.parse(body);
+            if (data.location.saplings === undefined)return message.channel.send(`**Error** No Purchased Fields Found`);            
             const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s Planting Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
                 .setDescription(`**Please note all infomation about amounts are strictly estimates!!**`)
+                
                     for (let [key, value] of Object.entries(data.location.saplings)){
                         var planttime = 0
                         var checktime = 0
