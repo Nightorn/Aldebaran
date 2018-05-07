@@ -15,11 +15,10 @@ exports.run = (client, message, args) => {
             var goldBoostpercent = Math.floor(data.attributes.goldBoost / 10);
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
             var donator = data.donate ? `Yes` : `No`
-            var lux = data.lux
-            if (data.lux == undefined){
-             lux = 0
-            };
-            
+            var completedquest = (data.quest.completed == undefined) ? `None`: data.quest.completed.join(`, `)
+            var questpoints = (data.questPoints == undefined) ? `0`: data.questPoints
+           var lux = (data.lux == undefined) ? `0` : data.lux
+          
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s DRPG Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
@@ -30,7 +29,7 @@ exports.run = (client, message, args) => {
                 .addField(`Skills`,`Chop - Lvl.${data.skills.chop.level} / Fish - Lvl.${data.skills.fish.level} / Forage - Lvl.${data.skills.forage.level} / Mine - Lvl.${data.skills.mine.level}`,false)
                 .addField(`Pet - ${data.pet.name} | ${data.pet.type}`,`Level - ${data.pet.level} | Damage - ${data.pet.damage.min}-${data.pet.damage.max}\nXP - ${data.pet.xp} | XPRate - ${data.pet.xprate}%`,false)
                 if (data.quest !== ''){
-                embed.addField(`Quest Completed - ${data.questPoints}`,`${data.quest.completed.join(`, `)}`,false)
+                embed.addField(`Quest Completed - ${questpoints}`,`${completedquest}`,false)
             };
                 message.channel.send({embed})
                 
