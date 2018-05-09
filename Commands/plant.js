@@ -2,7 +2,8 @@ exports.run = (client, message, args) => {
     const Discord = require("discord.js");
     const apikey = require("./../config.json");
     const request = require('request');
-    const itemlist = require("./../Data/drpgitemlist.json"); 
+    const itemlist = require("./../Data/drpgitemlist.json");
+    const locationdb = require("./../Data/drpglocationlist.json");
     var usrid = message.author.id;
         if(args.length > 0){
             usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
@@ -46,8 +47,13 @@ exports.run = (client, message, args) => {
                                 }
                             }
                         };    
-
-                        embed.addField(`__${key} - Set ${planttime} days ago.__`,`Seed Planted: **${plantname}**\nPlanted Since: ${plantdate}\nChecked with **Current** reaping would give you **${lootamountcurrentmin} - ${lootamountcurrentmax} items**.\nChecked with **Max** reaping would give you **${lootamountmaxmin} - ${lootamountmaxmax} items**.`,false);
+                        var locationname = key 
+                            for (var i = 0; i < locationdb.length; i++){
+                                if (locationdb[i].id == key){
+                                 locationname = locationdb[i].name  
+                                }
+                            }
+                        embed.addField(`__${locationname} - Set ${planttime} days ago.__`,`Seed Planted: **${plantname}**\nPlanted Since: ${plantdate}\nChecked with **Current** reaping would give you **${lootamountcurrentmin} - ${lootamountcurrentmax} items**.\nChecked with **Max** reaping would give you **${lootamountmaxmin} - ${lootamountmaxmax} items**.`,false);
                     
                     }
             message.channel.send({embed})
