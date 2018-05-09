@@ -25,182 +25,207 @@
         "connections" : "Add Later"
     },
     {
-        "id" : "5",
+        "id" : "6",
         "name" : "Copperfall",
         "connections" : "Add Later"
     },
     {
-        "id" : "6",
+        "id" : "7",
         "name" : "Copperfall Swamp",
         "connections" : "Add Later"
     },
     {
-        "id" : "7",
-        "name" : "Silverkeep",
-        "connections" : "Add Later"
-    },
-    {
         "id" : "8",
-        "name" : "Silverkeep",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "9",
-        "name" : "Silverkeep",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "10",
-        "name" : "Silverkeep",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "11",
-        "name" : "Silverkeep",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "12",
-        "name" : "Silverkeep",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "13",
-        "name" : "Silverkeep",
+        "name" : "Copperfall Summit",
         "connections" : "Add Later"
     },
     {
         "id" : "14",
-        "name" : "Silverkeep",
+        "name" : "Redhorn",
         "connections" : "Add Later"
     },
     {
         "id" : "15",
-        "name" : "Silverkeep",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "16",
-        "name" : "Silverkeep",
+        "name" : "Frostridge Shore",
         "connections" : "Add Later"
     },
     {
         "id" : "17",
-        "name" : "Silverkeep",
+        "name" : "Frostridge",
         "connections" : "Add Later"
     },
     {
         "id" : "18",
-        "name" : "Silverkeep",
+        "name" : "Blackburn Mountain",
         "connections" : "Add Later"
     },
     {
         "id" : "19",
-        "name" : "Silverkeep",
+        "name" : "Mirror Isle",
         "connections" : "Add Later"
     },
     {
         "id" : "20",
-        "name" : "Silverkeep",
+        "name" : "Sariila",
         "connections" : "Add Later"
     },
     {
         "id" : "21",
-        "name" : "Silverkeep",
+        "name" : "Miree",
         "connections" : "Add Later"
     },
     {
         "id" : "22",
-        "name" : "Silverkeep",
+        "name" : "Dingerou Cavern",
         "connections" : "Add Later"
     },
     {
         "id" : "23",
-        "name" : "",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "24",
-        "name" : "",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "25",
-        "name" : "",
+        "name" : "Bazaar of Lights",
         "connections" : "Add Later"
     },
     {
         "id" : "26",
-        "name" : "",
+        "name" : "Silverkeep Altar",
         "connections" : "Add Later"
     },
     {
         "id" : "27",
-        "name" : "",
+        "name" : "Frostridge Tavern",
         "connections" : "Add Later"
     },
     {
         "id" : "28",
-        "name" : "",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "29",
-        "name" : "",
+        "name" : "Members Only",
         "connections" : "Add Later"
     },
     {
         "id" : "30",
-        "name" : "",
+        "name" : "Scorched Desert",
         "connections" : "Add Later"
     },
     {
         "id" : "31",
-        "name" : "",
+        "name" : "Sandy Tomb",
         "connections" : "Add Later"
     },
     {
         "id" : "32",
-        "name" : "",
+        "name" : "Tower of Eternity",
         "connections" : "Add Later"
     },
     {
         "id" : "33",
-        "name" : "",
+        "name" : "Buckleport",
         "connections" : "Add Later"
     },
     {
         "id" : "34",
-        "name" : "",
+        "name" : "Ashgate",
         "connections" : "Add Later"
     },
     {
         "id" : "35",
-        "name" : "",
+        "name" : "Lemontree Plaza",
         "connections" : "Add Later"
     },
     {
         "id" : "36",
-        "name" : "",
+        "name" : "Bibliothecam Magnum",
         "connections" : "Add Later"
     },
     {
         "id" : "37",
-        "name" : "",
+        "name" : "Sanctum of Serenity",
         "connections" : "Add Later"
     },
     {
         "id" : "38",
-        "name" : "",
+        "name" : "The Sick Dahlia",
         "connections" : "Add Later"
     },
     {
         "id" : "39",
-        "name" : "",
+        "name" : "Maple Grove",
         "connections" : "Add Later"
     },
     {
         "id" : "40",
+        "name" : "Dawnburg",
+        "connections" : "Add Later"
+    },
+    {
+        "id" : "41",
+        "name" : "Copperfall Altar",
+        "connections" : "Add Later"
+    },
+    {
+        "id" : "42",
+        "name" : "Members Only",
+        "connections" : "Add Later"
+    },
+    {
+        "id" : "43",
+        "name" : "Sariila Altar",
+        "connections" : "Add Later"
+    },
+    {
+        "id" : "44",
+        "name" : "Redhorn Dungeon",
+        "connections" : "Add Later"
+    },
+    {
+        "id" : "",
+        "name" : "",
+        "connections" : "Add Later"
+    },
+    {
+        "id" : "",
         "name" : "",
         "connections" : "Add Later"
     }
