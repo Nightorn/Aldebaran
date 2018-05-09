@@ -2,6 +2,7 @@ exports.run = (client, message, args) => {
     const Discord = require("discord.js");
     const apikey = require("./../config.json");
     const request = require('request');
+    const locationdb = require("./../Data/drpglocationlist.json");
     var usrid = message.author.id;
         if(args.length > 0){
             usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
@@ -17,13 +18,18 @@ exports.run = (client, message, args) => {
             var donator = data.donate ? `Yes` : `No`
             var completedquest = (data.quest.completed == undefined) ? `None`: data.quest.completed.join(`, `)
             var questpoints = (data.questPoints == undefined) ? `0`: data.questPoints
-           var lux = (data.lux == undefined) ? `0` : data.lux
-          
+            var lux = (data.lux == undefined) ? `0` : data.lux
+            var locationname = data.location.current 
+                            for (var i = 0; i < locationdb.length; i++){
+                                if (locationdb[i].id == data.location.current){
+                                 locationname = locationdb[i].name  
+                                }
+                            }
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s DRPG Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
-                .setDescription(`Donator - ${donator}\nLast seen ${playdate} mins ago.\nCurrently In ${data.location.current}`)
+                .setDescription(`Donator - ${donator}\nLast seen ${playdate} mins ago.\nCurrently In ${locationname}`)
                 .addField(`Level - ${data.level}`,`Kills - ${data.kills} | Deaths - ${data.deaths}\nXP - ${data.xp} | XPBoost - ${xpBoostpercent}%`,false)
                 .addField(`Gold - ${data.gold}`,`Lux - ${lux} | Gold Boost  - ${goldBoostpercent}%`,false)
                 .addField(`Skills`,`Chop - Lvl.${data.skills.chop.level} / Fish - Lvl.${data.skills.fish.level} / Forage - Lvl.${data.skills.forage.level} / Mine - Lvl.${data.skills.mine.level}`,false)
