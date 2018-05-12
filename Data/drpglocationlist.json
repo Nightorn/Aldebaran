@@ -2,32 +2,38 @@
     {
         "id" : "1",
         "name" : "Silverkeep",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "2",
         "name" : "Dsian's House",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "3",
         "name" : "Mournstead",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "4",
         "name" : "Rivermouth",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "5",
         "name" : "Temple of MOUKN",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "6",
         "name" : "Copperfall",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "7",
@@ -37,27 +43,32 @@
     {
         "id" : "8",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "9",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "10",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "11",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "12",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "13",
@@ -67,7 +78,8 @@
     {
         "id" : "14",
         "name" : "Redhorn",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "15",
@@ -77,17 +89,20 @@
     {
         "id" : "16",
         "name" : "Frostridge Shore",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "17",
         "name" : "Frostridge",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "18",
         "name" : "Blackburn Mountain",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "19",
@@ -97,137 +112,164 @@
     {
         "id" : "20",
         "name" : "Sariila",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "21",
         "name" : "Miree",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "22",
         "name" : "Dingerou Cavern",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "23",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "24",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "25",
         "name" : "Bazaar of Lights",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "26",
         "name" : "Silverkeep Altar",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "27",
         "name" : "Frostridge Tavern",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "28",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "29",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "30",
         "name" : "Scorched Desert",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "31",
         "name" : "Sandy Tomb",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "32",
         "name" : "Tower of Eternity",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "33",
         "name" : "Buckleport",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "34",
         "name" : "Ashgate",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "35",
         "name" : "Lemontree Plaza",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "36",
         "name" : "Bibliothecam Magnum",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "37",
         "name" : "Sanctum of Serenity",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "38",
         "name" : "The Sick Dahlia",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "39",
         "name" : "Maple Grove",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "40",
         "name" : "Dawnburg",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "41",
         "name" : "Copperfall Altar",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "42",
         "name" : "Members Only",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "43",
         "name" : "Sariila Altar",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "44",
         "name" : "Redhorn Dungeon",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "",
         "name" : "",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     },
     {
         "id" : "",
         "name" : "",
-        "connections" : "Add Later"
+        "connections" : "Add Later",
+        "npc" : ""
     }
 
 
