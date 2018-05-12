@@ -19,6 +19,7 @@ exports.run = (client, message, args) => {
             var completedquest = (data.quest.completed == undefined) ? `None`: data.quest.completed.join(`, `)
             var questpoints = (data.questPoints == undefined) ? `0`: data.questPoints
             var lux = (data.lux == undefined) ? `0` : data.lux
+            var petxprate =(data.pet.xprate == undefined) ? `0` : data.pet.xprate
             var locationname = data.location.current 
                             for (var i = 0; i < locationdb.length; i++){
                                 if (locationdb[i].id == data.location.current){
@@ -33,7 +34,7 @@ exports.run = (client, message, args) => {
                 .addField(`Level - ${data.level}`,`Kills - ${data.kills} | Deaths - ${data.deaths}\nXP - ${data.xp} | XPBoost - ${xpBoostpercent}%`,false)
                 .addField(`Gold - ${data.gold}`,`Lux - ${lux} | Gold Boost  - ${goldBoostpercent}%`,false)
                 .addField(`Skills`,`Chop - Lvl.${data.skills.chop.level} / Fish - Lvl.${data.skills.fish.level} / Forage - Lvl.${data.skills.forage.level} / Mine - Lvl.${data.skills.mine.level}`,false)
-                .addField(`Pet - ${data.pet.name} | ${data.pet.type}`,`Level - ${data.pet.level} | Damage - ${data.pet.damage.min}-${data.pet.damage.max}\nXP - ${data.pet.xp} | XPRate - ${data.pet.xprate}%`,false)
+                .addField(`Pet - ${data.pet.name} | ${data.pet.type}`,`Level - ${data.pet.level} | Damage - ${data.pet.damage.min}-${data.pet.damage.max}\nXP - ${data.pet.xp} | XPRate - ${petxprate}%`,false)
                 if (data.quest !== ''){
                 embed.addField(`Quest Completed - ${questpoints}`,`${completedquest}`,false)
             };
