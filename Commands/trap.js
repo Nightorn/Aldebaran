@@ -14,12 +14,15 @@ exports.run = (client, message, args) => {
             var trapdate = new Date(data.trap.time);
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
             var trapelapsed = Math.round((new Date()-data.trap.time)/3600000);
+            trapelapsed = (Math.round((new Date()-data.trap.time)/3600000) > 24) ? (Math.round((new Date()-data.trap.time)/86400000)) : (Math.round((new Date()-data.trap.time)/3600000));
+            var hourorday = (Math.round((new Date()-data.trap.time)/3600000) > 24) ? true : false;
+            var hour = (hourorday == false) ? `Hours` : `Days`;
             const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s Trap Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
                 .setDescription(`It's a trap.`)
-                .addField(`Bear Trap - Set ${trapelapsed} Hours Ago`,`Trap Set - ${trapdate}`,false)
+                .addField(`Bear Trap - Set ${trapelapsed} ${hour} Ago`,`Trap Set - ${trapdate}`,false)
                 message.channel.send({embed})
                 
             }) 
