@@ -12,20 +12,22 @@ exports.run = (client, message, args) => {
             request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body) {
             if (err) return;
             const data = JSON.parse(body);
-            var xpBoostpercent = (data.attributes !== undefined) ? Math.floor(data.attributes.xpBoost / 10) : "Old Player" ;
-            var goldBoostpercent = (data.attributes !== undefined) ? Math.floor(data.attributes.goldBoost / 10) : "Old Player" ;
+            var xpBoostpercent = (data.attributes !== undefined) ? Math.floor(data.attributes.xpBoost / 10) : 0 ;
+            var goldBoostpercent = (data.attributes !== undefined) ? Math.floor(data.attributes.goldBoost / 10) : 0 ;
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
             var donator = data.donate ? `Yes` : `No`
-            var completedquest = (data.quest == null ) ? `None`: data.quest.completed.join(`, `)
+            var completedquest = (data.quest == null || data.quest == "" ) ? `None`: data.quest.completed.join(`, `)
             var questpoints = (data.questPoints == undefined) ? `0`: data.questPoints
             var lux = (data.lux == undefined) ? `0` : data.lux
-            var petxprate =(data.pet.xprate == undefined) ? `0` : data.pet.xprate
-            var locationname = data.location.current 
+            var petxprate =(data.pet.xprate == undefined || data.pet == undefined) ? `0` : data.pet.xprate
+            var locationname = (data.loction !== undefined) ? data.location.current : "The Abyss";
+                        if(data.location !== undefined){    
                             for (var i = 0; i < locationdb.length; i++){
                                 if (locationdb[i].id == data.location.current){
                                  locationname = locationdb[i].name  
                                 }
                             }
+                        }    
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s DRPG Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
