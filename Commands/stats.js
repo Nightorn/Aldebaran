@@ -16,7 +16,7 @@ exports.run = (client, message, args) => {
             var goldBoostpercent = Math.floor(data.attributes.goldBoost / 10);
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
             var donator = data.donate ? `Yes` : `No`
-            var completedquest = (data.quest.completed == undefined) ? `None`: data.quest.completed.join(`, `)
+            var completedquest = (data.quest.completed == null) ? `None`: data.quest.completed.join(`, `)
             var questpoints = (data.questPoints == undefined) ? `0`: data.questPoints
             var lux = (data.lux == undefined) ? `0` : data.lux
             var petxprate =(data.pet.xprate == undefined) ? `0` : data.pet.xprate
