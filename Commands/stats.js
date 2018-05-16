@@ -12,8 +12,8 @@ exports.run = (client, message, args) => {
             request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body) {
             if (err) return;
             const data = JSON.parse(body);
-            var xpBoostpercent = Math.floor(data.attributes.xpBoost / 10);
-            var goldBoostpercent = Math.floor(data.attributes.goldBoost / 10);
+            var xpBoostpercent = (data.attributes.xpBoost !== undefined) ? Math.floor(data.attributes.xpBoost / 10) : "Old Player" ;
+            var goldBoostpercent = (data.attributes.goldBoost !== undefined) ? Math.floor(data.attributes.goldBoost / 10) : "Old Player" ;
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
             var donator = data.donate ? `Yes` : `No`
             var completedquest = (data.quest == null ) ? `None`: data.quest.completed.join(`, `)

@@ -5,11 +5,12 @@
   "main": "bot.js",
   "dependencies": {
     "discord.js": "^11.3.2",
+    "fs": "^0.0.1-security",
     "git": "^0.1.5",
     "node.js": "^0.0.0",
     "request": "^2.85.0",
-    "superagent": "^3.8.2",
-    "fs": "^0.0.1-security"
+    "sqlite": "^2.9.1",
+    "superagent": "^3.8.2"
   },
   "devDependencies": {},
   "scripts": {
