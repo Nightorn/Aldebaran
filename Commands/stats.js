@@ -19,13 +19,13 @@ exports.run = (client, message, args) => {
             var completedquest = (data.quest == null || data.quest == "" || data.quest.accept !== undefined ) ? `None`: data.quest.completed.join(`, `)
             var questpoints = (data.questPoints == undefined) ? `0`: data.questPoints
             var lux = (data.lux == undefined) ? `0` : data.lux
-            var petxprate =(data.pet.xprate == undefined || data.pet == undefined) ? `0` : data.pet.xprate
+            var petxprate =(data.pet == undefined || data.pet.xprate == undefined ) ? `0` : data.pet.xprate
             var locationname = (data.loction !== undefined) ? data.location.current : "The Abyss";
                         if(data.location !== undefined){    
                             for (var i = 0; i < locationdb.length; i++){
                                 if (locationdb[i].id == data.location.current){
                                  locationname = locationdb[i].name  
-                                }
+                                } 
                             }
                         }    
                 const embed = new Discord.RichEmbed()
