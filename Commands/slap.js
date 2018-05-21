@@ -1,6 +1,6 @@
 exports.run = (client, message, args) => {
     const slaps = require("./../Data/imageurls.json");
-    var sendslaps = (`${slaps.slaps[~~(Math.random() * kidnaps.kidnaps.length)]}`);
+    var sendslaps = (`${slaps.slaps[~~(Math.random() * slaps.slaps.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
         message.channel.send({embed:{
