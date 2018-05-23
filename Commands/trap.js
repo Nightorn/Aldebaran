@@ -10,7 +10,7 @@ exports.run = (client, message, args) => {
         request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body){
             if (err) return;
             const data = JSON.parse(body);
-            if (data.trap == undefined) return message.channel.send(`No Trap Set`);//Checking for data.trap in json
+            if (data.trap == undefined || data.trap.time == "" ) return message.channel.send(`No Trap Set`);//Checking for data.trap in json
             var trapsetdate = new Date(data.trap.time);//changing date code from UTC to actual date
             var trapelapsedraw = Math.round((new Date()-data.trap.time) / 1000);
             var traptimeelapsed = (Math.round((new Date()-data.trap.time)/3600000) > 24) ? (Math.round((new Date()-data.trap.time)/86400000)) : (Math.round((new Date()-data.trap.time)/3600000));
