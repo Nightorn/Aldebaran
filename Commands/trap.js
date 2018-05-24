@@ -12,9 +12,9 @@ exports.run = (client, message, args) => {
             const data = JSON.parse(body);
             if (data.trap == undefined || data.trap.time == "" ) return message.channel.send(`No Trap Set`);//Checking for data.trap in json
             var trapsetdate = new Date(data.trap.time);//changing date code from UTC to actual date
-            var trapelapsedraw = Math.round((new Date()-data.trap.time) / 1000);
-            var traptimeelapsed = (Math.round((new Date()-data.trap.time)/3600000) > 24) ? (Math.round((new Date()-data.trap.time)/86400000)) : (Math.round((new Date()-data.trap.time)/3600000));
-            var hourorday = (Math.round((new Date()-data.trap.time)/3600000) > 24) ? true : false;
+            var trapelapsedraw = Math.floor((new Date()-data.trap.time) / 1000);
+            var traptimeelapsed = (Math.floor((new Date()-data.trap.time)/3600000) > 24) ? (Math.floor((new Date()-data.trap.time)/86400000)) : (Math.floor((new Date()-data.trap.time)/3600000));
+            var hourorday = (Math.floor((new Date()-data.trap.time)/3600000) > 24) ? true : false;
             var hour = (hourorday == false) ? `Hours` : `Days`;
             var currentsalvage = (data.attributes.salvaging == 0) ? 1 : data.attributes.salvaging;
             var maxsalvage = Math.floor(data.level * 5);
