@@ -31,7 +31,7 @@ exports.run = (client, message) => {
         healthraw = test[8]
       };
       var editedhealth = (healthraw != undefined) ? healthraw.split(` `)[3] : 0
-      console.log(`Current Health ${editedhealth}`)
+      message.channel.send(`Current Health ${editedhealth}`)
       
       ///if (test[0].startsWith(`!`)){
       ///  console.log(test)
