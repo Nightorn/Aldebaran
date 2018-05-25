@@ -30,7 +30,7 @@ exports.run = (client, message) => {
       if (test[3] != `+ Critical hit!`) {
         healthraw = test[8]
       };
-      var editedhealth = healthraw.split(` `)[3]
+      var editedhealth = (healthraw != undefined) ? healthraw.split(` `)[3] : 0
       message.channel.send(`Current Health ${editedhealth}`)
       
       ///if (test[0].startsWith(`!`)){
