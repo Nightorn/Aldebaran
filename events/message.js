@@ -18,17 +18,12 @@ exports.run = (client, message) => {
         var maxHealth = Number(nums[2].replace(/,/g,""));
         var playername = message.content.split(` `)[1];
         if (playername === "used") playername = message.content.split(` `)[0];
-        console.log(healthMessage);
-        console.log(nums);
-        console.log(health);
-        console.log(maxHealth)
-        console.log(playername)
         var healthPercent = (Math.floor((health/maxHealth)*100))
         if (healthPercent < 10){
           const embed = new Discord.RichEmbed()
             .setTitle(`__${playername} Health Warning!!! ${healthPercent}%__`)
             .setColor(0xff0000)
-            .setDescription(`**${playername}** is at __**10%**__ health or below!!! Heal...or die!!!`)
+            .setDescription(`**${playername}** is at __**${healthPercent}**__ health or below!!! Heal...or die!!!`)
             .setImage(`https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg`)
             .setFooter(`Your going to die arent you?`)
           message.channel.send({embed})
