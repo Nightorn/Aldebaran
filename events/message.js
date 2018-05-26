@@ -26,8 +26,13 @@ exports.run = (client, message) => {
             .setDescription(`**${playername}** is at __**${healthPercent}**__ health or below!!! Heal...or die!!!`)
             .setImage(`https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg`)
             .setFooter(`Your going to die arent you?`)
-          message.channel.send({embed})
-        }else message.channel.send(`${playername} Health at **${healthPercent}%**.`)
+          message.channel.send({embed}).then(msg =>{
+            msg.delete(60000)
+          })
+        }else message.channel.send(`${playername} Health at **${healthPercent}%**.`).then(msg =>{
+          msg.delete(30000)
+        }) 
+              
       }
     }
     else {
