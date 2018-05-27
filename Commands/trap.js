@@ -16,7 +16,10 @@ exports.run = (client, message, args) => {
             var traptimeelapsed = (Math.floor((new Date()-data.trap.time)/3600000) > 24) ? (Math.floor((new Date()-data.trap.time)/86400000)) : (Math.floor((new Date()-data.trap.time)/3600000));
             var hourorday = (Math.floor((new Date()-data.trap.time)/3600000) > 24) ? true : false;
             var hour = (hourorday == false) ? `Hours` : `Days`;
-            var currentsalvage = (data.attributes.salvaging == 0) ? 1 : data.attributes.salvaging;
+            var currentsalvage = 1;
+            if (data.attributes.salvaging != undefined){
+                currentsalvage = (data.attributes.salvaging == 0) ? 1 : data.attributes.salvaging;
+            };
             var maxsalvage = Math.floor(data.level * 5);
             var currentid79min = (trapelapsedraw >= 300) ? Math.floor(1+(Math.floor(Math.sqrt(currentsalvage)*(trapelapsedraw/25)/15000))) : 0;
             var currentid79max = (trapelapsedraw >= 300) ? Math.floor(1+(Math.floor(Math.sqrt(currentsalvage)*(trapelapsedraw/25)/14000))) : 0;
