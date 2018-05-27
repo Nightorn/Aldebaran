@@ -37,7 +37,7 @@ exports.run = (client, message) => {
     }
     else {
       const field = message.embeds[0].fields[1].name == "Critical Hit!" ? message.embeds[0].fields[4] : message.embeds[0].fields[3];
-      message.channel.send(`${field.name} Health at **${Math.floor(parseInt(field.value.split(' ')[1].split('/')[0]) * 100 / parseInt(field.value.split(' ')[1].split('/')[1]))}%**.`).then(msg => msg.delete(30000));
+      message.channel.send(`${field.name} Health at **${Math.round(parseInt(field.value.split(' ')[1].split('/')[0].replace(',', '')) * 100 / parseInt(field.value.split(' ')[1].split('/')[1].replace(',', '')))}%**.`).then(msg => msg.delete(30000));
     }
   }
 }   
