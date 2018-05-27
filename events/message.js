@@ -2,7 +2,7 @@ exports.run = (client, message) => {
   //Pollux Lootbox Watcher
   if (message.author.id == `271394014358405121` ){
     console.log(message.content)
-    if(message.content.endsWith(`a chance to claim it!`)) {
+    if(message.content.endsWith(`a chance to claim it!`) && message.author.id == "271394014358405121") {
       message.channel.send(`Come Grab My Box <@310296184436817930> <@384996823556685824> <@266632489546678273> <@207575115616092161> <@226358525410934794>`)
     }
   }
@@ -36,7 +36,8 @@ exports.run = (client, message) => {
       }
     }
     else {
-     return console.log(`Using A Embed Adv`)
+      const field = message.embeds[0].fields[1].name == "Critical Hit!" ? message.embeds[0].fields[4] : message.embeds[0].fields[3];
+      message.channel.send(`${field.name} Health at **${Math.round(parseInt(field.value.split(' ')[1].split('/')[0].replace(',', '')) * 100 / parseInt(field.value.split(' ')[1].split('/')[1].replace(',', '')))}%**.`).then(msg => msg.delete(30000));
     }
   }
 }   
