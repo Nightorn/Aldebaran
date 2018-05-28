@@ -25,7 +25,7 @@ exports.run = (client, message) => {
             .setColor(0xff0000)
             .setDescription(`**${playername}** is at __**${healthPercent}**__ health or below!!! Heal...or die!!!`)
             .setImage(`https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg`)
-            .setFooter(`Your going to die arent you?`)
+            .setFooter(`You are going to die aren't you?`)
           message.channel.send({embed}).then(msg =>{
             msg.delete(60000)
           })
