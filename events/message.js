@@ -64,7 +64,7 @@ exports.run = async (client, message) => {
       } else { 
         var embed = new Discord.RichEmbed()
           .setAuthor(user.username, user.avatarURL)
-          .addField(`Character Health`, `**${char_healthPercent}%** (${char_currentHP} HP / ${char_maxHP} HP)`, true)
+          .addField(`__Character Health__ - **${char_healthPercent}%**`,`(${char_currentHP} HP / ${char_maxHP} HP)`, false)
 
         if (char_healthPercent <= 20 || pet_healthPercent <= 20)
           embed.setColor('RED');
@@ -76,7 +76,7 @@ exports.run = async (client, message) => {
           embed.setColor('GREEN');
 
         if (!isNaN(pet_healthPercent))
-          embed.addField(`Pet Health`, `**${pet_healthPercent}%** (${pet_currentHP} HP / ${pet_maxHP} HP)`, true);
+          embed.addField(`__Pet Health__ - **${pet_healthPercent}%**`, `(${pet_currentHP} HP / ${pet_maxHP} HP)`, false);
         message.channel.send({embed}).then(msg => msg.delete(30000));
       }
     }
