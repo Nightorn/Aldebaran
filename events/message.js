@@ -55,12 +55,12 @@ exports.run = async (client, message) => {
     if (user != null && playerName != undefined && char_healthPercent != pet_healthPercent) {
       if (char_healthPercent < 10){
         const embed = new Discord.RichEmbed()
-          .setTitle(`__${playername} Health Warning!!! ${char_healthPercent}%__`)
+          .setTitle(`__${user.username} Health Warning!!! - ${char_healthPercent}%__`)
           .setColor(0xff0000)
-          .setDescription(`**${playername}** is at __**${char_healthPercent}**__ health or below!!! Heal...or die!!!`)
+          .setDescription(`**${user.username}** is at __**${char_currentHP}**__ health!!!\n`)
           .setImage(`https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg`)
           .setFooter(`You are going to die aren't you?`)
-        message.channel.send({embed}).then(msg => msg.delete(60000));
+        message.channel.send(embed).then(msg => msg.delete(60000));
       } else { 
         var embed = new Discord.RichEmbed()
           .setAuthor(user.username, user.avatarURL)
