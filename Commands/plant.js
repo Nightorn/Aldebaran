@@ -13,7 +13,8 @@ exports.run = (client, message, args) => {
             if (err) return;
             const data = JSON.parse(body);
             if (data.location === undefined) return message.channel.send(`**Error** No Purchased Fields Found`);
-            if (Object.values(data.location.saplings).indexOf(null) != -1) return message.channel.send(`**Error** No Currently Planted Saplings Found`);
+            //if (Object.values(data.location.saplings).indexOf(null) != -1) return message.channel.send(`**Error** No Currently Planted Saplings Found`);  
+                //Caused errors when any location was "null" would then show complete message and ignore all other locations was removed fixing error.
 
             const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s Planting Info")
