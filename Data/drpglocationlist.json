@@ -260,10 +260,10 @@
         "npc" : ""
     },
     {
-        "id" : "",
-        "name" : "",
-        "connections" : "Add Later",
-        "npc" : ""
+        "id" : "45",
+        "name" : "Nightmare's Heaven",
+        "connections" : [35],
+        "npc" : ["Nightmare", "Jesie"]
     },
     {
         "id" : "",
