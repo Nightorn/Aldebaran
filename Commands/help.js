@@ -11,6 +11,8 @@ exports.run = (client, message, args) => {
         .addBlankField(false)
         .addField("💡__**Miscellaneous Commands**__🔦- Commands without specific category","🔹**Avatar** - *Displays avatar.*\n🔹**Cuteag** - *Displays a random cute SFW anime girl.*\n🔹**Emojilist** - *Displays all emojis in current server(**Spam Warning**)*\n🔹**Invite** - *Displays invite to add this bot to your server.*\n🔹**Ping** - *Returns bots current latency.*\n🔹**Say** - *Used to send embed message as the bot*",false)        
         .addBlankField(false)
+        .addField("🚫__**NSFW Commands**__⛔- Usable in NSFW Channels","🔹**Lewd** - *Action Command lewding another person*\n",false)
+        .addBlankField(false)
         .addField("__**Have a command request or suggestion?**__", "*DM Nightmare#1234* - Always looking for new and fun commands!",false)
         .setFooter("In Development By Nightmare#1234")
         .setTimestamp ()
