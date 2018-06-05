@@ -15,22 +15,24 @@ exports.run = async (client, message) => {
     var pet_maxHP = 0;
 
     if (message.embeds.length === 0){
-      const regex = /has \d+\d+ HP left./
-      var healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
-      var healthMessage = message.content.match(healthMessagePattern);
-      if (healthMessage) {
-        var nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
-        char_currentHP = Number(nums[1].replace(/,/g,""));
-        char_maxHP = Number(nums[2].replace(/,/g,""));
-        playerName = message.content.split(` `)[1].replace("'s", "");
-        if (playerName === "used") playerName = message.content.split(` `)[0];
-      }
-
-      const messageArray = message.content.split('\n');
-      if (messageArray[3] != undefined) {
-        const petInfosLine = messageArray[3].indexOf('+ Critical hit!') != -1 ? messageArray[8].split(' ') : messageArray[7].split(' ');
-        pet_currentHP = parseInt(petInfosLine[petInfosLine.indexOf('has') + 1].split('/')[0].replace(',', ''));
-        pet_maxHP = parseInt(petInfosLine[petInfosLine.indexOf('has') + 1].split('/')[1].replace(',', ''));
+      if (message.content.indexOf("'s Adventure") != -1) {
+        const regex = /has \d+\d+ HP left./
+        var healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
+        var healthMessage = message.content.match(healthMessagePattern);
+        if (healthMessage) {
+          var nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
+          char_currentHP = Number(nums[1].replace(/,/g,""));
+          char_maxHP = Number(nums[2].replace(/,/g,""));
+          playerName = message.content.split(` `)[1].replace("'s", "");
+          if (playerName === "used") playerName = message.content.split(` `)[0];
+        }
+  
+        const messageArray = message.content.split('\n');
+        if (messageArray[3] != undefined) {
+          const petInfosLine = messageArray[3].indexOf('+ Critical hit!') != -1 ? messageArray[8].split(' ') : messageArray[7].split(' ');
+          pet_currentHP = parseInt(petInfosLine[petInfosLine.indexOf('has') + 1].split('/')[0].replace(',', ''));
+          pet_maxHP = parseInt(petInfosLine[petInfosLine.indexOf('has') + 1].split('/')[1].replace(',', ''));
+        }
       }
     }
     else {
