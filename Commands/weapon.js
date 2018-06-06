@@ -30,13 +30,15 @@ exports.run = (client, message, args) => {
     }
     
     var embed = new Discord.RichEmbed()
-    .setTitle(`Buyable Weapons Available At Level ${level}`)
+    .setTitle(`Obtainable Weapons Available At Level ${level}`)
     .setAuthor(message.author.username,message.author.avatarURL)
     .setColor(0x00AE86)
     .setDescription(`Will display weapon available at level specfied, unless none exist which will return close matches above and below level specfied.`)
     if (exactWeaponLevelFound.size != 0)
         allWeapons = exactWeaponLevelFound;
-
+    if (args[0] = 100) {
+        embed.addField(`__*Blue Ceremonial Card*__ - Lvl. 100`,`Given to all players who have reached Level 100. Contains the memories of the player gained from their adventure.\n**Price:** Free using **__*getcard*__** command.\n**Damage:** 333 - 377`,false)
+    }
     for (let [weapon, weaponLevel] of allWeapons) {
         embed.addField(`__*${weapon.name} - Lvl.${weapon.level}*__`,`*${weapon.desc}*\n**Price:** ${weapon.cost} gold\n**Damage:** ${weapon.weapon.dmg.min} - ${weapon.weapon.dmg.max}`,false);
     };
