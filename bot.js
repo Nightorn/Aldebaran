@@ -23,7 +23,7 @@ client.on("message", message => {
     const command = args.shift().toLowerCase();
 //....................Added API 1min Cooldown Single Item Search................................................//    
     if (command == "mcsearch") {
-      if (itemapicooldown == true) return message.reply("NO U");
+      if (itemapicooldown == true) return message.reply("Please try again in 1min due to ratelimits.");
         itemapicooldown = true
         setTimeout(() => {
         itemapicooldown = false
