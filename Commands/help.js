@@ -3,7 +3,7 @@ exports.run = (client, message, args) => {
     const embed = new Discord.RichEmbed()
         .setTitle("Aldebaran's Help")
         .setAuthor(`${message.author.username}`)
-        .setDescription("You can find a brief list of my functions and how to use them below.\n-For a full list of commands use `&commands`.\n-For detailed command help use `&help <command>`.")
+        .setDescription("You can find a brief list of my functions and how to use them below.")
         .addBlankField(false)
         .addField("⚔__**DRPG Commands**__🛡- Utility commands for Discord RPG Bot","🔹**Stats** - *Displays users detailed stats.*\n🔹**Trap** - *Displays users current trap info.* \n🔹**Plant** - *Displays users current plant info.*\n🔹**Weapon** - *Displays buyable weapons at level specified.*",false)
         .addBlankField(false)
