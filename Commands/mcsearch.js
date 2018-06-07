@@ -4,7 +4,7 @@ exports.run = (client, message, args) => {
   const Discord = require("discord.js");
   const request = require('request')
 //..................................................................................//
-  if (message.author.id != 310296184436817930)return message.channel.send("Ummm No Please Don't Touch Me There");
+  if (message.author.id != 310296184436817930 || 320933389513523220)return message.channel.send("Ummm No Please Don't Touch Me There");
 //.................................................................................//
   var con = mysql.createPool({
     host : config.mysqlHost,
