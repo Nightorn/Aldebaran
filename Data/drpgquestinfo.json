@@ -1,0 +1,114 @@
+{
+    "cult of moukn": {
+        "name": "Cult of MOUKN",
+        "lvl": "10",
+        "membersOnly" : false,
+        "startPoint": "Temple of MOUKN",
+        "startNpc": "Pope Seth",
+        "steps": {
+            "1": "Travel to Temple of MOUKN",
+            "2": "Talk to Pope Seth",
+            "3": "Travel to Copperfall Swamp",
+            "4": "Talk to Priest",
+            "5": "Use __search__ to find herb",
+            "6": "Talk to priest again",
+            "7": "Travel to temple of MOUKN",
+            "8": "Talk to Pope Seth"
+        },
+        "itemsNeeded": {},
+        "rewards": {
+            "1": "MOUKN figurine",
+            "2": "200xp",
+            "3": "300 Gold",
+            "4": "1 Quest point"
+        }
+    },
+    "the cold north": {
+        "name": "The Cold North",
+        "lvl": "25",
+        "membersOnly": false,
+        "startPoint": "Frostridge",
+        "startNpc": "Nieves",
+        "warning": "Combat required",
+        "steps": {
+            "1": "Travel to Frostridge",
+            "2": "Talk to Nieves",
+            "3": "Travel to Blackburn Mountain",
+            "4": "Talk to Illyena",
+            "5": "Use __search__ to find yeti hair",
+            "6": "Talk to Illyena",
+            "7": "Use __adv__ to fight Yeti",
+            "8": "Defeat Yeti",
+            "9": "Talk to Illyena"
+        },
+        "itemsNeeded": {
+            "1": {
+                "item": "Health potion",
+                "qty": "Varies",
+                "buyable": true,
+                "price": "5 Gold"
+            }
+        },
+        "rewards": {
+            "1": "Yeti hair",
+            "2": "Yeti fur",
+            "3": "200xp",
+            "4": "300 Gold",
+            "5": "1 Quest point"
+        }
+    },
+    "fickle fishing": {
+        "name": "Fickle Fishing",
+        "lvl": "25",
+        "membersOnly": false,
+        "startPoint": "Rivermouth",
+        "startNpc": "Angler Dave",
+        "warning": "High damage taken, Combat required",
+        "steps": {
+            "1": "Travel to Rivermouth",
+            "2": "Talk to Angler Dave",
+            "3": "Catch 7 Freshwater fish, 3 Crabs, and 1 Octopus",
+            "4": "Talk to Angler Dave",
+            "5": "Catch 4 Tuna (Catchable in Mournstead only)",
+            "6": "Talk to Angker Dave",
+            "7": "Travel to Frostridge Shore",
+            "8": "Talk to Angler John",
+            "9": "Use __adv__ to fight ice whales while in Frostridge Shore",
+            "10": "Kill ice whales untill receive *Ice Whale Fin* as a dropped item",
+            "11": "Travel to Rivermouth",
+            "12": "Talk to Angler Dave"
+        },
+        "itemsNeeded": {
+            "1": {
+                "item": "Freshwater Fish",
+                "qty": "7",
+                "buyable": true,
+                "price": "200 Gold"
+            },
+            "2": {
+                "item": "Crab",
+                "qty": "3",
+                "buyable": true,
+                "price": "270 Gold"
+            },
+            "3": {
+                "item": "Octopus",
+                "qty": "1",
+                "buyable": true,
+                "price": "400 Gold"
+            },
+            "4": {
+                "item": "Tuna",
+                "qty": "4",
+                "buyable": false,
+                "price": "Varies"
+            }
+        },
+        "rewards": {
+            "1": "Angler's Rod",
+            "2": "2,500xp",
+            "3": "3,000 Gold",
+            "4": "1 Quest point"
+        }
+    }
+}

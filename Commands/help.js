@@ -5,7 +5,7 @@ exports.run = (client, message, args) => {
         .setAuthor(`${message.author.username}`)
         .setDescription("You can find a brief list of my functions and how to use them below.")
         .addBlankField(false)
-        .addField("⚔__**DRPG Commands**__🛡- Utility commands for Discord RPG Bot","🔹**Stats** - *Displays users detailed stats.*\n🔹**Trap** - *Displays users current trap info.* \n🔹**Plant** - *Displays users current plant info.*\n🔹**Weapon** - *Displays buyable weapons at level specified.*",false)
+        .addField("⚔__**DRPG Commands**__🛡- Utility commands for Discord RPG Bot","🔹**Stats** - *Displays users detailed stats.*\n🔹**Trap** - *Displays users current trap info.* \n🔹**Plant** - *Displays users current plant info.*\n🔹**Weapon** - *Displays buyable weapons at level specified.*\n🔹**Quest** - *Displays DRPG quest list(work in progress)*.",false)
         .addBlankField(false)
         .addField("📽__**Action Commands**__🎥- Fun commands to preform on others","🔹**Adorbs**, **Bite**, **CPR**, **Cuddle**,\n🔹**Hug**, **Kidnap**, **Kiss**, **Lick**,\n🔹**Slap**, **Spank**, **Tackle**",false)
         .addBlankField(false)
