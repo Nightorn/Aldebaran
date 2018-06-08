@@ -110,5 +110,53 @@
             "3": "3,000 Gold",
             "4": "1 Quest point"
         }
+    },
+    "the quest about wood?": {
+        "name": "The quest about wood?",
+        "lvl": "14",
+        "membersOnly": false,
+        "startPoint": "Miree",
+        "startNpc": "Lumberjack Elliot",
+        "warning": "Combat required",
+        "steps": {
+            "1": "Travel to Miree",
+            "2": "Talk to Lumberjack Elliot",
+            "3": "Gather 300 Regular logs, 250 Oak logs, 150 Williow logs, and 50 Maple logs.",
+            "4": "Talk to Lumberjack Elliot",
+            "5": "Fight and defeat `Ent` (You will recieve a *special stick*)",
+            "6": "Talk to Lumberjack Elliot"
+        },
+        "itemsNeeded": {
+            "1": {
+                "item": "Regular logs",
+                "qty": "300",
+                "buyable": false,
+                "price": "Varies"
+            },
+            "2": {
+                "item": "Oak logs",
+                "qty": "250",
+                "buyable": false,
+                "price": "Varies"
+            },
+            "3": {
+                "item": "Williow logs",
+                "qty": "150",
+                "buyable": false,
+                "price": "Varies"
+            },
+            "4": {
+                "item": "Maple logs",
+                "qty": "50",
+                "buyable": false,
+                "price": "Varies"
+            }
+        },
+        "rewards": {
+            "1": "The True Wood Cutter",
+            "2": "1,000",
+            "3": "750 Gold",
+            "4": "1 Quest point"
+        }
     }
 }
