@@ -36,7 +36,7 @@ client.on("message", message => {
       globalcooldown = true
       setTimeout(() => {
       globalcooldown = false
-    }, 2000);
+    }, 500);
   } 
 //..............................................................................................................//
 try {
