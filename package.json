@@ -11,7 +11,8 @@
     "node.js": "^0.0.0",
     "request": "^2.85.0",
     "sqlite": "^2.9.1",
-    "superagent": "^3.8.2"
+    "superagent": "^3.8.2",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {},
   "scripts": {

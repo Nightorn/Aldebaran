@@ -6,5 +6,6 @@
     "omdb_apikey" : "1aa9cc94",
     "mysqlUser" : "b26ca98b5b6cb2",
     "mysqlPass" : "580c0f52",
-    "mysqlHost" : "us-cdbr-iron-east-04.cleardb.net"
+    "mysqlHost" : "us-cdbr-iron-east-04.cleardb.net",
+    "cat_apikey": "MzI0MDc4"
 }
