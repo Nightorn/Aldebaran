@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     var request = require('request');
     var searchimage = (args[0]);
     const apikey = require("./../config.json");

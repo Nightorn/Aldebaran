@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const lewds = require("./../Data/imageurls.json");
     var sendlewds = (`${lewds.lewds[~~(Math.random() * lewds.lewds.length)]}`);
     if(message.channel.nsfw === true){

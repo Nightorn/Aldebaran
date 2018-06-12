@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const bot = new Discord.Client();
+
 const config = require("./config.json");
 const fs = require("fs");
 const mysql = require("mysql");
@@ -12,11 +13,11 @@ fs.readdir("./events/", (err, files) => {
       let eventFunction = require(`./events/${file}`);
       let eventName = file.split(".")[0];
       // super-secret recipe to call events with all their proper arguments *after* the `client` var.
-      client.on(eventName, (...args) => eventFunction.run(client, ...args));
+      bot.on(eventName, (...args) => eventFunction.run(bot, ...args));
     });
   });
  
-client.on("message", message => {
+bot.on("message", message => {
     if (message.author.bot) return;
     if (message.content.indexOf(config.prefix) !== 0) return;
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
@@ -41,11 +42,11 @@ client.on("message", message => {
 //..............................................................................................................//
 try {
     let commandFile = require(`./Commands/${command}.js` );
-    commandFile.run(client, message, args);
+    commandFile.run(bot, message, args);
   } catch (err) {
     console.error(err);
   }
 
 });
  
-  client.login(config.token)
+  bot.login(config.token)

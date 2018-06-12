@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const kidnaps = require("./../Data/imageurls.json");
     var sendkidnaps = (`${kidnaps.kidnaps[~~(Math.random() * kidnaps.kidnaps.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.

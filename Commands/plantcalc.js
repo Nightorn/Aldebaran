@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
     if (args.length = 2){
         var seconds = args[1] * 3600    

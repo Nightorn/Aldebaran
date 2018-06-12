@@ -1,16 +1,16 @@
 
-exports.run = function(client, message, args) {
+exports.run = function(bot, message, args) {
     const Discord = require('discord.js');
     const config = require('./../config.json');
     const embed = new Discord.RichEmbed()
-        .setTitle(`Restarting ${client.user.username}`)
+        .setTitle(`Restarting ${bot.user.username}`)
         .setDescription(`Please wait, this may take up to 15 seconds.`)
         .setColor('ORANGE');
     message.channel.send({embed}).then(msg => {
-        client.destroy().then(() => {
-            client.login(config.token).then(() => {
+        bot.destroy().then(() => {
+            bot.login(config.token).then(() => {
                 const embed = new Discord.RichEmbed()
-                    .setTitle(`Restarting ${client.user.username}`)
+                    .setTitle(`Restarting ${bot.user.username}`)
                     .setDescription(`Successfully restarted the bot.`)
                     .setColor('GREEN');
                 msg.delete();
@@ -18,7 +18,7 @@ exports.run = function(client, message, args) {
             })
         }).catch(err => {
             const embed = new Discord.RichEmbed()
-                .setTitle(`Restarting ${client.user.username}`)
+                .setTitle(`Restarting ${bot.user.username}`)
                 .setDescription(`An unknown error occured.`)
                 .setColor('RED');
             msg.delete();

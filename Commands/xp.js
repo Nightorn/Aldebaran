@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
     var level = args[0];
     if (level >= 1){

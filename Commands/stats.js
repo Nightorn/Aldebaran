@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
     const apikey = require("./../config.json");
     const request = require('request');
@@ -7,7 +7,7 @@ exports.run = (client, message, args) => {
         if(args.length > 0){
             usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
         };
-    client.fetchUser(usrid).then((user) => {
+    bot.fetchUser(usrid).then((user) => {
                  
             request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body) {
             if (err) return;

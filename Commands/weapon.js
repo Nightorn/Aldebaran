@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
     const request = require('request');
     const itemlist = require("./../Data/drpgitemlist.json");

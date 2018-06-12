@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const request = require(`request`)
     const Discord = require(`discord.js`)
 

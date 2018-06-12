@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
     const embed = new Discord.RichEmbed()
         .setTitle("Aldebaran's Help")

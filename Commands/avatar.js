@@ -1,4 +1,4 @@
-exports.run = (client, message, args) => {      
+exports.run = (bot, message, args) => {      
         if(message.mentions.users.first()) { //Check if the message has a mention in it.
             let user = message.mentions.users.first(); //Since message.mentions.users returns a collection; we must use the first() method to get the first in the collection.
             let output = user.avatarURL; /*The Avatar URL*/

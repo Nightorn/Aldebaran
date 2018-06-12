@@ -1,10 +1,10 @@
-exports.run = (client, message, args) => {
+exports.run = (bot, message, args) => {
    const sayMessage = args.join(" ");
    message.delete().catch(O_o=>{});
    message.channel.send({embed:{
         author:{
-        name: client.user.username,
-        icon_url: client.user.avatarURL
+        name: bot.user.username,
+        icon_url: bot.user.avatarURL
         },
         title: (sayMessage),
         timestamp: new Date()
