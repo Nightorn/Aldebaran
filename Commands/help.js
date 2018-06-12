@@ -7,7 +7,7 @@ exports.run = (bot, message, args) => {
         .addBlankField(false)
         .addField("⚔__**DRPG Commands**__🛡- Utility commands for Discord RPG Bot","🔹**Stats** - *Displays users detailed stats.*\n🔹**Trap** - *Displays users current trap info.* \n🔹**Plant** - *Displays users current plant info.*\n🔹**Weapon** - *Displays buyable weapons at level specified.*\n🔹**Quest** - *Displays DRPG quest list(work in progress)*.",false)
         .addBlankField(false)
-        .addField("📽__**Action Commands**__🎥- Fun commands to preform on others","🔹**Adorbs**, 🔹**Bite**, 🔹**CPR**, 🔹**Cuddle**,\n🔹**Hug**, 🔹**Kidnap**, 🔹**Kiss**, 🔹**Lick**,\n🔹**Slap**, 🔹**Spank**, 🔹**Tackle**, 🔹**Feed**\n🔹**Poke**",false)
+        .addField("📽__**Action Commands**__🎥- Fun commands to preform on others","🔹**Adorbs** 🔹**Bite** 🔹**CPR** 🔹**Cuddle**\n🔹**Hug** 🔹**Kidnap** 🔹**Kiss** 🔹**Lick**\n🔹**Slap** 🔹**Spank** 🔹**Tackle** 🔹**Feed**\n🔹**Poke** 🔹**Tickle**",false)
         .addBlankField(false)
         .addField("🐱__**Image Commands**__🐦- Commands to display images", "🔹**Birb** - *Displays random bird image.*\n🔹**Cat** - *Displays random cat image.*\n🔹**Dog** - *Displays random dog image.*\n🔹**Lizard** - *Displays random lizard image*",false)
         .addBlankField(false)
