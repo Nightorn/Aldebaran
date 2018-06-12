@@ -1,5 +1,6 @@
 exports.run = (bot, message, args) => {
     const client = require('nekos.life');
+    const Discord = require(`discord.js`)
     const neko = new client();
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
@@ -10,7 +11,7 @@ exports.run = (bot, message, args) => {
                     name: message.author.username,
                     icon_url: message.author.avatarURL
                 },
-                description: (message.author +` is Poking `+ target),
+                description: (message.author +`  is poking  `+ target),
                 image: {
                     url : (data.url),
                 },
