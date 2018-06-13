@@ -1,5 +1,6 @@
 exports.run = async (client, message) => {
   //Pollux Lootbox Watcher
+  if (message.content === 'kek kek') message.delete();
   if (message.author.id == `271394014358405121`){
     console.log(message.content)
     if(message.content.endsWith(`a chance to claim it!`) && message.author.id == "271394014358405121") {
