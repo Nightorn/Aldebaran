@@ -1,6 +1,5 @@
-const config = require("./../../config.json");
+const poolQuery = require('./../../functions/database/poolQuery');
 const Discord = require("discord.js");
-const mysql = require("mysql");
 module.exports = function(client, message, args) {
     var playerName = null;
     var char_currentHP = 0;
@@ -48,51 +47,40 @@ module.exports = function(client, message, args) {
     var char_healthPercent = Math.round(10 * char_currentHP * 100 / char_maxHP) / 10;
     var pet_healthPercent = Math.round(10 * pet_currentHP * 100 / pet_maxHP) / 10;
     if (user != null && playerName != undefined && char_healthPercent != pet_healthPercent) {
-      var con = mysql.createPool({
-        host : config.mysqlHost,
-        user : config.mysqlUser,
-        password : config.mysqlPass,
-        database : config.mysqlDatabase
-      });
-      con.getConnection((err, connection) => {
-        if (err) throw err;
-        connection.query(`SELECT * FROM users WHERE userId='${user.id}'`, (err, result) => {
-          if (err) throw err;
-          connection.release();
-          if (Object.keys(result).length !== 0) {
-            let settings = JSON.parse(result[0].settings);
-            if (settings.healthMonitor !== 'off') {
-              if (settings.healthMonitor === 'on' || char_healthPercent < settings.healthMonitor || pet_healthPercent < settings.healthMonitor) {
-                if (char_healthPercent < 10) {
-                  const embed = new Discord.RichEmbed()
-                    .setTitle(`__${user.username} Health Warning!!! - ${char_healthPercent}%__`)
-                    .setColor(0xff0000)
-                    .setDescription(`**${user.username}** is at __**${char_currentHP}**__ health!!!\n`)
-                    .setImage(`https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg`)
-                    .setFooter(`You are going to die aren't you?`)
-                  message.channel.send(embed).then(msg => msg.delete(60000));
-                } else { 
-                  var embed = new Discord.RichEmbed()
-                    .setAuthor(user.username, user.avatarURL)
-                    .addField(`__Character Health__ - **${char_healthPercent}%**`,`(${char_currentHP} HP / ${char_maxHP} HP)`, false)
-          
-                  if (char_healthPercent <= 20 || pet_healthPercent <= 20)
-                    embed.setColor('RED');
-                  else if (char_healthPercent <= 40 || pet_healthPercent <= 40)
-                    embed.setColor('ORANGE');
-                  else if (char_healthPercent <= 60 || pet_healthPercent <= 60)
-                    embed.setColor('GOLD');
-                  else if (char_healthPercent <= 100 || pet_healthPercent <= 100)
-                    embed.setColor('GREEN');
-          
-                  if (!isNaN(pet_healthPercent))
-                    embed.addField(`__Pet Health__ - **${pet_healthPercent}%**`, `(${pet_currentHP} HP / ${pet_maxHP} HP)`, false);
-                  message.channel.send({embed}).then(msg => msg.delete(30000));
-                }
+      poolQuery(`SELECT * FROM users WHERE userId='${user.id}'`).then((result) => {
+        if (Object.keys(result).length !== 0) {
+          let settings = JSON.parse(result[0].settings);
+          if (settings.healthMonitor !== 'off') {
+            if (settings.healthMonitor === 'on' || char_healthPercent < settings.healthMonitor || pet_healthPercent < settings.healthMonitor) {
+              if (char_healthPercent < 10) {
+                const embed = new Discord.RichEmbed()
+                  .setTitle(`__${user.username} Health Warning!!! - ${char_healthPercent}%__`)
+                  .setColor(0xff0000)
+                  .setDescription(`**${user.username}** is at __**${char_currentHP}**__ health!!!\n`)
+                  .setImage(`https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg`)
+                  .setFooter(`You are going to die aren't you?`)
+                message.channel.send(embed).then(msg => msg.delete(60000));
+              } else { 
+                var embed = new Discord.RichEmbed()
+                  .setAuthor(user.username, user.avatarURL)
+                  .addField(`__Character Health__ - **${char_healthPercent}%**`,`(${char_currentHP} HP / ${char_maxHP} HP)`, false)
+        
+                if (char_healthPercent <= 20 || pet_healthPercent <= 20)
+                  embed.setColor('RED');
+                else if (char_healthPercent <= 40 || pet_healthPercent <= 40)
+                  embed.setColor('ORANGE');
+                else if (char_healthPercent <= 60 || pet_healthPercent <= 60)
+                  embed.setColor('GOLD');
+                else if (char_healthPercent <= 100 || pet_healthPercent <= 100)
+                  embed.setColor('GREEN');
+        
+                if (!isNaN(pet_healthPercent))
+                  embed.addField(`__Pet Health__ - **${pet_healthPercent}%**`, `(${pet_currentHP} HP / ${pet_maxHP} HP)`, false);
+                message.channel.send({embed}).then(msg => msg.delete(30000));
               }
             }
           }
-        })
+        }
       });
     }
 }
