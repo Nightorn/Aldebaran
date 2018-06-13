@@ -13,6 +13,7 @@ exports.run = function(bot, message, args) {
         con.getConnection((err, connection) => {
             if (err) throw err;
             connection.query(args.join(' '), (err, result) => {
+                connection.release();
                 if (err) {
                     message.channel.send(`An error occured.\n\`\`\`xl\n${err}\n\`\`\``);
                 } else {
