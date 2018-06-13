@@ -57,6 +57,8 @@ module.exports = function(client, message, args) {
       con.getConnection((err, connection) => {
         if (err) throw err;
         connection.query(`SELECT * FROM users WHERE userId='${user.id}'`, (err, result) => {
+          if (err) throw err;
+          connection.release();
           if (Object.keys(result).length !== 0) {
             let settings = JSON.parse(result[0].settings);
             if (settings.healthMonitor !== 'off') {

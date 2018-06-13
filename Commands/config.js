@@ -28,16 +28,19 @@ exports.run = function(bot, message, args) {
                     con.getConnection((err, connection) => {
                         if (err) throw err;
                         connection.query(`SELECT * FROM users WHERE userId='${message.author.id}'`, (err, result) => {
+                            connection.release();
                             if (err) throw err;
                             if (Object.keys(result).length == 0) {
-                                connection.query(`INSERT INTO users (userId, settings) VALUES ('${message.author.id}', '{}')`, (err, result) => {
+                                connection.query(`INSERT INTO users (userId, settings) VALUES ('${message.author.id}', '{}')`, (err) => {
+                                    connection.release();
                                     if (err) throw err;
                                     connect();
                                 });
                             } else {
                                 let settings = JSON.parse(result[0].settings);
                                 settings.healthMonitor = value;
-                                connection.query(`UPDATE users SET settings='${JSON.stringify(settings)}' WHERE userId='${message.author.id}'`, (err, result) => {
+                                connection.query(`UPDATE users SET settings='${JSON.stringify(settings)}' WHERE userId='${message.author.id}'`, (err) => {
+                                    connection.release();
                                     if (!err) {
                                         const embed = new Discord.RichEmbed()
                                             .setAuthor(message.author.username, message.author.avatarURL)
