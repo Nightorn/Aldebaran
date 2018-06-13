@@ -23,8 +23,7 @@ exports.run = async (client, message) => {
           var nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
           char_currentHP = Number(nums[1].replace(/,/g,""));
           char_maxHP = Number(nums[2].replace(/,/g,""));
-          playerName = message.content.split(` `)[1].replace("'s", "");
-          if (playerName === "used") playerName = message.content.split(` `)[0];
+          playerName = message.content.split(`\n`)[1].replace("'s Adventure ]========!", "").replace("!========[ ", "");
         }
   
         const messageArray = message.content.split('\n');
