@@ -7,5 +7,6 @@
     "mysqlUser" : "b26ca98b5b6cb2",
     "mysqlPass" : "580c0f52",
     "mysqlHost" : "us-cdbr-iron-east-04.cleardb.net",
+    "mysqlDatabase": "heroku_39f8be6222713c4",
     "cat_apikey": "MzI0MDc4"
 }
