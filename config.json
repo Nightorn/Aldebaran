@@ -4,9 +4,11 @@
     "drpg_apikey":"0647bfdf-067e-442a-8a6c-daf893ab13c8",
     "giphy_apikey":"t5bwD3kNWxpYRbk01My3SPoFKlJCjpfG",
     "omdb_apikey" : "1aa9cc94",
-    "mysqlUser" : "b26ca98b5b6cb2",
-    "mysqlPass" : "580c0f52",
-    "mysqlHost" : "us-cdbr-iron-east-04.cleardb.net",
-    "mysqlDatabase": "heroku_39f8be6222713c4",
-    "cat_apikey": "MzI0MDc4"
+    "cat_apikey": "MzI0MDc4",
+    "mysql": {
+        "host": "us-cdbr-iron-east-04.cleardb.net",
+        "user": "b26ca98b5b6cb2",
+        "password": "580c0f52",
+        "database": "heroku_39f8be6222713c4"
+    }
 }
