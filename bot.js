@@ -62,6 +62,10 @@ try {
         let commandFile = require(`./Commands/ImageCommands/${command}.js`)
         commandFile.run(bot, message, args);
       }
+      else if (fs.existsSync(`./Commands/FunCommands/${command}.js`) === true) {
+        let commandFile = require(`./Commands/FunCommands/${command}.js`)
+        commandFile.run(bot, message, args);
+      }
 
 
   } catch (err) {
