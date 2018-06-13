@@ -2,8 +2,8 @@ exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
     const apikey = require("./../../config.json");
     const request = require('request');
-    const itemlist = require("./../Data/drpgitemlist.json");
-    const locationdb = require("./../Data/drpglocationlist.json");
+    const itemlist = require("./../../Data/drpgitemlist.json");
+    const locationdb = require("./../../Data/drpglocationlist.json");
     var usrid = message.author.id;
     if (args.length > 0){
         usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
