@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
-    const kidnaps = require("./../Data/imageurls.json");
-    var sendkidnaps = (`${kidnaps.kidnaps[~~(Math.random() * kidnaps.kidnaps.length)]}`);
+    const slaps = require("./../../Data/imageurls.json");
+    var sendslaps = (`${slaps.slaps[~~(Math.random() * slaps.slaps.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
         message.channel.send({embed:{
@@ -8,9 +8,9 @@ exports.run = (bot, message, args) => {
         name: message.author.username,
         icon_url: message.author.avatarURL
         },
-        description: (message.author +` just kidnapped `+ target),
+        description: (message.author +` slapped `+ target + ` that's going to leave a mark.`),
         image: {
-            url : (sendkidnaps),
+            url : (sendslaps),
       },
         timestamp: new Date()
     

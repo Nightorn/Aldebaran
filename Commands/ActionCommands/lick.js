@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
-    const bites = require("./../Data/imageurls.json");
-    var sendbites = (`${bites.bites[~~(Math.random() * bites.bites.length)]}`);
+    const licks = require("./../../Data/imageurls.json");
+    var sendlicks = (`${licks.licks[~~(Math.random() * licks.licks.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
         message.channel.send({embed:{
@@ -8,9 +8,9 @@ exports.run = (bot, message, args) => {
         name: message.author.username,
         icon_url: message.author.avatarURL
         },
-        description: (message.author +` Bit `+ target),
+        description: (message.author +` licked `+ target + ` maybe we should look away.`),
         image: {
-            url : (sendbites),
+            url : (sendlicks),
       },
         timestamp: new Date()
     

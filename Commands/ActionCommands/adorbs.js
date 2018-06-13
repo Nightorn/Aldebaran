@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
-    const slaps = require("./../Data/imageurls.json");
-    var sendslaps = (`${slaps.slaps[~~(Math.random() * slaps.slaps.length)]}`);
+    const adorables = require("./../../Data/imageurls.json");
+    var sendadorables = (`${adorables.adorables[~~(Math.random() * adorables.adorables.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
         message.channel.send({embed:{
@@ -8,9 +8,9 @@ exports.run = (bot, message, args) => {
         name: message.author.username,
         icon_url: message.author.avatarURL
         },
-        description: (message.author +` slapped `+ target + ` that's going to leave a mark.`),
+        description: (message.author +` thinks `+ target + ` is totally adorable.`),
         image: {
-            url : (sendslaps),
+            url : (sendadorables),
       },
         timestamp: new Date()
     

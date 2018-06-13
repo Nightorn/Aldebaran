@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
-    const tackles = require("./../Data/imageurls.json");
-    var sendtackles = (`${tackles.tackles[~~(Math.random() * tackles.tackles.length)]}`);
+    const cprs = require("./../../Data/imageurls.json");
+    var sendcprs = (`${cprs.cprs[~~(Math.random() * cprs.cprs.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
         message.channel.send({embed:{
@@ -8,9 +8,9 @@ exports.run = (bot, message, args) => {
         name: message.author.username,
         icon_url: message.author.avatarURL
         },
-        description: (message.author +` just tackled `+ target + `, looks like it hurt!`),
+        description: (`OMG ${target} is dying, Good thing ${message.author} knows CPR!`),
         image: {
-            url : (sendtackles),
+            url : (sendcprs),
       },
         timestamp: new Date()
     

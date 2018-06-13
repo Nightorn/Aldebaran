@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
-    const adorables = require("./../Data/imageurls.json");
-    var sendadorables = (`${adorables.adorables[~~(Math.random() * adorables.adorables.length)]}`);
+    const kisses = require("./../../Data/imageurls.json");
+    var sendkisses = (`${kisses.kisses[~~(Math.random() * kisses.kisses.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
         message.channel.send({embed:{
@@ -8,9 +8,9 @@ exports.run = (bot, message, args) => {
         name: message.author.username,
         icon_url: message.author.avatarURL
         },
-        description: (message.author +` thinks `+ target + ` is totally adorable.`),
+        description: (message.author +` kissed `+ target + `, awwww get a Room!`),
         image: {
-            url : (sendadorables),
+            url : (sendkisses),
       },
         timestamp: new Date()
     
