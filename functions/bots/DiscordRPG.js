@@ -61,6 +61,7 @@ module.exports = function(client, message, args) {
             var embed = new Discord.RichEmbed()
               .setAuthor(user.username, user.avatarURL)
               .addField(`__Character Health__ - **${char_healthPercent}%**`,`(${char_currentHP} HP / ${char_maxHP} HP)`, false)
+              .setFooter(`&Config To Change Health Monitor Settings`)
     
             if (char_healthPercent <= 20 || pet_healthPercent <= 20)
               embed.setColor('RED');
