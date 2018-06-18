@@ -154,9 +154,59 @@
         },
         "rewards": {
             "1": "The True Wood Cutter",
-            "2": "1,000",
+            "2": "1,000xp",
             "3": "750 Gold",
             "4": "1 Quest point"
         }
-    }
+    },
+    "meditative magic" : {
+        "name": "Meditative Magic",
+        "lvl": "20",
+        "membersOnly": false,
+        "startPoint": "Silverkeep Altar",
+        "startNpc": "Rune Guru",
+        "steps": {
+            "1": "Travel to Silverkeep Altar",
+            "2": "Talk to Rune Guru",
+            "3": "Travel to Copperfall Summit",
+            "4": "Talk to Copperfall Monk",
+            "5": "Use *search* to obtain Lotus Blossom",
+            "6": "Talk to Copperfall Monk",
+            "7": "Travel to Silverkeep Altar",
+            "8": "Mine for Silver Essence at Silverkeep Altar",
+            "9": "Talk to Rune Guru",
+            "10": "Obtain 50k gold and talk to Rune Guru Again",
+            "11": "Craft a Knotted Mesh",
+            "12": "Talk to Rune Guru"
+        },
+        "itemsNeeded": {
+            "1": {
+                "item": "String",
+                "qty": "2",
+                "buyable": false,
+                "price": "Varies"
+            },
+            "2": {
+                "item": "Silver Essence",
+                "qty": "3",
+                "buyable": false,
+                "price": "Varies"
+            }
+        },
+        "rewards": {
+           "1": "Silverkeep Rune",
+           "2": "500xp",
+           "3": "500 Gold",
+           "4": "1 Quest Point" 
+        } 
+    } 
+
+
+
+
+
+
+
+
+
 }
