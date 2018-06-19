@@ -13,7 +13,7 @@ exports.run = (bot, message, args) => {
         .setAuthor(message.author.username,message.author.avatarURL)
         .setColor(0x00AE86)
         .setImage(`${image}`)
-        .setFooter(`Bunny Powered By: ${imagesource}`)
+        .setFooter(`Bunny Powered By: ${imagesource} on Pexels.com`)
         message.channel.send({embed})
     })
 }

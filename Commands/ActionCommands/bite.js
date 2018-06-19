@@ -5,8 +5,8 @@ exports.run = (bot, message, args) => {
         let target = message.mentions.users.first();
         message.channel.send({embed:{
         author:{
-        name: message.author.username,
-        icon_url: message.author.avatarURL
+            name: message.author.username,
+            icon_url: message.author.avatarURL
         },
         description: (message.author +` Bit `+ target),
         image: {

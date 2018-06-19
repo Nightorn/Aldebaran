@@ -2,7 +2,7 @@ exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
     const embed = new Discord.RichEmbed()
         .setTitle("Aldebaran's Help")
-        .setAuthor(`${message.author.username}`)
+        .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
         .setDescription("You can find a brief list of my functions and how to use them below.")
         .addBlankField(false)
         .addField("⚔__**DRPG Commands**__🛡- Utility commands for Discord RPG Bot","🔹**Stats** - *Displays users detailed stats.*\n🔹**Trap** - *Displays users current trap info.* \n🔹**Plant** - *Displays users current plant info.*\n🔹**Weapon** - *Displays buyable weapons at level specified.*\n🔹**Quest** - *Displays DRPG quest list(work in progress)*.",false)
