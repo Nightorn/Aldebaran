@@ -29,7 +29,7 @@
         "membersOnly": false,
         "startPoint": "Frostridge",
         "startNpc": "Nieves",
-        "warning": "Combat required",
+        "warning": "Combat required - OP Boss Please Consider Coming Back at Lvl 60+",
         "steps": {
             "1": "Travel to Frostridge",
             "2": "Talk to Nieves",
