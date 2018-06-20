@@ -3,3 +3,8 @@ exports.run = (bot, message, args) => {
     message.delete();
     message.channel.send(emojilist);
 }
+exports.infos = {
+    "category": "Fun",
+    "description": "",
+    "usage": ""
+}

@@ -9,5 +9,10 @@ exports.run = (bot, message, args) => {
         title: (sayMessage),
         timestamp: new Date()
     
-    }}
-)};
+    }})
+};
+exports.infos = {
+    "category": "Fun",
+    "description": "",
+    "usage": ""
+}

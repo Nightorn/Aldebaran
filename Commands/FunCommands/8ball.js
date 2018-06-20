@@ -1,6 +1,6 @@
+const client = require('nekos.life');
+const Discord = require(`discord.js`)
 exports.run = (bot, message, args) => {
-    const client = require('nekos.life');
-    const Discord = require(`discord.js`)
     const neko = new client();
     if(args =! ''){
         async function ball() {
@@ -27,4 +27,9 @@ exports.run = (bot, message, args) => {
     } else {
         message.reply("Please ask a question")
     }
+}
+exports.infos = {
+    "category": "Fun",
+    "description": "Ask the magic 8ball a question, get it's all knowing answer",
+    "usage": "&8ball Why is the sky blue?"
 }

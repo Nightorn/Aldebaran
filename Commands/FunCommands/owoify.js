@@ -10,3 +10,8 @@ exports.run = (bot, message, args) => {
         
         owo();
 }
+exports.infos = {
+    "category": "Fun",
+    "description": "",
+    "usage": ""
+}
