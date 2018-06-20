@@ -15,7 +15,7 @@ exports.run = (bot, message, args) => {
         .addBlankField(false)        
         .addField("🎟__**Fun Commands**__🎭- Commands used for fun or entertainment","🔹**Say** - *Used to send embed message as the bot*\n🔹**Fact** - *Used to display a random fact*\n🔹**Kaomoji** - *Used to send a random Kaomoji in chat*\n🔹**Owoify** - *Used to Owoify the text sent in command*\n🔹**8Ball** - *Ask 8ball a question and recieve your answer*",false)
         .addBlankField(false)        
-        .addField("🚫__**NSFW Commands**__⛔- Usable in NSFW Channels","🔹**Lewd** - *Action Command lewding another person*\n🔹**XBoobs** - * Display a Animated Image or Gif*\n🔹**XKitty** - * Display a Animated Image or Gif*\n🔹**XLez** - * Display a Animated Image or Gif*\n🔹**XNeko** - * Display a Animated Image or Gif*\n🔹**XRandom** - * Display a Random Animated Image or Gif*\n",false)
+        .addField("🚫__**NSFW Commands**__⛔- Usable in NSFW Channels","🔹**Lewd** - *Action Command lewding another person*\n🔹**XBoobs** - *Display a Animated Image or Gif*\n🔹**XKitty** - *Display a Animated Image or Gif*\n🔹**XLez** - *Display a Animated Image or Gif*\n🔹**XNeko** - *Display a Animated Image or Gif*\n🔹**XRandom** - *Display a Random Animated Image or Gif*\n",false)
         .addBlankField(false)
         .addField("__**Have a command request or suggestion?**__", "*DM Nightmare#1234* - Always looking for new and fun commands!",false)
         .setFooter("In Development By Nightmare#1234")
