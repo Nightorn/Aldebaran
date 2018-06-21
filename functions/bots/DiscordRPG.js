@@ -85,8 +85,6 @@ module.exports = function(client, message, args) {
               drpg();
             }
           }
-        } else {
-          drpg();
         }
       });
     }
