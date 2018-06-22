@@ -40,7 +40,7 @@ exports.run = (bot, message, args) => {
         embed.addField(`__*Blue Ceremonial Card*__ - Lvl. 100`,`Given to all players who have reached Level 100. Contains the memories of the player gained from their adventure.\n**Price:** Free using **__*getcard*__** command.\n**Damage:** 333 - 377`,false)
     }
     for (let [weapon, weaponLevel] of allWeapons) {
-        embed.addField(`__*${weapon.name} - Lvl.${weapon.level}*__`,`*${weapon.desc}*\n**Price:** ${weapon.cost} gold\n**Damage:** ${weapon.weapon.dmg.min} - ${weapon.weapon.dmg.max}\n**ItemID: ${weapon.id}`,false);
+        embed.addField(`__*${weapon.name} - Lvl.${weapon.level}*__`,`*${weapon.desc}*\n**Price:** ${weapon.cost} gold\n**Damage:** ${weapon.weapon.dmg.min} - ${weapon.weapon.dmg.max}\n**ItemID:** ${weapon.id}`,false);
     };
     message.channel.send(embed);
 }
