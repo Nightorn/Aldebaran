@@ -36,7 +36,7 @@ exports.run = (bot, message, args) => {
     .setDescription(`Will display weapon available at level specfied, unless none exist which will return close matches above and below level specfied.`)
     if (exactWeaponLevelFound.size != 0)
         allWeapons = exactWeaponLevelFound;
-    if (args[0] = 100) {
+    if (args[0] == 100) {
         embed.addField(`__*Blue Ceremonial Card*__ - Lvl. 100`,`Given to all players who have reached Level 100. Contains the memories of the player gained from their adventure.\n**Price:** Free using **__*getcard*__** command.\n**Damage:** 333 - 377`,false)
     }
     for (let [weapon, weaponLevel] of allWeapons) {
