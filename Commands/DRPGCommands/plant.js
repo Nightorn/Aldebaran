@@ -1,27 +1,31 @@
-exports.run = (bot, message, args) => {
+exports.run = (bot, message, args, apiratelimit) => {
     const Discord = require("discord.js");
     const apikey = require("./../../config.json");
     const request = require('request');
     const itemlist = require("./../../Data/drpgitemlist.json");
     const locationdb = require("./../../Data/drpglocationlist.json");
     var usrid = message.author.id;
-    if (args.length > 0){
+    if (args.length > `0`){
         usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
     };
+    if (apiratelimit == 0)return message.channel.send(`This Command is globally ratelimited, please try again in 1min.`);
     bot.fetchUser(usrid).then((user) => {
-        request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body) {
+        request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body, headers) {
             if (err) return;
             const data = JSON.parse(body);
+            apiratelimit = response.headers["x-ratelimit-remaining"]
             if (data.location === undefined) return message.channel.send(`**Error** No Purchased Fields Found`);
             if (data.location.saplings === null) return message.channel.send(`**Please plant at purchased feilds first**`);
             //if (Object.values(data.location.saplings).indexOf(null) != -1) return message.channel.send(`**Error** No Currently Planted Saplings Found`);  
                 //Caused errors when any location was "null" would then show complete message and ignore all other locations was removed fixing error.
-
+            var ratelimitrest = Math.floor(parseInt(response.headers["x-ratelimit-reset"] - (Date.now()/1000)))
+            console.log(response.headers["x-ratelimit-reset"])
             const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s Planting Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
                 .setDescription(`**Please note all infomation about amounts are strictly estimates!!**`)
+                .setFooter(`${apiratelimit} Global Uses Remain Before Ratelimited | Usages Reset In ${ratelimitrest} seconds.`)
                 
             for (let [key, value] of Object.entries(data.location.saplings)){
                 var planttime = 0

@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
-const bot = new Discord.Client();
-
+const bot = new Discord.Client(); 
 const config = require("./config.json");
 const fs = require("fs");
 const mysql = require("mysql");
 var itemapicooldown = false;
 var globalcooldown = false;
+var apiratelimit ;
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
@@ -35,9 +35,9 @@ bot.on("message", message => {
   if (message.content.startsWith("&")) {
     if (globalcooldown == true) return message.reply("Stop that, spam hurts!!");
       globalcooldown = true
-      setTimeout(() => {
+      setTimeout((channel, userid) => {
       globalcooldown = false
-    }, 10);
+    }, 2000, message.channel, message.author.id);
   } 
 //..............................................................................................................//
 try {
