@@ -19,7 +19,7 @@ exports.run = (bot, message, args, apiratelimit) => {
             var goldBoostpercent = (data.attributes !== undefined) ? Math.floor(data.attributes.goldBoost / 10) : 0 ;
             var playdate = Math.floor((new Date()-data.lastseen)/60000);
             var donator = data.donate ? `Yes` : `No`
-            var completedquest = (data.quest == null || data.quest == "" || data.quest.accept !== undefined ) ? `None`: data.quest.completed.join(`, `)
+            var completedquest = (data.quest == null || data.quest == "" || data.quest.accept !== undefined || data.quest.completed == undefined ) ? `None`: data.quest.completed.join(`, `)
             var questpoints = (data.questPoints == undefined) ? `0`: data.questPoints
             var lux = (data.lux == undefined) ? `0` : data.lux
             var petxprate =(data.pet == undefined || data.pet.xprate == undefined ) ? `0` : data.pet.xprate
