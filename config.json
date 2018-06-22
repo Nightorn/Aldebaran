@@ -11,5 +11,10 @@
         "password": "580c0f52",
         "database": "heroku_39f8be6222713c4"
     },
-    "pexels_apikey": "563492ad6f9170000100000176b8f11924744d96ae2793f53b8aa16d"
+    "pexels_apikey": "563492ad6f9170000100000176b8f11924744d96ae2793f53b8aa16d",
+    "dprg_prefix": [
+        ",",
+        "#!",
+        "."
+    ]
 }
