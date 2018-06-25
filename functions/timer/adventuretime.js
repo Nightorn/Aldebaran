@@ -1,7 +1,7 @@
 const config = require('./../../config.json');
 module.exports = function(bot, message, args) {
     if (message.content.toLowerCase().startsWith(`#!adv`)){
-      if(message.channel.id == `172388293999198208`){
+      if(message.channel.id == `172388244007288832`){
         message.delete(1000);
         setTimeout((channel, userid) => {
           message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
