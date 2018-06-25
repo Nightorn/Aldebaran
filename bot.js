@@ -38,7 +38,8 @@ bot.on("message", message => {
       setTimeout((channel, userid) => {
       globalcooldown = false
     }, 2000, message.channel, message.author.id);
-  } 
+  }
+  console.log(`User- ${message.author.id} Commaand - ${command} Args - ${args}`)  
 //..............................................................................................................//
 try {
   
