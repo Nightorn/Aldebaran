@@ -1,6 +1,6 @@
 const config = require('./../../config.json');
 const Discord = require("discord.js")
-module.exports = function(bot, message, args) {
+module.exports = async function(bot, message, args) {
     if (message.content.toLowerCase().startsWith(`#!adv`)){
       if(message.channel.id == `172388244007288832`){
         message.delete(1000);
