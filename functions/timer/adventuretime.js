@@ -26,4 +26,13 @@ module.exports = function(bot, message, args) {
         }).catch();
       }, 13500, message.channel, message.author.id)
     }
+
+    else if (message.content.toLowerCase().startsWith(`#!mine`)){
+      message.delete(1000);
+      setTimeout((channel, userid) => {
+        message.channel.send(`<@${message.author.id}> Sides Time! :lemon:`).then(msg => {
+          msg.delete(30000)
+        }).catch();
+      }, 295000, message.channel, message.author.id)
+    }
 }
