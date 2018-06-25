@@ -12,7 +12,7 @@ module.exports = function(bot, message, args) {
       }
     }
 
-    else if (message.content.toLowerCase().startsWith(`,adv`)){
+    /*else if (message.content.toLowerCase().startsWith(`,adv`)){
       message.delete(1000);
       setTimeout((channel, userid) => {
         message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
@@ -28,7 +28,7 @@ module.exports = function(bot, message, args) {
           msg.delete(3000)
         }).catch();
       }, 13500, message.channel, message.author.id)
-    }
+    }*/
 
     else if (message.content.toLowerCase().startsWith(`#!mine`)){
       const cancel = "🚫"
