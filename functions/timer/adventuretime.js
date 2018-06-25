@@ -4,7 +4,7 @@ module.exports = function(bot, message, args) {
       message.delete(1000);
       setTimeout((channel, userid) => {
         message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
-          msg.delete(5000)
+          msg.delete(3000)
         }).catch();
       }, 13500, message.channel, message.author.id)
     }
@@ -13,7 +13,7 @@ module.exports = function(bot, message, args) {
       message.delete(1000);
       setTimeout((channel, userid) => {
         message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
-          msg.delete(5000)
+          msg.delete(3000)
         }).catch();
       }, 13500, message.channel, message.author.id)  
     }
@@ -22,7 +22,7 @@ module.exports = function(bot, message, args) {
       message.delete(1000);
       setTimeout((channel, userid) => {
         message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
-          msg.delete(5000)
+          msg.delete(3000)
         }).catch();
       }, 13500, message.channel, message.author.id)
     }
@@ -31,8 +31,8 @@ module.exports = function(bot, message, args) {
       message.delete(1000);
       setTimeout((channel, userid) => {
         message.channel.send(`<@${message.author.id}> Sides Time! :lemon:`).then(msg => {
-          msg.delete(30000)
+          msg.delete(25000)
         }).catch();
-      }, 295000, message.channel, message.author.id)
+      }, 297500, message.channel, message.author.id)
     }
 }
