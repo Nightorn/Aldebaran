@@ -6,7 +6,7 @@ module.exports = async function(bot, message, args) {
         message.delete(1000);
         setTimeout((channel, userid) => {
           message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
-            msg.delete(3000)
+            msg.delete(5000)
           }).catch();
         }, 13500, message.channel, message.author.id)
       }
