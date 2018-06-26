@@ -13,6 +13,7 @@ exports.run = (bot, message, args, apiratelimit) => {
             request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body) {
             if (err) return;
             const data = JSON.parse(body);
+            if (data.error != undefined)return message.channel.send(`**Error**: No User Profile Found.`)
             apiratelimit = response.headers["x-ratelimit-remaining"]
             var ratelimitrest = Math.floor(parseInt(response.headers["x-ratelimit-reset"] - (Date.now()/1000)))
             var xpBoostpercent = (data.attributes !== undefined) ? Math.floor(data.attributes.xpBoost / 10) : 0 ;
