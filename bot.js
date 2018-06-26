@@ -6,6 +6,7 @@ const mysql = require("mysql");
 var itemapicooldown = false;
 var globalcooldown = false;
 var apiratelimit ;
+var ratelimitreset ;
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);

@@ -3,8 +3,10 @@ const config = require("./../config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
+    if (['310296184436817930', '320933389513523220', message.guild.ownerID].indexOf(message.author.id) == -1) return message.reply(`How about you not do that!`);
     const parametersAvailable = {
-        healthMonitor: {support: "['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100)", help: "DiscordRPG Health Monitor - [on | off | healthPercentage]"}
+        adventureTimer: {support: "['on', 'off'].indexOf(value) != -1", help: "DiscordRPG Adventure Timer - [on | off]"},
+        sidesTimer: {support: "['on', 'off'].indexOf(value) != -1", help: "DiscordRPG Sides Timer - [on | off]"}
     }
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
@@ -12,7 +14,7 @@ exports.run = function(bot, message, args) {
         const embed = new Discord.RichEmbed()
             .setAuthor(message.author.username, message.author.avatarURL)
             .setTitle('Config Command Help Page')
-            .setDescription(`Here are the different parameters you can change to have a better experience of ${bot.user.username}. Usage Example : \`&config healthMonitor off\`\n${description}`)
+            .setDescription(`Here are the different parameters you can change to have a better experience of ${bot.user.username}. Usage Example : \`&config adventureTimer off\`\n${description}`)
             .setColor('BLUE');
         message.channel.send({embed});
     } else {
@@ -20,15 +22,15 @@ exports.run = function(bot, message, args) {
             const value = args[1];
             if (eval(parametersAvailable[args[0]].support)) {
                 const connect = function() {
-                    poolQuery(`SELECT * FROM users WHERE userId='${message.author.id}'`).then(result => {
+                    poolQuery(`SELECT * FROM guilds WHERE guildid='${message.guild.id}'`).then(result => {
                         if (Object.keys(result).length == 0) {
-                            poolQuery(`INSERT INTO users (userId, settings) VALUES ('${message.author.id}', '{}')`).then(() => {
+                            poolQuery(`INSERT INTO guilds (guildid, settings) VALUES ('${message.guild.id}', '{}')`).then(() => {
                                 connect();
                             });
                         } else {
                             let settings = JSON.parse(result[0].settings);
-                            settings.healthMonitor = value;
-                            poolQuery(`UPDATE users SET settings='${JSON.stringify(settings)}' WHERE userId='${message.author.id}'`).then(() => {
+                            settings[args[0]] = value;
+                            poolQuery(`UPDATE guilds SET settings='${JSON.stringify(settings)}' WHERE guildid='${message.guild.id}'`).then(() => {
                                 const embed = new Discord.RichEmbed()
                                     .setAuthor(message.author.username, message.author.avatarURL)
                                     .setTitle(`Settings successfully changed`)
