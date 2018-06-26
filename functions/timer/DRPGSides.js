@@ -32,7 +32,7 @@ module.exports = async function(bot, message, args) {
                   .then(msg => {
                     msg.delete(180000)
                   }).catch();
-                }, 315000, message.channel, message.author.id)
+                }, 312500, message.channel, message.author.id)
               } else {
                 const embed1 = new Discord.RichEmbed()
                 .setDescription(`Timer Canceled`)

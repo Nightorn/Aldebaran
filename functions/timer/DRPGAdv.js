@@ -12,9 +12,9 @@ module.exports = function(bot, message, args) {
               message.delete(1000);
               setTimeout((channel, userid) => {
                 message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
-                  msg.delete(3000)
+                  msg.delete(10000)
                 }).catch();
-              }, 13500, message.channel, message.author.id)
+              }, 13250, message.channel, message.author.id)
             }
       
             if (Object.keys(result).length != 0) {
