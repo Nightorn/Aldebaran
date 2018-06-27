@@ -14,7 +14,7 @@ exports.run = function(bot, message, args) {
         const embed = new Discord.RichEmbed()
             .setAuthor(message.author.username, message.author.avatarURL)
             .setTitle('Config Command Help Page')
-            .setDescription(`Here are the different parameters you can change to have a better experience of ${bot.user.username}\n(Note: If setting is disabled in &gconfig by guild owner, these settings will be ignored.\nUsage Example : \`&uconfig healthMonitor off\`\n${description}`)
+            .setDescription(`Here are the different parameters you can change to have a better experience of ${bot.user.username}\n(Note: If setting is disabled in &gconfig by guild owner, these settings will be ignored.\n**__Usage Example__** : \`&uconfig healthMonitor off\`\n${description}\n`)
             .setColor('BLUE');
         message.channel.send({embed});
     } else {

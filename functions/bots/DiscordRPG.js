@@ -77,12 +77,13 @@ module.exports = function(client, message, args) {
             message.channel.send({embed}).then(msg => msg.delete(30000));
           }
         }
-
+        console.log(char_healthPercent + " " +pet_healthPercent)
         if (Object.keys(result).length !== 0) {
           let settings = JSON.parse(result[0].settings);
           if (settings.healthMonitor !== 'off') {
             if (settings.healthMonitor === 'on' || char_healthPercent < settings.healthMonitor || pet_healthPercent < settings.healthMonitor) {
               drpg();
+              console.log(char_healthPercent + " " +pet_healthPercent)
             }
           }
         }
