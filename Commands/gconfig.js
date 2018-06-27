@@ -14,7 +14,7 @@ exports.run = function(bot, message, args) {
         const embed = new Discord.RichEmbed()
             .setAuthor(message.author.username, message.author.avatarURL)
             .setTitle('Config Command Help Page')
-            .setDescription(`Here are the different parameters you can change to set the experience and the limitations of the members of your server.\n**Usage Example:** \`&gconfig adventureTimer off\`.\n**Note:** This command can only be used by the owner of the server.\n${description}`)
+            .setDescription(`Here are the different parameters you can change to set the experience and the limitations of the members of your server.\n**Usage Example:** \`&gconfig adventureTimer off\`.\n__Note:__ This command can only be used by the owner of the server.\n${description}`)
             .setColor('BLUE');
         message.channel.send({embed});
     } else {
