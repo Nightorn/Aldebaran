@@ -33,7 +33,7 @@ exports.run = (bot, message, args) => {
         .setColor(0x00AE86)
         .setDescription(`Use &quest <questname> to view walkthrough.`)
         .addField(`**__Non-Members Quest__**`,`🔺Cult of MOUKN                 🔺Fickle Fishing           🔺The Cold North\n🔺The quest about wood?   🔺Meditative Magic   🔺Exotic Eggnog\n🔺The Land Above`,false)
-        .addField(`**__Members Only Quest__**`,`🔺Baffling Banking                 🔺Dragon Slayer          🔺Menu Specials\n🔺Bakoushi's Bunny              🔺Mystic Gravestone`,false)
+        .addField(`**__Members Only Quest__**`,`🔺Baffling Baking                  🔺Dragon Slayer          🔺Menu Specials\n🔺Bakoushi's Bunny              🔺Mystic Gravestone`,false)
         .setFooter(`Work in progress`);
         message.channel.send({embed});
     }
