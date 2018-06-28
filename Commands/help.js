@@ -1,24 +1,69 @@
 exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
-    const embed = new Discord.RichEmbed()
-        .setTitle("Aldebaran's Help")
+    var category = (args[0] != undefined) ? args[0].toLowerCase() : `none`
+    if (category == `drpg`){
+        const embed = new Discord.RichEmbed()
+        .setTitle("DRPG Commands Help")
         .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-        .setDescription("You can find a brief list of my functions and how to use them below.")
-        .addBlankField(false)
-        .addField("⚔__**DRPG Commands**__🛡- Utility commands for Discord RPG Bot","🔹**Stats** - *Displays users detailed stats.*\n🔹**Trap** - *Displays users current trap info.* \n🔹**Plant** - *Displays users current plant info.*\n🔹**Weapon** - *Displays buyable weapons at level specified.*\n🔹**Quest** - *Displays DRPG quest list(work in progress)*.",false)
-        .addBlankField(false)
-        .addField("📽__**Action Commands**__🎥- Fun commands to preform on others","🔹**Adorbs** 🔹**Bite** 🔹**CPR** 🔹**Cuddle**\n🔹**Hug** 🔹**Kidnap** 🔹**Kiss** 🔹**Lick**\n🔹**Slap** 🔹**Spank** 🔹**Tackle** 🔹**Feed**\n🔹**Poke** 🔹**Tickle**",false)
-        .addBlankField(false)
-        .addField("🐱__**Image Commands**__🐦- Commands to display images", "🔹**Birb** - *Displays random bird image.*\n🔹**Cat** - *Displays random cat image.*\n🔹**Dog** - *Displays random dog image.*\n🔹**Lizard** - *Displays random lizard image*\n🔹**Cuteag** - *Displays a random cute SFW anime girl.*\n🔹**Duck** - *Displays random duck image*\n🔹**Randimal** - *Displays a random animal image*",false)
-        .addBlankField(false)
-        .addField("💡__**Miscellaneous Commands**__🔦- Commands without specific category","🔹**Avatar** - *Displays avatar.*\n🔹**Emojilist** - *Displays all emojis in current server(**Spam Warning**)*\n🔹**Invite** - *Displays invite to add this bot to your server.*\n🔹**Ping** - *Returns bots current latency.*\n",false)        
-        .addBlankField(false)        
-        .addField("🎟__**Fun Commands**__🎭- Commands used for fun or entertainment","🔹**Say** - *Used to send embed message as the bot*\n🔹**Fact** - *Used to display a random fact*\n🔹**Kaomoji** - *Used to send a random Kaomoji in chat*\n🔹**Owoify** - *Used to Owoify the text sent in command*\n🔹**8Ball** - *Ask 8ball a question and recieve your answer*",false)
-        .addBlankField(false)        
-        .addField("🚫__**NSFW Commands**__⛔- Usable in NSFW Channels","🔹**Lewd** - *Action Command lewding another person*\n🔹**XBoobs** - *Display a Animated Image or Gif*\n🔹**XKitty** - *Display a Animated Image or Gif*\n🔹**XLez** - *Display a Animated Image or Gif*\n🔹**XNeko** - *Display a Animated Image or Gif*\n🔹**XRandom** - *Display a Random Animated Image or Gif*\n",false)
-        .addBlankField(false)
-        .addField("__**Have a command request or suggestion?**__", "*DM Nightmare#1234* - Always looking for new and fun commands!",false)
-        .setFooter("In Development By Nightmare#1234")
+        .setDescription("You can find command list and usage example for DRPG related commands below.")
         .setTimestamp ()
+        message.channel.send({embed});
+    }
+        else if (category == `action`) {
+            const embed = new Discord.RichEmbed()
+            .setTitle("Action Commands Help")
+            .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
+            .setDescription("You can find command list and usage example for action commands below.")
+            .setTimestamp ()
             message.channel.send({embed});
+        }
+            else if (category == `image`) {
+                const embed = new Discord.RichEmbed()
+                .setTitle("Image Commands Help")
+                .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
+                .setDescription("You can find command list and usage example for Image related commands below.")
+                .setTimestamp ()
+                message.channel.send({embed});
+            }
+                else if (category == `general`) {
+                    const embed = new Discord.RichEmbed()
+                    .setTitle("Misc. Commands Help")
+                    .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
+                    .setDescription("You can find command list and usage example for general commands below.")
+                    .setTimestamp ()
+                    message.channel.send({embed});
+                }
+                    else if (category == `fun`) {
+                        const embed = new Discord.RichEmbed()
+                        .setTitle("Fun Commands Help")
+                        .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
+                        .setDescription("You can find command list and usage example for fun related commands below.")
+                        .setTimestamp ()
+                        message.channel.send({embed});
+                    }
+                        else if (category == `nsfw`) {
+                            const embed = new Discord.RichEmbed()
+                            .setTitle("NSFW Commands Help")
+                            .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
+                            .setDescription("You can find command list and usage example for NSFW commands below.")
+                            .setTimestamp ()
+                            message.channel.send({embed});
+                        }
+                            else if (category == `none`) {
+                                const embed = new Discord.RichEmbed()
+                                .setTitle("Aldebaran's Help Categories")
+                                .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
+                                .setDescription("Below are the different help categories.\n\n*Useage example:* \`&help Image\`")
+                                .addField("⚔__**DRPG Commands**__🛡","Utility commands for Discord RPG Bot",false)
+                                .addField("📽__**Action Commands**__🎥","Fun commands to preform on others",false)
+                                .addField("🐱__**Image Commands**__🐦","Commands to display images",false)
+                                .addField("💡__**General Commands**__🔦","General use commands",false)              
+                                .addField("🎟__**Fun Commands**__🎭","Commands used for fun or entertainment",false)       
+                                .addField("🚫__**NSFW Commands**__⛔","NSFW Image and Action Commands, Usable In NSFW Channels Only",false)
+                                .addField("__**Have a command request or suggestion?**__", "*Join support server*- https://discord.gg/3x6rXAv",false)
+                                .setFooter("In Development By Nightmare#1234")
+                                .setTimestamp ()
+                                message.channel.send({embed}); 
+                            }
+                            else message.channel.reply(`Please enter a correct category from &help`)    
 }
