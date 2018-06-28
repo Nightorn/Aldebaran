@@ -2,7 +2,7 @@ const config = require('./../../config.json');
 const Discord = require("discord.js");
 const poolQuery = require('./../../functions/database/poolQuery');
 module.exports = function(bot, message, args) {
-  if (message.content.toLowerCase().startsWith(`#!adv`) || message.content.toLowerCase().startsWith(`,adv`)||message.content.toLowerCase().startsWith(`.adv`)){
+  if (message.content.toLowerCase().startsWith(`#!adv`) || message.content.toLowerCase().startsWith(`,adv`)||message.content.toLowerCase().startsWith(`.adv`) || message.content.toLowerCase().startsWith(`DiscordRPG adv`)){
     poolQuery(`SELECT * FROM guilds WHERE guildid ='${message.guild.id}'`).then((result) =>{
       if (Object.keys(result).length != 0){
         let settings = JSON.parse(result[0].settings);
