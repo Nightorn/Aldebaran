@@ -6,7 +6,8 @@ module.exports = function(client, message, args) {
     var char_maxHP = 0;
     var pet_currentHP = 0;
     var pet_maxHP = 0;
-
+    var deathimage = require(`./../../Data/imageurls.json`)
+    var senddeath = (`${deathimage.deathimage[~~(Math.random() * deathimage.deathimage.length)]}`);
     if (message.embeds.length === 0){
       if (message.content.indexOf("'s Adventure") != -1) {
         const regex = /has \d+\d+ HP left./
@@ -54,7 +55,7 @@ module.exports = function(client, message, args) {
               .setTitle(`__${user.username} Health Warning!!! - ${char_healthPercent}%__`)
               .setColor(0xff0000)
               .setDescription(`**${user.username}** is at __**${char_currentHP}**__ health!!!\n`)
-              .setImage(`https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg`)
+              .setImage(`${senddeath}`)
               .setFooter(`You are going to die aren't you?`)
             message.channel.send(embed).then(msg => msg.delete(60000));
           } else { 
