@@ -27,3 +27,11 @@ exports.run = function(bot, message, args) {
         })
     })
 }
+
+exports.infos = {
+    category: "General",
+    description: "Preforms restart on Aldebaran",
+    usage: "\`&restart\`",
+    example: "\`&restart\`",
+    restrictions: "Developer Only"
+}

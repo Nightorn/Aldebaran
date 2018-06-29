@@ -29,3 +29,10 @@ exports.run = (bot, message, args) => {
         message.reply("Tsk tsk! This command is only usable in a NSFW channel.")
     }
 }
+exports.infos = {
+    category: "NSFW",
+    description: "Displays a hentai Neko picture or gif. ",
+    usage: "\`&xneko\`",
+    example: "\`&neko\`",
+    restrictions: "NSFW Channels Only"
+}

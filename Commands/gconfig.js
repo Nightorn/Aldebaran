@@ -57,3 +57,10 @@ exports.run = function(bot, message, args) {
         }
     }
 }
+exports.infos = {
+    category: "Settings",
+    description: "Used to enabled or disable features of aldebaran.",
+    usage: "\`&gconfig <parameter> <setting>\`",
+    example: "\`&gconfig adventureTimer on\`",
+    restrictions: "Server Owner"
+}

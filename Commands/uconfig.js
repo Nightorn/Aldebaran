@@ -57,3 +57,9 @@ exports.run = function(bot, message, args) {
         }
     }
 }
+exports.infos = {
+    category: "Settings",
+    description: "Changes User Configurations For Aldebaran Features",
+    usage: "\`&uconfig <parameter> <setting>\`",
+    example: "\`&uconfig adventureTimer on\`",
+}

@@ -24,3 +24,9 @@ exports.run = (bot, message, args) => {
         }
     lizard(); 
 }
+exports.infos = {
+    category: "Image",
+    description: "Displays a random lizard picture or gif. ",
+    usage: "\`&lizard\`",
+    example: "\`&lizard\`",
+}

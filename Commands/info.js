@@ -14,3 +14,9 @@ exports.run = function(bot, message, args) {
         .setColor(`GREEN`);
     message.channel.send({embed: embed});
 }
+exports.infos = {
+    category: "General",
+    description: "Displays Into About Aldebaran",
+    usage: "\`&info\`",
+    example: "\`&info\`"
+}

@@ -58,3 +58,10 @@ exports.run = function(bot, message, args) {
         }
     }
 }
+exports.infos = {
+    category: "Settings",
+    description: "Modifies a users uconfig settings",
+    usage: "\`&moduser <parameter> <setting> <userid>\`",
+    example: "\`&moduser adventureTimer on 320933389513523220\`",
+    restrictions: "Developer Only"
+}

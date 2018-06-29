@@ -4,7 +4,8 @@ exports.run = (bot, message, args) => {
     message.channel.send(emojilist);
 }
 exports.infos = {
-    "category": "Fun",
-    "description": "",
-    "usage": ""
+    category: "Fun",
+    description: "Display All Emojis For The Server (Spam Alert)",
+    usage: "\`&emojilist\`",
+    example: "\`&emojilist\`"
 }

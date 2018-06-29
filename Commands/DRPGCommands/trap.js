@@ -59,3 +59,9 @@ exports.run = (bot, message, args, apiratelimit) => {
         message.reply(`Error you must enter a valid UserID or Mention User.`)
     });
 };
+exports.infos = {
+    category: "DRPG",
+    description: "Displays users trap information and estimated loots.",
+    usage: "\`&trap\` or \`&trap <usermention>\` or \`&trap <userid>\`",
+    example: "\`&trap\` or \`&trap @aldebaran\` or \`&trap 246302641930502145\`"
+}

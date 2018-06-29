@@ -67,4 +67,10 @@ exports.run = (bot, message, args, apiratelimit) => {
     }).catch(err => {
         message.reply("Error you must enter a valid UserID or User Mention")
     })
-};    
+};
+exports.infos = {
+    category: "DRPG",
+    description: "Displays users plant information and estimated loots.",
+    usage: "\`&plant\` or \`&plant <usermention>\` or \`&plant <userid>\`",
+    example: "\`&plant\` or \`&plant @aldebaran\` or \`&plant 246302641930502145\`"
+}    

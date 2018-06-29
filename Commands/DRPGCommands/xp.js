@@ -23,3 +23,9 @@ exports.run = (bot, message, args) => {
     }else message.reply(`You must specify a level.`)
 
 }
+exports.infos = {
+    category: "DRPG",
+    description: "Displays estimated xp per kill at a certian lvl.",
+    usage: "\`&xp <level>\`",
+    example: "\`&xp 600\`"
+}

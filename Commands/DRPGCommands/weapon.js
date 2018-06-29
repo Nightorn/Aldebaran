@@ -44,3 +44,9 @@ exports.run = (bot, message, args) => {
     };
     message.channel.send(embed);
 }
+exports.infos = {
+    category: "DRPG",
+    description: "Displays exact or closest weapon matching lvl specified.",
+    usage: "\`&weapon <level>\`",
+    example: "\`&weapon 150\`"
+}

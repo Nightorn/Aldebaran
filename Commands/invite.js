@@ -6,3 +6,9 @@ exports.run = (bot, message, args) => {
         "footer": {"text": "In Development By Nightmare#1234"}
       }})
 }
+exports.infos = {
+    category: "General",
+    description: "Displays Bot & Server Invite",
+    usage: "\`&invite\`",
+    example: "\`&invite\`"
+}

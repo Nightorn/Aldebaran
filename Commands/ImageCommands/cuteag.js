@@ -23,3 +23,9 @@ exports.run = (bot, message, args) => {
     
         
     };
+    exports.infos = {
+        category: "Image",
+        description: "Displays a random cute anime girl picture. ",
+        usage: "\`&cuteag\`",
+        example: "\`&cuteag\`",
+    }

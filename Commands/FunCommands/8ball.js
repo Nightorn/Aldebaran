@@ -29,7 +29,8 @@ exports.run = (bot, message, args) => {
     }
 }
 exports.infos = {
-    "category": "Fun",
-    "description": "Ask the magic 8ball a question, get it's all knowing answer",
-    "usage": "&8ball Why is the sky blue?"
+    category: "Fun",
+    description: "Ask the magic 8ball a question, get it's all knowing answer",
+    usage: "\`&8ball <question>\`",
+    example: "\`&8ball will the grass be red today?\`"
 }

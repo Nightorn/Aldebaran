@@ -19,3 +19,9 @@ exports.run = (bot, message, args) => {
     message.reply("Please mention someone :thinking:"); //Reply with a mention saying "Invalid user."
 };
 };
+exports.infos = {
+    category: "Action",
+    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
+    usage: "\`&adorbs <usermention>\`",
+    example: "\`&adorbs @aldebaran\`"
+}

@@ -21,3 +21,10 @@ exports.run = function(bot, message, args) {
     } else message.reply("NO U")
 
 }
+exports.infos = {
+    category: "General",
+    description: "Queries Attached DB",
+    usage: "\`&query <sqlstatement>\`",
+    example: "\`&query SELECT * FROM users WHERE userid = 310296184436817930\`",
+    restrictions: "Developer Only"
+}

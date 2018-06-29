@@ -24,3 +24,9 @@ exports.run = (bot, message, args) => {
         }
         nekos();
     }
+    exports.infos = {
+        category: "Image",
+        description: "Displays a random neko picture or gif. ",
+        usage: "\`&neko\`",
+        example: "\`&neko\`",
+    }

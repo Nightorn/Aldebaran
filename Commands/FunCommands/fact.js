@@ -23,7 +23,8 @@ exports.run = (bot, message, args) => {
     fact();
 }
 exports.infos = {
-    "category": "Fun",
-    "description": "",
-    "usage": ""
+    category: "Fun",
+    description: "Get a random fact!",
+    usage: "\`&fact\`",
+    example: "\`&fact\`"
 }

@@ -6,3 +6,10 @@ exports.run = async (client, message) => {
     })
     message.reply(string)
 }
+exports.infos = {
+    category: "General",
+    description: "Server List Of Aldebaran",
+    usage: "\`&serverlist\`",
+    example: "\`&serverlist\`",
+    restrictions: "Developer Only"
+}

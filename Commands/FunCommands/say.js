@@ -12,7 +12,8 @@ exports.run = (bot, message, args) => {
     }})
 };
 exports.infos = {
-    "category": "Fun",
-    "description": "",
-    "usage": ""
+    category: "Fun",
+    description: "Make the bot say something.",
+    usage: "\`&say <text>\`",
+    example: "\`&say hello how are you today?\`"
 }

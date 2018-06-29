@@ -17,3 +17,9 @@ exports.run = (bot, message, args) => {
         message.channel.send({embed})
     })
 }
+exports.infos = {
+    category: "Image",
+    description: "Displays a random hedgehog picture or gif. ",
+    usage: "\`&hedgehog\`",
+    example: "\`&hedgehog\`",
+}

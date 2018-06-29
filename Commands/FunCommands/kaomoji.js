@@ -11,7 +11,8 @@ exports.run = (bot, message, args) => {
         asc();
 }
 exports.infos = {
-    "category": "Fun",
-    "description": "",
-    "usage": ""
+    category: "Fun",
+    description: "Displays a random Kaomoji",
+    usage: "\`&kaomoji\`",
+    example: "\`&kaomoji\`"
 }

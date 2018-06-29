@@ -17,3 +17,9 @@ exports.run = (bot, message, args) => {
 
     });
 }
+exports.infos = {
+    category: "Image",
+    description: "Displays a random dog picture or gif. ",
+    usage: "\`&dog\`",
+    example: "\`&dog\`",
+}

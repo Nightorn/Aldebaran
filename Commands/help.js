@@ -68,3 +68,10 @@ exports.run = (bot, message, args) => {
                             }
                             else message.channel.reply(`Please enter a correct category from &help`)    
 }
+exports.infos = {
+    category: "General",
+    description: "Displays Detailed Help Info",
+    usage: "\`&help\`",
+    example: "\`&help\`",
+}
+

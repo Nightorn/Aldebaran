@@ -11,7 +11,8 @@ exports.run = (bot, message, args) => {
         owo();
 }
 exports.infos = {
-    "category": "Fun",
-    "description": "",
-    "usage": ""
+    category: "Fun",
+    description: "OwOify Text Sent (150 Char. Limit)",
+    usage: "\`&owoify <text>\`",
+    example: "\`&owoify why is the grass green\`"
 }

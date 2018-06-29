@@ -38,3 +38,9 @@ exports.run = (bot, message, args) => {
         message.channel.send({embed});
     }
 }
+exports.infos = {
+    category: "DRPG",
+    description: "Displays DRPG Quest list & Detailed If Provide Quest Name.",
+    usage: "\`&quest\` or \`&trap <questname>\`",
+    example: "\`&quest\` or \`&trap cult of moukn\`"
+}

@@ -52,7 +52,12 @@ exports.run = (bot, message, args, apiratelimit) => {
         message.reply("Error you must enter a valid UserID or User Mention")
         })
     };    
-    
+    exports.infos = {
+        category: "DRPG",
+        description: "Displays users character and pet infos.",
+        usage: "\`&stats\` or \`&stats <usermention>\` or \`&stats <userid>\`",
+        example: "\`&stats\` or \`&stats @aldebaran\` or \`&stats 246302641930502145\`"
+    }
     
     
     

@@ -17,4 +17,11 @@ exports.run = (bot, message, args) => {
             timestamp: new Date()
       }}); //We send the output in the current channel.
 }
+
+exports.infos = {
+      category: "General",
+      description: "Displays Mentioned Users Avatar Image.",
+      usage: "\`&avatar <usermention>\`",
+      example: "\`&avatar @aldebaran\`"
+  }
         

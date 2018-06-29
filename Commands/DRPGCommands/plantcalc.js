@@ -8,3 +8,9 @@ exports.run = (bot, message, args) => {
         message.channel.send(`Estimated ${formulamin} - ${formulamax} when planted for ${hours} hours. `)
     }else return message.channel.send("You must provide both reaping and hours set. Example (&plantcalc 1 24)")
 }
+exports.infos = {
+    category: "DRPG",
+    description: "Displays estimated plant harvest based on time and lvl given.",
+    usage: "\`&plantcalc <salvagingstats> <minutes>\`",
+    example: "\`&plantcalc 3600 360\`"
+}

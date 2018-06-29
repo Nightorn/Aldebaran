@@ -29,3 +29,9 @@ exports.run = (bot, message, args) => {
         message.reply("Please mention someone :thinking:")
     }
 }
+exports.infos = {
+    category: "Action",
+    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
+    usage: "\`&tickle <usermention>\`",
+    example: "\`&tickle @aldebaran\`"
+}

@@ -25,3 +25,10 @@ exports.run = (bot, message, args) => {
     }
 
 };
+exports.infos = {
+    category: "NSFW",
+    description: "Performs A Lewd Action On Mentioned User & Displays Gif To Accompany",
+    usage: "\`&lewd <usermention>\`",
+    example: "\`&lewd @aldebaran\`",
+    restrictions: "NSFW Channels Only"
+}

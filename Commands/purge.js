@@ -8,4 +8,11 @@ exports.run = (bot, message, args) => {
         }) 
     message.delete()
     }
+    exports.infos = {
+        category: "General",
+        description: "Purges Set Amount Of Messages",
+        usage: "\`&purge <amount>\`",
+        example: "\`&pruge 15\`",
+        restrictions: "Developer Only"
+    }
 
