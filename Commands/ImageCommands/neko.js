@@ -10,7 +10,7 @@ exports.run = (bot, message, args) => {
                     name: message.author.username,
                     icon_url: message.author.avatarURL
                 },
-                description: (message.author + " " + `Here is your innocent Neko.`),
+                description: (`${message.author}\nHere is your innocent Neko.`),
                 image: {
                     url : (data.url),
                 },
