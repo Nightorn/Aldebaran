@@ -4,7 +4,7 @@ exports.run = (bot, message, args) => {
     const neko = new client();
         let target = message.mentions.users.first();
         async function nekos() {
-            const data = (await neko.getSFWNekoGif());
+            const data = (await neko.getSFWNeko());
             message.channel.send({embed:{
                 author:{
                     name: message.author.username,
