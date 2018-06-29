@@ -1,6 +1,6 @@
 const { RichEmbed } = require('discord.js');
 const fs = require('fs');
-exports.run = function(bot, message, args) {
+exports.run = function(bot, message) {
     var commands = {};
     const storeCommand = function(fileName, command) {
         if (command.infos == undefined) return;
