@@ -3,7 +3,7 @@ exports.run = (bot, message, args) => {
     const Discord = require(`discord.js`)
     const neko = new client();
         let target = message.mentions.users.first();
-        async function neko() {
+        async function nekos() {
             const data = (await neko.getSFWNekoGif());
             message.channel.send({embed:{
                 author:{
@@ -22,5 +22,5 @@ exports.run = (bot, message, args) => {
             
             }});
         }
-        xneko();
+        nekos();
     }
