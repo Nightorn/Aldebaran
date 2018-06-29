@@ -6,6 +6,7 @@ exports.run = (bot, message, args) => {
         .setTitle("DRPG Commands Help")
         .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
         .setDescription("You can find command list and usage example for DRPG related commands below.")
+        .addField(`**__Plant__**`,`**Description**: Used to show users current fields and esitmates if harvested.\n*Useage: \`&plant\` , \`&plant <user mention>\` , \`&plant <userid>\`*`)
         .setTimestamp ()
         message.channel.send({embed});
     }
