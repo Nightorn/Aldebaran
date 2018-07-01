@@ -7,6 +7,7 @@ var itemapicooldown = false;
 var globalcooldown = false;
 var apiratelimit ;
 var ratelimitreset ;
+var update;
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
