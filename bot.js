@@ -42,38 +42,25 @@ bot.on("message", message => {
   }
   console.log(`User- ${message.author.id} Commaand - ${command} Args - ${args}`)  
 //..............................................................................................................//
-try {
-  
-    if (fs.existsSync(`./Commands/${command}.js`) === true){
-      let commandFile = require(`./Commands/${command}.js` )
-      commandFile.run(bot, message, args);
-    } 
-      else if (fs.existsSync(`./Commands/NSFWCommands/${command}.js`) === true){
-        let commandFile = require(`./Commands/NSFWCommands/${command}.js`)
-        commandFile.run(bot, message, args);
-      } 
-      else if (fs.existsSync(`./Commands/DRPGCommands/${command}.js`) === true) { 
-        let commandFile = require(`./Commands/DRPGCommands/${command}.js`)
-        commandFile.run(bot, message, args);
+  try {
+    fs.readdir('./Commands', (err, files) => {
+      if (files.indexOf(`${command}.js`) != -1) {
+        require(`./Commands/${command}`).run(bot, message, args);
+      } else {
+        for (let fileName of files) {
+          if (fs.statSync(`./Commands/${fileName}`).isDirectory()) {
+            fs.readdir(`./Commands/${fileName}`, (err, files) => {
+              if (files.indexOf(`${command}.js`) != -1) {
+                require(`./Commands/${fileName}/${command}`).run(bot, message, args);
+              }
+            });
+          }
+        }
       }
-      else if (fs.existsSync(`./Commands/ActionCommands/${command}.js`) === true) {
-        let commandFile = require(`./Commands/ActionCommands/${command}.js`)
-        commandFile.run(bot, message, args);
-      }
-      else if (fs.existsSync(`./Commands/ImageCommands/${command}.js`) === true) {
-        let commandFile = require(`./Commands/ImageCommands/${command}.js`)
-        commandFile.run(bot, message, args);
-      }
-      else if (fs.existsSync(`./Commands/FunCommands/${command}.js`) === true) {
-        let commandFile = require(`./Commands/FunCommands/${command}.js`)
-        commandFile.run(bot, message, args);
-      }
-
-
+    });
   } catch (err) {
     console.error(err);
   }
-
 });
  
   bot.login(config.token)
