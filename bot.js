@@ -7,15 +7,17 @@ var itemapicooldown = false;
 var globalcooldown = false;
 var apiratelimit ;
 var ratelimitreset ;
+var update;
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
     files.forEach(file => {
-      	let eventFunction = require(`./events/${file}`);
-      	let eventName = file.split(".")[0];
-      	bot.on(eventName, (...args) => eventFunction.run(bot, ...args));
+      let eventFunction = require(`./events/${file}`);
+      let eventName = file.split(".")[0];
+      // super-secret recipe to call events with all their proper arguments *after* the `client` var.
+      bot.on(eventName, (...args) => eventFunction.run(bot, ...args));
     });
-});
+  });
  
 bot.on("message", message => {
     if (message.author.bot) return;
@@ -41,25 +43,38 @@ bot.on("message", message => {
   }
   console.log(`User- ${message.author.id} Commaand - ${command} Args - ${args}`)  
 //..............................................................................................................//
-  	try {
-		fs.readdir('./Commands', (err, files) => {
-			if (files.indexOf(command) != -1) {
-				require(`./Commands/${command}`).run(bot, message, args);
-			} else {
-				for (let fileName of files) {
-					if (fs.statSync(`./Commands/${fileName}`).isDirectory()) {
-						fs.readdir(`./Commands/${fileName}`, (err, files) => {
-							if (files.indexOf(command) != -1) {
-								require(`./Commands/${fileName}/${command}`).run(bot, message, args);
-							}
-						});
-					}
-				}
-			}
-		});
-	} catch (err) {
-		console.error(err);
-	}
+try {
+  
+    if (fs.existsSync(`./Commands/${command}.js`) === true){
+      let commandFile = require(`./Commands/${command}.js` )
+      commandFile.run(bot, message, args);
+    } 
+      else if (fs.existsSync(`./Commands/NSFWCommands/${command}.js`) === true){
+        let commandFile = require(`./Commands/NSFWCommands/${command}.js`)
+        commandFile.run(bot, message, args);
+      } 
+      else if (fs.existsSync(`./Commands/DRPGCommands/${command}.js`) === true) { 
+        let commandFile = require(`./Commands/DRPGCommands/${command}.js`)
+        commandFile.run(bot, message, args);
+      }
+      else if (fs.existsSync(`./Commands/ActionCommands/${command}.js`) === true) {
+        let commandFile = require(`./Commands/ActionCommands/${command}.js`)
+        commandFile.run(bot, message, args);
+      }
+      else if (fs.existsSync(`./Commands/ImageCommands/${command}.js`) === true) {
+        let commandFile = require(`./Commands/ImageCommands/${command}.js`)
+        commandFile.run(bot, message, args);
+      }
+      else if (fs.existsSync(`./Commands/FunCommands/${command}.js`) === true) {
+        let commandFile = require(`./Commands/FunCommands/${command}.js`)
+        commandFile.run(bot, message, args);
+      }
+
+
+  } catch (err) {
+    console.error(err);
+  }
+
 });
  
-bot.login(config.token)
+  bot.login(config.token)
