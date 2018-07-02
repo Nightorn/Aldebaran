@@ -50,10 +50,10 @@ exports.run = function(bot, message, args) {
                 }
                 connect();
             } else {
-                message.channel.send(`**Error** This value is not supported, check \`&config help\` for more informations.`);
+                message.channel.send(`**Error** This value is not supported, check \`&gconfig help\` for more informations.`);
             }
         } else {
-            message.channel.send(`**Error** This key does not exist, check \`&config help\` for more informations.`);
+            message.channel.send(`**Error** This key does not exist, check \`&gconfig help\` for more informations.`);
         }
     }
 }
