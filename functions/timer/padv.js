@@ -1,6 +1,6 @@
 const poolQuery = require('./../../functions/database/poolQuery');
 module.exports = (client, message) => {
-    if ((message.content.indexOf('padv') > 0 && message.content.indexOf('padv') <= 3) || message.content.toLowerCase().indexOf('discordrpg') == 0) {
+    if (message.content.toLowerCase().startsWith(`#!padv`)|| message.content.toLowerCase().startsWith(`,padv`)|| message.content.toLowerCase().startsWith(`.padv`)){
         poolQuery(`SELECT settings FROM guilds WHERE guildId='${message.guild.id}'`).then(result => {
             if (Object.keys(result).length != 0) {
                 let settings = JSON.parse(result[0].settings);
