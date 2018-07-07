@@ -66,7 +66,7 @@ exports.run = (bot, message, args) => {
                                 .setTimestamp ()
                                 message.channel.send({embed}); 
                             }
-                            else message.channel.reply(`Please enter a correct category from &help`)    
+                            else message.channel.send(`Please enter a correct category from &help`)    
 }
 exports.infos = {
     category: "General",
