@@ -1,0 +1,37 @@
+{
+    "general": {
+        "name": "General",
+        "title": ":bulb: General Commands :flashlight:",
+        "description": "General use commands"
+    },
+    "action": {
+        "name": "Action",
+        "title": ":projector: Action Commands :movie_camera:",
+        "description": "Fun commands to preform on others"
+    },
+    "image": {
+        "name": "Image",
+        "title": ":cat: Image Commands :bird:",
+        "description": "Commands to display images"
+    },
+    "fun": {
+        "name": "Fun",
+        "title": ":tickets: Fun Commands :performing_arts:",
+        "description": "Commands used for fun or entertainment"
+    },
+    "drpg": {
+        "name": "DRPG",
+        "title": ":crossed_swords: DRPG Commands :shield:",
+        "description": "Utility commands for DiscordRPG"
+    },
+    "settings": {
+        "name": "Settings",
+        "title": ":wrench: Settings Commands :gear:",
+        "description": "Commands to personnalize Aldebaran"
+    },
+    "nsfw": {
+        "name": "NSFW",
+        "title": ":no_entry_sign: NSFW Commands :no_entry:",
+        "description": "NSFW Image and Action Commands, Usable In NSFW Channels Only"
+    }
+}

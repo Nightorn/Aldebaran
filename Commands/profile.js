@@ -30,3 +30,10 @@ exports.run = function(bot, message, args) {
     }
     connect()
 }
+
+exports.infos = {
+    category: "General",
+    description: "Shows your Aldebaran's profile",
+    usage: "\`&profile\`",
+    example: "\`&profile\`",
+}

@@ -1,77 +1,73 @@
 exports.run = (bot, message, args) => {
-    const Discord = require("discord.js");
-    var category = (args[0] != undefined) ? args[0].toLowerCase() : `none`
-    if (category == `drpg`){
-        const embed = new Discord.RichEmbed()
-        .setTitle("DRPG Commands Help")
-        .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-        .setDescription("You can find command list and usage example for DRPG related commands below.")
-        .addField(`**__Plant__**`,`**Description**: Used to show users current fields and esitmates if harvested.\n*Useage: \`&plant\` , \`&plant <user mention>\` , \`&plant <userid>\`*`)
-        .setTimestamp ()
+    const fs = require('fs');
+    const { RichEmbed } = require('discord.js');
+    if (args[0] != undefined) {
+        let commands = {};
+        var files = fs.readdirSync(`./Commands/`);
+            
+        const set = (path) => {
+            let file = require(path).infos;
+            if (path.split('/').pop().split('.')[0] == args[0].toLowerCase()) {
+                commands = file;
+            } else if (typeof commands === 'object' && args[0].toLowerCase() === file.category.toLowerCase()) {
+                if (commands[file.category.toLowerCase()] == undefined) commands[file.category.toLowerCase()] = new Map();
+                commands[file.category.toLowerCase()].set(path.split('/').pop().split('.')[0], file.description);
+            }
+        }
+
+        for (let fileName of files) {
+            if (fs.statSync(`./Commands/${fileName}`).isDirectory()) {
+                let dirName = fileName;
+                files = fs.readdirSync(`./Commands/${dirName}/`);
+                for (let fileName of files) {
+                    if (dirName !== 'inProgress') set(`./${dirName}/${fileName}`);
+                }
+            } else {
+                set(`./${fileName}`);
+            }
+        }
+    
+        if (commands[args[0].toLowerCase()] instanceof Map) {
+            if (commands[args[0].toLowerCase()].size > 0) {
+                var list = ``, category = require('./../Data/categories.json')[args[0].toLowerCase()];
+                for (let [command, description] of commands[args[0].toLowerCase()]) list += `:small_blue_diamond: **${command}** : ${description}\n`;
+                const embed = new RichEmbed()
+                    .setAuthor(message.author.username, message.author.avatarURL)
+                    .setTitle(`__**${category.title}**__`)
+                    .setDescription(`${category.description}\n${list}`)
+                    .setColor('BLUE');
+                message.channel.send({embed});
+            } else {
+                message.channel.send(`**Error** No command of the specified category was found. Get a list of all available commands with \`&commands\`.`);
+            }
+        } else if (typeof commands === 'object' && commands.category !== undefined) {
+            const embed = new RichEmbed()
+                .setAuthor(message.author.username, message.author.avatarURL)
+                .setTitle(`Details of the ${args[0].toLowerCase()} Command`)
+                .setDescription(commands.description)
+                .addField(`Category`, commands.category, true)
+                .addField(`Usage`, commands.usage, true)
+                .addField(`Example`, commands.example, true)
+                .setColor(`BLUE`);
+            message.channel.send({embed});
+        } else {
+            message.channel.send(`**Error** No command was found. Get a list of all available commands with \`&commands\`.`);
+        }
+    } else {
+        var embed = new RichEmbed()
+            .setAuthor(message.author.username, message.author.avatarURL)
+            .setTitle(`Aldebaran's Help Pages`)
+            .setDescription(`Below are the different categories, each of them contains a list of commands which you can see with \`&help [category name]\`. You can get a brief overview of all available commands with \`&commands\`.`)
+            .setFooter(`This bot is currently in development by Nightmare#1234`);
+        for (let [category, data] of Object.entries(require('./../Data/categories.json'))) embed.addField(`__**${data.title}**__`, data.description, true);
+        embed.addField(`**__Have a command request or suggestion?__**`, `Join our support server here by clicking [right here](https://discord.gg/3x6rXAv)!`, true);
         message.channel.send({embed});
     }
-        else if (category == `action`) {
-            const embed = new Discord.RichEmbed()
-            .setTitle("Action Commands Help")
-            .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-            .setDescription("You can find command list and usage example for action commands below.")
-            .setTimestamp ()
-            message.channel.send({embed});
-        }
-            else if (category == `image`) {
-                const embed = new Discord.RichEmbed()
-                .setTitle("Image Commands Help")
-                .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-                .setDescription("You can find command list and usage example for Image related commands below.")
-                .setTimestamp ()
-                message.channel.send({embed});
-            }
-                else if (category == `general`) {
-                    const embed = new Discord.RichEmbed()
-                    .setTitle("Misc. Commands Help")
-                    .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-                    .setDescription("You can find command list and usage example for general commands below.")
-                    .setTimestamp ()
-                    message.channel.send({embed});
-                }
-                    else if (category == `fun`) {
-                        const embed = new Discord.RichEmbed()
-                        .setTitle("Fun Commands Help")
-                        .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-                        .setDescription("You can find command list and usage example for fun related commands below.")
-                        .setTimestamp ()
-                        message.channel.send({embed});
-                    }
-                        else if (category == `nsfw`) {
-                            const embed = new Discord.RichEmbed()
-                            .setTitle("NSFW Commands Help")
-                            .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-                            .setDescription("You can find command list and usage example for NSFW commands below.")
-                            .setTimestamp ()
-                            message.channel.send({embed});
-                        }
-                            else if (category == `none`) {
-                                const embed = new Discord.RichEmbed()
-                                .setTitle("Aldebaran's Help Categories")
-                                .setAuthor(`${message.author.username}`,`${message.author.avatarURL}`)
-                                .setDescription("Below are the different help categories.\n\n*Useage example:* \`&help Image\`")
-                                .addField("⚔__**DRPG Commands**__🛡","Utility commands for Discord RPG Bot",false)
-                                .addField("📽__**Action Commands**__🎥","Fun commands to preform on others",false)
-                                .addField("🐱__**Image Commands**__🐦","Commands to display images",false)
-                                .addField("💡__**General Commands**__🔦","General use commands",false)              
-                                .addField("🎟__**Fun Commands**__🎭","Commands used for fun or entertainment",false)       
-                                .addField("🚫__**NSFW Commands**__⛔","NSFW Image and Action Commands, Usable In NSFW Channels Only",false)
-                                .addField("__**Have a command request or suggestion?**__", "*Join support server*- https://discord.gg/3x6rXAv",false)
-                                .setFooter("In Development By Nightmare#1234")
-                                .setTimestamp ()
-                                message.channel.send({embed}); 
-                            }
-                            else message.channel.send(`Please enter a correct category from &help`)    
 }
+
 exports.infos = {
     category: "General",
     description: "Displays Detailed Help Info",
     usage: "\`&help\`",
     example: "\`&help\`",
 }
-
