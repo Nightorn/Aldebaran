@@ -41,7 +41,7 @@ bot.on("message", message => {
       globalcooldown = false
     }, 500, message.channel, message.author.id);
   }
-  console.log(`User- ${message.author.id} Commaand - ${command} Args - ${args}`)  
+  console.log(`User - ${message.author.id} (${message.author.tag}) | Command - ${command}${args.length === 0 ? '' : ` | Args - ${args}`}`);  
 //..............................................................................................................//
   try {
     fs.readdir('./Commands', (err, files) => {
