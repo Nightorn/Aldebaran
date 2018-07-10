@@ -6,7 +6,6 @@ exports.run = (bot, message, args) => {
         var files = fs.readdirSync(`./Commands/`);
             
         const set = (path) => {
-            console.log(path);
             let file = require(path).infos;
             if (path.split('/').pop().split('.')[0] == args[0].toLowerCase()) {
                 commands = file;
@@ -41,7 +40,7 @@ exports.run = (bot, message, args) => {
             } else {
                 message.channel.send(`**Error** No command of the specified category was found. Get a list of all available commands with \`&commands\`.`);
             }
-        } else if (typeof commands === 'object') {
+        } else if (typeof commands === 'object' && commands.category !== undefined) {
             const embed = new RichEmbed()
                 .setAuthor(message.author.username, message.author.avatarURL)
                 .setTitle(`Details of the ${args[0].toLowerCase()} Command`)
