@@ -1,8 +1,9 @@
 // Command Developed with the help of Akashic Bearer#2305
 const { RichEmbed } = require('discord.js');
 exports.run = function(bot, message, args) {
+    if (args.length === 0) return message.channel.send(`You can't send an empty suggestion.`);
     const embed = new RichEmbed()
-        .setAuthor(message.author.tag, message.author.avatarURL)
+    .setAuthor(`${message.author.tag} | ${message.author.id}`, message.author.avatarURL)
         .setTitle('New Suggestion')
         .setDescription(args.join(' '))
         .setFooter(`Channel : #${message.channel.name} [ID: ${message.channel.id}] • Server : ${message.guild.name} [ID: ${message.guild.id}]`)
