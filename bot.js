@@ -43,16 +43,25 @@ bot.on("message", message => {
   }
   console.log(`User - ${message.author.id} (${message.author.tag}) | Command - ${command}${args.length === 0 ? '' : ` | Args - ${args}`}`);  
 //..............................................................................................................//
+  const execute = (path) => {
+    let file = require(path);
+    if ((file.infos.category === 'NSFW' && message.channel.nsfw) || file.infos.category !== 'NSFW') {
+      file.run(bot, message, args);
+    } else {
+      message.reply("Tsk tsk! This command is only usable in a NSFW channel.");
+    }
+  }
+
   try {
     fs.readdir('./Commands', (err, files) => {
       if (files.indexOf(`${command}.js`) != -1) {
-        require(`./Commands/${command}`).run(bot, message, args);
+        execute(`./Commands/${command}`);
       } else {
         for (let fileName of files) {
           if (fs.statSync(`./Commands/${fileName}`).isDirectory()) {
             fs.readdir(`./Commands/${fileName}`, (err, files) => {
               if (files.indexOf(`${command}.js`) != -1) {
-                require(`./Commands/${fileName}/${command}`).run(bot, message, args);
+                execute(`./Commands/${fileName}/${command}`);
               }
             });
           }
