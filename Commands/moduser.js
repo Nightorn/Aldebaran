@@ -5,9 +5,9 @@ const mysql = require("mysql");
 exports.run = function(bot, message, args) {
     if (message.author.id != `310296184436817930`)return message.channel.reply(`What makes you think you can do that?`)
     const parametersAvailable = {
-        healthMonitor: {support: "['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100)", help: "DiscordRPG Health Monitor - [on | off | healthPercentage]"},
-        adventureTimer: {support: "['on', 'off'].indexOf(value) != -1", help: "DiscordRPG Adventure Timer - [on | off]"},
-        sidesTimer: {support: "['on', 'off'].indexOf(value) != -1", help: "DiscordRPG Sides Timer - [on | off]"}
+        healthMonitor: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100) }, help: "DiscordRPG Health Monitor - [on | off | healthPercentage]"},
+        adventureTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Adventure Timer - [on | off]"},
+        sidesTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Sides Timer - [on | off]"}
     }
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
@@ -20,8 +20,7 @@ exports.run = function(bot, message, args) {
         message.channel.send({embed});
     } else {
         if (Object.keys(parametersAvailable).indexOf(args[0]) != -1) {
-            const value = args[1];
-            if (eval(parametersAvailable[args[0]].support)) {
+            if (parametersAvailable[args[0]].support(args[1])) {
                 const connect = function() {
                     poolQuery(`SELECT * FROM users WHERE userId='${args[2]}'`).then(result => {
                         if (Object.keys(result).length == 0) {
@@ -30,12 +29,12 @@ exports.run = function(bot, message, args) {
                             });
                         } else {
                             let settings = JSON.parse(result[0].settings);
-                            settings[args[0]] = value;
+                            settings[args[0]] = args[1];
                             poolQuery(`UPDATE users SET settings='${JSON.stringify(settings)}' WHERE userId='${args[2]}'`).then(() => {
                                 const embed = new Discord.RichEmbed()
                                     .setAuthor(message.author.username, message.author.avatarURL)
                                     .setTitle(`Settings successfully changed`)
-                                    .setDescription(`The property **${args[0]}** has successfully been changed to the value **${value}**. For user **${args[2]}**.`)
+                                    .setDescription(`The property **${args[0]}** has successfully been changed to the value **${args[1]}**. For user **${args[2]}**.`)
                                     .setColor(`GREEN`);
                                 message.channel.send({embed});
                             }).catch(() => {
