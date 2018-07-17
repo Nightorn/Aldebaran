@@ -33,5 +33,11 @@ exports.infos = {
     category: "Action",
     description: "Performs Action On Mentioned User & Displays Gif To Accompany",
     usage: "\`&tickle <usermention>\`",
-    example: "\`&tickle @aldebaran\`"
+    example: "\`&tickle @aldebaran\`",
+    cooldown: {
+        time: 1000,
+        rpm: 60,
+        resetTime: 60000,
+        commandGroup: "action"
+    }
 }

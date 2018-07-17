@@ -33,5 +33,11 @@ exports.infos = {
     category: "Action",
     description: "Performs Action On Mentioned User & Displays Gif To Accompany",
     usage: "\`&feed <usermention>\`",
-    example: "\`&feed @aldebaran\`"
+    example: "\`&feed @aldebaran\`",
+    cooldown: {
+        time: 1000,
+        rpm: 60,
+        resetTime: 60000,
+        commandGroup: "action"
+    }
 }

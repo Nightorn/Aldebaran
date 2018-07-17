@@ -33,5 +33,11 @@ exports.infos = {
     category: "Action",
     description: "Performs Action On Mentioned User & Displays Gif To Accompany",
     usage: "\`&poke <usermention>\`",
-    example: "\`&poke @aldebaran\`"
+    example: "\`&poke @aldebaran\`",
+    cooldown: {
+        time: 1000,
+        rpm: 60,
+        resetTime: 60000,
+        commandGroup: "action"
+    }
 }

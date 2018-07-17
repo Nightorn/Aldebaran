@@ -23,5 +23,11 @@ exports.infos = {
     category: "Action",
     description: "Performs Action On Mentioned User & Displays Gif To Accompany",
     usage: "\`&kidnap <usermention>\`",
-    example: "\`&kidnap @aldebaran\`"
+    example: "\`&kidnap @aldebaran\`",
+    cooldown: {
+        time: 1000,
+        rpm: 60,
+        resetTime: 60000,
+        commandGroup: "action"
+    }
 }

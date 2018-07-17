@@ -72,5 +72,11 @@ exports.infos = {
     category: "DRPG",
     description: "Displays users plant information and estimated loots.",
     usage: "\`&plant\` or \`&plant <usermention>\` or \`&plant <userid>\`",
-    example: "\`&plant\` or \`&plant @aldebaran\` or \`&plant 246302641930502145\`"
+    example: "\`&plant\` or \`&plant @aldebaran\` or \`&plant 246302641930502145\`",
+            cooldown: {
+            time: 5000,
+            rpm: 25,
+            resetTime: 60000,
+            commandGroup: "drpg"
+        }
 }    
