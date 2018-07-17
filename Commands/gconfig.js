@@ -6,7 +6,8 @@ exports.run = function(bot, message, args) {
     if (['310296184436817930', '320933389513523220', message.guild.ownerID].indexOf(message.author.id) == -1) return message.reply(`How about you not do that!`);
     const parametersAvailable = {
         adventureTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Adventure Timer - [on | off]"},
-        sidesTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Sides Timer - [on | off]"}
+        sidesTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Sides Timer - [on | off]"},
+        aldebaranPrefix: {support: (value) => {return ['&',`${args[1]}`].indexOf(value) != -1}, help: "Aldebaran's Prefix - [& | Guild Customized]", postUpdate: (value) => { bot.prefixes.set(message.guild.id, value); }}
     }
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
@@ -30,6 +31,7 @@ exports.run = function(bot, message, args) {
                             let settings = JSON.parse(result[0].settings);
                             settings[args[0]] = args[1];
                             poolQuery(`UPDATE guilds SET settings='${JSON.stringify(settings)}' WHERE guildid='${message.guild.id}'`).then(() => {
+                                if (parametersAvailable[args[0]].postUpdate !== undefined) parametersAvailable[args[0]].postUpdate(args[1]);
                                 const embed = new Discord.RichEmbed()
                                     .setAuthor(message.author.username, message.author.avatarURL)
                                     .setTitle(`Settings successfully changed`)

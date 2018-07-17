@@ -2,9 +2,11 @@ const CooldownManager = require('./structures/CooldownManager');
 const Command = require('./structures/Command');
 const config = require("./config.json");
 const Discord = require("discord.js");
+const poolQuery = require("./functions/database/poolQuery");
 const bot = new Discord.Client(); 
 const fs = require("fs");
 const cooldownManager = new CooldownManager();
+bot.prefixes = new Map();
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
@@ -16,12 +18,28 @@ fs.readdir("./events/", (err, files) => {
     });
 });
  
-bot.on("message", message => {
+bot.on("message", async message => {
     if (message.author.bot) return;
-    if (message.content.indexOf(config.prefix) !== 0) return;
-
-    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
+    
+    let guildid = message.guild.id
+    if (bot.prefixes.get(guildid) === undefined){
+        const result = await poolQuery(`SELECT * FROM guilds WHERE guildid='${guildid}'`);
+        if (Object.keys(result).length !== 0) {
+            let guildsettings = JSON.parse(result[0].settings);
+            if (guildsettings.aldebaranPrefix !== undefined){
+                bot.prefixes.set(guildid,guildsettings.aldebaranPrefix);
+            } else if (guildsettings.aldebaranPrefix === undefined){
+                bot.prefixes.set(guildid, config.prefix);
+            }      
+        } else bot.prefixes.set(guildid, config.prefix);
+    }
+    console.log(bot.prefixes)    
+    let guildprefix = bot.prefixes.get(guildid)
+    
+    if (message.content.indexOf(guildprefix) !== 0)return;
+        const args = message.content.slice(guildprefix.length).trim().split(/ +/g);
+        const command = args.shift().toLowerCase();
+    
     
   
   	try {
