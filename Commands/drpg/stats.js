@@ -56,7 +56,13 @@ exports.run = (bot, message, args, apiratelimit) => {
         category: "DRPG",
         description: "Displays users character and pet infos.",
         usage: "\`&stats\` or \`&stats <usermention>\` or \`&stats <userid>\`",
-        example: "\`&stats\` or \`&stats @aldebaran\` or \`&stats 246302641930502145\`"
+        example: "\`&stats\` or \`&stats @aldebaran\` or \`&stats 246302641930502145\`",
+        cooldown: {
+            time: 5000,
+            rpm: 25,
+            resetTime: 60000,
+            commandGroup: "drpg"
+        }
     }
     
     
