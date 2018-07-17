@@ -23,13 +23,6 @@ bot.on("message", message => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     
-    /*if (command == "mcsearch") {
-      if (itemapicooldown == true) return message.reply("Please try again in 1min due to ratelimits.");
-        itemapicooldown = true
-        setTimeout(() => {
-        itemapicooldown = false
-      }, 60000);
-	} */
   
   	try {
       const isGood = cooldownManager.execute(message.author.id, true, new Command(command), bot, message, args);
