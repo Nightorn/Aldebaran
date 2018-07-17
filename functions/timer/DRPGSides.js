@@ -46,7 +46,7 @@ module.exports = async function(bot, message, args) {
 								});
             				}
           				}
-        			})  
+        			}).catch();  
       			}
     		}
   		})
