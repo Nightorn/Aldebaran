@@ -3,7 +3,13 @@ const config = require("./../config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
-    if (args.length <= 0)return message.channel.send(`Please specify section and your input`)
+    const embed = new Discord.RichEmbed()
+        setAuthor(message.author.username, message.author.avatarURL)
+        .setTitle()
+        .setDescription(`Please specify a section and value`)
+        .setColor(`Red`)
+        .addField(`**__Available Sections__**,*name,country,timeZone,birthDay\naboutMe,flavoTtext,age,gender,dmfriendly,profilePictureLink\nfavoriteGames,profileColor,favoriteMusic,socialLinks\nzodiacName`,false)
+    if (args.length <= 0)return message.channel.send(`${embed}`)
     var profiletarget = args[0].toLowerCase()
     var inputdata = args.join(" ").slice(profiletarget.length).split(",")
         const connect = function() {
@@ -19,7 +25,7 @@ exports.run = function(bot, message, args) {
                         const embed = new Discord.RichEmbed()
                             .setAuthor(message.author.username, message.author.avatarURL)
                             .setTitle(`Unknown Profile Section`)
-                            .setDescription(`Please check to ensure this is a correct profile secontion`)
+                            .setDescription(`Please check to ensure this is a correct profile section`)
                             .setColor(`RED`);
                         message.channel.send({embed});
                     });

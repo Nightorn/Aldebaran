@@ -36,8 +36,8 @@ exports.run = function(bot, message, args) {
         }).catch(() => {
             const embed = new Discord.RichEmbed()
                 .setAuthor(message.author.username, message.author.avatarURL)
-                .setTitle(`An Error Occured`)
-                .setDescription(`An error occured and we could not retrive your profile. Please retry later.`)
+                .setTitle(`No Profile Found`)
+                .setDescription(`Please use \`&setprofile name <yournamehere>\` to create your profile`)
                 .setColor(`RED`);
             message.channel.send({embed});
         })
