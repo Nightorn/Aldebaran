@@ -8,16 +8,18 @@ exports.run = function(bot, message, args) {
             let profile = result[0];
             const embed = new Discord.RichEmbed()
                 .setTitle(`${message.author.username}\'s Profile`)
-                .setDescription(`*${profile.flavorText}*`)
+                .setDescription(`${profile.flavorText}`)
                 .setColor(`${profile.profileColor}`)
-                .addField(`**__User Details__**`,`**Name:** ${profile.name}\n**From:** ${profile.country}\n**Timezone:** ${profile.timezone}\n**Birthday:** ${profile.birthday} | **Zodiac Sign:** ${profile.zodiacName}\n**Age:** ${profile.age}\n**Gender**: ${profile.gender}`,true)
+                .addField(`**__User Details__**`,`**Name:** ${profile.name}\n**Country:** ${profile.country}\n**Timezone:** ${profile.timezone}\n**Birthday:** ${profile.birthday} | **Zodiac Sign:** ${profile.zodiacName}\n**Age:** ${profile.age}\n**Gender**: ${profile.gender}`,true)
                 .addField(`**__About Me__**`,`${profile.aboutMe}`,false)
                 .addField(`__**Favorite Game**__`,`${profile.favoriteGames}`,true)
                 .addField(`__**Favorite Music**__`,`${profile.favoriteMusic}`,true)
                 .addField(`__**Social Media Links**__`,`${profile.socialLinks}`,false)
-                .setImage(`${profile.profilePictureLink}`)
                 .setThumbnail(message.author.avatarURL)
                 .setFooter(`${profile.dmFriendly} My DM's Are Open. | Currently has ${profile.fortunePoints} Fortune points.`)
+                if(`${profile.profilePictureLink}` !== "null"){
+                    embed.setImage(`${profile.profilePictureLink}`)
+                }
             message.channel.send(embed) 
         }).catch(() => {
             const embed = new Discord.RichEmbed()
