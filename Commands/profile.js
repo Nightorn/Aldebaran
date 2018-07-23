@@ -3,8 +3,12 @@ const config = require("./../config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
+    var usrid = message.author.id;
+    if(args.length > 0){
+        usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
+    };
     const connect = function() {
-        poolQuery(`SELECT * FROM socialprofile WHERE userId='${message.author.id}'`).then(result => {
+        poolQuery(`SELECT * FROM socialprofile WHERE userId='${usrid}'`).then(result => {
             let profile = result[0];
             const embed = new Discord.RichEmbed()
                 .setTitle(`${message.author.username}\'s Profile`)
