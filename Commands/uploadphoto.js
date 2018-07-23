@@ -5,6 +5,7 @@ const mysql = require("mysql");
 exports.run = function(bot, message, args) {
     const connect = function() {
         poolQuery(`INSERT INTO photogallery (userid,links,linkname,tags,nsfw) VALUES ("${message.author.id}","${args[0]}","${args[1]}","${args[2]}","${args[3]}")`).then(result => {
+            message.channel.send(`Your Image has been uploaded.`)
         }).catch(() => {
             const embed = new Discord.RichEmbed()
                 .setAuthor(message.author.username, message.author.avatarURL)
