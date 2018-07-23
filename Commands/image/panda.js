@@ -9,7 +9,7 @@ exports.run = (bot, message, args) => {
         var image = data.photos[0].src.large
         var imagesource = data.photos[0].photographer
         const embed = new Discord.RichEmbed()
-        .setTitle(`**__Panda Panda Panda**`)
+        .setTitle(`**__Panda Panda Panda__**`)
         .setAuthor(message.author.username,message.author.avatarURL)
         .setColor(0x00AE86)
         .setImage(`${image}`)
