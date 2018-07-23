@@ -31,12 +31,13 @@ exports.run = (bot, message, args, apiratelimit) => {
                                  locationname = locationdb[i].name  
                                 } 
                             }
-                        }    
+                        }
+            var started = Math.floor((data.lastheal - Date.now()) / (1000 * 60 * 60 * 24))
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s DRPG Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
-                .setDescription(`Donator - ${donator}\nLast seen ${playdate} mins ago.\nCurrently In ${locationname}`)
+                .setDescription(`Donator - ${donator}\nLast seen ${playdate} mins ago.\nCurrently In ${locationname}\nStarted ${started} days ago.`)
                 .setFooter(`${apiratelimit} Global Uses Remain Before Ratelimited | Usages Reset In ${ratelimitrest} seconds.`)
                 .addField(`Level - ${data.level}`,`Kills - ${data.kills} | Deaths - ${data.deaths}\nXP - ${data.xp} | XPBoost - ${xpBoostpercent}%`,false)
                 .addField(`Gold - ${data.gold}`,`Lux - ${lux} | Gold Boost  - ${goldBoostpercent}%`,false)
