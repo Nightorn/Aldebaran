@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
     const embed = new Discord.RichEmbed()
-        setAuthor(message.author.username, message.author.avatarURL)
+        .setAuthor(message.author.username, message.author.avatarURL)
         .setTitle()
         .setDescription(`Please specify a section and value`)
         .setColor(`Red`)
