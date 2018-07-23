@@ -32,8 +32,7 @@ bot.on("message", async message => {
                 bot.prefixes.set(guildid, config.prefix);
             }      
         } else bot.prefixes.set(guildid, config.prefix);
-    }
-    console.log(bot.prefixes)    
+    }  
     let guildprefix = bot.prefixes.get(guildid)
     
     if (message.content.indexOf(guildprefix) !== 0)return;
