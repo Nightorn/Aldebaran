@@ -4,7 +4,7 @@ const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
     
-    var usrid = message.author.id;
+    var userid = message.author.id;
     var title = message.author.username;
     var useravatar = message.author.avatarURL
     
