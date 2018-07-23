@@ -3,6 +3,7 @@ const config = require("./../config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
+    if (args.length < 4)return message.reply(`You must enter all correct info to upload, <link>,<linkname><tag><nsfw?>`)
     const connect = function() {
         poolQuery(`INSERT INTO photogallery (userid,links,linkname,tags,nsfw) VALUES ("${message.author.id}","${args[0]}","${args[1]}","${args[2]}","${args[3]}")`).then(result => {
             message.channel.send(`Your Image has been uploaded.`)

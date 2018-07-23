@@ -7,7 +7,7 @@ exports.run = function(bot, message, args) {
     
     const connect = function() {
         var maximage = 0;
-        poolQuery(`SELECT COUNT(*) FROM photogallery`).then(result =>{
+        poolQuery(`SELECT COUNT(*) FROM photogallery WHERE NSFW != "Yes"`).then(result =>{
             maximage = parseInt(result[0]["COUNT(*)"]) -1 
         }).catch(() => {
         const embed = new Discord.RichEmbed()
@@ -18,7 +18,7 @@ exports.run = function(bot, message, args) {
         message.channel.send({embed});
         })
 
-        poolQuery(`SELECT * FROM photogallery`).then(result => {
+        poolQuery(`SELECT * FROM photogallery WHERE NSFW != "Yes"`).then(result => {
             let imagenumber = Math.ceil((Math.random() * maximage))
             let image = result[parseInt(imagenumber)];
             console.log(imagenumber)
