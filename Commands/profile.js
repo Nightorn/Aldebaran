@@ -4,14 +4,19 @@ const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
     var usrid = message.author.id;
+    var title = message.author.username;
+    var useravatar = message.author.avatarURL
     if(args.length > 0){
         usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
+        title = message.mentions.members.first().username
+        useravatar = message.mentions.members.first().avatarURL 
     };
+
     const connect = function() {
         poolQuery(`SELECT * FROM socialprofile WHERE userId='${usrid}'`).then(result => {
             let profile = result[0];
             const embed = new Discord.RichEmbed()
-                .setTitle(`${message.author.username}\'s Profile`)
+                .setTitle(`${title}\'s Profile`)
                 .setDescription(`${profile.flavorText}`)
                 .setColor(`${profile.profileColor}`)
                 .addField(`**__User Details__**`,`**Name:** ${profile.name}\n**Country:** ${profile.country}\n**Timezone:** ${profile.timezone}\n**Birthday:** ${profile.birthday} | **Zodiac Sign:** ${profile.zodiacName}\n**Age:** ${profile.age}\n**Gender**: ${profile.gender}`,true)
@@ -19,7 +24,7 @@ exports.run = function(bot, message, args) {
                 .addField(`__**Favorite Game**__`,`${profile.favoriteGames}`,true)
                 .addField(`__**Favorite Music**__`,`${profile.favoriteMusic}`,true)
                 .addField(`__**Social Media Links**__`,`${profile.socialLinks}`,false)
-                .setThumbnail(message.author.avatarURL)
+                .setThumbnail(useravatar)
                 .setFooter(`${profile.dmFriendly} My DM's Are Open. | Currently has ${profile.fortunePoints} Fortune points.`)
                 if(`${profile.profilePictureLink}` !== "null"){
                     embed.setImage(`${profile.profilePictureLink}`)
