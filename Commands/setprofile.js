@@ -9,7 +9,7 @@ exports.run = function(bot, message, args) {
         .setDescription(`Please specify a section and value`)
         .setColor(`Red`)
         .addField(`**__Available Sections__**,*name,country,timeZone,birthDay\naboutMe,flavoTtext,age,gender,dmfriendly,profilePictureLink\nfavoriteGames,profileColor,favoriteMusic,socialLinks\nzodiacName`,false)
-    if (args.length <= 0)return message.channel.send(`${embed}`)
+    if (args.length <= 0)return message.channel.send((embed))
     var profiletarget = args[0].toLowerCase()
     var inputdata = args.join(" ").slice(profiletarget.length).split(",")
         const connect = function() {
