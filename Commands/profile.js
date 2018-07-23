@@ -22,7 +22,7 @@ exports.run = function(bot, message, args) {
                 .setTitle(`${title}\'s Profile`)
                 .setDescription(`${profile.flavorText}`)
                 .setColor(`${profile.profileColor}`)
-                .addField(`**__User Details__**`,`**Name:** ${profile.name}\n**Country:** ${profile.country}\n**Timezone:** ${profile.timezone}\n**Birthday:** ${profile.birthday} | **Zodiac Sign:** ${profile.zodiacName}\n**Age:** ${profile.age}\n**Gender**: ${profile.gender}`,true)
+                .addField(`**__User Details__**`,`**Name:** ${profile.name}\n**Country:** ${profile.country}\n**Timezone:** ${profile.timezone}\n**Birthday:** ${profile.birthday}\n**Zodiac Sign:** ${profile.zodiacName}\n**Age:** ${profile.age}\n**Gender**: ${profile.gender}`,true)
                 .addField(`**__About Me__**`,`${profile.aboutMe}`,false)
                 .addField(`__**Favorite Game**__`,`${profile.favoriteGames}`,true)
                 .addField(`__**Favorite Music**__`,`${profile.favoriteMusic}`,true)
