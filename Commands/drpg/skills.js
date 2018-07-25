@@ -28,3 +28,15 @@ exports.run = (bot, message, args, apiratelimit) => {
             message.reply("Error you must enter a valid UserID or User Mention")
         })
 }
+exports.infos = {
+    category: "DRPG",
+    description: "Displays users skills info.",
+    usage: "\`&skills\` or \`&skills <usermention>\` or \`&skills <userid>\`",
+    example: "\`&skills\` or \`&skills @aldebaran\` or \`&skills 246302641930502145\`",
+    cooldown: {
+        time: 5000,
+        rpm: 25,
+        resetTime: 60000,
+        commandGroup: "drpg"
+    }
+}
