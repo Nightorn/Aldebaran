@@ -21,7 +21,7 @@ exports.run = (bot, message, args, apiratelimit) => {
                 .setColor(0x00AE86)
                 .setFooter(`${apiratelimit} Global Uses Remain Before Ratelimited | Usages Reset In ${ratelimitrest} seconds.`)
                 .addField(`**__Chopping__**`,`**Level:** *${data.skills.chop.level}*\n**Total XP:** ${data.skills.chop.xp}`)
-                message.send(embed)
+                message.channel.send(embed)
             });
         })
         .catch(err => {
