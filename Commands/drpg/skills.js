@@ -18,8 +18,25 @@ exports.run = (bot, message, args, apiratelimit) => {
                 var maxpoints = Math.floor(data.level * 5)
                 var skillinfo = data.skills
                 var currentpoints = data.attributes
-                var lumbercurrent = Math.floor(((currentpoints.lumberBoost / 25 ) + 1) + skillinfo.chop.level)
-                var lumbermax = Math.floor(((maxpoints / 25) + 1) + skillinfo.chop.level)
+                var tool = data.tool
+                var axebonus = 0;
+                if (tool.axe === "370"){
+                    axebonus = 0
+                } else if (tool.axe === "413"){
+                    axebonus += 1
+                } else if (tool.axe === "415" ){
+                    axebonus += 3
+                } else if (tool.axe === "416"){
+                    axebonus += 5
+                } else if (tool.axe === "417"){
+                    axebonus += 8
+                } else {
+                    axebonus = 0                  
+                }
+                var lumbercurrent = Math.floor((((currentpoints.lumberBoost / 25 ) + 1) + skillinfo.chop.level) + axebonus)
+                var lumbermax = Math.floor((((maxpoints / 25) + 1) + skillinfo.chop.level) + axebonus)
+                
+                
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s Skill Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
