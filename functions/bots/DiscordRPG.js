@@ -50,7 +50,7 @@ module.exports = function(client, message, args) {
     if (user != null && playerName != undefined && char_healthPercent != pet_healthPercent) {
       poolQuery(`SELECT * FROM users WHERE userId='${user.id}'`).then((result) => {
         const drpg = function() {
-          if (char_healthPercent < 10) {
+          if (char_healthPercent < 11) {
             const embed = new Discord.RichEmbed()
               .setTitle(`__${user.username} Health Warning!!! - ${char_healthPercent}%__`)
               .setColor(0xff0000)
@@ -58,7 +58,16 @@ module.exports = function(client, message, args) {
               .setImage(`${senddeath}`)
               .setFooter(`You are going to die aren't you?`)
             message.channel.send(embed).then(msg => msg.delete(60000));
-          } else { 
+          } else if (pet_healthPercent < 11) {
+            const embed = new Discord.RichEmbed()
+            .setTitle(`__${user.username} PET Health Warning!!! - ${pet_healthPercent}%__`)
+            .setColor(0xff0000)
+            .setDescription(`**${user.username}** your pet is at __**${pet_currentHP}**__ health!!!\n`)
+            .setImage(`${senddeath}`)
+            .setFooter(`OMG YOUR GOING TO LET YOUR PET DIE????`)
+          message.channel.send(embed).then(msg => msg.delete(60000));
+          }
+          else { 
             var embed = new Discord.RichEmbed()
               .setAuthor(user.username, user.avatarURL)
               .addField(`__Character Health__ - **${char_healthPercent}%**`,`(${char_currentHP} HP / ${char_maxHP} HP)`, false)
