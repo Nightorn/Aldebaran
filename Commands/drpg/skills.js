@@ -18,7 +18,7 @@ exports.run = (bot, message, args, apiratelimit) => {
                 var maxpoints = Math.floor(data.level * 5)
                 var skillinfo = data.skills
                 var currentpoints = data.attributes
-                var lumbercurrent = Math.floor(((currentpoints.lumberboost / 25 ) + 1) + skillinfo.chop.level)
+                var lumbercurrent = Math.floor(((currentpoints.lumberBoost / 25 ) + 1) + skillinfo.chop.level)
                 var lumbermax = Math.floor(((maxpoints / 25) + 1) + skillinfo.chop.level)
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s Skill Info")
