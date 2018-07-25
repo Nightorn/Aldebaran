@@ -15,12 +15,17 @@ exports.run = (bot, message, args, apiratelimit) => {
                 if (data.error != undefined)return message.channel.send(`**Error**: No User Profile Found.`)
                 apiratelimit = response.headers["x-ratelimit-remaining"]
                 var ratelimitrest = Math.floor(parseInt(response.headers["x-ratelimit-reset"] - (Date.now()/1000)))
+                var maxpoints = Math.floor(data.level * 5)
+                var skillinfo = data.skills
+                var currentpoints = data.attributes
+                var lumbercurrent = Math.floor(((currentpoints.lumberboost / 25 ) + 1) + skillinfo.chop.level)
+                var lumbermax = Math.floor(((maxpoints / 25) + 1) + skillinfo.chop.level)
                 const embed = new Discord.RichEmbed()
                 .setTitle(data.name + "'s Skill Info")
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
                 .setFooter(`${apiratelimit} Global Uses Remain Before Ratelimited | Usages Reset In ${ratelimitrest} seconds.`)
-                .addField(`**__Chopping__**`,`**Level:** *${data.skills.chop.level}*\n**Total XP:** ${data.skills.chop.xp}`)
+                .addField(`**__Chopping__**`,`**Level:** *${skillinfo.chop.level}*\n**Total XP:** *${skillinfo.chop.xp}*\n**Current Chop Reward:** *${lumbercurrent}* Logs.\n**Max Chop Rewards:** *${lumbermax}* Logs.`)
                 message.channel.send(embed)
             });
         })
