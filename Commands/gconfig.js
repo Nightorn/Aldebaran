@@ -7,6 +7,7 @@ exports.run = function(bot, message, args) {
     const parametersAvailable = {
         adventureTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Adventure Timer - [on | off]"},
         sidesTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Sides Timer - [on | off]"},
+        autoDelete: {support: (value) => { return ['on', 'off'].indexOf(value) != -1}, help: "Auto Delete Sides & Adv Commands - [on | off]"},
         aldebaranPrefix: {support: (value) => {return ['&',`${args[1]}`].indexOf(value) != -1}, help: "Aldebaran's Prefix - [& | Guild Customized]", postUpdate: (value) => { bot.prefixes.set(message.guild.id, value); }}
     }
     if (args.length == 0 || args.indexOf('help') != -1) {
