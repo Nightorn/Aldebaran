@@ -24,19 +24,19 @@ module.exports = class CooldownManager {
         }
         if (command !== undefined) {
             if (command.infos.cooldown === undefined) return gogogo(this);
-            if (command.infos.cooldown.resetTime === undefined) {
+            /*if (command.infos.cooldown.resetTime === undefined) {
                 if (this[userId][commandGroup] === undefined) this[userId][commandGroup] = {
                     cooldown: Date.now() + command.infos.cooldown.time
                 };
             } else {
-                if (this[userId][commandGroup] === undefined) this[userId][commandGroup] = {
+                */if (this[userId][commandGroup] === undefined) this[userId][commandGroup] = {
                     cooldown: Date.now() - command.infos.cooldown.time,
                     resetTime: Date.now() - command.infos.cooldown.resetTime,
                     rpm: command.infos.cooldown.rpm--
                 };
-            }
+            //}
             if (this[userId][commandGroup].cooldown - Date.now() <= -command.infos.cooldown.time) {
-                if (this[userId][commandGroup].resetTime !== undefined) {
+                /*if (this[userId][commandGroup].resetTime !== undefined) {
                     if (this[userId][commandGroup].resetTime - Date.now <= -command.infos.cooldown.resetTime) this[userId][commandGroup].rpm = command.infos.cooldown.rpm--;
                     if (this[userId][commandGroup].rpm > 0) {
                         this[userId][commandGroup].cooldown = Date.now();
@@ -44,9 +44,9 @@ module.exports = class CooldownManager {
                         console.log(this);
                         return gogogo(this);
                     }
-                } else {
+                } else {*/
                     return gogogo(this);
-                };
+                //};
             }
         } else {
             return gogogo(this);
