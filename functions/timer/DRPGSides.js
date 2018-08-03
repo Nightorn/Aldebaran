@@ -11,7 +11,7 @@ module.exports = async function(bot, message, args) {
           				if (Object.keys(result).length != 0) {
             				let settings = JSON.parse(result[0].settings);
             				if (settings.sidesTimer === `on`) {
-								if (settingsg.autoDelete === `on`){message.delete(1000);}    
+								if (settingsg.autoDelete !== `off`){message.delete(1000);}    
 								const embed3 = new Discord.RichEmbed()
 									.setAuthor(message.author.username, message.author.avatarURL)
 									.setColor(0x00AE86)
