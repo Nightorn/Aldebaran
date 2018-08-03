@@ -6,10 +6,10 @@
     "omdb_apikey" : "1aa9cc94",
     "cat_apikey": "MzI0MDc4",
     "mysql": {
-        "host": "us-cdbr-iron-east-04.cleardb.net",
-        "user": "b26ca98b5b6cb2",
-        "password": "580c0f52",
-        "database": "heroku_39f8be6222713c4"
+        "host": "localhostt",
+        "user": "ciborn",
+        "password": "Waifus4lyfe",
+        "database": "aldebaran"
     },
     "pexels_apikey": "563492ad6f9170000100000176b8f11924744d96ae2793f53b8aa16d",
     "dprg_prefix": [
