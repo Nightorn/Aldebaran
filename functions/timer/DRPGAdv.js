@@ -4,7 +4,7 @@ module.exports = function(bot, message, args) {
     poolQuery(`SELECT * FROM guilds WHERE guildid ='${message.guild.id}'`).then((result) =>{
       if (Object.keys(result).length != 0){
         let settingsg = JSON.parse(result[0].settings);
-        if (settingsg.adventureTimer === `on`){
+        if (settingsg.adventureTimer !== `off`){
           poolQuery(`SELECT * FROM users WHERE userId='${message.author.id}'`).then((result) => {
             const timer = function(){
               if (settingsg.autoDelete !== `off`){message.delete(1000);}            
@@ -17,7 +17,7 @@ module.exports = function(bot, message, args) {
       
             if (Object.keys(result).length != 0) {
               let settings = JSON.parse(result[0].settings);
-              if (settings.adventureTimer === `on`) {
+              if (settings.adventureTimer !== `off`) {
                 timer();
               }
             }

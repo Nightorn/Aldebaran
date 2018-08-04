@@ -6,12 +6,12 @@ module.exports = async function(bot, message, args) {
       	poolQuery(`SELECT * FROM guilds WHERE guildid ='${message.guild.id}'`).then((result) =>{
         	if (Object.keys(result).length != 0) {
           		let settingsg = JSON.parse(result[0].settings);
-          		if (settingsg.sidesTimer === `on`){
+          		if (settingsg.sidesTimer !== `off`){
             		poolQuery(`SELECT * FROM users WHERE userId='${message.author.id}'`).then((result) => {
 						if (settingsg.autoDelete !== `off`)message.delete(500);
           				if (Object.keys(result).length != 0) {
             				let settings = JSON.parse(result[0].settings);
-            				if (settings.sidesTimer === `on`) {
+            				if (settings.sidesTimer !== `off`) {
 								const embed3 = new Discord.RichEmbed()
 									.setAuthor(message.author.username, message.author.avatarURL)
 									.setColor(0x00AE86)
