@@ -8,10 +8,10 @@ module.exports = async function(bot, message, args) {
           		let settingsg = JSON.parse(result[0].settings);
           		if (settingsg.sidesTimer === `on`){
             		poolQuery(`SELECT * FROM users WHERE userId='${message.author.id}'`).then((result) => {
+						if (settingsg.autoDelete !== `off`)message.delete(500);
           				if (Object.keys(result).length != 0) {
             				let settings = JSON.parse(result[0].settings);
             				if (settings.sidesTimer === `on`) {
-								if (settingsg.autoDelete !== `off`){message.delete(1000);}    
 								const embed3 = new Discord.RichEmbed()
 									.setAuthor(message.author.username, message.author.avatarURL)
 									.setColor(0x00AE86)
