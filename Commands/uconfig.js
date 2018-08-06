@@ -6,7 +6,8 @@ exports.run = function(bot, message, args) {
     const parametersAvailable = {
         healthMonitor: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100) }, help: "DiscordRPG Health Monitor - [on | off | healthPercentage]"},
         adventureTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Adventure Timer - [on | off]"},
-        sidesTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Sides Timer - [on | off]"}
+        sidesTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Sides Timer - [on | off]"},
+        individualHealthMonitor: {support: value => { return ['off', "character", "pet"].indexOf(value) != -1 }, help: "DiscordRPGIndividual Health Monitor - [off | character | pet]" }
     }
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
