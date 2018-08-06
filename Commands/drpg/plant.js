@@ -54,12 +54,7 @@ exports.run = (bot, message, args, apiratelimit) => {
                         }
                     }
                 };    
-                var locationname = key 
-                for (var i = 0; i < locationdb.length; i++){
-                        if (locationdb[i].id == key){
-                            locationname = locationdb[i].name  
-                        }
-                }
+                var locationname = locationdb[`${key}`] !== undefined ? locationdb[`${key}`].name : "???"
                 embed.addField(`__${locationname} - Set ${planttime} days ago.__`,`Seed Planted: **${plantname}**\nPlanted Since: ${plantdate}\nChecked with **Current** reaping would give you **${lootamountcurrentmin} - ${lootamountcurrentmax} items**.\nChecked with **Max** reaping would give you **${lootamountmaxmin} - ${lootamountmaxmax} items**.`,false);
             }
             message.channel.send({embed})

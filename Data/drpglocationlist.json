@@ -34,6 +34,11 @@
         "connections" : [],
         "npc" : []
     },
+    "11": {
+        "name" : "Ravens Gate",
+        "connections" : [],
+        "npc" : []
+    },
     "13": {
         "name" : "Copperfall Summit",
         "connections" : [],
