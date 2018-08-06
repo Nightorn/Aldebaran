@@ -22,7 +22,7 @@ exports.run = (bot, message, args, apiratelimit) => {
                     .setAuthor(data.name, bot.users.get(usrid).avatarURL)
                     .setColor(data.donate ? 'GOLD' : 0x00AE86)
                     .setDescription(`${data.location !== undefined ? `Currently In **${locationdb[`${data.location.current}`] !== undefined ? `${locationdb[`${data.location.current}`].name}**` : 'The Abyss**'}` : ''}`)
-                    .addField(`Level ${format(data.level)}`,`**Progression** - ${format(data.kills)} **Kills** | ${data.deaths} **Deaths** | ${format(data.xp)} **XP**\n**Money** - ${format(data.gold)} **Gold** | ${data.lux !== undefined ? format(data.lux) : '0'} **Lux**`, false)
+                    .addField(`Level ${format(data.level)}`,`**Progression** - ${format(data.kills)} **Kills** | ${data.deaths} **Deaths** | ${format(data.xp)} **XP**\n**Currency** - ${format(data.gold)} **Gold** | ${data.lux !== undefined ? format(data.lux) : '0'} **Lux**`, false)
                     .addField(`Specifications`, `**Skills** - ${skills.join(', ')}\n**Attributes** - ${attributes.length !== 0 ? attributes.join(', ') : 'None'}`)
                     //.setFooter(`${response.headers["x-ratelimit-remaining"]} Global Uses Remain Before Ratelimited | Usages Reset In ${Math.floor(parseInt(response.headers["x-ratelimit-reset"] - (Date.now()/1000)))} seconds.`);
                     .setFooter(`${data.donate ? 'Donator, ' : ''}Last seen ${Math.floor((new Date() - data.lastseen) / 60000)} mins ago`);
