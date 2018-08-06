@@ -26,8 +26,13 @@ module.exports = function(client, message, args) {
 					player.name = message.content.split(`\n`)[1].replace("'s Adventure ]========!", "").replace("!========[ ", "");
 				}
 				const messageArray = message.content.split('\n');
-				if (messageArray[3] != undefined) {
-					const petInfosLine = messageArray[3].indexOf('+ Critical hit!') != -1 ? messageArray[8].split(' ') : messageArray[7].split(' ');
+				var dealtLine = null, tookLine = null;
+				for (let i in messageArray) {
+					if (messageArray[i].indexOf(' dealt ') !== -1) dealtLine = parseInt(i);
+					if (messageArray[i].indexOf(' took' ) !== -1) tookLine = parseInt(i);
+				}
+				if (tookLine === dealtLine + 1) {
+					const petInfosLine = messageArray[tookLine + 1].split(' ');
 					pet.currentHP = parseInt(petInfosLine[petInfosLine.indexOf('has') + 1].split('/')[0].replace(',', ''));
 					pet.maxHP = parseInt(petInfosLine[petInfosLine.indexOf('has') + 1].split('/')[1].replace(',', ''));
 				}
@@ -73,14 +78,16 @@ module.exports = function(client, message, args) {
 				}, general = () => {
 					var embed = new Discord.RichEmbed()
 					 	.setAuthor(user.username, user.avatarURL)
-					 	.addField(`__Character Health__ - **${player.healthPercent}%**`,`(${player.currentHP} HP / ${player.maxHP} HP)`, false)
 					 	.setFooter(`&config To Change Health Monitor Settings`)
 	  
+					if (individual !== 'pet') embed.addField(`__Character Health__ - **${player.healthPercent}%**`,`(${player.currentHP} HP / ${player.maxHP} HP)`, false)
+					if (!isNaN(pet.healthPercent) && individual !== 'character') embed.addField(`__Pet Health__ - **${pet.healthPercent}%**`, `(${pet.currentHP} HP / ${pet.maxHP} HP)`, false);
+					if ((isNaN(pet.healthPercent) || pet.healthPercent === 0) && individual !== 'character') embed.addField(`__Pet Condition__`, `**DEAD** or not able to do damages`);
+					if (embed.fields.length === 0) return;
 					if (player.healthPercent <= 20 || pet.healthPercent <= 20) embed.setColor('RED');
 					else if (player.healthPercent <= 40 || pet.healthPercent <= 40) embed.setColor('ORANGE');
 					else if (player.healthPercent <= 60 || pet.healthPercent <= 60) embed.setColor('GOLD');
 					else if (player.healthPercent <= 100 || pet.healthPercent <= 100) embed.setColor('GREEN');
-					if (!isNaN(pet.healthPercent)) embed.addField(`__Pet Health__ - **${pet.healthPercent}%**`, `(${pet.currentHP} HP / ${pet.maxHP} HP)`, false);
 					message.channel.send({embed}).then(msg => msg.delete(30000));
 				}
 
