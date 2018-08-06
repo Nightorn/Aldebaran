@@ -48,7 +48,7 @@ module.exports = function(client, message, args) {
 				}
 			}
 		}
-
+      
 		const user = client.users.find('username', player.name);
 		player.healthPercent = Math.round(10 * player.currentHP * 100 / player.maxHP) / 10;
 		pet.healthPercent = Math.round(10 * pet.currentHP * 100 / pet.maxHP) / 10;

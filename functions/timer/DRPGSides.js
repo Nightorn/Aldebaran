@@ -3,15 +3,17 @@ const Discord = require("discord.js");
 const poolQuery = require('./../../functions/database/poolQuery');
 module.exports = async function(bot, message, args) {
     if (message.content.toLowerCase().startsWith(`#!mine`)|| message.content.toLowerCase().startsWith(`,mine`)|| message.content.toLowerCase().startsWith(`.mine`)){
-      	poolQuery(`SELECT * FROM guilds WHERE guildid ='${message.guild.id}'`).then((result) =>{
+		const emoji = ["🥕","🍋","🥔","🐟"]
+		var randomemoji = (`${emoji[~~(Math.random() * emoji.length)]}`);  
+		poolQuery(`SELECT * FROM guilds WHERE guildid ='${message.guild.id}'`).then((result) =>{
         	if (Object.keys(result).length != 0) {
           		let settingsg = JSON.parse(result[0].settings);
           		if (settingsg.sidesTimer === `on`){
             		poolQuery(`SELECT * FROM users WHERE userId='${message.author.id}'`).then((result) => {
+						if (settingsg.autoDelete !== `off`)message.delete(500);
           				if (Object.keys(result).length != 0) {
             				let settings = JSON.parse(result[0].settings);
             				if (settings.sidesTimer === `on`) {
-								if (settingsg.autoDelete === `on`){message.delete(1000);}    
 								const embed3 = new Discord.RichEmbed()
 									.setAuthor(message.author.username, message.author.avatarURL)
 									.setColor(0x00AE86)
@@ -28,7 +30,7 @@ module.exports = async function(bot, message, args) {
 										  	message.channel.send({embed}).then(timerset => {
 												timerset.delete(5000)
 												setTimeout((channel, userid) => {
-												  	message.channel.send(`<@${message.author.id}> sides time! :rolling_eyes:`).then(msg => {
+												  	message.channel.send(`<@${message.author.id}> sides time! ${randomemoji}`).then(msg => {
 														msg.delete(180000)
 												  	}).catch();
 												}, 312500, message.channel, message.author.id);
