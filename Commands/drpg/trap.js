@@ -49,8 +49,8 @@ exports.run = (bot, message, args, apiratelimit) => {
                 .setAuthor(message.author.username,message.author.avatarURL)
                 .setColor(0x00AE86)
                 .setDescription(`Bear Trap - Set ${traptimeelapsed} ${hour} Ago`)
-                .addField(`__Current Trap Rewards__`,`You will recieve **${currentid79min}-${currentid79max}** **Raven Feathers**.\nYou will recieve **${currentid78min}-${currentid78max}** **Balls of Whool**.\nYou will recieve **${currentid81min}-${currentid81max}** **Golden Feathers**.\nYou will recieve **${currentid80min}-${currentid80max}** **Meats**.\nYou will recieve **${id462}** **bear**.`,false)                
-                .addField(`__Max Salvaging Trap Rewards__`,`You will recieve **${maxsalid79min}-${maxsalid79max}** **Raven Feathers**.\nYou will recieve **${maxsalid78min}-${maxsalid78max}** **Balls of Whool**.\nYou will recieve **${maxsalid81min}-${maxsalid81max}** **Golden Feathers**.\nYou will recieve **${maxsalid80min}-${maxsalid80max}** **Meats**.\nYou will recieve **${id462}** **bear**.`,false)
+                .addField(`__Current Trap Rewards__`,`You will recieve **${currentid79min}-${currentid79max}** **Raven Feathers**.\nYou will recieve **${currentid78min}-${currentid78max}** **Balls of Wool**.\nYou will recieve **${currentid81min}-${currentid81max}** **Golden Feathers**.\nYou will recieve **${currentid80min}-${currentid80max}** **Meats**.\nYou will recieve **${id462}** **bear**.`,false)                
+                .addField(`__Max Salvaging Trap Rewards__`,`You will recieve **${maxsalid79min}-${maxsalid79max}** **Raven Feathers**.\nYou will recieve **${maxsalid78min}-${maxsalid78max}** **Balls of Wool**.\nYou will recieve **${maxsalid81min}-${maxsalid81max}** **Golden Feathers**.\nYou will recieve **${maxsalid80min}-${maxsalid80max}** **Meats**.\nYou will recieve **${id462}** **bear**.`,false)
                 .setFooter(`Trap Set - ${trapsetdate}\n${apiratelimit} Global Uses Remain Before Ratelimited | Usages Reset In ${ratelimitrest} seconds.`)
                 message.channel.send({embed})    
 
