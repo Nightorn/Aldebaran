@@ -73,7 +73,7 @@ module.exports = function(client, message, args) {
 						.setColor(0xff0000)
 						.setDescription(`**${user.username}** your pet is at __**${pet.currentHP}**__ health!!!\n`)
 						.setImage(`${senddeath}`)
-						.setFooter(`OMG YOUR GOING TO LET YOUR PET DIE????`)
+						.setFooter(`OMG YOU ARE GOING TO LET YOUR PET DIE????`)
 				  message.channel.send(embed).then(msg => msg.delete(60000));
 				}, general = () => {
 					var embed = new Discord.RichEmbed()
