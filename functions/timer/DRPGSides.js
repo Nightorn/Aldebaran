@@ -1,7 +1,7 @@
 const config = require('./../../config.json');
 const Discord = require("discord.js");
 const poolQuery = require('./../../functions/database/poolQuery');
-module.exports = async function(bot, message, args) {
+module.exports = async function(bot, message, args,sidestimer) {
     if (message.content.toLowerCase().startsWith(`#!mine`)|| message.content.toLowerCase().startsWith(`,mine`)|| message.content.toLowerCase().startsWith(`.mine`)){
 		const emoji = ["🥕","🍋","🥔","🐟"]
 		var randomemoji = (`${emoji[~~(Math.random() * emoji.length)]}`);  
@@ -14,6 +14,7 @@ module.exports = async function(bot, message, args) {
           				if (Object.keys(result).length != 0) {
             				let settings = JSON.parse(result[0].settings);
             				if (settings.sidesTimer === `on`) {
+								if (bot.sidestimer.has(message.author.id))return;
 								const embed3 = new Discord.RichEmbed()
 									.setAuthor(message.author.username, message.author.avatarURL)
 									.setColor(0x00AE86)
@@ -29,7 +30,9 @@ module.exports = async function(bot, message, args) {
 											  	.setColor(0x00AE86);
 										  	message.channel.send({embed}).then(timerset => {
 												timerset.delete(5000)
+												bot.sidestimer.set(message.author.id);
 												setTimeout((channel, userid) => {
+													bot.sidestimer.delete(message.author.id)
 												  	message.channel.send(`<@${message.author.id}> sides time! ${randomemoji}`).then(msg => {
 														msg.delete(180000)
 												  	}).catch();
