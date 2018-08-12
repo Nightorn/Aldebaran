@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
-    const questlist = require("./../../Data/drpgquestinfo.json");
+    const questlist = require(`${process.cwd()}/Data/drpgquestinfo.json`);
 
     var questrequest = args.join(' ').toLowerCase(), found = false;
     if (args != '') {

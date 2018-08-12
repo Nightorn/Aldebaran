@@ -29,6 +29,11 @@
         "title": ":wrench: Settings Commands :gear:",
         "description": "Commands to personnalize Aldebaran"
     },
+    "developer": {
+        "name": "Developer",
+        "title": ":hammer: Developer Commands :tools:",
+        "description": "Commands for Aldebaran developers"
+    },
     "nsfw": {
         "name": "NSFW",
         "title": ":no_entry_sign: NSFW Commands :no_entry:",

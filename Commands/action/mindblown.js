@@ -1,5 +1,5 @@
 exports.run = (bot, message, args) => {
-    const images = require("./../../Data/imageurls.json");
+    const images = require(`${process.cwd()}/Data/imageurls.json`);
     const randomGif = images.mindblown[~~(Math.random() * images.mindblown.length)];
     
     message.channel.send({embed:{

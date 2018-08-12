@@ -1,4 +1,4 @@
-const poolQuery = require('./../../functions/database/poolQuery');
+const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
 module.exports = (client, message) => {
     if (message.content.toLowerCase().startsWith(`#!padv`)|| message.content.toLowerCase().startsWith(`,padv`)|| message.content.toLowerCase().startsWith(`.padv`)){
         poolQuery(`SELECT settings FROM guilds WHERE guildId='${message.guild.id}'`).then(result => {

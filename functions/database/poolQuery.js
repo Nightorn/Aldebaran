@@ -1,4 +1,4 @@
-const pool = require('./returnPool.js');
+const pool = require(`./returnPool.js`);
 module.exports = function(query) {
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {

@@ -1,4 +1,4 @@
-const poolQuery = require('./../functions/database/poolQuery');
+const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
 const { Attachment } = require('discord.js');
 const util = require('util');
 exports.run = function(bot, message, args) {
@@ -16,7 +16,7 @@ exports.run = function(bot, message, args) {
 
 }
 exports.infos = {
-    category: "General",
+    category: "Developer",
     description: "Queries Attached DB",
     usage: "\`&query <sqlstatement>\`",
     example: "\`&query SELECT * FROM users WHERE userid = 310296184436817930\`",
