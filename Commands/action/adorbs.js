@@ -1,5 +1,5 @@
 exports.run = (bot, message, args) => {
-    const adorables = require("./../../Data/imageurls.json");
+    const adorables = require(`${process.cwd()}/Data/imageurls.json`);
     var sendadorables = (`${adorables.adorables[~~(Math.random() * adorables.adorables.length)]}`);
     if(message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
