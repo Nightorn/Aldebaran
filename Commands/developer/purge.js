@@ -9,7 +9,7 @@ exports.run = (bot, message, args) => {
     message.delete()
     }
     exports.infos = {
-        category: "General",
+        category: "Developer",
         description: "Purges Set Amount Of Messages",
         usage: "\`&purge <amount>\`",
         example: "\`&pruge 15\`",

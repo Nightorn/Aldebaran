@@ -33,5 +33,10 @@
         "name": "NSFW",
         "title": ":no_entry_sign: NSFW Commands :no_entry:",
         "description": "NSFW Image and Action Commands, Usable In NSFW Channels Only"
+    },
+    "developer": {
+        "name": "Developer",
+        "title": "☣ Developer Commands ☣",
+        "description": "Developer Only Commands"
     }
 }

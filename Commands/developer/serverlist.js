@@ -7,7 +7,7 @@ exports.run = async (client, message) => {
     message.reply(string)
 }
 exports.infos = {
-    category: "General",
+    category: "Developer",
     description: "Server List Of Aldebaran",
     usage: "\`&serverlist\`",
     example: "\`&serverlist\`",

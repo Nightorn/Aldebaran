@@ -16,7 +16,7 @@ exports.run = function(bot, message, args) {
 
 }
 exports.infos = {
-    category: "General",
+    category: "Developer",
     description: "Queries Attached DB",
     usage: "\`&query <sqlstatement>\`",
     example: "\`&query SELECT * FROM users WHERE userid = 310296184436817930\`",
