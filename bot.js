@@ -6,7 +6,10 @@ const poolQuery = require("./functions/database/poolQuery");
 const bot = new Discord.Client(); 
 const fs = require("fs");
 const cooldownManager = new CooldownManager();
+
 bot.prefixes = new Map();
+bot.advtimer = new Map();
+bot.sidestimer = new Map();
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
