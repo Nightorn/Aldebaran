@@ -2,7 +2,7 @@
 exports.run = function(bot, message, args) {
     if (message.author.id != `310296184436817930`)return message.channel.reply(`Kindly fck off`)
     const Discord = require('discord.js');
-    const config = require('./../config.json');
+    const config = require('./../../config.json');
     const embed = new Discord.RichEmbed()
         .setTitle(`Restarting ${bot.user.username}`)
         .setDescription(`Please wait, this may take up to 15 seconds.`)

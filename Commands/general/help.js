@@ -3,7 +3,7 @@ exports.run = (bot, message, args) => {
     const { RichEmbed } = require('discord.js');
     if (args[0] != undefined) {
         let commands = {};
-        var files = fs.readdirSync(`./../Commands/`);
+        var files = fs.readdirSync(`./../Aldebaran/Commands/`);
             
         const set = (path) => {
             let file = require(path).infos;
@@ -20,7 +20,7 @@ exports.run = (bot, message, args) => {
                 let dirName = fileName;
                 files = fs.readdirSync(`./Commands/${dirName}/`);
                 for (let fileName of files) {
-                    if (dirName !== 'inProgress') set(`./${dirName}/${fileName}`);
+                    if (dirName !== 'inProgress') set(`./../${dirName}/${fileName}`);
                 }
             } else {
                 set(`./${fileName}`);

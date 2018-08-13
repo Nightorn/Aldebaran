@@ -1,5 +1,5 @@
-const poolQuery = require('./../functions/database/poolQuery');
-const config = require("./../config.json");
+const poolQuery = require('./../../functions/database/poolQuery');
+const config = require("./../../config.json");
 const Discord = require("discord.js");
 const mysql = require("mysql");
 

@@ -1,4 +1,4 @@
-const poolQuery = require('./../functions/database/poolQuery');
+const poolQuery = require('./../../functions/database/poolQuery');
 const { Attachment } = require('discord.js');
 const util = require('util');
 exports.run = function(bot, message, args) {
