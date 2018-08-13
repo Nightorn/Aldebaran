@@ -1,24 +1,29 @@
-exports.run = (bot, message, args) => {
-    const hugs = require("./../../Data/imageurls.json");
-    var sendhugs = (`${hugs.hugs[~~(Math.random() * hugs.hugs.length)]}`);
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        message.channel.send({embed:{
-        author:{
-        name: message.author.username,
-        icon_url: message.author.avatarURL
-        },
-        description: (message.author +` hugged `+ target + ` how sweet!`),
-        image: {
-            url : (sendhugs),
-      },
-        timestamp: new Date()
+exports.run = (bot, message, args,command) => {
+    const userCheck = require(`${process.cwd()}/functions/action/userCheck`)
+    const getImage = require(`${process.cwd()}/functions/action/getImage`)
     
-    }});
-}   else {
-    message.reply("Please mention someone :thinking:"); //Reply with a mention saying "Invalid user."
-};
-};
+    const userId = userCheck(bot,message,args).then((userId) => {
+        var target = `<@${userId}>`
+        getImage(bot,message,args).then((image) =>{
+            message.channel.send({embed:{
+                author:{
+                    name: message.author.username,
+                    icon_url: message.author.avatarURL
+                },
+                description: (`${message.author.username} is hugging ${target} ever so tightly.`),
+                image: {
+                url : (image),
+                },
+                timestamp: new Date()
+            }});
+        })
+            
+    }).catch(() => {
+        message.channel.send(`You must enter a valid userid or mention!`)
+    });
+}
+
+
 exports.infos = {
     category: "Action",
     description: "Performs Action On Mentioned User & Displays Gif To Accompany",
