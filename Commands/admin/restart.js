@@ -1,6 +1,10 @@
 
 exports.run = function(bot, message, args) {
-    if (message.author.id != `310296184436817930`)return message.channel.reply(`Kindly fck off`)
+    if (['310296184436817930', '320933389513523220', '143026985763864576'].indexOf(message.author.id) === -1) {message.channel.send({embed: {
+        title: ":x: NOU",
+        description: "You are not an Aldebaran developer. You are not allowed to do that.",
+        color: 0xff0000
+    }}); return;} 
     const Discord = require('discord.js');
     const config = require(`${process.cwd()}/config.json`);
     const embed = new Discord.RichEmbed()

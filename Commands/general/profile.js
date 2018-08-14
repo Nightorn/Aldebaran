@@ -28,7 +28,7 @@ exports.run = function(bot, message, args) {
                 .addField(`__**Favorite Music**__`,`${profile.favoriteMusic}`,true)
                 .addField(`__**Social Media Links**__`,`${profile.socialLinks}`,false)
                 .setThumbnail(useravatar)
-                .setFooter(`${profile.dmFriendly} My DM's Are Open. | Currently has ${profile.fortunePoints} Fortune points.`)
+                .setFooter(`${/yes/i.test(profile.dmFriendly) ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`)
                 if(`${profile.profilePictureLink}` !== "null"){
                     embed.setImage(`${profile.profilePictureLink}`)
                 }
