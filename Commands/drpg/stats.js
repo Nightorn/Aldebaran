@@ -26,7 +26,7 @@ exports.run = (bot, message, args, apiratelimit) => {
                     .addField(`Specifications`, `**Skills** - ${skills.join(', ')}\n**Attributes** - ${attributes.length !== 0 ? attributes.join(', ') : 'None'}`)
                     //.setFooter(`${response.headers["x-ratelimit-remaining"]} Global Uses Remain Before Ratelimited | Usages Reset In ${Math.floor(parseInt(response.headers["x-ratelimit-reset"] - (Date.now()/1000)))} seconds.`);
                     .setFooter(`${data.donate ? 'Donator, ' : ''}Last seen ${Math.floor((new Date() - data.lastseen) / 60000)} mins ago`);
-                if (data.quest !== '' && data.quest !== undefined) embed.addField(`Quests`, `${data.quest.current !== null ? `**Current** : ${data.quest.current.name}\n` : ''}${data.quest.completed.length !== 0 ? `**Completed (${data.quest.completed.length})** : ${data.quest.completed.join(`, `)}` : ''}`, false);
+                if (data.quest !== '' && data.quest !== undefined) embed.addField(`Quests`, `${data.quest.current !== null ? `**Current** : ${data.quest.current.name}\n` : ''}${data.quest.completed !== undefined ? `**Completed (${data.quest.completed.length})** : ${data.quest.completed.join(`, `)}` : ''}`, false);
                 if (data.pet !== undefined) embed.addField(`Pet (${data.pet.type})`, `**Name** : ${data.pet.name} | **Level** ${format(data.pet.level)}\n${format(data.pet.xp)} **XP** (XP Rate : ${data.pet.xprate}%) | **Damages** : [${format(data.pet.damage.min)} - ${format(data.pet.damage.max)}]`, false);
                 message.channel.send({embed});
             });
