@@ -14,11 +14,28 @@ exports.run = (bot, message, args) => {
       },
         timestamp: new Date()
     
-    }});
-}   else {
-    message.reply("Please mention someone :thinking:"); //Reply with a mention saying "Invalid user."
-};
-};
+    const userId = userCheck(bot,message,args).then((userId) => {
+        var target = `<@${userId}>`
+        getImage(bot,message,args).then((image) =>{
+            message.channel.send({embed:{
+                author:{
+                    name: message.author.username,
+                    icon_url: message.author.avatarURL
+                },
+                description: (`**${message.author.username}** is hugging ${target} ever so tightly.`),
+                image: {
+                url : (image),
+                },
+                timestamp: new Date()
+            }});
+        })
+            
+    }).catch(() => {
+        message.channel.send(`You must enter a valid userid or mention!`)
+    });
+}
+
+
 exports.infos = {
     category: "Action",
     description: "Performs Action On Mentioned User & Displays Gif To Accompany",
