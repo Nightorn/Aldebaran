@@ -1,5 +1,10 @@
+<<<<<<< HEAD:Commands/settings/uconfig.js
 const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
 const config = require(`${process.cwd()}/config.json`);
+=======
+const poolQuery = require('./../../functions/database/poolQuery');
+const config = require("./../../config.json");
+>>>>>>> 5b150877d5979a67115c8662bb36f737fbdc3c57:Commands/settings/uconfig.js
 const Discord = require("discord.js");
 const timeNames = require(`${process.cwd()}/Commands/general/time.js`).timezones;
 const mysql = require("mysql");
