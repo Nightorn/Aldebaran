@@ -16,8 +16,7 @@ exports.run = (bot, message, args) => {
         var mode = 'osu';
         for (let element of args) if (element.indexOf('--') === 0) mode = element.replace('--', '');
         if (Nodesu.Mode[mode] !== undefined) {
-            client.user.get(args[0], Nodesu.Mode[mode], undefined, 'string').then(data => {
-                console.log(data);
+            client.user.get(args[0], Nodesu.Mode[mode]).then(data => {
                 const f = x => { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") };
                 const i = x => { return parseInt(x) };
                 const t = x => { let s = x.toString(); let l = s.length; return l > 9 ? `${f(s.substr(0, l - 6))}**M**` : l > 6 ? `${f(s.substr(0, l - 3))}**K**`: f(x) }
@@ -45,7 +44,7 @@ exports.run = (bot, message, args) => {
 exports.infos = {
     category: "osu!",
     description: "Shows the stats of the user specified",
-    usage: "\`&osu <Username|User ID>\`",
+    usage: "\`&osu <Username|User ID> <Mode>\`",
     example: "\`&osu Ciborn\`",
     cooldown: {
         time: 1000,

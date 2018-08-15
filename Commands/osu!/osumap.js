@@ -1,8 +1,6 @@
-exports.run = (bot, message, args) => {
-    const config = require('./../../config.json');
-    const { RichEmbed } = require('discord.js');
-    const Nodesu = require('nodesu');
-    const client = new Nodesu.Client(config.apikeys["osu!"]);
+exports.run = async (bot, message, args) => {
+    const { RichEmbed } = require('discord.js'), Nodesu = require('nodesu'), oppai = require('oppai');
+    const client = new Nodesu.Client(require('./../../config.json').apikeys["osu!"]);
     if (args.length === 0) return message.channel.send(`You need to send a link of the beatmap or its ID. Check \`&osu ?\` for more informations.`);
     if (args[0].toLowerCase() === '?') {
         const embed = new RichEmbed()
@@ -24,54 +22,50 @@ exports.run = (bot, message, args) => {
                 if (!isNaN(parseInt(element.replace('x', '')))) combo = parseInt(element.replace('x', ''));
             } else if (element.indexOf('%') === element.length - 1) {
                 if (!isNaN(parseFloat(element.replace('%', '')))) accuracy = parseFloat(element.replace('%', ''));
+            } else if (element.indexOf('#') !== -1) {
+                if (element.indexOf('/#taiko/') !== -1) mode = 'taiko';
+                else if (element.indexOf('/#fruits/') !== -1) mode = 'ctb';
+                else if (element.indexOf('/#mania/') !== -1) mode = 'mania';
             }
         };
         if (Nodesu.Mode[mode] !== undefined) {
-            client.beatmaps.getByBeatmapId(args[0].split('/').pop(), Nodesu.Mode[mode], undefined, 'string').then(data => {
-                var approvalStatus = null;
+            const data = await client.beatmaps.getByBeatmapId(args[0].replace('>', '').replace('<', '').split('/').pop(), Nodesu.Mode[mode], undefined, 'string');
+            if (data.length > 0) {
+                var ctx = oppai.Ctx(), b = oppai.Beatmap(ctx);
                 const beatmap = new Nodesu.Beatmap(data[0]);
-                for (let [key, value] of Object.entries(Nodesu.ApprovalStatus)) if (value == beatmap.approved) approvalStatus = key;
-                approvalStatus = approvalStatus[0].toUpperCase() + approvalStatus.slice(1);
-                const d = x => { return x.toString().length === 1 ? `0${x}` : x };
-                const returnDate = x => { return `${d(x.getUTCMonth()+1)}/${d(x.getUTCDay()+1)}/${x.getUTCFullYear()} ${d(x.getUTCHours())}:${d(x.getUTCMinutes())} UTC` };
-                const returnDuration = x => { return x > 60 ? `${Math.floor(x/60)}m${d(x%60)}s` : `${x}s` }
                 require(`${process.cwd()}/functions/osu!/retrieveBeatmapFile.js`)(beatmap.id).then(() => {
-                    const oppai = require('oppai');
-                    var ctx = oppai.Ctx(), b = oppai.Beatmap(ctx);
+                    var approvalStatus = null;
+                    for (let [key, value] of Object.entries(Nodesu.ApprovalStatus)) if (value == beatmap.approved) approvalStatus = key[0].toUpperCase() + key.slice(1);
+                    const d = x => { return x.toString().length === 1 ? `0${x}` : x };
+                    const returnDate = x => { return `${d(x.getUTCMonth()+1)}/${d(x.getUTCDay()+1)}/${x.getUTCFullYear()} ${d(x.getUTCHours())}:${d(x.getUTCMinutes())} UTC` };
+                    const returnDuration = x => { return x > 60 ? `${Math.floor(x/60)}m${d(x%60)}s` : `${x}s` }
                     b.parse(`./osu/${beatmap.id}.osu`, oppai.Buffer(2000000), 2000000, true);
-                    if (mods.length !== 0) { 
-                        for (let mod of mods) modsBitfield += oppai[mod.toLowerCase()];
-                    } else mods = ['NoMod'];
-                    if (combo === null) combo = beatmap.maxCombo;
+                    if (mods.length !== 0) for (let mod of mods) modsBitfield += oppai[mod.toLowerCase()] 
+                        else mods = ['NoMod'];
                     b.applyMods(modsBitfield);
                     const dctx = oppai.DiffCalcCtx(ctx), diff = dctx.diffCalc(b);
                     const embed = new RichEmbed()
                         .setAuthor(beatmap.creator, `https://a.ppy.sh/${data[0].creator_id}`, `https://osu.ppy.sh/users/${data[0].creator_id}`)
-                        .setTitle(`__**${beatmap.title}** by ${beatmap.artist}__ [${beatmap.version}] (+${mods.join('')} **${diff.stars.toFixed(2)} ★**)`)
+                        .setTitle(`__**${beatmap.title}** by ${beatmap.artist}__ [${beatmap.version}] (${mode === 'osu' ? `+${mods.join('')} **${diff.stars.toFixed(2)}` : `**${beatmap.difficultyRating.toFixed(2)}`} ★**)`)
                         .setURL(`https://osu.ppy.sh/beatmapsets/${beatmap.setId}/#${mode}/${beatmap.id}`)
                         .addField(`Map Length`, `**Playing Duration** : ${returnDuration(beatmap.hitLength)}\n**Song Duration** : ${returnDuration(beatmap.totalLength)}`, true)
                         .addField(`Rank Status`, `${data[0].approved_date === null ? `**${approvalStatus}**\nLast Updated on ${returnDate(new Date(data[0].last_update))}` : `**${approvalStatus}** on ${returnDate(new Date(data[0].approved_date))}`}`, true)
-                        .addField(`Specifications`, `${beatmap.bpm} **BPM** | **Max Combo** x${beatmap.maxCombo}\n**CS**${beatmap.diffSize} | **AR**${beatmap.diffApproach} | **HP**${beatmap.diffDrain} | **OD**${beatmap.diffOverall}`, true)
-                        .addField(`PPs Calculations`, `**FC (100%)** : ${ctx.ppCalc(diff.aim, diff.speed, b, modsBitfield, combo).pp.toFixed(2)} PPs\n**${combo === beatmap.maxCombo ? ` FC (${accuracy}%)` : `${accuracy}%`} ** : ${ctx.ppCalcAcc(diff.aim, diff.speed, b, accuracy, modsBitfield, combo).pp.toFixed(2)} PPs`, true)
+                        .addField(`Specifications`, `**Max Combo** x${beatmap.maxCombo}${mode === 'osu' ? ` | **SP**${diff.aim.toFixed(2)} | **AD**${diff.speed.toFixed(2)}` : ''}\n${beatmap.bpm} **BPM** | **CS**${beatmap.diffSize} | **AR**${beatmap.diffApproach} | **HP**${beatmap.diffDrain} | **OD**${beatmap.diffOverall}`, true)
+                        .addField(`Estimated PPs Calculations`, `**FC 100%** : ${ctx.ppCalc(diff.aim, diff.speed, b, modsBitfield).pp.toFixed(2)} PPs\n**${combo === beatmap.maxCombo ? ` FC ${accuracy}%` : `${accuracy}%`} ** : ${ctx.ppCalcAcc(diff.aim, diff.speed, b, accuracy, modsBitfield, combo === null ? beatmap.maxCombo : combo).pp.toFixed(2)} PPs`, true)
                         .setImage(`https://assets.ppy.sh/beatmaps/${beatmap.setId}/covers/cover.jpg`)
                         .setColor(`#cc5288`);
                     if (beatmap.source !== null) embed.setFooter(`Source : ${beatmap.source}`)
                     message.channel.send({embed});
                 });
-            }).catch((err) => {
-                message.reply("the map you specified does not exist, or at least in the mode specified.");
-                throw err;
-            });
-        } else {
-            message.reply("the mode you specified does not exist. Check \`&osu ?\` for more informations.");
-        }
+            } else message.reply("the map you asked does not exist, or at least in the mode specified.");
+        } else message.reply("the mode you specified does not exist. Check \`&osu ?\` for more informations.");
     }
 }
 
 exports.infos = {
     category: "osu!",
     description: "Shows the informations of the map specified",
-    usage: "\`&osu <Beatmap Link|Beatmap ID>\`",
+    usage: "\`&osu <Beatmap Link|Beatmap ID> <Mode> <Mods> <Accuracy> <Combo>\`",
     example: "\`&osumap 1588069\`",
     cooldown: {
         time: 1000,
