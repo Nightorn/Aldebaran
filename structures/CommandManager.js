@@ -1,7 +1,30 @@
 const Command = require('./Command');
-module.exports = class CooldownManager {
+const DeveloperCommand = require("./DeveloperCommand")
+const fs = require('fs');
+
+module.exports = class CommandManager {
     constructor() {
-        
+        this.commands = [];
+    }
+    /**
+     * Lifted from Command to here. Finds the command in the FS and requries it.
+     */
+    findCommand (command) {
+        //the values from the file
+        const values = {}
+        var files = fs.readdirSync('./Commands/');
+        if (files.indexOf(`${command}.js`) !== -1) {
+            for (let [key, value] of Object.entries(require(`./../Commands/${command}`))) values[key] = value;
+        } else {
+            for (let fileName of files) {
+                if (fs.statSync(`./Commands/${fileName}`).isDirectory()) {
+                    files = fs.readdirSync(`./Commands/${fileName}/`);
+                    if (files.indexOf(`${command}.js`) != -1) for (let [key, value] of Object.entries(require(`./../Commands/${fileName}/${command}`))) values[key] = value;
+                }
+            }
+        }
+        if (values.infos === undefined) throw new RangeError('Unknown Command');
+        return values;
     }
 
     /**
@@ -12,30 +35,40 @@ module.exports = class CooldownManager {
      * @param {String[]} args Command Arguments if execute is true
      */
     execute(userId, execute, command, ...args) {
+        const commandFile = this.findCommand(command);
+        let executer;
+        if (commandFile.developer) {
+            executer = new DeveloperCommand(command, commandFile);
+        }
+        else {
+            executer = new Command(command, commandFile);
+        }
+
         if (this[userId] === undefined) this[userId] = {};
         if (this[userId].generalCooldown === undefined) this[userId].generalCooldown = Date.now() - 500;
-        const commandGroup = command.cooldown === undefined ? command.name : command.cooldown.commandGroup === undefined ? command.name : command.cooldown.commandGroup;
+        const info = executer.getInfo();
+        const commandGroup = info.cooldown === undefined ? executer.name : info.cooldown.commandGroup === undefined ? executer.name : info.cooldown.commandGroup;
         const gogogo = function(_class) {
             if (_class[userId].generalCooldown - Date.now() <= -500) {
                 _class[userId].generalCooldown = Date.now();
-                if (execute) command.execute(...args);
+                if (execute) executer.execute(...args);
                 return true;
             } else return false;
         }
-        if (command !== undefined) {
-            if (command.infos.cooldown === undefined) return gogogo(this);
+        if (executer !== undefined) {
+            if (info.cooldown === undefined) return gogogo(this);
             /*if (command.infos.cooldown.resetTime === undefined) {
                 if (this[userId][commandGroup] === undefined) this[userId][commandGroup] = {
                     cooldown: Date.now() + command.infos.cooldown.time
                 };
             } else {
                 */if (this[userId][commandGroup] === undefined) this[userId][commandGroup] = {
-                    cooldown: Date.now() - command.infos.cooldown.time,
-                    resetTime: Date.now() - command.infos.cooldown.resetTime,
-                    rpm: command.infos.cooldown.rpm--
+                    cooldown: Date.now() - info.cooldown.time,
+                    resetTime: Date.now() - info.cooldown.resetTime,
+                    rpm: info.cooldown.rpm--
                 };
             //}
-            if (this[userId][commandGroup].cooldown - Date.now() <= -command.infos.cooldown.time) {
+            if (this[userId][commandGroup].cooldown - Date.now() <= -info.cooldown.time) {
                 /*if (this[userId][commandGroup].resetTime !== undefined) {
                     if (this[userId][commandGroup].resetTime - Date.now <= -command.infos.cooldown.resetTime) this[userId][commandGroup].rpm = command.infos.cooldown.rpm--;
                     if (this[userId][commandGroup].rpm > 0) {

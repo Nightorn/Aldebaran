@@ -3,7 +3,6 @@ const config = require(`${process.cwd()}/config.json`);
 const Discord = require("discord.js");
 const mysql = require("mysql");
 exports.run = function(bot, message, args) {
-    if (message.author.id != `310296184436817930`)return message.reply(`What makes you think you can do that?\nUse &uconfig to change your settings. `)
     const parametersAvailable = {
         healthMonitor: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100) }, help: "DiscordRPG Health Monitor - [on | off | healthPercentage]"},
         adventureTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "DiscordRPG Adventure Timer - [on | off]"},
@@ -64,3 +63,5 @@ exports.infos = {
     example: "\`&moduser adventureTimer on 320933389513523220\`",
     restrictions: "Developer Only"
 }
+
+exports.developer = true;

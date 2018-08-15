@@ -74,3 +74,5 @@ exports.infos = {
     usage: "\`&admin\`",
     example: "\`&admin\`"
 }
+
+exports.developer = true;

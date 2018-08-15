@@ -1,5 +1,4 @@
 exports.run = async (client, message) => {
-    if(message.author.id != `310296184436817930`)return message.channel.send(`YOU SHALL NOT PASS!!!`)
     let string = "";
     client.guilds.forEach(guild =>{
         string += `Guild Name: ${guild.name}\n`
@@ -13,3 +12,4 @@ exports.infos = {
     example: "\`&serverlist\`",
     restrictions: "Developer Only"
 }
+exports.developer = true;
