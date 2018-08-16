@@ -25,5 +25,6 @@ exports.infos = {
     description: "Displays a random hentai picture or gif. ",
     usage: "\`&xrandom\`",
     example: "\`&random\`",
-    restrictions: "NSFW Channels Only"
+    restrictions: "NSFW Channels Only",
+    nsfw: true
 }

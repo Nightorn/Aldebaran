@@ -19,10 +19,6 @@ module.exports = class Command {
      * @param {string[]} args Command Ags
      */
     execute(bot, message, args) {
-        if ((this.commandFile.infos.category === 'NSFW' && message.channel.nsfw) || this.commandFile.infos.category !== 'NSFW') {
-            this.commandFile.run(bot, message, args);
-        } else {
-            message.reply("Tsk tsk! This command is only usable in a NSFW channel.");
-        }
+        this.commandFile.run(bot, message, args);
     }
 }

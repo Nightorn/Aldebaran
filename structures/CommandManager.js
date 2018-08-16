@@ -2,12 +2,20 @@ const Command = require('./Command');
 const DeveloperCommand = require("./DeveloperCommand")
 const fs = require('fs');
 
+const NSFWDeniedEmbed = {
+    title: ":underage: Tsk tsk tsk!",
+    description: "This command only works in an NSFW channel!",
+    color: 0xff0000
+};
+
 module.exports = class CommandManager {
     constructor() {
         this.commands = [];
     }
     /**
      * Lifted from Command to here. Finds the command in the FS and requries it.
+     * @function
+     * @param {string} command
      */
     findCommand (command) {
         //the values from the file
@@ -34,7 +42,7 @@ module.exports = class CommandManager {
      * @param {Command} command Command
      * @param {String[]} args Command Arguments if execute is true
      */
-    execute(userId, execute, command, ...args) {
+    execute(userId, execute, command, client, message, ...args) {
         const commandFile = this.findCommand(command);
         let executer;
         if (commandFile.developer) {
@@ -47,16 +55,25 @@ module.exports = class CommandManager {
         if (this[userId] === undefined) this[userId] = {};
         if (this[userId].generalCooldown === undefined) this[userId].generalCooldown = Date.now() - 500;
         const info = executer.getInfo();
+        const isNSFW = info.nsfw;
         const commandGroup = info.cooldown === undefined ? executer.name : info.cooldown.commandGroup === undefined ? executer.name : info.cooldown.commandGroup;
         const gogogo = function(_class) {
             if (_class[userId].generalCooldown - Date.now() <= -500) {
                 _class[userId].generalCooldown = Date.now();
-                if (execute) executer.execute(...args);
+                if (execute) {
+                    if ((isNSFW && message.channel.nsfw) || !isNSFW) {
+                        executer.execute(client, message, ...args);
+                    }
+                    else {message.channel.send({embed: NSFWDeniedEmbed})}
+                }
                 return true;
             } else return false;
         }
         if (executer !== undefined) {
-            if (info.cooldown === undefined) return gogogo(this);
+            if (info.cooldown === undefined) { 
+                return gogogo(this)
+                
+            }
             /*if (command.infos.cooldown.resetTime === undefined) {
                 if (this[userId][commandGroup] === undefined) this[userId][commandGroup] = {
                     cooldown: Date.now() + command.infos.cooldown.time

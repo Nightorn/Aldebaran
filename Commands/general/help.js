@@ -7,6 +7,11 @@ exports.run = (bot, message, args) => {
             
         const set = (path) => {
             let file = require(path).infos;
+            if (!file) {
+                console.log(`No information for ${path}, skipping`);
+                return;
+            }; 
+
             if (path.split('/').pop().split('.')[0] == args[0].toLowerCase()) {
                 commands = file;
             } else if (typeof commands === 'object' && args[0].toLowerCase() === file.category.toLowerCase()) {

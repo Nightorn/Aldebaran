@@ -1,5 +1,5 @@
 exports.run = (bot, message, args) => {
-    const lewds = require(`process.cwd()/Data/imageurls.json`);
+    const lewds = require(`${process.cwd()}/Data/imageurls.json`);
     var sendlewds = (`${lewds.lewds[~~(Math.random() * lewds.lewds.length)]}`);
     if (message.mentions.users.first()) { //Check if the message has a mention in it.
         let target = message.mentions.users.first();
@@ -25,5 +25,6 @@ exports.infos = {
     description: "Performs A Lewd Action On Mentioned User & Displays Gif To Accompany",
     usage: "\`&lewd <usermention>\`",
     example: "\`&lewd @aldebaran\`",
-    restrictions: "NSFW Channels Only"
+    restrictions: "NSFW Channels Only",
+    nsfw: true
 }
