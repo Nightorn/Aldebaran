@@ -1,0 +1,29 @@
+{
+    "token" : "NDM3ODAyMTk3NTM5ODgwOTcw.Db7WrA.HNv614rAv8ptfJ5kvuFWbxbw-7Q",
+    "tokendev" : "NDY1NTU2NzA4MDYwNjkyNDgw.Dk5n1Q.WsJn_9uye9GScTMa8yY96I9RV4I",
+    "prefix": "&",
+    "drpg_apikey":"0647bfdf-067e-442a-8a6c-daf893ab13c8",
+    "giphy_apikey":"t5bwD3kNWxpYRbk01My3SPoFKlJCjpfG",
+    "omdb_apikey" : "1aa9cc94",
+    "cat_apikey": "MzI0MDc4",
+    "mysql": {
+        "host": "localhost",
+        "user": "ciborn",
+        "password": "Waifus4lyfe",
+        "database": "aldebaran"
+    },
+    "pexels_apikey": "563492ad6f9170000100000176b8f11924744d96ae2793f53b8aa16d",
+    "dprg_prefix": [
+        ",",
+        "#!",
+        "."
+    ], 
+    "admins": [
+        "320933389513523220",
+        "143026985763864576",
+        "310296184436817930"
+    ],
+    "apikeys": {
+        "osu!": "989ce4ace5a53a97367559d373ac09be02637339"
+    }
+}
