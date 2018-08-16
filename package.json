@@ -9,6 +9,9 @@
     "moment-timezone": "^0.5.21",
     "mysql": "^2.15.0",
     "nekos.life": "^1.0.5",
+    "node-fetch": "^2.2.0",
+    "nodesu": "^0.6.4",
+    "oppai": "^0.1.19",
     "request": "^2.85.0",
     "xml2js": "^0.4.19"
   },
