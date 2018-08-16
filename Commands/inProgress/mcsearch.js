@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
   const mysql = require("mysql")
-  const config = require("./../config.json");
+  const config = require("${process.cwd()}/config.json");
   const Discord = require("discord.js");
   const request = require('request')
 //..................................................................................//

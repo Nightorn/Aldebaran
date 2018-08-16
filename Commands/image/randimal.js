@@ -1,7 +1,7 @@
 exports.run = (bot, message, args) => {
     const request = require(`request`)
     const Discord = require(`discord.js`)
-    const config = require(`./../../config.json`)
+    const config = require(`${process.cwd()}/config.json`)
     var randomnumber = Math.floor((Math.random() * 5749) + 1)
     request({uri: `https://api.pexels.com/v1/search?query=animal+query&per_page=1&page=${randomnumber}`,headers: {"Authorization":config.pexels_apikey}}, function (err, response, body) {
         if (err) return message.channel.send("The seems to be a problem")

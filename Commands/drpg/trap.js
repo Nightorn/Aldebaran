@@ -1,6 +1,6 @@
 exports.run = (bot, message, args, apiratelimit) => {
     const Discord = require(`discord.js`);
-    const apikey = require(`./../../config.json`);
+    const apikey = require(`${process.cwd()}/config.json`);
     const request = require(`request`);
     var usrid = message.author.id;
     if (args.length > 0) {

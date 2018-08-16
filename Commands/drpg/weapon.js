@@ -1,7 +1,7 @@
 exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
-    const request = require('request');
-    const itemlist = require("./../../Data/drpgitemlist.json");
+    const request = require("request");
+    const itemlist = require(`${process.cwd()}/Data/drpgitemlist.json`);
     var itemname = "Cannot locate weapon for specified level";
     var level = (args.length > 0) ? parseInt(args[0]) : 1 ;
     var levelmax = Math.floor(level + level)

@@ -1,6 +1,6 @@
 exports.run = (bot, message, args) => {
     const Discord = require("discord.js");
-    if (args.length = 2){
+    if (args.length == 2){
         var seconds = args[1] * 3600    
         var formulamin = Math.floor(1+((Math.floor(args[0]))*(seconds/25)/15000));
         var formulamax = Math.floor(1+((Math.floor(args[0]))*(seconds/25)/14000));

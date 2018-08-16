@@ -25,5 +25,6 @@ exports.infos = {
     description: "Displays a hentai picture or gif containing \"Kitty\". ",
     usage: "\`&xkitty\`",
     example: "\`&kitty\`",
-    restrictions: "NSFW Channels Only"
+    restrictions: "NSFW Channels Only",
+    nsfw: true
 }

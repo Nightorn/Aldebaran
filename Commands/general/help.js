@@ -3,10 +3,15 @@ exports.run = (bot, message, args) => {
     const { RichEmbed } = require('discord.js');
     if (args[0] != undefined) {
         let commands = {};
-        var files = fs.readdirSync(`./../Aldebaran/Commands/`);
+        var files = fs.readdirSync(`${process.cwd()}/Commands/`);
             
         const set = (path) => {
             let file = require(path).infos;
+            if (!file) {
+                console.log(`No information for ${path}, skipping`);
+                return;
+            }; 
+
             if (path.split('/').pop().split('.')[0] == args[0].toLowerCase()) {
                 commands = file;
             } else if (typeof commands === 'object' && args[0].toLowerCase() === file.category.toLowerCase()) {
@@ -16,20 +21,20 @@ exports.run = (bot, message, args) => {
         }
 
         for (let fileName of files) {
-            if (fs.statSync(`./Commands/${fileName}`).isDirectory()) {
+            if (fs.statSync(`${process.cwd()}/Commands/${fileName}`).isDirectory()) {
                 let dirName = fileName;
-                files = fs.readdirSync(`./Commands/${dirName}/`);
+                files = fs.readdirSync(`${process.cwd()}/Commands/${dirName}/`);
                 for (let fileName of files) {
-                    if (dirName !== 'inProgress') set(`./../${dirName}/${fileName}`);
+                    if (dirName !== 'inProgress') set(`${process.cwd()}/Commands/${dirName}/${fileName}`);
                 }
             } else {
-                set(`./${fileName}`);
+                set(`${process.cwd()}/Commands/${fileName}`);
             }
         }
     
         if (commands[args[0].toLowerCase()] instanceof Map) {
             if (commands[args[0].toLowerCase()].size > 0) {
-                var list = ``, category = require('./../../Data/categories.json')[args[0].toLowerCase()];
+                var list = ``, category = require(`${process.cwd()}/Data/categories.json`)[args[0].toLowerCase()];
                 for (let [command, description] of commands[args[0].toLowerCase()]) list += `:small_blue_diamond: **${command}** : ${description}\n`;
                 const embed = new RichEmbed()
                     .setAuthor(message.author.username, message.author.avatarURL)
@@ -59,8 +64,8 @@ exports.run = (bot, message, args) => {
             .setTitle(`Aldebaran's Help Pages`)
             .setDescription(`Below are the different categories, each of them contains a list of commands which you can see with \`&help [category name]\`. You can get a brief overview of all available commands with \`&commands\`.`)
             .setFooter(`This bot is currently in development by Nightmare#1234`);
-        for (let [category, data] of Object.entries(require('./../../Data/categories.json'))) embed.addField(`__**${data.title}**__`, data.description, true);
-        embed.addField(`**__Have a command request or suggestion?__**`, `Join our support server here by clicking [right here](https://discord.gg/3x6rXAv)!`, false);
+        for (let [category, data] of Object.entries(require(`${process.cwd()}/Data/categories.json`))) embed.addField(`__**${data.title}**__`, data.description, true);
+        embed.addField(`**__Have a command request or suggestion?__**`, `Join our support server here by clicking [right here](https://discord.gg/3x6rXAv)!`, true);
         message.channel.send({embed});
     }
 }

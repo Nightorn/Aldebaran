@@ -1,8 +1,8 @@
 exports.run = (bot, message, args, apiratelimit) => {
     const Discord = require("discord.js");
-    const apikey = require("./../../config.json");
+    const apikey = require(`${process.cwd()}/config.json`);
     const request = require('request');
-    const locationdb = require("./../../Data/drpglocationlist.json");
+    const locationdb = require(`${process.cwd()}/Data/drpglocationlist.json`);
     var usrid = message.author.id;
     if(args.length > 0){
         usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];

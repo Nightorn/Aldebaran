@@ -1,5 +1,5 @@
 exports.run = (bot, message, args) => {
-    const poolQuery = require('./../../functions/database/poolQuery');
+    const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
     const Discord = require('discord.js');
     if (message.author.id === '310296184436817930' || message.author.id === '320933389513523220') {
         if (args[0] === 'view') {
@@ -74,3 +74,5 @@ exports.infos = {
     usage: "\`&admin\`",
     example: "\`&admin\`"
 }
+
+exports.developer = true;

@@ -5,6 +5,8 @@
   "main": "bot.js",
   "dependencies": {
     "discord.js": "^11.3.2",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.21",
     "mysql": "^2.15.0",
     "nekos.life": "^1.0.5",
     "request": "^2.85.0",
