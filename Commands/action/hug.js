@@ -1,6 +1,20 @@
-exports.run = (bot, message, args,command) => {
-    const userCheck = require(`${process.cwd()}/functions/action/userCheck`)
-    const getImage = require(`${process.cwd()}/functions/action/getImage`)
+exports.run = (bot, message, args) => {
+    const hugs = require(`${process.cwd()}/Data/imageurls.json`);
+    var sendhugs = (`${hugs.hugs[~~(Math.random() * hugs.hugs.length)]}`);
+    if(message.mentions.users.first()) { //Check if the message has a mention in it.
+        let target = message.mentions.users.first();
+        message.channel.send({embed:{
+            author:{
+                name: message.author.username,
+                icon_url: message.author.avatarURL
+            },
+            description: (message.author +` hugged `+ target + ` how sweet!`),
+            image: {
+                url : (sendhugs),
+            },
+            timestamp: new Date()
+            }
+        })};
     
     const userId = userCheck(bot,message,args).then((userId) => {
         var target = `<@${userId}>`

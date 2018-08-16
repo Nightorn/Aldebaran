@@ -11,13 +11,13 @@ exports.run = function(bot, message) {
     const rootCommands = fs.readdirSync('./Commands');
     for (let fileName of rootCommands) {
         if (fs.statSync(`./Commands/${fileName}`).isDirectory()) {
-            const dirCommands = fs.readdirSync(`./Commands/${fileName}`);
+            const dirCommands = fs.readdirSync(`${process.cwd()}/Commands/${fileName}`);
             let dirName = fileName;
             for (let fileName of dirCommands) {
-                if (dirName != 'In Progress Commands') storeCommand(fileName, require(`./${dirName}/${fileName}`));
+                if (dirName != 'In Progress Commands') storeCommand(fileName, require(`${process.cwd()}/Commands/${dirName}/${fileName}`));
             }
         } else {
-            storeCommand(fileName, require(`./${fileName}`));
+            storeCommand(fileName, require(`${process.cwd()}/Commands/${fileName}`));
         }
     }
 

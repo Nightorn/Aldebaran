@@ -22,8 +22,9 @@ exports.run = async (bot, message, args) => {
 }
 exports.infos = {
     category: "NSFW",
-    description: "Displays a lebian hentai animated picture or gif.",
-    usage: "\`&xlez\`",
-    example: "\`&lez\`",
-    restrictions: "NSFW Channels Only"
+    description: "Displays a lesbian hentai animated picture or gif.",
+    usage: "\`&xlesbian\`",
+    example: "\`&xlesbian\`",
+    restrictions: "NSFW Channels Only",
+    nsfw: true
 }

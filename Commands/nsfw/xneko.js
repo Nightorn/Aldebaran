@@ -25,5 +25,6 @@ exports.infos = {
     description: "Displays a hentai Neko picture or gif. ",
     usage: "\`&xneko\`",
     example: "\`&neko\`",
-    restrictions: "NSFW Channels Only"
+    restrictions: "NSFW Channels Only",
+    nsfw: true
 }

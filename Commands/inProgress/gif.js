@@ -1,7 +1,7 @@
 exports.run = (bot, message, args) => {
     var request = require('request');
     var searchimage = (args[0]);
-    const apikey = require("./../config.json");
+    const apikey = require(`${process.cwd()}/config.json`);
     request({uri:`https://api.giphy.com/v1/gifs/random?api_key=${apikey.giphy_apikey}&tag=${searchimage}&rating=G`, 
     headers: {} }, function(err, response, body) {
         if (err) return;

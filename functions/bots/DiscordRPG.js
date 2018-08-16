@@ -1,4 +1,4 @@
-const poolQuery = require('./../../functions/database/poolQuery');
+const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
 const Discord = require("discord.js");
 module.exports = function(client, message, args) {
   	poolQuery(`SELECT * FROM guilds WHERE guildid ='${message.guild.id}'`).then((result) => {

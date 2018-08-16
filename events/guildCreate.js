@@ -30,6 +30,7 @@ exports.run = async (client, guild) => {
                 **Timer messages auto deletion**: Is Aldebaran spamming up your channels? This will make Aldebaran automatically delete it's timer messages. - \`&gconfig autoDelete on\`
               `}
             ],
+            color: 0x00ff00,
             footer: {
               text: "These features will not work until you enable them!"
             }
@@ -42,6 +43,7 @@ exports.run = async (client, guild) => {
         url: "http://nightorn.com/aldebaran",
         title: "Hey! I\'m Aldebaran!",
         description: "*Here's some helpful tips for you!*",
+        color: 0x00ff00,
         fields: [
           {name: "DiscordRPG enhancement", value: `
           **Your guild owner** has to enable these before they can be used.

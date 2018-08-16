@@ -1,7 +1,7 @@
 exports.run = (bot, message, args) => {
     const request = require(`request`)
     const Discord = require(`discord.js`)
-    const config = require(`./../../config.json`)
+    const config = require(`${process.cwd()}/config.json`)
     request({uri: `https://random.dog/woof.json`} , function (err, response, body) {
         if (err) return message.channel.send("There seems to be a dogo problem")
         const data = JSON.parse(body)

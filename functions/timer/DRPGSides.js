@@ -1,6 +1,6 @@
-const config = require('./../../config.json');
+const config = require(`${process.cwd()}/config.json`);
 const Discord = require("discord.js");
-const poolQuery = require('./../../functions/database/poolQuery');
+const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
 module.exports = async function(bot, message, args,sidestimer) {
     if (message.content.toLowerCase().startsWith(`#!mine`)|| message.content.toLowerCase().startsWith(`,mine`)|| message.content.toLowerCase().startsWith(`.mine`)){
 		const emoji = ["🥕","🍋","🥔","🐟"]

@@ -1,7 +1,7 @@
 exports.run = (bot, message, args) => {
     const request = require(`request`)
     const Discord = require(`discord.js`)
-    const config = require(`./../../config.json`)
+    const config = require(`${process.cwd()}/config.json`)
     const parser = require("xml2js")
 
     request({uri: `http://thecatapi.com/api/images/get?api_key=${config.cat_apikey}&format=xml&results_per_page=1`}, function (err, response, body) {
