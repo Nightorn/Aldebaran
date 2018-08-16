@@ -37,7 +37,10 @@ exports.run = async function (bot, message, args) {
         const time = moment().tz(timezone);
         message.channel.send({embed: {
             title: `:clock: Time for ${username}`,
-            description: `The time for ${username} is \`${time.format("hh:mm:ss A")}\`!`
+            description: `The time for ${username} is \`${time.format("hh:mm:ss A")}\`!`,
+            footer: {
+                text: "Tip: if this in inaccurate, try setting an tz timezone instead of an GMT+ or GMT- timezone!"
+            }
         }})
     }
 }
