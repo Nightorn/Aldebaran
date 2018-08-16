@@ -23,7 +23,7 @@ exports.run = async function (bot, message, args) {
     if (moment.tz.zone(timezone) === null) {
         message.channel.send({embed: {
             title: ":x: Ooof!",
-            description: `The timezone setting for ${user} seems to be invaild! Tell them to set it again with &uconfig timezone!`,
+            description: `The timezone setting for ${username} seems to be invaild! Tell them to set it again with &uconfig timezone!`,
             fields: [
                 {
                     name: ':information_source:',
