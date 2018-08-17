@@ -3,8 +3,8 @@ const config = require(`${process.cwd()}/config.json`);
 const admins = config.admins;
 exports.run = function(bot, message, args) {
     let adminMentions = "";
-    admins.forEach((value, index)=>{
-        adminMentions = adminMentions.concat(`${index===0?'':','}<@${value}>`)
+    admins.forEach((value, index, arr)=>{
+        adminMentions = adminMentions.concat(`<@${value}>${index+1===arr.length?'':','}\n`)
     })
     const minutesUptime = `${String(Math.floor(bot.uptime%3600000/60000))}m`;
     const embed = new Discord.RichEmbed()
