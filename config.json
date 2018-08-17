@@ -7,7 +7,8 @@
     "omdb_apikey" : "1aa9cc94",
     "cat_apikey": "MzI0MDc4",
     "mysql": {
-        "host": "209.97.153.67",
+        "hostdev": "209.97.153.67",
+        "host": "localhost",
         "user": "ciborn",
         "password": "Waifus4lyfe",
         "database": "aldebaran"
@@ -19,8 +20,12 @@
         "."
     ], 
     "admins": [
+        "310296184436817930",
         "320933389513523220",
-        "143026985763864576",
-        "310296184436817930"
-    ]
+        "143026985763864576"
+        
+    ],
+    "apikeys": {
+        "osu!": "989ce4ace5a53a97367559d373ac09be02637339"
+    }
 }
