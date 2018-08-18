@@ -14,7 +14,7 @@ exports.run = function(bot, message, args) {
 
 exports.infos = {
     category: "General",
-    description: "Sends a bug repory",
+    description: "Sends a bug report",
     usage: "\`&bugreport <bug report>\`",
     example: "\`&suggest ur bot doesnt work\`",
 }
