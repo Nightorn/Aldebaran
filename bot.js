@@ -62,5 +62,6 @@ if (process.argv[2] === "dev") {
     bot.login(config.tokendev);
 }
 else {
+    console.log("Running in prod mode")
     bot.login(config.token);
 }
