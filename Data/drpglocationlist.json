@@ -34,11 +34,15 @@
         "connections" : [],
         "npc" : []
     },
+    "8":{},
+    "9":{},
+    "10":{},
     "11": {
         "name" : "Ravens Gate",
         "connections" : [],
         "npc" : []
     },
+    "12":{},
     "13": {
         "name" : "Copperfall Summit",
         "connections" : [],
@@ -49,6 +53,7 @@
         "connections" : [],
         "npc" : []
     },
+    "15":{},
     "16": {
         "name" : "Frostridge Shore",
         "connections" : [],
@@ -84,6 +89,8 @@
         "connections" : [],
         "npc" : []
     },
+    "23": {},
+    "24": {},
     "25": {
         "name" : "Bazaar of Lights",
         "connections" : [],
@@ -99,6 +106,8 @@
         "connections" : [],
         "npc" : []
     },
+    "28":{},
+    "29":{},
     "30": {
         "name" : "Scorched Desert",
         "connections" : [],
@@ -127,7 +136,8 @@
     "35": {
         "name" : "Lemontree Plaza",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "36": {
         "name" : "Bibliothecam Magnum",
@@ -159,6 +169,7 @@
         "connections" : [],
         "npc" : []
     },
+    "42":{},
     "43": {
         "name" : "Sariila Altar",
         "connections" : [],
@@ -172,6 +183,7 @@
     "45": {
         "name" : "Nightmare's Heaven",
         "connections" : [35],
-        "npc" : ["Nightmare", "Jesie"]
+        "npc" : ["Nightmare", "Jesie"],
+        "traveltime": 10
     }
 }
