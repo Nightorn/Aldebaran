@@ -2,7 +2,8 @@
     "1": {
         "name" : "Silverkeep",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 25
     },
     "2": {
         "name" : "Dsian's House",
@@ -17,7 +18,8 @@
     "4": {
         "name" : "Rivermouth",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 30
     },
     "5": {
         "name" : "Temple of MOUKN",
@@ -131,7 +133,8 @@
     "34": {
         "name" : "Ashgate",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "35": {
         "name" : "Lemontree Plaza",
@@ -142,27 +145,32 @@
     "36": {
         "name" : "Bibliothecam Magnum",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "37": {
         "name" : "Sanctum of Serenity",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "38": {
         "name" : "The Sick Dahlia",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "39": {
         "name" : "Maple Grove",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "40": {
         "name" : "Dawnburg",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "41": {
         "name" : "Copperfall Altar",
