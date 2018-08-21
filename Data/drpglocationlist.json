@@ -113,7 +113,8 @@
     "30": {
         "name" : "Scorched Desert",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 15
     },
     "31": {
         "name" : "Sandy Tomb",
@@ -123,12 +124,14 @@
     "32": {
         "name" : "Tower of Eternity",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 120
     },
     "33": {
         "name" : "Buckleport",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 120
     },
     "34": {
         "name" : "Ashgate",
