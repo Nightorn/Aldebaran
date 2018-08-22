@@ -12,7 +12,9 @@ module.exports = function(bot, message, args,advtimer) {
               bot.advtimer.set(message.author.id);
               setTimeout((channel, userid) => {
                 bot.advtimer.delete(message.author.id)
-                message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`);
+                message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
+                  if (settingsg.autoDelete != 'off') msg.delete(1000);
+                });
                 //bot should only delete if autodelete is on man!
               }, 13250, message.channel, message.author.id)
             }
