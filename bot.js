@@ -11,6 +11,7 @@ bot.prefixes = new Map();
 bot.prefix = config.prefix;
 bot.advtimer = new Map();
 bot.sidestimer = new Map();
+bot.traveltimer = new Map();
 
 fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);

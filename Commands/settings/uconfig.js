@@ -18,6 +18,7 @@ exports.run = function(bot, message, args) {
         healthMonitor: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100) }, help: "Tells you when you or your pet's health is low - [on | off | healthPercentage]"},
         adventureTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "Tells you when your DiscordRPG adventure cooldown has passed - [on | off]"},
         sidesTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "Tells you when your DiscordRPG sides cooldown has passed  - [on | off]"},
+        travelTimer: {support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, help: "Alerts you that you have finished traveling.  - [on | off]"},
         individualHealthMonitor: {support: (value) => { return ['off', "character", "pet"].indexOf(value) != -1 }, help: "Lets you choose whether you want to display the health of your character or your pet with the health monitor - [off | character | pet]" },
         timezone: {support: timezoneSupport, help: "Sets your timezone - [GMT+/-, or [tz database timezone (required for DST detection)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]"}
     }
