@@ -8,13 +8,18 @@ module.exports = function(bot, message, args) {
             }).catch(() => {
                 reject(new RangeError('Invalid User ID'));
             });
-        } else {
-            const userId = args[0];
+        }
+        else if (args[0]){
+            const userId = args[0]
             bot.fetchUser(userId).then(() => {
                 resolve(userId);
             }).catch(() => {
                 reject(new RangeError('Invalid User ID'));
             });
         }
+        else {
+            const userId = message.author.id
+            resolve(userId)           
+       }
     });
 }
