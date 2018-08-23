@@ -1,0 +1,14 @@
+{
+    "hug": {
+        "self": [
+            "{target} could really use a hug.",
+            "{target} is waiting for a warm hug",
+            "Please hug {target} asap!"
+        ],
+        "user": [
+            "{sender} is hugging {target} ever so tightly!",
+            "{sender} wraps there arms around {target}",
+            "${sender} is forcefully hugging {target}"
+        ]
+    }
+}
