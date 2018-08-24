@@ -8,7 +8,7 @@
         "user": [
             "{sender} is hugging {target} ever so tightly!",
             "{sender} wraps there arms around {target}",
-            "${sender} is forcefully hugging {target}"
+            "{sender} is forcefully hugging {target}"
         ]
     },
     "adorable": {
