@@ -10,5 +10,14 @@
             "{sender} wraps there arms around {target}",
             "${sender} is forcefully hugging {target}"
         ]
+    },
+    "adorable": {
+        "self": [
+            "Isn't {target} just adroable"
+        ],
+        "user": [
+            "{sender} thinks {target} is totally adorable!",
+            "{target} is the most adorable according to {sender}."
+        ]
     }
 }
