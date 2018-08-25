@@ -1,10 +1,12 @@
 {
     "hug": {
+
         "self": [
             "{target} could really use a hug.",
             "{target} is waiting for a warm hug",
             "Please hug {target} asap!"
         ],
+
         "user": [
             "{sender} is hugging {target} ever so tightly!",
             "{sender} wraps there arms around {target}",
@@ -12,12 +14,178 @@
         ]
     },
     "adorable": {
+
         "self": [
             "Isn't {target} just adroable"
         ],
+
         "user": [
             "{sender} thinks {target} is totally adorable!",
             "{target} is the most adorable according to {sender}."
+        ]
+    },
+    "bite":{
+
+        "self": [
+            "{target} dares you to bite them!"
+        ],
+
+        "user": [
+            "{sender} clamps down and bites {target}.",
+            "Watch out {target}, {sender} is a biter.",
+            "{sender} thinks {target} is there new chew toy."
+        ]
+    },
+    "cpr": {
+        
+        "self": [
+            "HELP {target} needs CPR!"
+        ],
+        
+        "user": [
+            "No worries {sender} is giving {target} CPR."
+        ]
+    },
+    "cuddle": {
+        
+        "self": [
+            "{target} really could use cuddles!."
+        ],
+        
+        "user": [
+            "{sender} is cuddling {target}."
+        ]
+    },
+    "escape": {
+        
+        "self": [
+            "{target} is outta here.",
+            "You can't keep {target} hostage anymore."
+        ],
+        
+        "user": [
+            "{sender} has finally escaped {target}.",
+            "{sender} is no longer {target}'s hostage."
+        ]
+    },
+    "feed": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "kidnap": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "kiss": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "lick": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "mindblown": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "pat": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "poke": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "rub": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "slap": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "spank": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "tackle": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
+        ]
+    },
+    "tickle": {
+        
+        "self": [
+
+        ],
+        
+        "user": [
+
         ]
     }
 }

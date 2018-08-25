@@ -1,29 +1,12 @@
-exports.run = (bot, message, args) => {
-    const cprs = require(`${process.cwd()}/Data/imageurls.json`);
-    var sendcprs = (`${cprs.cprs[~~(Math.random() * cprs.cprs.length)]}`);
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        message.channel.send({embed:{
-        author:{
-        name: message.author.username,
-        icon_url: message.author.avatarURL
-        },
-        description: (`OMG ${target} is dying, Good thing ${message.author} knows CPR!`),
-        image: {
-            url : (sendcprs),
-      },
-        timestamp: new Date()
-    
-    }});
-}   else {
-    message.reply("Please mention someone :thinking:"); //Reply with a mention saying "Invalid user."
-};
+const Discord = require(`discord.js`)
+exports.run = async (bot, message,args) => {
+    require(`../../functions/action/executeAction.js`)(bot,message,args);
 };
 exports.infos = {
     category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&cpr <usermention>\`",
-    example: "\`&cpr @aldebaran\`",
+    description: "Use to preform CPR on Somone",
+    usage: "\`&cpr <usermention>\` or \`&cpr <userid>\`",
+    example: "\`&cpr @aldebaran\` or \`&cpr 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,
