@@ -7,7 +7,7 @@ exports.run = (bot, message, args) => {
             var allRoles = [], allPermissions = [];
             const mjd = new Date(user.joinedTimestamp);
             if (user.permissions.has('ADMINISTRATOR')) allPermissions.push('Administrator');
-            else for (let [name, value] of Object.entries(user.permissions.serialize())) {
+            else for (let [name, value] of Object.entries(user.permissions.serialize())) if (value) {
                 name = name.toLowerCase().split('_');
                 for (let word of name) word = word[0].toUpperCase() + word.slice(1);
                 allPermissions.push(name.join(' '));   
