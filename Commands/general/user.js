@@ -9,8 +9,9 @@ exports.run = (bot, message, args) => {
             if (user.permissions.has('ADMINISTRATOR')) allPermissions.push('Administrator');
             else for (let [name, value] of Object.entries(user.permissions.serialize())) if (value) {
                 name = name.toLowerCase().split('_');
-                for (let word of name) word = word[0].toUpperCase() + word.slice(1);
-                allPermissions.push(name.join(' '));   
+                var words = [];
+                for (let word of name) words.push(word[0].toUpperCase() + word.slice(1));
+                allPermissions.push(words.join(' '));
             };
             for (let [id, data] of user.roles) if (id !== user.highestRole.id && data.name !== '@everyone') allRoles.push(`<@&${id}>`);
 
