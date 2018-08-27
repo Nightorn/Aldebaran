@@ -7,7 +7,7 @@ exports.run = (bot, message, args) => {
             var allRoles = [], allPermissions = [];
             const mjd = new Date(user.joinedTimestamp);
             if (user.permissions.has('ADMINISTRATOR')) allPermissions.push('Administrator');
-            else for (let [name, value] of Object.entries(user.permissions.serialize())) if (value) {
+            else for (let [name, value] of Object.entries(user.permissions.serialize())) if (value  ) {
                 name = name.toLowerCase().split('_');
                 var words = [];
                 for (let word of name) words.push(word[0].toUpperCase() + word.slice(1));
@@ -18,7 +18,7 @@ exports.run = (bot, message, args) => {
             const embed = new RichEmbed()
                 .setAuthor(user.user.tag, user.user.avatarURL)
                 .setTitle(`User Details of ${user.user.username} in the ${message.guild.name} server`)
-                .setDescription(`**User ID** ${user.user.id}\n**Nickname** ${user.displayName}\n**Server Join Date** ${mjd.getUTCMonth()}/${mjd.getUTCDate()}/${mjd.getUTCFullYear()} ${mjd.getUTCHours()}:${mjd.getUTCMinutes()} UTC`)
+                .setDescription(`**User ID** ${user.user.id}\n**Nickname** ${user.displayName}\n**Server Join Date** ${mjd.getUTCMonth()+1}/${mjd.getUTCDate()}/${mjd.getUTCFullYear()} ${mjd.getUTCHours()}:${mjd.getUTCMinutes()} UTC`)
                 .addField(`Roles`, `**Highest Role** <@&${user.highestRole.id}>\n**Others** ${allRoles.join(', ')}`)
                 .addField(`Permissions`, allPermissions.join(', '))
                 .setThumbnail(user.user.avatarURL)
