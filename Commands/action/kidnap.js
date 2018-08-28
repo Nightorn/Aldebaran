@@ -1,29 +1,12 @@
-exports.run = (bot, message, args) => {
-    const kidnaps = require(`${process.cwd()}/Data/imageurls.json`);
-    var sendkidnaps = (`${kidnaps.kidnaps[~~(Math.random() * kidnaps.kidnaps.length)]}`);
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        message.channel.send({embed:{
-        author:{
-        name: message.author.username,
-        icon_url: message.author.avatarURL
-        },
-        description: (message.author +` just kidnapped `+ target),
-        image: {
-            url : (sendkidnaps),
-      },
-        timestamp: new Date()
-    
-    }});
-}   else {
-    message.reply("Please mention someone :thinking:"); //Reply with a mention saying "Invalid user."
-};
+const Discord = require(`discord.js`)
+exports.run = async (bot, message,args) => {
+    require(`../../functions/action/executeAction.js`)(bot,message,args);
 };
 exports.infos = {
     category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&kidnap <usermention>\`",
-    example: "\`&kidnap @aldebaran\`",
+    description: "Use to kidnap your favorite person!",
+    usage: "\`&kidnap <usermention>\` or \`&kidnap <userid>\`",
+    example: "\`&kidnap @aldebaran\` or \`&kidnap 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,

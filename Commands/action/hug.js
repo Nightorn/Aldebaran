@@ -4,9 +4,9 @@ exports.run = async (bot, message,args) => {
 };
 exports.infos = {
     category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&hug <usermention>\`",
-    example: "\`&hug @aldebaran\`",
+    description: "Send warm hugs to a user of your choice.",
+    usage: "\`&hug <usermention>\` or \`&hug <userid>\`",
+    example: "\`&hug @aldebaran\` or \`&hug 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,

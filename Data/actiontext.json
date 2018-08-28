@@ -1,18 +1,18 @@
 {
-    "hug": {
+        "hug": {
 
-        "self": [
-            "{target} could really use a hug.",
-            "{target} is waiting for a warm hug",
-            "Please hug {target} asap!"
-        ],
+            "self": [
+                "{target} could really use a hug.",
+                "{target} is waiting for a warm hug",
+                "Please hug {target} asap!"
+            ],
 
-        "user": [
-            "{sender} is hugging {target} ever so tightly!",
-            "{sender} wraps there arms around {target}",
-            "{sender} is forcefully hugging {target}"
-        ]
-    },
+            "user": [
+                "{sender} is hugging {target} ever so tightly!",
+                "{sender} wraps there arms around {target}",
+                "{sender} is forcefully hugging {target}"
+            ]
+        },
     "adorable": {
 
         "self": [
@@ -71,41 +71,54 @@
     "feed": {
         
         "self": [
-
+            "{target} thinks your should feed them.",
+            "{target} is requesting your food services"
         ],
         
         "user": [
-
+            "{sender} is feeding {target} Nom Nom's.",
+            "Aww {sender} is feeding {target} how cute.",
+            "{sender} is stuffing {target}'s face with food."
         ]
     },
     "kidnap": {
         
         "self": [
-
+            "ohhh no {target} has been kidnapped."
         ],
         
         "user": [
-
+            "{sender} grabs {target} while no one was looking.",
+            "{sender} runs away with {target}.",
+            "{sender} claims {target} as theres, and kidnaps them.",
+            "{target} is being taken by {sender}"
         ]
     },
     "kiss": {
         
         "self": [
-
+            "{target} really needs a kiss.",
+            "{target} is puckering up for a kiss"
         ],
         
         "user": [
-
+            "{sender} is kissing {target} so softly.",
+            "{sender} is madly kissing {target}.",
+            "{sender} and {target} are making out.",
+            "We should look away {sender} is kissing {target}"
         ]
     },
     "lick": {
         
         "self": [
-
+            "{target} is trying to lick themselves.",
+            "{target} must think they are a cat"
         ],
         
         "user": [
-
+            "{sender} is licking {target}.",
+            "Ewwww {sender} just licked {target}.",
+            "{sender} licky licky {target}"
         ]
     },
     "mindblown": {
@@ -121,11 +134,12 @@
     "pat": {
         
         "self": [
-
+            "You should really pat {target}."
         ],
         
         "user": [
-
+            "{sender} loves patting {target}",
+            "{target} is getting soft pats from {sender}."
         ]
     },
     "poke": {
@@ -141,41 +155,51 @@
     "rub": {
         
         "self": [
-
+            "{target} really is wanting a rub",
+            "You should rub {target} please!"
         ],
         
         "user": [
-
+            "{sender} loves softly rubbing {target}.",
+            "Awww {sender} rubs {target} so gently."
         ]
     },
     "slap": {
         
         "self": [
-
+            "{target} needs to be slapped!",
+            "Wake {target} up with a slap!"
         ],
         
         "user": [
-
+            "{sender} slaps {target} so hard!!",
+            "Ouch thats going to leave a mark on {target}",
+            "I dont't know what {target} did to {sender}, but i bet that hurt!"
         ]
     },
     "spank": {
         
         "self": [
-
+            "{target} has been bad and deserves a spank!",
+            "{target} says SPANK ME!",
+            "HARDER! {target} says."
         ],
         
         "user": [
-
+            "{sender} thinks {target} deserves a spanking!",
+            "{sender} spanks {target}, that might leave a mark!",
+            "Maybe we should look away, as {sender} spanks {target}."
         ]
     },
     "tackle": {
         
         "self": [
-
+            "{target} thinks you should try and tackle them!"
         ],
         
         "user": [
-
+            "{target} gets brutally tackled by {sender}",
+            "{sender} tackles {target} out of no where!"
         ]
     },
     "tickle": {

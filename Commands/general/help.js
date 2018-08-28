@@ -48,7 +48,7 @@ exports.run = (bot, message, args) => {
         } else if (typeof commands === 'object' && commands.category !== undefined) {
             const embed = new RichEmbed()
                 .setAuthor(message.author.username, message.author.avatarURL)
-                .setTitle(`Details of the ${args[0].toLowerCase()} Command`)
+                .setTitle(`Details of the ${args[0].toLowerCase()} command`)
                 .setDescription(commands.description)
                 .addField(`Category`, commands.category, true)
                 .addField(`Usage`, commands.usage, true)
