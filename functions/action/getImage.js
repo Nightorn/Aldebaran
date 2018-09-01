@@ -1,7 +1,6 @@
-const Discord = require("discord.js");
 const request = require("request");
 module.exports = function(bot, message, args) {
-    const command = message.content.slice(bot.prefixes.get(message.guild.id).length).split(' ')[0]
+    const command = message.content.slice(message.guild.prefix.length).split(' ')[0]
     return new Promise((resolve, reject) => {
         request({uri:`http://nightorn.com:3000/api/v1/images/random/${command}`}, function(err, response, body, headers) {
             if(err){
