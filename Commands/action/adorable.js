@@ -4,9 +4,9 @@ exports.run = async (bot, message,args) => {
 };
 exports.infos = {
     category: "Action",
-    description: "Feeling Cuddly? Use This",
-    usage: "\`&cuddle <usermention>\` or \`&cuddle <userid>\`",
-    example: "\`&cuddle @aldebaran\` or \`&cuddle 320933389513523220\`",
+    description: "Used to show how adorable you think someone is!",
+    usage: "\`&adorable <usermention>\` or \`&adorable <userid>\`",
+    example: "\`&adorable @aldebaran\` or \`&adorable 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,

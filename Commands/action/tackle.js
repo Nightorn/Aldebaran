@@ -1,29 +1,12 @@
-exports.run = (bot, message, args) => {
-    const tackles = require(`${process.cwd()}/Data/imageurls.json`);
-    var sendtackles = (`${tackles.tackles[~~(Math.random() * tackles.tackles.length)]}`);
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        message.channel.send({embed:{
-        author:{
-        name: message.author.username,
-        icon_url: message.author.avatarURL
-        },
-        description: (message.author +` just tackled `+ target + `, looks like it hurt!`),
-        image: {
-            url : (sendtackles),
-      },
-        timestamp: new Date()
-    
-    }});
-}   else {
-    message.reply("Please mention someone :thinking:"); //Reply with a mention saying "Invalid user."
-};
+const Discord = require(`discord.js`)
+exports.run = async (bot, message,args) => {
+    require(`../../functions/action/executeAction.js`)(bot,message,args);
 };
 exports.infos = {
     category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&tackle <usermention>\`",
-    example: "\`&tackle @aldebaran\`",
+    description: "Tackle that user you been dying to tackle!",
+    usage: "\`&tackle <usermention>\` or \`&tackle <userid>\`",
+    example: "\`&tackle @aldebaran\` or \`&tackle 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,

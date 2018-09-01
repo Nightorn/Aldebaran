@@ -2,37 +2,44 @@
     "1": {
         "name" : "Silverkeep",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 25
     },
     "2": {
         "name" : "Dsian's House",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "3": {
         "name" : "Mournstead",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 25
     },
     "4": {
         "name" : "Rivermouth",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 30
     },
     "5": {
         "name" : "Temple of MOUKN",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 60
     },
     "6": {
         "name" : "Copperfall",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 40
     },
     "7": {
         "name" : "Copperfall Swamp",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 30
     },
     "8":{},
     "9":{},
@@ -40,98 +47,116 @@
     "11": {
         "name" : "Ravens Gate",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 40
     },
     "12":{},
     "13": {
         "name" : "Copperfall Summit",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 100
     },
     "14": {
         "name" : "Redhorn",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 30
     },
     "15":{},
     "16": {
         "name" : "Frostridge Shore",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 300
     },
     "17": {
         "name" : "Frostridge",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 32
     },
     "18": {
         "name" : "Blackburn Mountain",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 30
     },
     "19": {
         "name" : "Mirror Isle",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 20
     },
     "20": {
         "name" : "Sariila",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 250
     },
     "21": {
         "name" : "Miree",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 23
     },
     "22": {
         "name" : "Dingerou Cavern",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 15
     },
     "23": {},
     "24": {},
     "25": {
         "name" : "Bazaar of Lights",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 20
     },
     "26": {
         "name" : "Silverkeep Altar",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 5
     },
     "27": {
         "name" : "Frostridge Tavern",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 5
     },
     "28":{},
     "29":{},
     "30": {
         "name" : "Scorched Desert",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 15
     },
     "31": {
         "name" : "Sandy Tomb",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 15
     },
     "32": {
         "name" : "Tower of Eternity",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 120
     },
     "33": {
         "name" : "Buckleport",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 120
     },
     "34": {
         "name" : "Ashgate",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "35": {
         "name" : "Lemontree Plaza",
@@ -142,43 +167,51 @@
     "36": {
         "name" : "Bibliothecam Magnum",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "37": {
         "name" : "Sanctum of Serenity",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "38": {
         "name" : "The Sick Dahlia",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "39": {
         "name" : "Maple Grove",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "40": {
         "name" : "Dawnburg",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "41": {
         "name" : "Copperfall Altar",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 5
     },
     "42":{},
     "43": {
         "name" : "Sariila Altar",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 10
     },
     "44": {
         "name" : "Redhorn Dungeon",
         "connections" : [],
-        "npc" : []
+        "npc" : [],
+        "traveltime": 15
     },
     "45": {
         "name" : "Nightmare's Heaven",

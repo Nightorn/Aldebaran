@@ -1,29 +1,12 @@
-exports.run = (bot, message, args) => {
-    const kisses = require(`${process.cwd()}/Data/imageurls.json`);
-    var sendkisses = (`${kisses.kisses[~~(Math.random() * kisses.kisses.length)]}`);
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        message.channel.send({embed:{
-        author:{
-        name: message.author.username,
-        icon_url: message.author.avatarURL
-        },
-        description: (message.author +` kissed `+ target + `, awwww get a Room!`),
-        image: {
-            url : (sendkisses),
-      },
-        timestamp: new Date()
-    
-    }});
-}   else {
-    message.reply("Please mention someone :thinking:"); //Reply with a mention saying "Invalid user."
-};
+const Discord = require(`discord.js`)
+exports.run = async (bot, message,args) => {
+    require(`../../functions/action/executeAction.js`)(bot,message,args);
 };
 exports.infos = {
     category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&kiss <usermention>\`",
-    example: "\`&kiss @aldebaran\`",
+    description: "Kiss someone...why not?",
+    usage: "\`&kiss <usermention>\` or \`&kiss <userid>\`",
+    example: "\`&kiss @aldebaran\` or \`&kiss 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,
