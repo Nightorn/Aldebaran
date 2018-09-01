@@ -4,7 +4,7 @@
   "description": "Utility",
   "main": "bot.js",
   "dependencies": {
-    "discord.js": "^11.3.2",
+    "discord.js": "git://github.com/discordjs/discord.js.git#master",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "mysql": "^2.15.0",
