@@ -1,30 +1,14 @@
-
+const AldebaranClient = require(`${process.cwd()}/structures/Discord/Client.js`);
+const { MessageEmbed } = require('discord.js');
 exports.run = function(bot, message, args) {
-    const Discord = require('discord.js');
-    const config = require(`${process.cwd()}/config.json`);
-    const embed = new Discord.RichEmbed()
+    const embed = new MessageEmbed()
         .setTitle(`Restarting ${bot.user.username}`)
-        .setDescription(`Please wait, this may take up to 15 seconds.`)
+        .setDescription(`Restarting the bot, depending on the bot size, this should take a while.`)
         .setColor('ORANGE');
     message.channel.send({embed}).then(msg => {
-        bot.destroy().then(() => {
-            bot.login(config.token).then(() => {
-                const embed = new Discord.RichEmbed()
-                    .setTitle(`Restarting ${bot.user.username}`)
-                    .setDescription(`Successfully restarted the bot.`)
-                    .setColor('GREEN');
-                msg.delete();
-                message.channel.send(embed);
-            })
-        }).catch(err => {
-            const embed = new Discord.RichEmbed()
-                .setTitle(`Restarting ${bot.user.username}`)
-                .setDescription(`An unknown error occured.`)
-                .setColor('RED');
-            msg.delete();
-            message.channel.send(embed);
-        })
-    })
+        bot.destroy();
+        bot = new AldebaranClient();
+    });
 }
 
 exports.infos = {
@@ -34,4 +18,3 @@ exports.infos = {
     example: "\`&restart\`",
     restrictions: "Developer Only"
 }
-exports.developer = true;

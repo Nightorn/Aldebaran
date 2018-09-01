@@ -12,4 +12,3 @@ exports.infos = {
     example: "\`&serverlist\`",
     restrictions: "Developer Only"
 }
-exports.developer = true;

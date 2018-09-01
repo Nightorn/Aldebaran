@@ -1,4 +1,4 @@
-exports.run = (bot, message, args) => {
+exports.run = (bot, message) => {
     const lewds = require(`${process.cwd()}/Data/imageurls.json`);
     var sendlewds = (`${lewds.lewds[~~(Math.random() * lewds.lewds.length)]}`);
     if (message.mentions.users.first()) { //Check if the message has a mention in it.
@@ -6,7 +6,7 @@ exports.run = (bot, message, args) => {
         message.channel.send({embed:{
             author:{
                 name: message.author.username,
-                icon_url: message.author.avatarURL
+                icon_url: message.author.avatarURL()
             },
             description: (message.author +` is being lewd towards `+ target),
             image: {

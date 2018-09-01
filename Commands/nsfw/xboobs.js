@@ -1,13 +1,11 @@
-exports.run = async (bot, message, args) => {
+exports.run = async (bot, message) => {
     const client = require('nekos.life');
-    const Discord = require(`discord.js`)
     const neko = new client();
-    let target = message.mentions.users.first();
     const data = await neko.getNSFWBoobs();
     message.channel.send({embed:{
         author:{
             name: message.author.username,
-            icon_url: message.author.avatarURL
+            icon_url: message.author.avatarURL()
         },
         description: (message.author + " " + `You want boobs?, I give you...BOOBS!`),
         image: {
@@ -15,7 +13,7 @@ exports.run = async (bot, message, args) => {
         },
         timestamp: new Date(),
         footer: {
-            icon_url: bot.avatarURL,
+            icon_url: bot.avatarURL(),
             text: "Powered By Nekos.life"
         }
     }});

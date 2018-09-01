@@ -1,9 +1,9 @@
 // Command Developed with the help of Akashic Bearer#2305
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = function(bot, message, args) {
     if (args.length === 0) return message.channel.send(`You can't send an empty bug report.`);
-    const embed = new RichEmbed()
-        .setAuthor(`${message.author.tag} | ${message.author.id}`, message.author.avatarURL)
+    const embed = new MessageEmbed()
+        .setAuthor(`${message.author.tag} | ${message.author.id}`, message.author.avatarURL())
         .setTitle('New Bug Report')
         .setDescription(args.join(' '))
         .setFooter(`Channel : #${message.channel.name} [ID: ${message.channel.id}] • Server : ${message.guild.name} [ID: ${message.guild.id}]`)

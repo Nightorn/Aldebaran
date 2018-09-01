@@ -12,9 +12,9 @@ exports.run = (bot, message, args) => {
         var guildgold = data.gold
         var guildopen = (data.open == true) ? `Open to join` : `Invite Only`;
         var guildmembercount = data.members.length
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle(`${guildname} Guild - ${guildmembercount} Members.`)
-            .setAuthor(message.author.username,message.author.avatarURL)
+            .setAuthor(message.author.username,message.author.avatarURL())
             .setColor(0x00AE86)
             .addField(`**__Owner__**`,`${ownerid}`,true)
             .addField(`__**Requirements**__`,`${guildopen}`,true)
