@@ -21,7 +21,6 @@ exports.run = (bot, message, args) => {
             } else {
                 message.channel.send(`**Error** No command of the specified category was found. Get a list of all available commands with \`&commands\`.`);
             }
-<<<<<<< HEAD
         } else if (bot.commandHandler.commands.get(args[0]) !== undefined) {
             const command = bot.commandHandler.commands.get(args[0]);
             const embed = new MessageEmbed()
@@ -31,16 +30,6 @@ exports.run = (bot, message, args) => {
                 .addField(`Category`, command.category, true)
                 .addField(`Usage`, command.usage, true)
                 .addField(`Example`, command.example, true)
-=======
-        } else if (typeof commands === 'object' && commands.category !== undefined) {
-            const embed = new RichEmbed()
-                .setAuthor(message.author.username, message.author.avatarURL)
-                .setTitle(`Details of the ${args[0].toLowerCase()} command`)
-                .setDescription(commands.description)
-                .addField(`Category`, commands.category, true)
-                .addField(`Usage`, commands.usage, true)
-                .addField(`Example`, commands.example, true)
->>>>>>> 137f977f43512afcdf8ebd7057b230c9866cb724
                 .setColor(`BLUE`);
             message.channel.send({embed});
         } else {

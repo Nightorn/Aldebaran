@@ -2,8 +2,8 @@ module.exports = function (bot, message, args,command) {
     const userCheck = require(`${process.cwd()}/functions/action/userCheck`)
     const getImage = require(`${process.cwd()}/functions/action/getImage`)
     const text  = require (`${process.cwd()}/Data/actiontext.json`)
-    const userId = userCheck(bot,message,args).then((userId) => {
-        command = message.content.slice(bot.prefixes.get(message.guild.id).length).split(' ')[0]
+    userCheck(bot,message,args).then((userId) => {
+        command = message.content.slice(message.guild.prefix.length).split(' ')[0]
         var target = `<@${userId}>`
         var sender = message.author.username
         var comment = ""

@@ -1,4 +1,3 @@
-const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
 const { MessageEmbed } = require("discord.js");
 exports.run = function(bot, message, args) {
     var userid = message.author.id;

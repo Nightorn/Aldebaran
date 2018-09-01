@@ -1,5 +1,3 @@
-const poolQuery = require('./../../functions/database/poolQuery');
-const Discord = require("discord.js");
 exports.run = function(bot, message, args) {
     bot.database.photogallery.selectRandom(false).then(photo => {
         message.channel.send(photo[0].links)
