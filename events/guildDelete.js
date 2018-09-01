@@ -1,7 +1,7 @@
 const Discord = require(`discord.js`)
 exports.run = async (client, guild) => {
-  const embed = new Discord.RichEmbed()
-  .setAuthor(client.user.username, client.user.avatarURL)
+  const embed = new Discord.MessageEmbed()
+  .setAuthor(client.user.username, client.user.avatarURL())
   .setTitle(`Has Left A Guild!`)
   .setColor('RED')
   .addField(`__**Server Name**__`,guild.name,true)
@@ -10,6 +10,6 @@ exports.run = async (client, guild) => {
   .addField(`__**Server ID**__`,guild.id,true)
   .addField(`__**Large Guild?**__`,guild.large,true)
   .setTimestamp()
-  .setThumbnail(guild.iconURL)
+  .setThumbnail(guild.iconURL())
   client.channels.get(`463201092398874634`).send(embed);
 }   

@@ -27,7 +27,7 @@ exports.run = async (client, guild) => {
               {name: "You may enable these features for your guild members:", value: `
                 **Adventure Timer**: DiscordRPG adventure timers - \`&gconfig adventureTimer on\`\n
                 **Sides Timer**: DiscordRPG sides timers - \`&gconfig sidesTimer on\`\n
-                **Timer messages auto deletion**: Is Aldebaran spamming up your channels? This will make Aldebaran automatically delete it's timer messages. - \`&gconfig autoDelete on\`
+                **Timer messages auto deletion**: Is Aldebaran spamming up your channels? This will make Aldebaran automatically delete its timer messages. - \`&gconfig autoDelete on\`
               `}
             ],
             color: 0x00ff00,
@@ -60,8 +60,8 @@ exports.run = async (client, guild) => {
     }
   }
 
-  const embed = new Discord.RichEmbed()
-  .setAuthor(client.user.username, client.user.avatarURL)
+  const embed = new Discord.MessageEmbed()
+  .setAuthor(client.user.username, client.user.avatarURL())
   .setTitle(`Has Joined A New Guild!`)
   .setColor('GREEN')
   .addField(`__**Server Name**__`,guild.name,true)
@@ -70,6 +70,6 @@ exports.run = async (client, guild) => {
   .addField(`__**Server ID**__`,guild.id,true)
   .addField(`__**Large Guild?**__`,guild.large,true)
   .setFooter(`Added On ${guild.joinedAt}`)
-  .setThumbnail(guild.iconURL)
+  .setThumbnail(guild.iconURL())
   client.channels.get(`463201092398874634`).send(embed);
 }   
