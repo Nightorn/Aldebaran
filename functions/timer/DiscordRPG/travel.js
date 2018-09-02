@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
-const locationinfo = require(`${process.cwd()}/Data/drpglocationlist.json`);
-const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
-module.exports = function(bot, message, args,traveltimer) {
+const locationinfo = require(`${process.cwd()}/Data/drpglocationlist.json`)
+module.exports = function(bot, message) {
     if (message.content.indexOf("started their journey to") !== -1){
         var locationName = message.content.slice(message.content.indexOf("to")+2).trim().split("!");
         var userName = message.content.substring(0,message.content.indexOf("started")).trim()

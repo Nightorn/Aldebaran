@@ -4,7 +4,7 @@ exports.run = (bot, message, args) => {
    message.channel.send({embed:{
         author:{
         name: bot.user.username,
-        icon_url: bot.user.avatarURL
+        icon_url: bot.user.avatarURL()
         },
         title: (sayMessage),
         timestamp: new Date()

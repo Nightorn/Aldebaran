@@ -1,12 +1,12 @@
 exports.run = (bot, message, args) => {
     const config = require('./../../config.json');
-    const { RichEmbed } = require('discord.js');
+    const { MessageEmbed } = require('discord.js');
     const Nodesu = require('nodesu');
     const client = new Nodesu.Client(config.apikeys["osu!"]);
     if (args.length === 0) return message.channel.send(`You need to specify the name of the user you want to the stats. Check \`&osu ?\` for more informations.`);
     if (args[0].toLowerCase() === '?') {
-        const embed = new RichEmbed()
-            .setAuthor(message.author.username, message.author.avatarURL)
+        const embed = new MessageEmbed()
+            .setAuthor(message.author.username, message.author.avatarURL())
             .setTitle(`Documentation for the osu! (User Profile) command`)
             .setDescription(`First, you have to run the command with the osu! username of the user you want to see the stats, or eventually his user ID. After that, you can choose the mode to show stats from, note that the default mode is standard.`)
             .addField(`Supported Modes`, `**osu!standard** : BY DEFAULT, --osu\n**osu!taiko** : --taiko\n**osu!ctb** : --ctb\n**osu!mania** : --mania`)
@@ -21,7 +21,7 @@ exports.run = (bot, message, args) => {
                 const i = x => { return parseInt(x) };
                 const t = x => { let s = x.toString(); let l = s.length; return l > 9 ? `${f(s.substr(0, l - 6))}**M**` : l > 6 ? `${f(s.substr(0, l - 3))}**K**`: f(x) }
                 user = new Nodesu.User(data);
-                const embed = new RichEmbed()
+                const embed = new MessageEmbed()
                     .setAuthor(`${user.username}  |  #${f(user.rank)} (${f(user.pp)}pp)  |  osu!${mode === 'osu' ? '' : mode}`, `https://a.ppy.sh/${user.id}`, `https://osu.ppy.sh/users/${user.id}`)
                     .setTitle(`Level ${Math.floor(user.level)} (${((user.level % 1) * 100).toFixed(2)}%)  |  :flag_${user.country.toLowerCase()}:  #${f(user.countryRank)}`)
                     .addField(`Hit Accuracy`, `${user.accuracy.toFixed(2)}%`, true)

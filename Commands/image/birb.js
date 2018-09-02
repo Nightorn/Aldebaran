@@ -1,20 +1,16 @@
 exports.run = (bot, message, args) => {
-    const request = require(`request`)
-    const Discord = require(`discord.js`)
-
+    const request = require(`request`);
+    const { MessageEmbed } = require(`discord.js`);
     request({uri: `http://random.birb.pw/tweet.json/`}, function (err, response, body) {
-        if (err) return message.channel.send("The seems to be a birb problem")
-        const data = JSON.parse(body);
-        var imagefile = data.file
-        var imageurl = `http://random.birb.pw/img/${imagefile}`
-        const embed = new Discord.RichEmbed()
+        if (err) return message.channel.send("This seems to be a birb problem");
+        const embed = new MessageEmbed()
             .setTitle(`You want some __Birb__?`)
-            .setAuthor(message.author.username,message.author.avatarURL)
+            .setAuthor(message.author.username,message.author.avatarURL())
             .setColor(0x00AE86)
-            .setImage(`${imageurl}`)
+            .setImage(`http://random.birb.pw/img/${JSON.parse(body).file}`)
             .setFooter(`Birb powered by http://random.brib.pw`)
-        message.channel.send({embed})        
-    })    
+        message.channel.send({embed});
+    });
 }
 exports.infos = {
     category: "Image",

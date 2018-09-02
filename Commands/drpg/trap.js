@@ -1,18 +1,13 @@
-exports.run = (bot, message, args, apiratelimit) => {
-    const Discord = require(`discord.js`);
-    const apikey = require(`${process.cwd()}/config.json`);
+exports.run = (bot, message, args) => {
+    const { MessageEmbed } = require(`discord.js`);
     const request = require(`request`);
     var usrid = message.author.id;
-    if (args.length > 0) {
-        usrid = (message.mentions.members.size > 0) ? message.mentions.members.first().id : args[0];
-    };
-    if (apiratelimit == 0)return message.channel.send(`This Command is globally ratelimited, please try again in 1min.`);
-    bot.fetchUser(usrid).then((user) => {
-        request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":apikey.drpg_apikey} }, function(err, response, body){
+    if (args.length > 0) usrid = (message.mentions.members.size > 0) ? message.mentions.members.first().id : args[0];
+    const user = bot.users.get(usrid);
+    if (user !== undefined) {
+        request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":bot.config.drpg_apikey} }, function(err, response, body){
             if (err) return;
             const data = JSON.parse(body);
-            apiratelimit = response.headers["x-ratelimit-remaining"]
-            var ratelimitrest = Math.floor(parseInt(response.headers["x-ratelimit-reset"] - (Date.now()/1000)))
             if (data.trap == undefined || data.trap.time == "" ) return message.channel.send(`No Trap Set`);//Checking for data.trap in json
             var trapsetdate = new Date(data.trap.time);//changing date code from UTC to actual date
             var trapelapsedraw = Math.floor((new Date()-data.trap.time) / 1000);
@@ -44,20 +39,19 @@ exports.run = (bot, message, args, apiratelimit) => {
             //Bears are only awared 1 min & max after 7 days.
             var id462 = (trapelapsedraw >= 604800) ? 1 : 0;
             //Embed Stuffs
-            const embed = new Discord.RichEmbed()
+            const embed = new MessageEmbed()
                 .setTitle(data.name + "'s Trap Info")
-                .setAuthor(message.author.username,message.author.avatarURL)
+                .setAuthor(message.author.username,message.author.avatarURL())
                 .setColor(0x00AE86)
                 .setDescription(`Bear Trap - Set ${traptimeelapsed} ${hour} Ago`)
                 .addField(`__Current Trap Rewards__`,`You will recieve **${currentid79min}-${currentid79max}** **Raven Feathers**.\nYou will recieve **${currentid78min}-${currentid78max}** **Balls of Wool**.\nYou will recieve **${currentid81min}-${currentid81max}** **Golden Feathers**.\nYou will recieve **${currentid80min}-${currentid80max}** **Meats**.\nYou will recieve **${id462}** **bear**.`,false)                
                 .addField(`__Max Salvaging Trap Rewards__`,`You will recieve **${maxsalid79min}-${maxsalid79max}** **Raven Feathers**.\nYou will recieve **${maxsalid78min}-${maxsalid78max}** **Balls of Wool**.\nYou will recieve **${maxsalid81min}-${maxsalid81max}** **Golden Feathers**.\nYou will recieve **${maxsalid80min}-${maxsalid80max}** **Meats**.\nYou will recieve **${id462}** **bear**.`,false)
-                .setFooter(`Trap Set - ${trapsetdate}\n${apiratelimit} Global Uses Remain Before Ratelimited | Usages Reset In ${ratelimitrest} seconds.`)
-                message.channel.send({embed})    
-
-        })
-    }).catch(err => {
-        message.reply(`Error you must enter a valid UserID or Mention User.`)
-    });
+                .setFooter(`Trap Set - ${trapsetdate}`)
+            message.channel.send({embed});
+        });
+    } else {
+        message.reply(`Error you must enter a valid UserID or Mention User.`);
+    }
 };
 exports.infos = {
     category: "DRPG",

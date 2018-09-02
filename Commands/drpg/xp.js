@@ -1,5 +1,5 @@
 exports.run = (bot, message, args) => {
-    const Discord = require("discord.js");
+    const { MessageEmbed } = require("discord.js");
     var level = args[0];
     if (level >= 1){
         var formula1 = Math.floor((1249297 * (level * level)) /61200000);
@@ -9,9 +9,9 @@ exports.run = (bot, message, args) => {
         var finalxpring = Math.floor(((formula1 + formula2 + formula3) / 1.5) * 1.25);
         var finaldonorring = Math.floor((formula1 + formula2 + formula3));
         
-        const embed = new Discord.RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle(`Average Xp Kill At Lvl. ${level}`)
-            .setAuthor(message.author.username,message.author.avatarURL)
+            .setAuthor(message.author.username,message.author.avatarURL())
             .setColor(0x00AE86)
             .setDescription(`**Please note all infomation about xp are strictly estimates!!**\n*Estimates are based on FULL xpboost build, while grinding Dynomobs.*`)
             .addField(`**__With Ring of XP (1.25X)__**`,` Estimated ${finalxpring}xp Per Kill`,true)

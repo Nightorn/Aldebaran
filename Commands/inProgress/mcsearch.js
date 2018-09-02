@@ -26,9 +26,9 @@ exports.run = (bot, message, args) => {
   request({uri:`http://api.discorddungeons.me/v3/trade/buy/${itemid}`, headers: {"Authorization":config.drpg_apikey} }, function(err, response, body) {
     if (err) return;
     const data = JSON.parse(body)
-    const embed = new Discord.RichEmbed()
+    const embed = new Discord.MessageEmbed()
       .setTitle("Market Info")
-      .setAuthor(message.author.username,message.author.avatarURL)
+      .setAuthor(message.author.username,message.author.avatarURL())
       .setColor(0x00AE86)
       .setDescription(`**Work in progress**`)
 //.............................................................................//

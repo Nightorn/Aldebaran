@@ -1,6 +1,5 @@
-
-
-{   "bites" :[
+{   
+    "bites" :[
         "https://media1.tenor.com/images/c22a247affcf4cd02c7d17f5a432cd95/tenor.gif?itemid=8259627",
         "https://media.giphy.com/media/fhkRUj3BWmMnu/giphy.gif",
         "http://data.whicdn.com/images/81002249/large.gif",
@@ -167,6 +166,4 @@
         "https://media.giphy.com/media/l0NhZ0aUSE8fXag12/giphy.gif",
         "https://media.giphy.com/media/p3ZV46zdstXxu/giphy.gif"
     ]
-
-
 }

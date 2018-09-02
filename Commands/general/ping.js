@@ -1,6 +1,5 @@
-exports.run = (bot, message, args) => {
-    message.reply(`
-That only took me ${Math.round(bot.ping)}ms !`);
+exports.run = (bot, message) => {
+    message.reply(`That only took me ${Math.round(bot.ping)}ms !`);
 };
 exports.infos = {
     category: "General",
