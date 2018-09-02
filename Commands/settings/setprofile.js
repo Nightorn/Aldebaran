@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
+const { MessageEmbed } = require('discord.js');
 exports.run = function(bot, message, args) {
-    const embed = new Discord.MessageEmbed()
+    const embed = new MessageEmbed()
         .setAuthor(message.author.username, message.author.avatarURL())
         .setTitle()
         .setDescription(`Please specify a section and value`)
@@ -14,7 +15,7 @@ exports.run = function(bot, message, args) {
     message.author.profile.changeProperty(profiletarget, inputdata).then(() => {
         message.channel.send(`Your ${profiletarget} has been updated to \`${inputdata}\`.`);
     }).catch(() => {
-        const embed = new Discord.MessageEmbed()
+        const embed = new MessageEmbed()
             .setAuthor(message.author.username, message.author.avatarURL())
             .setTitle(`Unknown Profile Section`)
             .setDescription(`Please check to ensure this is a correct profile section`)

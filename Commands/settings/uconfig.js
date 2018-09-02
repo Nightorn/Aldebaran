@@ -4,7 +4,7 @@ exports.run = async function(bot, message, args) {
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
         for (let [key, data] of Object.entries(parametersAvailable)) description += `**${key}** - ${data.help}\n`;
-        const embed = new Discord.MessageEmbed()
+        const embed = new MessageEmbed()
             .setAuthor(message.author.username, message.author.avatarURL())
             .setTitle('Config Command Help Page')
             .setDescription(`Here are the different parameters you can change to have a better experience of ${bot.user.username}\n(Note: If setting is disabled in &gconfig by guild owner, these settings will be ignored.\n**__Usage Example__** : \`&uconfig healthMonitor off\`\n${description}\n`)
