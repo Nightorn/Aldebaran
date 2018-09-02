@@ -1,4 +1,3 @@
-const poolQuery = require(`${process.cwd()}/functions/database/poolQuery`);
 const Discord = require("discord.js");
 module.exports = function(client, message) {
 	if (message.guild.settings.healthMonitor === 'off') return;
