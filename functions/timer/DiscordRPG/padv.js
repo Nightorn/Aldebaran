@@ -1,4 +1,4 @@
-module.exports = (message) => {
+module.exports = function(message){
 	if (message.author.timers.padventure !== null) return;
 	if (message.guild.settings.adventureTimer === 'on' && message.author.settings.adventureTimer === 'on') {
 		if (message.content.toLowerCase().startsWith(`#!padv`) || message.content.toLowerCase().startsWith(`,padv`)||message.content.toLowerCase().startsWith(`.padv`)) {
