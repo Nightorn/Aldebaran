@@ -1,16 +1,14 @@
+const { MessageEmbed } = require("discord.js");
+const request = require('request');
+const locationdb = require(`${process.cwd()}/Data/drpglocationlist.json`);
+const userCheck = require(`${process.cwd()}/functions/action/userCheck`);
 exports.run = (bot, message, args) => {
-    const { MessageEmbed } = require("discord.js");
-    const request = require('request');
-    const locationdb = require(`${process.cwd()}/Data/drpglocationlist.json`);
-    var usrid = message.author.id;
-    const user = bot.users.get(usrid);
-    if (user !== undefined) {
+    userCheck(bot, message, args).then(usrid => {
         try {
             request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":bot.config.drpg_apikey} }, function(err, response, body) {
                 if (err) return;
                 const data = JSON.parse(body);
                 if (data.error !== undefined) return message.channel.send(`**Error** No User Profile Found`);
-
                 const format = (x) => { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") };
 
                 var skills = [], attributes = [];
@@ -31,9 +29,9 @@ exports.run = (bot, message, args) => {
         } catch(err) {
             message.channel.send('So bad, an error occured with the stats of the user you wanted to see, but it is unknown.');
         }
-    } else {
+    }).catch(() => {
         message.reply("The ID of the user you specified is invalid. Please retry by mentionning him or by getting their right ID.");
-    }
+    });
 };
 
 exports.infos = {
