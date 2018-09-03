@@ -2,11 +2,11 @@ module.exports = (BaseGuild) => {
     return class Guild extends BaseGuild {
         constructor(client, data) {
             super(client, data);
+            this.settings = {};
+            this.prefix = this.client.config.prefix;
+            this.existsInDB = false;
             client.database.guilds.selectOneById(data.id).then(guild => {
                 if (guild !== undefined) return this.build(guild);
-                this.settings = {};
-                this.prefix = this.client.config.prefix;
-                this.existsInDB = false;
             });
         }
 
