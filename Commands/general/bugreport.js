@@ -16,5 +16,5 @@ exports.infos = {
     category: "General",
     description: "Sends a bug report",
     usage: "\`&bugreport <bug report>\`",
-    example: "\`&suggest ur bot doesnt work\`",
+    example: "\`&bugreport ur bot doesnt work\`",
 }
