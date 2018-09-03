@@ -54,7 +54,6 @@ module.exports = function(client, message) {
 	player.healthPercent = Math.round(10 * player.currentHP * 100 / player.maxHP) / 10;
 	pet.healthPercent = Math.round(10 * pet.currentHP * 100 / pet.maxHP) / 10;
 	if (user !== undefined && player.name !== undefined && player.healthPercent !== pet.healthPercent) {
-		console.log('hi');
 		const execute = (individual, healthMonitor) => {
 			const playerWarning = () => {
 				const embed = new Discord.MessageEmbed()
