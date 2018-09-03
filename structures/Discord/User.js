@@ -3,11 +3,11 @@ module.exports = (BaseUser) => {
     return class User extends BaseUser {
         constructor(client, data) {
             super(client, data);
-            client.database.users.selectOneById(data.id).then(user => {
+            this.existsInDB = false;
+            this.settings = {};
+            this.banned = false;
+            this.client.database.users.selectOneById(data.id).then(user => {
                 if (user !== undefined) return this.build(user);
-                this.settings = {};
-                this.banned = false;
-                this.existsInDB = false;
             });
             this.timers = {
                 adventure: null,
