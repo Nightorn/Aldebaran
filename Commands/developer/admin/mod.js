@@ -4,7 +4,7 @@ module.exports = (bot, message, args) => {
         if (args[2] !== undefined) {
             if (args[3] !== undefined) {
                 const user = bot.users.get(args[1]);
-                const guild = bot.users.get(args[1]);
+                const guild = bot.guilds.get(args[1]);
                 if (user !== undefined) {
                     user.changeSetting(args[2], args[3]);
                     const embed = new MessageEmbed()
