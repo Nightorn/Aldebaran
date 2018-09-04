@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 exports.run = async function(bot, message, args) {
-    if (['310296184436817930', '320933389513523220'].indexOf(message.author.id) == -1 || !message.member.permissions.has('ADMINISTRATOR')) return message.reply(`How about you not do that!`);
+    if (!message.member.permissions.has('ADMINISTRATOR')) return message.reply(`How about you not do that!`);
     const parametersAvailable = bot.models.settings.guild;
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
