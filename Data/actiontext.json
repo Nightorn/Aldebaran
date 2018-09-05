@@ -145,8 +145,9 @@
     "nom": {
         
         "self": [
-            "{targer} sure is hungry!",
-            "Nom nom nom, says {target}."
+            "{targert} sure is hungry!",
+            "Nom nom nom, says {target}.",
+            "{target} thinks its nom nom time!"
         ],
         
         "user": [
