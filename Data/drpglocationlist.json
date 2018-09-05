@@ -198,7 +198,7 @@
         "name" : "Copperfall Altar",
         "connections" : [],
         "npc" : [],
-        "traveltime": 5
+        "traveltime": 20
     },
     "42":{},
     "43": {
