@@ -1,39 +1,12 @@
-exports.run = (bot, message, args) => {
-    const client = require('nekos.life');
-    const Discord = require(`discord.js`)
-    const neko = new client();
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        async function feed() {
-            const data = (await neko.getSFWFeed());
-            message.channel.send({embed:{
-                author:{
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                },
-                description: (message.author +`  is feeding  `+ target + ` nom nom's.`),
-                image: {
-                    url : (data.url),
-                },
-                timestamp: new Date(),
-                footer: {
-                    icon_url: bot.avatarURL,
-                    text: "Powerd By Nekos.life"
-                }
-            
-            }});
-        }
-        feed();
-        
-    } else {
-        message.reply("Please mention someone :thinking:")
-    }
-}
+const Discord = require(`discord.js`)
+exports.run = async (bot, message,args) => {
+    require(`../../functions/action/executeAction.js`)(bot,message,args);
+};
 exports.infos = {
     category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&feed <usermention>\`",
-    example: "\`&feed @aldebaran\`",
+    description: "Feed you friends, they look hungry",
+    usage: "\`&feed <usermention>\` or \`&feed <userid>\`",
+    example: "\`&feed @aldebaran\` or \`&feed 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,
