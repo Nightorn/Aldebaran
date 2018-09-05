@@ -3,7 +3,7 @@ module.exports = function(bot, message) {
     const userName = message.content.substring(0, message.content.indexOf("started")).trim();
     const user = bot.users.find(u => u.username === userName);
     if (user !== undefined) {
-        if (user.timers.travel !== null && user.settings.travelTimer === 'on') return;
+        if (user.timers.travel !== null | user.settings.travelTimer === 'off') return;
         if (message.content.indexOf("started their journey to") !== -1) {
             var locationName = message.content.slice(message.content.indexOf("to")+2).trim().split("!");
             for (let [id, data] of Object.entries(locationinfo)) {
