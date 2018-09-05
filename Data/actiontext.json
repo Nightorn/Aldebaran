@@ -36,6 +36,17 @@
             "{sender} thinks {target} is there new chew toy."
         ]
     },
+    "bop": {
+        "self": [
+            "{target} really deserves a bop"
+        ],
+
+        "user": [
+            "Ouch {sender} just bopped {target}",
+            "Bop bop bop ,{target} got bopped by {sender}",
+            "{target} is getting bopped by {sender}"
+        ]
+    },
     "cpr": {
         
         "self": [
