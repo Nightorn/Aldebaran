@@ -1,39 +1,12 @@
-exports.run = (bot, message, args) => {
-    const client = require('nekos.life');
-    const Discord = require(`discord.js`)
-    const neko = new client();
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        async function pat() {
-            const data = (await neko.getSFWPat());
-            message.channel.send({embed:{
-                author:{
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL
-                },
-                description: (message.author +`  loves patting `+ target),
-                image: {
-                    url : (data.url),
-                },
-                timestamp: new Date(),
-                footer: {
-                    icon_url: bot.avatarURL,
-                    text: "Powerd By Nekos.life"
-                }
-            
-            }});
-        }
-        pat();
-        
-    } else {
-        message.reply("Please mention someone :thinking:")
-    }
-}
+const Discord = require(`discord.js`)
+exports.run = async (bot, message,args) => {
+    require(`../../functions/action/executeAction.js`)(bot,message,args);
+};
 exports.infos = {
     category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&pat<usermention>\`",
-    example: "\`&pat @aldebaran\`",
+    description: "Send pats, everyone loves pats.",
+    usage: "\`&pat <usermention>\` or \`&pat <userid>\`",
+    example: "\`&pat @aldebaran\` or \`&pat 320933389513523220\`",
     cooldown: {
         time: 1000,
         rpm: 60,
