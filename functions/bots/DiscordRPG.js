@@ -74,7 +74,7 @@ module.exports = function(client, message) {
 			}, general = () => {
 				var embed = new Discord.MessageEmbed()
 					 .setAuthor(user.username, user.avatarURL())
-					 .setFooter(`&config To Change Health Monitor Settings`)
+					 .setFooter(`&uconfig To Change Health Monitor Settings`)
   
 				if (individual !== 'pet') embed.addField(`__Character Health__ - **${player.healthPercent}%**`,`(${player.currentHP} HP / ${player.maxHP} HP)`, false)
 				if (!isNaN(pet.healthPercent) && individual !== 'character') embed.addField(`__Pet Health__ - **${pet.healthPercent}%**`, `(${pet.currentHP} HP / ${pet.maxHP} HP)`, false);

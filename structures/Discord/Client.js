@@ -53,8 +53,8 @@ module.exports = class AldebaranClient extends Client {
                         support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, 
                         help: "DiscordRPG Travel Timer - [on | off]"
                     }, healthMonitor: {
-                        support: (value) => { return ['on', 'off'].indexOf(value) != -1}, 
-                        help: "DRPG Health Monitor - [on | off]"
+                        support: (value) => { return ['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100)}, 
+                        help: "DRPG Health Monitor - [on | off | healthPercentage ]"
                     }
                 },
                 user: {
