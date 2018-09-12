@@ -5,7 +5,7 @@ module.exports = function(message){
 			if (message.guild.settings.autoDelete !== 'off') message.delete({ timeout: 1000 });
 			message.author.timers.padventure = setTimeout(() => {
                 message.channel.send("<@" + message.author.id + "> Party Time! :tada:").then(msg => {
-					if (message.guild.settings.autoDelete !== 'off') message.delete({ timeout: 10000 });
+					if (message.guild.settings.autoDelete !== 'off') msg.delete({ timeout: 10000 });
 				});
 				message.author.timers.padventure = null;
 			}, 19000);
