@@ -13,7 +13,7 @@ module.exports = (BaseGuild) => {
         build(data) {
             for (let [key, value] of Object.entries(data)) this[key] = value;
             this.settings = JSON.parse(this.settings);
-            this.prefix = this.settings.aldebaranPrefix || this.client.config.prefix;
+            this.prefix = this.client.debugMode ? this.client.config.prefix : this.settings.aldebaranPrefix || this.client.config.prefix;
         }
 
         async create() {
@@ -23,6 +23,7 @@ module.exports = (BaseGuild) => {
 
         async clear() {
             this.existsInDB = false;
+            this.settings = {};
             return await this.client.database.guilds.deleteOneById(this.id);
         }
 
