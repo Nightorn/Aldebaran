@@ -1,20 +1,15 @@
 exports.run = (bot, message, args) => {
-      var user ;
-      if(args === '') user = message.author       
-      if(message.mentions.users.first()) { //Check if the message has a mention in it.
-            user = message.mentions.users.first();
-      } else user = (bot.users.get(`${args[0]}`) != undefined) ? bot.users.get(`${args[0]}`) : message.author ; 
-      message.channel.send({embed:{
-            author:{
-                  name: user.username,
-                  icon_url: user.avatarURL()
-            },
-            title: (user.username + `'s Avatar`),
-            image: {
-                  url : user.avatarURL({ size: 2048 }),
-            },
-            timestamp: new Date()
-      }}); //We send the output in the current channel.
+	const { MessageEmbed } = require('discord.js');
+	require(`${process.cwd()}/functions/action/userCheck`)(bot, message, args).then(usrid => {
+		const user = bot.users.fetch(usrid);
+		const embed = new MessageEmbed()
+			.setAuthor(user.username, user.avatarURL())
+			.setTitle(`${user.username}'s Avatar`)
+			.setImage(user.avatarURL({ size: 2048 }));
+		message.channel.send({embed});
+	}).catch(() => {
+        message.reply("The ID of the user you specified is invalid. Please retry by mentionning him or by getting their right ID.");
+	});
 }
 
 exports.infos = {

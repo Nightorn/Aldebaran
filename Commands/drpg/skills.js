@@ -1,10 +1,7 @@
 exports.run = (bot, message, args,) => {
     const { MessageEmbed } = require("discord.js");
     const request = require('request');
-    var usrid = message.author.id;
-    if (args.length > 0) usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
-    const user = bot.users.get(usrid);
-    if (user !== undefined) {
+    require(`${process.cwd()}/functions/action/userCheck.js`)(bot, message, args).then(usrid => {
         request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":bot.config.drpg_apikey} }, function(err, response, body) {
             if (err) return;
             const data = JSON.parse(body);
@@ -30,9 +27,9 @@ exports.run = (bot, message, args,) => {
                 .addField(`**__Chopping__**`,`**Level:** *${skillinfo.chop.level}*\n**Total XP:** *${skillinfo.chop.xp}*\n**Current Chop Reward:** *${lumbercurrent}* Logs.\n**Max Chop Rewards:** *${lumbermax}* Logs.`)
             message.channel.send(embed)
         });
-    } else {
+    }).catch(() => {
         message.reply("Error you must enter a valid UserID or User Mention");
-    }
+    });
 }
 exports.infos = {
     category: "DRPG",

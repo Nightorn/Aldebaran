@@ -1,16 +1,13 @@
+const { MessageEmbed } = require('discord.js');
 exports.run = (bot, message, args) => {
-   const sayMessage = args.join(" ");
-   message.delete().catch(O_o=>{});
-   message.channel.send({embed:{
-        author:{
-        name: bot.user.username,
-        icon_url: bot.user.avatarURL()
-        },
-        title: (sayMessage),
-        timestamp: new Date()
-    
-    }})
+    message.delete().catch(() => {});
+    const embed = new MessageEmbed()
+        .setAuthor(message.author.username, message.author.avatarURL())
+        .setDescription(args.join(' '))
+        .setTimestamp(new Date());
+    message.channel.send({embed});
 };
+
 exports.infos = {
     category: "Fun",
     description: "Make the bot say something.",

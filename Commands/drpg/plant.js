@@ -3,10 +3,8 @@ exports.run = (bot, message, args) => {
     const request = require('request');
     const itemlist = require(`${process.cwd()}/Data/drpgitemlist.json`);
     const locationdb = require(`${process.cwd()}/Data/drpglocationlist.json`);
-    var usrid = message.author.id;
-    if (args.length > `0`) usrid = message.mentions.members.size > 0 ? message.mentions.members.first().id : args[0];
-    if (bot.users.get(usrid) !== undefined) {
-        request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization" : bot.config.drpg_apikey} }, function(err, response, body, headers) {
+    require(`${process.cwd()}/functions/action/userCheck.js`)(bot, message, args).then(usrid => {
+        request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization" : bot.config.drpg_apikey} }, function(err, response, body) {
             if (err) return;
             const data = JSON.parse(body);
             if (data.location === undefined) return message.channel.send(`**Error** No Purchased Fields Found`);
@@ -51,9 +49,9 @@ exports.run = (bot, message, args) => {
             }
             message.channel.send({embed});
         });
-    } else {
+    }).catch(() => {
         message.reply("**Error** you must enter a valid UserID or User Mention");
-    }
+    });
 };
 exports.infos = {
     category: "DRPG",

@@ -1,23 +1,15 @@
 const { MessageEmbed } = require('discord.js');
 module.exports = (bot, message, args) => {
     var id = message.mentions.members.size === 1 ? message.mentions.members.first().id : args[1];
-    const user = bot.users.get(id);
-    if (user !== undefined) {
-        const warningsDetection = [
-            (settings) => { if (settings.individualHealthMonitor !== 'off' && settings.healthMonitor === 'off') return ':warning: **individualHealthMonitor** is on, but **healthMonitor** is disabled'; }
-        ]
-        var warnings = [], guilds = [];;
+    bot.users.fetch(id).then(user => {
+        var guilds = [];
         const embed = new MessageEmbed()
             .setAuthor(`${user.tag} | ${user.id}`, user.avatarURL());
-        if (Object.entries(user.settings) !== 0) {
-            for (let element of warningsDetection) if (element(user.settings) !== undefined) warnings.push(element(user.settings));
-            embed.addField('Settings', `\`\`\`js\n${require('util').inspect(user.settings, false, null)}\`\`\``);
-            if (warnings.length > 0) embed.addField(`Warnings`, warnings.join('\n'));
-        }
+        if (Object.entries(user.settings) !== 0) embed.addField('Settings', `\`\`\`js\n${require('util').inspect(user.settings, false, null)}\`\`\``);
         for (let [id, data] of bot.guilds) if (data.members.get(user.id) !== undefined) guilds.push(`\`${id}\` **${data.name}** ${data.ownerID === user.id ? '(Owner)' : ''}`);
         if (guilds.length > 0) embed.addField('Servers', guilds.join('\n'));
         message.channel.send({embed});
-    } else {
+    }).catch(() => {
         const guild = bot.guilds.get(id);
         if (guild !== undefined) {
             var warnings = [], guilds = [];
@@ -39,5 +31,5 @@ module.exports = (bot, message, args) => {
                 .setColor(`ORANGE`);
             message.channel.send({embed});
         }
-    }
+    });
 }

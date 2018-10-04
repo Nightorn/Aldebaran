@@ -1,10 +1,7 @@
 exports.run = (bot, message, args) => {
     const { MessageEmbed } = require(`discord.js`);
     const request = require(`request`);
-    var usrid = message.author.id;
-    if (args.length > 0) usrid = (message.mentions.members.size > 0) ? message.mentions.members.first().id : args[0];
-    const user = bot.users.get(usrid);
-    if (user !== undefined) {
+    require(`${process.cwd()}/functions/action/userCheck`)(bot, message, args).then(usrid => {
         request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":bot.config.drpg_apikey} }, function(err, response, body){
             if (err) return;
             const data = JSON.parse(body);
@@ -49,10 +46,11 @@ exports.run = (bot, message, args) => {
                 .setFooter(`Trap Set - ${trapsetdate}`)
             message.channel.send({embed});
         });
-    } else {
+    }).catch(() => {
         message.reply(`Error you must enter a valid UserID or Mention User.`);
-    }
+    });
 };
+
 exports.infos = {
     category: "DRPG",
     description: "Displays users trap information and estimated loots.",
