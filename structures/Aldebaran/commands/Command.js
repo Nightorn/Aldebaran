@@ -34,6 +34,7 @@ module.exports = class Command {
      * @param {string[]} args Command Ags
      */
     execute(bot, message, args) {
+        if (this.nsfw && !message.channel.nsfw) return message.channel.send(`This command only works in a NSFW channel!`);
         const canPass = this.cooldownManager.canPass(message.author);
         this.log(canPass, message, args);
         if (canPass) {
