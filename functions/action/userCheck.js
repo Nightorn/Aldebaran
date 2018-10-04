@@ -4,15 +4,16 @@ module.exports = function(bot, message, args) {
             resolve(message.mentions.members.first().id);
         } else if (args[0] !== undefined) {
             const userId = args[0];
-            const user = bot.users.get(userId);
-            if (user !== undefined) {
-                resolve(userId);
-            } else {
-                reject(new RangeError('Invalid User ID'));
-            }
+            bot.users.fetch(userId).then((user) => {
+                if (user !== undefined) {
+                    resolve(userId);
+                } else {
+                    reject(new RangeError('Invalid User ID'));
+                }
+            });
         } else {
-            const userId = message.author.id
-            resolve(userId)           
+            const userId = message.author.id;
+            resolve(userId);
         }
     });
 }
