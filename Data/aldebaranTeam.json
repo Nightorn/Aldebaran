@@ -1,0 +1,17 @@
+{
+    "320933389513523220": {
+        "titles": ["Developer", "Support"],
+        "acknowledgements": ["ADMIN"],
+        "staffRank": 1
+    },
+    "310296184436817930": {
+        "titles": ["Owner"],
+        "acknowledgements": ["ADMIN"],
+        "staffRank": 0
+    },
+    "246302641930502145": {
+        "titles": ["Support"],
+        "acknowledgements": ["SUPPORT"],
+        "staffRank": 2
+    }
+}
