@@ -19,6 +19,8 @@ exports.run = async (bot, message) => {
 	try {
 		bot.commandHandler.execute(command, bot, message, args);
 	} catch(err) {
-		if (err.message !== 'Unknown Command' && err.message !== 'Exceeded Command Cooldown') throw err;
+		if (err.message === 'Insufficient Bot Permissions') {
+			message.channel.send(`**${message.author.username}**, you are missing required permissions to execute this command.`);
+		} else if (err.message !== 'Unknown Command' && err.message !== 'Exceeded Command Cooldown') throw err;
 	}
 }

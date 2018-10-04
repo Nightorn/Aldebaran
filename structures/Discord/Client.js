@@ -23,7 +23,6 @@ module.exports = class AldebaranClient extends Client {
                 'MESSAGE_DELETE',
                 'MESSAGE_UPDATE',
                 'MESSAGE_DELETE_BULK',
-                'MESSAGE_REACTION_ADD',
                 'MESSAGE_REACTION_REMOVE',
                 'MESSAGE_REACTION_REMOVE_ALL',
                 'USER_UPDATE',
@@ -38,49 +37,14 @@ module.exports = class AldebaranClient extends Client {
         this.commandGroups = {};
         this.commandHandler = new CommandHandler(this);
         this.config = require(`${process.cwd()}/config.json`);
+        this.config.aldebaranTeam = require(`${process.cwd()}/Data/aldebaranTeam.json`);
         this.database = new DatabasePool();
-        this.login(process.argv[2] !== 'dev' ? this.config.token : this.config.tokendev);
+        this.debugMode = process.argv[2] === 'dev';
+        this.login(this.debugMode ? this.config.tokendev : this.config.token);
         this.models = {
-            settings: {
-                common: {
-                    adventureTimer: {
-                        support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, 
-                        help: "DiscordRPG Adventure Timer - [on | off]"
-                    }, sidesTimer: {
-                        support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, 
-                        help: "DiscordRPG Sides Timer - [on | off]"
-                    }, travelTimer: {
-                        support: (value) => { return ['on', 'off'].indexOf(value) != -1 }, 
-                        help: "DiscordRPG Travel Timer - [on | off]"
-                    }, healthMonitor: {
-                        support: (value) => { return ['on', 'off'].indexOf(value) != -1 || (parseInt(value) > 0 && parseInt(value) < 100)}, 
-                        help: "DRPG Health Monitor - [on | off | healthPercentage ]"
-                    }
-                },
-                user: {
-                    individualHealthMonitor: {
-                        support: (value) => { return ['off', "character", "pet"].indexOf(value) != -1 }, 
-                        help: "Lets you choose whether you want to display the health of your character or your pet with the health monitor - [off | character | pet]" 
-                    }, timezone: {
-                        support: require(`${process.cwd()}/functions/checks/timezoneSupport.js`), 
-                        help: "Sets your timezone - [GMT+/-, or [tz database timezone (required for DST detection)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]"
-                    }
-                },
-                guild: {
-                    autoDelete: {
-                        support: (value) => { return ['on', 'off'].indexOf(value) != -1}, 
-                        help: "Auto Delete Sides & Adv Commands - [on | off]"
-                    },  aldebaranPrefix: {
-                        support: () => { return true }, 
-                        help: "Aldebaran's Prefix - [& | Guild Customized]", 
-                        postUpdate: (value) => { message.guild.prefix = value; }
-                    }, discordrpgPrefix: {
-                        support: () => { return true }, 
-                        help: "DiscordRPG Prefix"
-                    }
-                }
-            }
+            settings: require(`${process.cwd()}/functions/checks/configurationModels.js`)
         }
+        if (process.argv[3] !== undefined && this.debugMode) this.config.prefix = process.argv[3];
         for (let [key, value] of Object.entries(this.models.settings.common)) {
             this.models.settings.user[key] = value;
             this.models.settings.guild[key] = value;
