@@ -7,7 +7,6 @@ module.exports = (BaseMessage) => {
                 const results = this.content.match(/(<@)([0-9]{16,19})>/g);
                 if (results !== null) return results.indexOf(`<@${member.id}>`) !== -1;
             });
-            console.log(this.userMentions);
         }
     }
 }

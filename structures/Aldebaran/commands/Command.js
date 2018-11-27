@@ -17,14 +17,22 @@ module.exports = class Command {
     }
 
     check(user) {
-        if (user.asBotStaff.acknowledgements.indexOf('ADMIN') !== -1) return true;
-        var pass = false;
-        if (this.permissions !== undefined) {
-            if (this.permissions.bot !== undefined) {
-                for (let acknowledgement of Object.entries(this.permissions.bot)) if (user.asBotStaff.acknowledgements.indexOf(acknowledgement) !== -1) pass = true;
+        if (user.asBotStaff === null) {
+            if (this.permissions === undefined) return true;
+            else return false;
+        } else {
+            if (user.asBotStaff.acknowledgements.indexOf('ADMIN') !== -1) {
+                return true;
+            } else {
+                var pass = false;
+                if (this.permissions !== undefined) {
+                    if (this.permissions.bot !== undefined) {
+                        for (let acknowledgement of Object.entries(this.permissions.bot)) if (user.asBotStaff.acknowledgements.indexOf(acknowledgement) !== -1) pass = true;
+                    }
+                }
+                return pass;
             }
         }
-        return pass;
     }
     
     /**
