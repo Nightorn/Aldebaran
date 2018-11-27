@@ -17,7 +17,6 @@ exports.run = (bot, message, args) => {
         if (Nodesu.Mode[mode] !== undefined) {
             client.user.getBest(args[0], Nodesu.Mode[mode], 5).then(async data => {
                 const f = x => { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") };
-                message.channel.send(require('util').inspect(data[0], false, null), {code: "xl"});
                 var ctx = oppai.Ctx(), maps = [], list = "";
                 for (let score of data) {
                     await require(`${process.cwd()}/functions/osu!/retrieveBeatmapFile.js`)(score.beatmap_id);
