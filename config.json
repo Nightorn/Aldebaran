@@ -8,10 +8,12 @@
     "omdb_apikey" : "1aa9cc94",
     "cat_apikey": "MzI0MDc4",
     "mysql": {
-        "host": "localhost",
+        "connectionLimit": 10,
+        "host": "nightorn.com",
         "user": "discord",
-        "password": "Z*Xn6Bqpe!8zNqhA",
-        "database": "aldebaran"
+        "password": "6+bT3A~9v`s!",
+        "database": "aldebaran",
+        "port": 3306
     },
     "pexels_apikey": "563492ad6f9170000100000176b8f11924744d96ae2793f53b8aa16d",
     "dprg_prefix": [
