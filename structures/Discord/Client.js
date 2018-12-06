@@ -38,7 +38,7 @@ module.exports = class AldebaranClient extends Client {
         this.commandHandler = new CommandHandler(this);
         this.config = require(`${process.cwd()}/config.json`);
         this.config.aldebaranTeam = require(`${process.cwd()}/Data/aldebaranTeam.json`);
-        this.database = new DatabasePool();
+        this.database = new DatabasePool(this);
         this.debugMode = process.argv[2] === 'dev';
         this.login(this.debugMode ? this.config.tokendev : this.config.token);
         this.models = {

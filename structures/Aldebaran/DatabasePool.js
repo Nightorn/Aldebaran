@@ -3,15 +3,8 @@ module.exports = class DatabasePool {
     /**
      * Returns a MySQL pool connection to the Aldebaran's database
      */
-    constructor() {
-        this._pool = mysql.createPool({
-            connectionLimit: 10,
-            host: 'nightorn.com',
-            port: 3306,
-            user: 'ciborn',
-            password: /*'Z*Xn6Bqpe!8zNqhA'*/'Nightorn2112',
-            database: 'aldebaranDev'
-        });
+    constructor(client) {
+        this._pool = mysql.createPool(client.config.mysql);
         this.users = {
             /**
              * Returns the data of the user specified from the database
