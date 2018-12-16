@@ -12,6 +12,11 @@ exports.run = (bot, message, args) => {
             .setColor(`BLUE`);
         message.channel.send({embed});
     } else {
+        const ranks = {
+            "SH": "S+",
+            "X": "SS",
+            "XH": "SS+"
+        }
         var mode = 'osu';
         for (let element of args) if (element.indexOf('--') === 0) mode = element.replace('--', '');
         if (Nodesu.Mode[mode] !== undefined) {
@@ -22,22 +27,26 @@ exports.run = (bot, message, args) => {
                     await require(`${process.cwd()}/functions/osu!/retrieveBeatmapFile.js`)(score.beatmap_id);
                     var b = oppai.Beatmap(ctx), buf = oppai.Buffer(2000000), dctx = oppai.DiffCalcCtx(ctx);
                     b.parse(`./cache/osu!/${score.beatmap_id}.osu`, buf, 2000000, true);
+                    b.applyMods(score.enabled_mods);
                     var diff = dctx.diffCalc(b);
                     var res = ctx.ppCalc(diff.aim, diff.speed, b, oppai.nomod, parseInt(score.maxcombo), parseInt(score.countmiss), parseInt(score.count300), parseInt(score.count100), parseInt(score.count50));
                     score.accuracy = res.accPercent;
+                    score.stars = diff.stars;
                     maps.push(score);
                 }
                 for (let map of maps) {
                     const metadata = (await client.beatmaps.getByBeatmapId(map.beatmap_id, Nodesu.Mode[mode], 1, true))[0];
-                    list += `**\`[${map.rank}]\` ${f(map.pp)}pp** | __${metadata.artist} - ${metadata.title}__ [${metadata.version}] (${parseInt(metadata.difficultyrating).toFixed(2)}\`*\`)\n**Score** \`${f(map.score)}\` | **Accuracy** ${Math.round(map.accuracy * 100) / 100}% | **300** ${f(map.count300)} | **100** ${map.count100} | **50** ${map.count50} | **Misses** ${map.countmiss}\n\n`
+                    const mods = require(`./../../functions/osu!/computeMods`)(parseInt(map.enabled_mods));
+                    list += `**\`[${ranks[map.rank] === undefined ? map.rank : ranks[map.rank]}]\` ${f(map.pp)}pp** | [__${metadata.artist} - **${metadata.title}**__ [${metadata.version}]](https://osu.ppy.sh/b/${map.beatmap_id}) (**${Math.round(parseFloat(map.stars) * 100) / 100}★ +${mods.join('')}**)\n**Score** \`${f(map.score)}\` | **Accuracy** ${Math.round(map.accuracy * 100) / 100}% | **300** \`${f(map.count300)}\` | **100** \`${map.count100}\` | **50** \`${map.count50}\` | **Misses** \`${map.countmiss}\`\n\n`
                 }
-                const user = (await client.users.get(maps[0].user_id, Nodesu.Mode[mode]))[0];
+                const user = (await client.user.get(maps[0].user_id, Nodesu.Mode[mode]));
                 const embed = new MessageEmbed()
-                    .setAuthor(`${user.username}'s 10 best plays`, `https://a.ppy.sh/${user.user_id}`)
+                    .setAuthor(`${user.username}'s 10 best plays`, `https://a.ppy.sh/${user.user_id}`, `https://osu.ppy.sh/users/${user.user_id}`)
                     .setDescription(list)
-                    .setColor('BLUE');
+                    .setColor('#cc5288');
                 message.channel.send({embed});
             }).catch((err) => {
+                throw err;
                 message.reply("the user you specified does not exist, or at least in the mode specified.");
             });
         } else {
