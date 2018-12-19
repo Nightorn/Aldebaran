@@ -5,9 +5,9 @@ exports.run = (bot, message, args) => {
     require(`${process.cwd()}/functions/action/userCheck`)(bot, message, args).then(usrid => {
         bot.users.fetch(usrid).then(user => {
             try {
-                request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":bot.config.drpg_apikey} }, function(err, response, body) {
+                request({uri:`https://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":bot.config.drpg_apikey} }, function(err, response, body) {
                     if (err) return;
-                    const data = JSON.parse(body);
+                    const data = JSON.parse(body).data;
                     if (data.error !== undefined) return message.channel.send(`**Error** No User Profile Found`);
                     const format = (x) => { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") };
     

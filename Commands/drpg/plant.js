@@ -4,9 +4,9 @@ exports.run = (bot, message, args) => {
     const itemlist = require(`${process.cwd()}/Data/drpgitemlist.json`);
     const locationdb = require(`${process.cwd()}/Data/drpglocationlist.json`);
     require(`${process.cwd()}/functions/action/userCheck.js`)(bot, message, args).then(usrid => {
-        request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization" : bot.config.drpg_apikey} }, function(err, response, body) {
+        request({uri:`https://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization" : bot.config.drpg_apikey} }, function(err, response, body) {
             if (err) return;
-            const data = JSON.parse(body);
+            const data = JSON.parse(body).data;
             if (data.location === undefined) return message.channel.send(`**Error** No Purchased Fields Found`);
             if (data.location.saplings === null) return message.channel.send(`**Please plant at purchased feilds first**`);
             //if (Object.values(data.location.saplings).indexOf(null) != -1) return message.channel.send(`**Error** No Currently Planted Saplings Found`);  
