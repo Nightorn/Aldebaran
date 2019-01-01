@@ -15,11 +15,11 @@
         "name" : "Mournstead",
         "connections" : [],
         "npc" : [],
-        "traveltime": 25
+        "traveltime": 30
     },
     "4": {
         "name" : "Rivermouth",
-        "connections" : [],
+        "connections" : [3, 44],
         "npc" : [],
         "traveltime": 30
     },
@@ -45,7 +45,7 @@
     "9":{},
     "10":{},
     "11": {
-        "name" : "Ravens Gate",
+        "name" : "Ravengate",
         "connections" : [],
         "npc" : [],
         "traveltime": 40
@@ -59,14 +59,14 @@
     },
     "14": {
         "name" : "Redhorn",
-        "connections" : [],
+        "connections" : [44],
         "npc" : [],
-        "traveltime": 30
+        "traveltime": 15
     },
     "15":{},
     "16": {
         "name" : "Frostridge Shore",
-        "connections" : [],
+        "connections" : [4],
         "npc" : [],
         "traveltime": 300
     },
@@ -90,7 +90,7 @@
     },
     "20": {
         "name" : "Sariila",
-        "connections" : [],
+        "connections" : [4],
         "npc" : [],
         "traveltime": 250
     },
@@ -209,7 +209,7 @@
     },
     "44": {
         "name" : "Redhorn Dungeon",
-        "connections" : [],
+        "connections" : [14],
         "npc" : [],
         "traveltime": 15
     },
