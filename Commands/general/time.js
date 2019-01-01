@@ -1,7 +1,7 @@
 const moment = require("moment-timezone");
 exports.run = async function (bot, message, args) {
     const user = message.mentions.users.size >= 1 ? message.mentions.users.first() : message.author;
-    const timezone = user.settings.timezone;
+    var timezone = user.settings.timezone;
     if (timezone !== undefined) {
         if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = "ETC/" + (timezone.search(/\+/i) ? timezone.replace("+", "-") : timezone.replace("-", "+"));
         if (moment.tz.zone(timezone) === null) {
