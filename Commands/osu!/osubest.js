@@ -46,7 +46,6 @@ exports.run = (bot, message, args) => {
                     .setColor('#cc5288');
                 message.channel.send({embed});
             }).catch((err) => {
-                throw err;
                 message.reply("the user you specified does not exist, or at least in the mode specified.");
             });
         } else {
