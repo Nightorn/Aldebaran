@@ -101,16 +101,22 @@ exports.run = async (bot, message, args) => {
                         if (trapId === null) {
                             var locations = "";
                             for (let [locationId, trapData] of Object.entries(userData.location.traps)) {
-                                if (locationsList[locationId] !== undefined) {
-                                    locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **${locationsList[locationId].name}** - ${getDate(trapData.time, true)}\n`;
-                                } else locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **Unknown Location (\`${locationId}\`)** - ${getDate(trapData.time, true)}\n`;
+                                if (traps[trapData.id] !== undefined) {
+                                    if (locationsList[locationId] !== undefined) {
+                                        locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **${locationsList[locationId].name}** - ${getDate(trapData.time, true)}\n`;
+                                    } else locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **Unknown Location (\`${locationId}\`)** - ${getDate(trapData.time, true)}\n`;
+                                }
                             }
                             const embed = new MessageEmbed()
                                 .setAuthor(`${user.username}  |  Trap Informations`, user.avatarURL())
                                 .setDescription(`**${user.username}** has **${locations.split('\n').length - 1} traps** set. Please tell us which one you want to view the informations of. Use \`${message.guild.prefix}trap 4\` for example.\n${locations}`)
                                 .setColor(`BLUE`);
                             return message.channel.send({embed});
-                        } else if (userData.location.traps[trapId] === undefined) return message.channel.send(`Sorry **${message.author.username}**, but the specified trap does not exist.`);
+                        } else if (userData.location.traps[trapId] === undefined) {
+                            return message.channel.send(`Sorry **${message.author.username}**, but the specified trap does not exist.`);
+                        } else {
+                            return message.channel.send(`Sorry **${message.author.username}**, but the specified trap has been checked before and is no longer available.`);
+                        }
                     } else trapId = Object.keys(userData.location.traps)[0];
                 } else return message.channel.send(errorMessage);
             } else return message.channel.send(errorMessage);
@@ -128,15 +134,10 @@ exports.run = async (bot, message, args) => {
             const beginning = `You will receive the following items (with ${isMax ? maxSalvage : currentSalvage === 1 ? 0 : currentSalvage} point(s) in salvaging) : \n`;
             var results = beginning;
             for (let [itemId, lootFunction] of Object.entries(traps[data.id].loots)) {
-                if (itemId === "462" | itemId === "657" | itemId === "499") {
-                    const loot = lootFunction();
-                    if (loot) results += ` - **${loot}** **${items[itemId]}**\n`;
-                } else {
-                    const minLoot = lootFunction(isMax ? maxSalvage : currentSalvage, false);
-                    const maxLoot = lootFunction(isMax ? maxSalvage : currentSalvage, true);
-                    if (minLoot === maxLoot && maxLoot !== 0) results += ` - **${maxLoot}** **${items[itemId]}**\n`;
-                    else if (maxLoot !== 0) results += ` - Between **${minLoot}** and **${maxLoot}** **${items[itemId]}**\n`;
-                }
+                const minLoot = lootFunction(isMax ? maxSalvage : currentSalvage, false);
+                const maxLoot = lootFunction(isMax ? maxSalvage : currentSalvage, true);
+                if (minLoot === maxLoot && maxLoot !== 0) results += ` - **${maxLoot}** **${items[itemId]}**\n`;
+                else if (maxLoot !== 0) results += ` - Between **${minLoot}** and **${maxLoot}** **${items[itemId]}**\n`;
             }
 
             if (results === beginning) results = "You cannot receive any item yet, wait few minutes and some will eventually get in your trap!";
