@@ -50,7 +50,11 @@ module.exports = function(client, message) {
 		}
 	}
   
-	const user = client.users.find(u => u.username === player.name);
+	const matchedMessage = message.channel.messages.find(msg => msg.author.username === player.name);
+	var user = null;
+	if (matchedMessage !== undefined) {
+		user = matchedMessage.author;
+	} else return;
 	player.healthPercent = Math.round(10 * player.currentHP * 100 / player.maxHP) / 10;
 	pet.healthPercent = Math.round(10 * pet.currentHP * 100 / pet.maxHP) / 10;
 	if (user !== undefined && player.name !== undefined && player.healthPercent !== pet.healthPercent) {
