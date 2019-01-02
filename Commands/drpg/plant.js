@@ -7,8 +7,8 @@ exports.run = (bot, message, args) => {
         request({uri:`https://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization" : bot.config.drpg_apikey} }, function(err, response, body) {
             if (err) return;
             const data = JSON.parse(body).data;
-            if (data.location === undefined) return message.channel.send(`**Error** No Purchased Fields Found`);
-            if (data.location.saplings === null) return message.channel.send(`**Please plant at purchased feilds first**`);
+            if (data.location === undefined) return message.channel.send(`Hey **${data.name}**, travel somewhere and set a trap on your way!`);
+            if (data.location.saplings === null || data.location.saplings === undefined) return message.channel.send(`Hey **${data.name}**, please plant some saplings at your purchased fields before!`);
             //if (Object.values(data.location.saplings).indexOf(null) != -1) return message.channel.send(`**Error** No Currently Planted Saplings Found`);  
                 //Caused errors when any location was "null" would then show complete message and ignore all other locations was removed fixing error.
             const embed = new MessageEmbed()
