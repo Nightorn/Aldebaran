@@ -19,7 +19,7 @@ exports.run = async function(bot, message, args) {
                     const embed = new MessageEmbed()
                         .setAuthor(message.author.username, message.author.avatarURL())
                         .setTitle(`Settings successfully changed`)
-                        .setDescription(`The property **${args[0]}** has successfully been changed to the value **${args[1]}**.`)
+                        .setDescription(`The property **\`${args[0]}\`** has successfully been changed to the value **\`${args[1]}\`**.`)
                         .setColor(`GREEN`);
                     message.channel.send({embed});
                 }).catch(err => {
