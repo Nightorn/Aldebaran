@@ -2,7 +2,14 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async function(message) {
 	if (message.author.timers.sides !== null) return;
 	if (message.guild.settings.sidesTimer === 'on' && message.author.settings.sidesTimer === 'on') {
-		if (message.content.toLowerCase().startsWith(`#!mine`)|| message.content.toLowerCase().startsWith(`,mine`)|| message.content.toLowerCase().startsWith(`.mine`)) {
+		var prefix = null;
+		message.content = `${message.content} `;
+		for (let element of ["DiscordRPG", "#!", message.guild.settings.discordrpgPrefix]) {
+			for (let action of ["mine", "chop", "forage", "fish"]) {
+				if (message.content.indexOf(`${element}${action} `) === 0) prefix = element;
+			}
+		}
+		if (prefix !== null) {
 			const emoji = ["🥕","🍋","🥔","🐟"];
 			var randomemoji = (`${emoji[~~(Math.random() * emoji.length)]}`);
 			if (message.guild.settings.autoDelete !== `off`) message.delete({ timeout: 500 });
@@ -39,6 +46,6 @@ module.exports = async function(message) {
 					}
 				});
 			});
-		} 
+		}
 	}
 }     
