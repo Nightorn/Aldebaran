@@ -114,7 +114,7 @@ exports.run = async (bot, message, args) => {
                             return message.channel.send({embed});
                         } else if (userData.location.traps[trapId] === undefined) {
                             return message.channel.send(`Sorry **${message.author.username}**, but the specified trap does not exist.`);
-                        } else {
+                        } else if (userData.location.traps[trapId].id === "") {
                             return message.channel.send(`Sorry **${message.author.username}**, but the specified trap has been checked before and is no longer available.`);
                         }
                     } else trapId = Object.keys(userData.location.traps)[0];
