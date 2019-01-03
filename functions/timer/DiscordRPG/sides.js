@@ -5,9 +5,7 @@ module.exports = async function(message) {
 		var prefix = null;
 		message.content = `${message.content} `;
 		for (let element of ["DiscordRPG", "#!", message.guild.settings.discordrpgPrefix]) {
-			for (let action of ["mine", "chop", "forage", "fish"]) {
-				if (message.content.indexOf(`${element}${action} `) === 0) prefix = element;
-			}
+			if (message.content.indexOf(`${element}mine `) === 0) prefix = element;
 		}
 		if (prefix !== null) {
 			const emoji = ["🥕","🍋","🥔","🐟"];
