@@ -41,12 +41,13 @@ module.exports = class Command {
      * @param {Message} message Message Object
      * @param {string[]} args Command Ags
      */
-    execute(bot, message, args) {
+    async execute(bot, message, args) {
         if (this.nsfw && !message.channel.nsfw) return message.channel.send(`This command only works in a NSFW channel!`);
         const canPass = this.cooldownManager.canPass(message.author);
         this.log(canPass, message, args);
         if (canPass) {
             if (this.check(message.author)) {
+                await bot.database.commands.create(this.name, args, message)
                 return this.commandFile.run(bot, message, args);
             } else {
                 return new Error('Insufficient Bot Permissions');

@@ -160,6 +160,11 @@ module.exports = class DatabasePool {
                 return await this.query(`INSERT INTO photogallery (userId, links, linkname, tags, nsfw) VALUES ('${id}', '${link}', '${linkname}', '${tags}', ${nsfw})`);
             }
         }
+        this.commands = {
+            create: async (command, args, message) => {
+                return await this.query(`INSERT INTO commands (command, userId, channelId, guildId, args) VALUES ('${command}', '${message.author.id}', '${message.channel.id}', '${message.guild.id}', '${JSON.stringify(args)}')`);
+            }
+        }
     }
 
     /**

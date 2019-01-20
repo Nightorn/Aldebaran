@@ -31,11 +31,11 @@ module.exports = class CommandHandler {
      * @param {object} message Message
      * @param {string[]} args Command Args
      */
-    execute(command, bot, message, args) {
+    async execute(command, bot, message, args) {
         try {
             const result = this.commands.get(command);
             if (result !== undefined) {
-                return result.execute(bot, message, args);
+                return await result.execute(bot, message, args);
             } else {
                 throw new RangeError('Unknown Command')
             }

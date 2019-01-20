@@ -17,7 +17,7 @@ exports.run = async (bot, message) => {
 	const command = args.shift().toLowerCase();
 
 	try {
-		bot.commandHandler.execute(command, bot, message, args);
+		await bot.commandHandler.execute(command, bot, message, args);
 	} catch(err) {
 		if (err.message === 'Insufficient Bot Permissions') {
 			message.channel.send(`**${message.author.username}**, you are missing required permissions to execute this command.`);
