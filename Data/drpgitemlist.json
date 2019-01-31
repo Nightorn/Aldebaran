@@ -8381,9 +8381,11 @@
             "type": "helm"
         },
         {
+            "artist": "「Takashi」#6110",
             "cost": -1,
             "desc": "It's a shiny blue and green rock.",
             "id": "597",
+            "image": "items/Opal.png",
             "level": 20,
             "name": "Opal Gemstone",
             "plural": "Opal Gemstones",
@@ -8449,9 +8451,11 @@
             }
         },
         {
+            "artist": "「Takashi」#6110",
             "cost": -1,
             "desc": "It's a shiny black and white rock",
             "id": "596",
+            "image": "items/Onyx.png",
             "level": 20,
             "name": "Onyx Gemstone",
             "plural": "Onyx Gemstones",
@@ -8475,9 +8479,11 @@
             "type": "dummy"
         },
         {
+            "artist": "「Takashi」#6110",
             "cost": -1,
             "desc": "It's a shiny green rock",
             "id": "595",
+            "image": "items/Jade.png",
             "level": 20,
             "name": "Jade Gemstone",
             "plural": "Jade Gemstones",
@@ -8563,9 +8569,11 @@
             "type": "ring"
         },
         {
+            "artist": "「Takashi」#6110",
             "cost": -1,
             "desc": "It's a shiny violet rock",
             "id": "594",
+            "image": "items/Amethyst.png",
             "level": 20,
             "name": "Amethyst Gemstone",
             "plural": "Amethyst Gemstones",
@@ -10515,6 +10523,134 @@
             "type": "ring"
         },
         {
+            "cost": -1,
+            "desc": "An alloy made when nova crystals interact with steel.",
+            "id": "708",
+            "image": "items/novasteel_ingot-2.png",
+            "items": "novasteel_ingot-2.png",
+            "level": 25,
+            "name": "Novasteel Ingot",
+            "plural": "Novasteel Ingots",
+            "prefix": "A",
+            "sellable": false,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
+            "cost": -1,
+            "desc": "The Unicorn Gods Are Envious Of Its Power",
+            "id": "58",
+            "image": "items/unicorn.png",
+            "level": 5,
+            "name": "Unicorn Horn",
+            "plural": "Unicorn Horns",
+            "prefix": "The",
+            "sellable": false,
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 25,
+                    "min": 20
+                }
+            }
+        },
+        {
+            "cost": -1,
+            "desc": "A ring that is bless with Myrissa's fighting spirit.",
+            "donate": true,
+            "id": "713",
+            "level": 100,
+            "membersOnly": false,
+            "name": "Ring of Myr",
+            "plural": "Rings of Myr",
+            "prefix": "A",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
+        },
+        {
+            "cost": -1,
+            "def": 0,
+            "desc": "This piece of apparel was the required clothing for every vault and is comprised of a light blue jumpsuit with a yellow line around the neck, middle and sleeves. It increases Energy Resistance by 5 and Radiation Resistance by 10 when worn.",
+            "id": "591",
+            "level": 1,
+            "name": "Vault Jumpsuit",
+            "plural": "Vault Jumpsuits",
+            "prefix": "a",
+            "sellable": false,
+            "tradable": true,
+            "type": "chest"
+        },
+        {
+            "cost": -1,
+            "desc": "A pendant given to the tributes of the Hunger Games.",
+            "donate": false,
+            "id": "709",
+            "image": "items/HG-Pendant.png",
+            "level": 50,
+            "membersOnly": false,
+            "name": "HG Pendant",
+            "plural": "HG Pendants",
+            "prefix": "A",
+            "sellable": false,
+            "tradable": true,
+            "type": "necklace"
+        },
+        {
+            "cost": -1,
+            "desc": "Forged In The Darkest Blood Well Of The Planes",
+            "id": "59",
+            "image": "items/book.png",
+            "level": 10,
+            "name": "Blood Magic",
+            "plural": "Blood Magic",
+            "prefix": "True",
+            "sellable": false,
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 86,
+                    "min": 66
+                }
+            }
+        },
+        {
+            "attributes": {
+                "xpBoost": 13
+            },
+            "cost": -1,
+            "desc": " A pendant given to the members of the Elven high council for their service.",
+            "donate": true,
+            "id": "712",
+            "level": 130,
+            "membersOnly": false,
+            "name": "Elven Pendant",
+            "plural": "Elven Pendant's",
+            "prefix": "an",
+            "sellable": false,
+            "tradable": false,
+            "type": "necklace"
+        },
+        {
+            "artist": "「Takashi」#6110",
+            "cost": -1,
+            "desc": "It's a shiny blue gemstone.",
+            "id": "598",
+            "image": "items/Sapphire.png",
+            "level": 20,
+            "name": "Sapphire",
+            "plural": "Sapphires",
+            "prefix": "A",
+            "sell": "15000",
+            "sellable": true,
+            "tradable": false,
+            "type": "dummy"
+        },
+        {
             "cost": 80,
             "desc": "Doesn't fall far from the tree.",
             "forage": true,
@@ -10552,21 +10688,28 @@
         },
         {
             "cost": -1,
-            "desc": "The Unicorn Gods Are Envious Of Its Power",
-            "id": "58",
-            "image": "items/unicorn.png",
-            "level": 5,
-            "name": "Unicorn Horn",
-            "plural": "Unicorn Horns",
-            "prefix": "The",
+            "desc": "Made from Nova lilies, this potion will grant the user more experience during combat.",
+            "donate": true,
+            "id": "583",
+            "image": "items/Nova_Potion.png",
+            "level": 500,
+            "name": "Nova Potion",
+            "plural": "Nova Potions",
+            "potion": {
+                "boost": {
+                    "xpBoost": "1.25"
+                },
+                "effects": {
+                    "xpBoost": 1.25
+                },
+                "last": 1,
+                "temp": true,
+                "time": 3600000
+            },
+            "prefix": " ",
             "sellable": false,
-            "type": "weapon",
-            "weapon": {
-                "dmg": {
-                    "max": 25,
-                    "min": 20
-                }
-            }
+            "tradable": false,
+            "type": "effectpotion"
         },
         {
             "cost": -1,
@@ -10587,66 +10730,193 @@
         },
         {
             "cost": -1,
-            "def": 0,
-            "desc": "This piece of apparel was the required clothing for every vault and is comprised of a light blue jumpsuit with a yellow line around the neck, middle and sleeves. It increases Energy Resistance by 5 and Radiation Resistance by 10 when worn.",
-            "id": "591",
+            "desc": "A ring that was made only for Wileria. She was hot with an unbearable smoldering intensity. This ring is unique, so is Wileria !",
+            "donate": true,
+            "id": "599",
             "level": 1,
-            "name": "Vault Jumpsuit",
-            "plural": "Vault Jumpsuits",
-            "prefix": "a",
-            "sellable": false,
-            "tradable": true,
-            "type": "chest"
-        },
-        {
-            "cost": 400,
-            "desc": "Remember that weird octopus witch lady in The Little Mermaid? Yeah, that.",
-            "fish": {
-                "amount": {
-                    "max": "1",
-                    "min": "1"
-                },
-                "chance": 40,
-                "minlevel": 1,
-                "xp": {
-                    "regular": {
-                        "max": "round(sqrt((sqrt(level)*0.25)*random(10, 15) / 2))",
-                        "min": "round(sqrt((sqrt(level)*0.25)*random(5, 10) / 2))"
-                    },
-                    "skill": {
-                        "max": "round(sqrt((sqrt(skillLevel)*0.25)*random(10, 15) / 2))",
-                        "min": "round(sqrt((sqrt(skillLevel)*0.25)*random(5, 10) / 2))"
-                    }
-                }
+            "name": "Wile's Angelic Halo",
+            "plural": "Wile's Angelic Halo",
+            "prefix": "A",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
             },
-            "id": "82",
-            "image": "items/octopus2.png",
-            "level": 4,
-            "name": "Octopus",
-            "plural": "Octopi",
-            "prefix": "a",
-            "sell": "330",
-            "sellable": true,
-            "tradable": true,
-            "type": "fish"
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
         },
         {
             "cost": -1,
-            "desc": "Forged In The Darkest Blood Well Of The Planes",
-            "id": "59",
-            "image": "items/book.png",
-            "level": 10,
-            "name": "Blood Magic",
-            "plural": "Blood Magic",
-            "prefix": "True",
+            "desc": "Broken pieces of a Nova Crystal.",
+            "id": "710",
+            "level": 25,
+            "name": "Nova Shard",
+            "plural": "Nova Shards",
+            "prefix": "A",
+            "sell": -1,
             "sellable": false,
-            "type": "weapon",
-            "weapon": {
-                "dmg": {
-                    "max": 86,
-                    "min": 66
-                }
-            }
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
+            "artist": "「Takashi」#6110",
+            "cost": -1,
+            "desc": "It's a shiny green rock",
+            "id": "593",
+            "image": "items/Emerald.png",
+            "level": 20,
+            "name": "Emerald Gemstone",
+            "plural": "Emerald Gemstones",
+            "prefix": "A",
+            "sell": "10000",
+            "sellable": true,
+            "tradable": false,
+            "type": "dummy"
+        },
+        {
+            "attribs": {
+                "xpBoost": 5
+            },
+            "attributes": {
+                "xpBoost": 5
+            },
+            "cost": -1,
+            "def": 5,
+            "defense": "5",
+            "desc": "A chestplate that radiates Myrissa's adventurous spirit.",
+            "donate": true,
+            "id": "720",
+            "level": 100,
+            "membersOnly": false,
+            "name": "Myr's Battlewear",
+            "plural": "Myr's Battlewears",
+            "prefix": "A",
+            "sellable": false,
+            "tradable": false,
+            "type": "chest"
+        },
+        {
+            "cost": -1,
+            "desc": "Grants the user a temporary increase in strength.",
+            "id": "6",
+            "image": "items/strength-potion.png",
+            "level": 3,
+            "name": "Strength Potion",
+            "plural": "Strength Potions",
+            "potion": {
+                "boost": {
+                    "strength": "1.25"
+                },
+                "effects": {
+                    "strength": 1.25
+                },
+                "last": 3,
+                "temp": true,
+                "time": 10800000
+            },
+            "prefix": "a",
+            "type": "effectpotion"
+        },
+        {
+            "cost": -1,
+            "desc": "The heirloom of House Stark, said to be crafted by Bran the Builder, oddly enough it always feels warm.",
+            "donate": true,
+            "id": "711",
+            "inv": "The heirloom of House Stark, said to be crafted by Bran the Builder, oddly enough it always feels warm.",
+            "level": 1,
+            "membersOnly": false,
+            "name": "Stark's Ring",
+            "plural": "Stark's Rings",
+            "prefix": "The",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
+        },
+        {
+            "artist": "「Takashi」#6110",
+            "cost": -1,
+            "desc": "It's a shiny red rock",
+            "id": "592",
+            "image": "items/Ruby.png",
+            "level": 20,
+            "name": "Ruby Gemstone",
+            "plural": "Ruby Gemstones",
+            "prefix": "A",
+            "sell": "10000",
+            "sellable": true,
+            "tradable": false,
+            "type": "dummy"
+        },
+        {
+            "cost": -1,
+            "def": 5,
+            "defense": "1",
+            "desc": "A terribly bright yellow and elongated armor clad with two black gems on each end.",
+            "donate": true,
+            "id": "721",
+            "level": 5,
+            "membersOnly": false,
+            "name": "Archangel's Divine Bananasuit",
+            "plural": "Archangel's Divine Bananasuit",
+            "prefix": "An",
+            "sellable": false,
+            "tradable": false,
+            "type": "chest"
+        },
+        {
+            "cost": -1,
+            "desc": "A dummy sword guard part",
+            "id": "606",
+            "level": 1,
+            "name": "Dummy Sword Guard",
+            "part": {
+                "boost": 0.98,
+                "name": "Dirty",
+                "type": "guard"
+            },
+            "plural": "Dummy Sword Guards",
+            "prefix": "a",
+            "type": "part"
+        },
+        {
+            "cost": -1,
+            "desc": "Magically crafted from the melted Valyrian Sword - Ice. Wearing this turns your blade into Valyrian Steel.",
+            "donate": true,
+            "id": "718",
+            "image": "items/ice-ring.png",
+            "level": 100,
+            "membersOnly": false,
+            "name": "Ice",
+            "plural": "Ice",
+            "prefix": " ",
+            "ring": {
+                "attribute": "strength",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
+        },
+        {
+            "cost": -1,
+            "desc": " A problem has been detected and      has been shut down to prevent damage to your computer. If this is the first time you've encountered this error, please find the nearest computer disposal team as your computer has gained sentience. If this screen appears again, please leave the premises in the most expedient manner possible, also known as run for your life.",
+            "donate": true,
+            "id": "604",
+            "level": 4,
+            "name": "[FILE READ ERROR]",
+            "plural": "[FILE READ ERROR]",
+            "prefix": "0x00000000",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
         },
         {
             "cost": -1,
@@ -10709,14 +10979,294 @@
         },
         {
             "cost": -1,
-            "desc": "It's a shiny blue gemstone.",
-            "id": "598",
-            "level": 20,
-            "name": "Sapphire",
-            "plural": "Sapphires",
+            "desc": "A dummy sword grip part",
+            "id": "607",
+            "level": 1,
+            "name": "Dummy Sword Grip",
+            "part": {
+                "damage": 8,
+                "type": "grip"
+            },
+            "plural": "Dummy Sword Grips",
+            "prefix": "a",
+            "type": "part"
+        },
+        {
+            "attribs": {
+                "xpBoost": 5
+            },
+            "attributes": {
+                "xpBoost": 5
+            },
+            "cost": -1,
+            "def": 5,
+            "defense": "5",
+            "desc": "A helmet that radiates Myrissa's adventurous spirit.",
+            "donate": true,
+            "id": "719",
+            "level": 100,
+            "membersOnly": false,
+            "name": "Myr's Helmet",
+            "plural": "Myr's Helmets",
             "prefix": "A",
-            "sell": "15000",
+            "sellable": false,
+            "tradable": false,
+            "type": "helm"
+        },
+        {
+            "cost": -1,
+            "desc": "A dummy sword blade part",
+            "id": "605",
+            "level": 1,
+            "name": "Dummy Sword Blade",
+            "part": {
+                "damage": 4,
+                "material": "Rust",
+                "name": "Rust",
+                "type": "blade"
+            },
+            "plural": "Dummy Sword Blades",
+            "prefix": "a",
+            "type": "part"
+        },
+        {
+            "cost": 2500,
+            "desc": "A two-headed axe.",
+            "id": "8",
+            "image": "items/battleaxe.png",
+            "level": 7,
+            "name": "Iron Battleaxe",
+            "plural": "Iron Battleaxes",
+            "prefix": "a",
+            "sell": 625,
             "sellable": true,
+            "tradable": true,
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 15,
+                    "min": 10
+                }
+            }
+        },
+        {
+            "cost": -1,
+            "desc": "A dagger made by combining the power of nova crystals and a small dagger",
+            "id": "617",
+            "image": "items/Nova_Dagger.png",
+            "level": 70,
+            "name": "Nova Dagger",
+            "plural": "Nova Daggers",
+            "prefix": "A",
+            "sellable": false,
+            "tradable": true,
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 265,
+                    "min": 238
+                }
+            }
+        },
+        {
+            "attributes": {
+                "xpBoost": 30
+            },
+            "cost": -1,
+            "desc": "After years of training to perfect the special move \"Rising Dragon Soars the Sky\", this necklace is bestowed upon he who masters it ",
+            "donate": true,
+            "id": "723",
+            "level": 300,
+            "membersOnly": false,
+            "name": "Dragon's Head",
+            "plural": "Dragon's Heads",
+            "prefix": "A",
+            "sellable": false,
+            "tradable": false,
+            "type": "necklace"
+        },
+        {
+            "cost": -1,
+            "desc": "It's a sword blade made from Leptocite",
+            "id": "615",
+            "level": 25,
+            "name": "Leptocite Sword Blade",
+            "part": {
+                "damage": 78,
+                "material": "Leptocite",
+                "name": "Leptocite",
+                "type": "blade"
+            },
+            "plural": "Leptocite Sword Blades",
+            "prefix": "a",
+            "type": "part"
+        },
+        {
+            "cost": -1,
+            "desc": "Golden and Light.",
+            "id": "81",
+            "image": "items/feather1.png",
+            "level": 12,
+            "name": "Golden Feather",
+            "plural": "Golden Feathers",
+            "prefix": "a",
+            "sell": "40",
+            "sellable": true,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
+            "cost": -1,
+            "desc": "A sword guard made from Leptocite",
+            "id": "616",
+            "level": 25,
+            "name": "Leptocite Sword Guard",
+            "part": {
+                "boost": 1.25,
+                "name": "Decent",
+                "type": "guard"
+            },
+            "plural": "Leptocite Guards",
+            "prefix": "a",
+            "type": "part"
+        },
+        {
+            "cost": -1,
+            "desc": "A curved yellow handle with a round black metal striking head",
+            "donate": true,
+            "id": "722",
+            "level": 5,
+            "membersOnly": false,
+            "name": "Archangel's Divine Banana Flail",
+            "plural": "Archangel's Divine Banana Flails",
+            "prefix": "An",
+            "sellable": false,
+            "tradable": false,
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 14,
+                    "min": 9
+                }
+            }
+        },
+        {
+            "cost": -1,
+            "desc": "A sword grip made from Leptocite",
+            "id": "614",
+            "level": 25,
+            "name": "Leptocite Sword Grip",
+            "part": {
+                "damage": 87,
+                "type": "grip"
+            },
+            "plural": "Leptocite Sword Grips",
+            "prefix": "a",
+            "type": "part"
+        },
+        {
+            "cost": -1,
+            "desc": "It's a chunk of meat.",
+            "id": "80",
+            "image": "items/meat.png",
+            "level": 12,
+            "name": "Meat",
+            "plural": "Meats",
+            "prefix": "Some",
+            "sell": "115",
+            "sellable": true,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
+            "cost": -1,
+            "desc": "A crystal owned by the royal family, but gifted upon the people to use",
+            "donate": true,
+            "id": "625",
+            "level": 30,
+            "name": "Royal Crystal",
+            "plural": "Royal Crystals",
+            "prefix": "a",
+            "sell": -1,
+            "sellable": false,
+            "tradable": false,
+            "type": "dummy"
+        },
+        {
+            "cost": 400,
+            "desc": "Remember that weird octopus witch lady in The Little Mermaid? Yeah, that.",
+            "fish": {
+                "amount": {
+                    "max": "1",
+                    "min": "1"
+                },
+                "chance": 40,
+                "minlevel": 1,
+                "xp": {
+                    "regular": {
+                        "max": "round(sqrt((sqrt(level)*0.25)*random(10, 15) / 2))",
+                        "min": "round(sqrt((sqrt(level)*0.25)*random(5, 10) / 2))"
+                    },
+                    "skill": {
+                        "max": "round(sqrt((sqrt(skillLevel)*0.25)*random(10, 15) / 2))",
+                        "min": "round(sqrt((sqrt(skillLevel)*0.25)*random(5, 10) / 2))"
+                    }
+                }
+            },
+            "id": "82",
+            "image": "items/octopus2.png",
+            "level": 4,
+            "name": "Octopus",
+            "plural": "Octopi",
+            "prefix": "a",
+            "sell": "330",
+            "sellable": true,
+            "tradable": true,
+            "type": "fish"
+        },
+        {
+            "cost": -1,
+            "desc": "Another ring of the AsianaPrince, one to strengthen him in his training",
+            "donate": true,
+            "id": "626",
+            "level": 150,
+            "name": "Royal Ring of Strength",
+            "plural": "Royal Rings of Strength",
+            "prefix": "The",
+            "ring": {
+                "attribute": "strength",
+                "boost": 1.5
+            },
+            "sell": -1,
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
+        },
+        {
+            "cost": -1,
+            "desc": "Infused with the powers of the earth.",
+            "id": "89",
+            "image": "items/earthcrystal.png",
+            "level": 20,
+            "name": "Earth Shard",
+            "plural": "Earth Shards",
+            "prefix": "a",
+            "sell": "125",
+            "sellable": true,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
+            "cost": -1,
+            "desc": "A popular ingredient passed down for generations, by the royal family",
+            "donate": true,
+            "id": "624",
+            "level": 1,
+            "name": "Royal Ingredient",
+            "plural": "Royal Ingredients",
+            "prefix": "a",
+            "sell": -1,
+            "sellable": false,
             "tradable": false,
             "type": "dummy"
         },
@@ -10754,65 +11304,49 @@
         },
         {
             "cost": -1,
-            "desc": "Made from Nova lilies, this potion will grant the user more experience during combat.",
+            "desc": "A pickaxe carefully crafted for the royals, but gifted down to the people by the royals",
             "donate": true,
-            "id": "583",
-            "image": "items/Nova_Potion.png",
-            "level": 500,
-            "name": "Nova Potion",
-            "plural": "Nova Potions",
-            "potion": {
-                "boost": {
-                    "xpBoost": "1.25"
-                },
-                "effects": {
-                    "xpBoost": 1.25
-                },
-                "last": 1,
-                "temp": true,
-                "time": 3600000
-            },
-            "prefix": " ",
+            "id": "627",
+            "itemBoost": 7,
+            "level": 125,
+            "name": "Royal Pickaxe",
+            "plural": "Royal Pickaxes",
+            "prefix": "A",
             "sellable": false,
+            "skillLevel": 20,
+            "toolType": "pickaxe",
             "tradable": false,
-            "type": "effectpotion"
-        },
-        {
-            "cost": 2500,
-            "desc": "A two-headed axe.",
-            "id": "8",
-            "image": "items/battleaxe.png",
-            "level": 7,
-            "name": "Iron Battleaxe",
-            "plural": "Iron Battleaxes",
-            "prefix": "a",
-            "sell": 625,
-            "sellable": true,
-            "tradable": true,
-            "type": "weapon",
-            "weapon": {
-                "dmg": {
-                    "max": 15,
-                    "min": 10
-                }
-            }
+            "type": "tool"
         },
         {
             "cost": -1,
-            "desc": "A ring that was made only for Wileria. She was hot with an unbearable smoldering intensity. This ring is unique, so is Wileria !",
-            "donate": true,
-            "id": "599",
-            "level": 1,
-            "name": "Wile's Angelic Halo",
-            "plural": "Wile's Angelic Halo",
-            "prefix": "A",
-            "ring": {
-                "attribute": "xpBoost",
-                "boost": 1.5
+            "desc": "Infused with the powers of fire.",
+            "id": "88",
+            "image": "items/firecrystal.png",
+            "level": 20,
+            "name": "Fire Shard",
+            "plural": "Fire Shards",
+            "prefix": "a",
+            "sell": "125",
+            "sellable": true,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
+            "attributes": {
+                "xpBoost": 7
             },
+            "cost": -1,
+            "desc": "An Amulet made with a gem of Pink Slime that boosts XP.",
+            "donate": true,
+            "id": "634",
+            "level": 100,
+            "name": "Amulet of Pink Slime",
+            "plural": "Amulets of Pink Slime",
+            "prefix": "The",
             "sellable": false,
             "tradable": false,
-            "type": "ring"
+            "type": "necklace"
         },
         {
             "cost": 100,
@@ -10830,52 +11364,64 @@
         },
         {
             "cost": -1,
-            "desc": "It's a shiny green rock",
-            "id": "593",
-            "level": 20,
-            "name": "Emerald Gemstone",
-            "plural": "Emerald Gemstones",
-            "prefix": "A",
-            "sell": "10000",
-            "sellable": true,
+            "desc": "A delightfully shiny rod that attracts the rare sea creatures",
+            "donate": true,
+            "id": "637",
+            "itemBoost": 5,
+            "level": 160,
+            "name": "Sharkeys Golden Rod",
+            "plural": "Sharkeys Golden Rods",
+            "prefix": "",
+            "sellable": false,
+            "skillLevel": 17,
+            "toolData": {
+                "catchChance": 5
+            },
+            "toolType": "fishingRod",
             "tradable": false,
-            "type": "dummy"
+            "type": "tool"
         },
         {
-            "cost": -1,
-            "desc": "Golden and Light.",
-            "id": "81",
-            "image": "items/feather1.png",
-            "level": 12,
-            "name": "Golden Feather",
-            "plural": "Golden Feathers",
+            "cost": 4500,
+            "desc": "A hammer with a golden shell.",
+            "id": "9",
+            "image": "items/hammer.png",
+            "level": 10,
+            "name": "Golden Hammer",
+            "plural": "Golden Hammers",
             "prefix": "a",
-            "sell": "40",
+            "sell": 1125,
             "sellable": true,
             "tradable": true,
-            "type": "dummy"
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 18,
+                    "min": 13
+                }
+            }
         },
         {
-            "cost": -1,
-            "desc": "Grants the user a temporary increase in strength.",
-            "id": "6",
-            "image": "items/strength-potion.png",
-            "level": 3,
-            "name": "Strength Potion",
-            "plural": "Strength Potions",
-            "potion": {
-                "boost": {
-                    "strength": "1.25"
-                },
-                "effects": {
-                    "strength": 1.25
-                },
-                "last": 3,
-                "temp": true,
-                "time": 10800000
+            "attributes": {
+                "goldBoost": 5
             },
-            "prefix": "a",
-            "type": "effectpotion"
+            "cost": -1,
+            "desc": "The Sword of Pink Slime Sucks gold from the enemy.",
+            "donate": true,
+            "id": "635",
+            "level": 600,
+            "name": "Sword of Pink Slime",
+            "plural": "Swords of Pink Slime",
+            "prefix": "The",
+            "sellable": false,
+            "tradable": false,
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 2615,
+                    "min": 2240
+                }
+            }
         },
         {
             "cost": -1,
@@ -10928,261 +11474,12 @@
         },
         {
             "cost": -1,
-            "desc": "It's a shiny red rock",
-            "id": "592",
-            "level": 20,
-            "name": "Ruby Gemstone",
-            "plural": "Ruby Gemstones",
-            "prefix": "A",
-            "sell": "10000",
-            "sellable": true,
-            "tradable": false,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "It's a chunk of meat.",
-            "id": "80",
-            "image": "items/meat.png",
-            "level": 12,
-            "name": "Meat",
-            "plural": "Meats",
-            "prefix": "Some",
-            "sell": "115",
-            "sellable": true,
-            "tradable": true,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "A dummy sword guard part",
-            "id": "606",
+            "desc": "Celebrating Mackan's 19th birthday!",
+            "id": "636",
             "level": 1,
-            "name": "Dummy Sword Guard",
-            "part": {
-                "boost": 0.98,
-                "name": "Dirty",
-                "type": "guard"
-            },
-            "plural": "Dummy Sword Guards",
-            "prefix": "a",
-            "type": "part"
-        },
-        {
-            "cost": -1,
-            "desc": " A problem has been detected and      has been shut down to prevent damage to your computer. If this is the first time you've encountered this error, please find the nearest computer disposal team as your computer has gained sentience. If this screen appears again, please leave the premises in the most expedient manner possible, also known as run for your life.",
-            "donate": true,
-            "id": "604",
-            "level": 4,
-            "name": "[FILE READ ERROR]",
-            "plural": "[FILE READ ERROR]",
-            "prefix": "0x00000000",
-            "ring": {
-                "attribute": "xpBoost",
-                "boost": 1.5
-            },
-            "sellable": false,
-            "tradable": false,
-            "type": "ring"
-        },
-        {
-            "cost": -1,
-            "desc": "Infused with the powers of the earth.",
-            "id": "89",
-            "image": "items/earthcrystal.png",
-            "level": 20,
-            "name": "Earth Shard",
-            "plural": "Earth Shards",
-            "prefix": "a",
-            "sell": "125",
-            "sellable": true,
-            "tradable": true,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "A dummy sword grip part",
-            "id": "607",
-            "level": 1,
-            "name": "Dummy Sword Grip",
-            "part": {
-                "damage": 8,
-                "type": "grip"
-            },
-            "plural": "Dummy Sword Grips",
-            "prefix": "a",
-            "type": "part"
-        },
-        {
-            "cost": -1,
-            "desc": "A dummy sword blade part",
-            "id": "605",
-            "level": 1,
-            "name": "Dummy Sword Blade",
-            "part": {
-                "damage": 4,
-                "material": "Rust",
-                "name": "Rust",
-                "type": "blade"
-            },
-            "plural": "Dummy Sword Blades",
-            "prefix": "a",
-            "type": "part"
-        },
-        {
-            "cost": -1,
-            "desc": "A dagger made by combining the power of nova crystals and a small dagger",
-            "id": "617",
-            "image": "items/Nova_Dagger.png",
-            "level": 70,
-            "name": "Nova Dagger",
-            "plural": "Nova Daggers",
-            "prefix": "A",
-            "sellable": false,
-            "tradable": true,
-            "type": "weapon",
-            "weapon": {
-                "dmg": {
-                    "max": 265,
-                    "min": 238
-                }
-            }
-        },
-        {
-            "cost": -1,
-            "desc": "It's a sword blade made from Leptocite",
-            "id": "615",
-            "level": 25,
-            "name": "Leptocite Sword Blade",
-            "part": {
-                "damage": 78,
-                "material": "Leptocite",
-                "name": "Leptocite",
-                "type": "blade"
-            },
-            "plural": "Leptocite Sword Blades",
-            "prefix": "a",
-            "type": "part"
-        },
-        {
-            "cost": 4500,
-            "desc": "A hammer with a golden shell.",
-            "id": "9",
-            "image": "items/hammer.png",
-            "level": 10,
-            "name": "Golden Hammer",
-            "plural": "Golden Hammers",
-            "prefix": "a",
-            "sell": 1125,
-            "sellable": true,
-            "tradable": true,
-            "type": "weapon",
-            "weapon": {
-                "dmg": {
-                    "max": 18,
-                    "min": 13
-                }
-            }
-        },
-        {
-            "cost": -1,
-            "desc": "A sword guard made from Leptocite",
-            "id": "616",
-            "level": 25,
-            "name": "Leptocite Sword Guard",
-            "part": {
-                "boost": 1.25,
-                "name": "Decent",
-                "type": "guard"
-            },
-            "plural": "Leptocite Guards",
-            "prefix": "a",
-            "type": "part"
-        },
-        {
-            "cost": -1,
-            "desc": "Infused with the powers of fire.",
-            "id": "88",
-            "image": "items/firecrystal.png",
-            "level": 20,
-            "name": "Fire Shard",
-            "plural": "Fire Shards",
-            "prefix": "a",
-            "sell": "125",
-            "sellable": true,
-            "tradable": true,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "A sword grip made from Leptocite",
-            "id": "614",
-            "level": 25,
-            "name": "Leptocite Sword Grip",
-            "part": {
-                "damage": 87,
-                "type": "grip"
-            },
-            "plural": "Leptocite Sword Grips",
-            "prefix": "a",
-            "type": "part"
-        },
-        {
-            "cost": -1,
-            "desc": "A crystal owned by the royal family, but gifted upon the people to use",
-            "donate": true,
-            "id": "625",
-            "level": 30,
-            "name": "Royal Crystal",
-            "plural": "Royal Crystals",
-            "prefix": "a",
-            "sell": -1,
-            "sellable": false,
-            "tradable": false,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "Another ring of the AsianaPrince, one to strengthen him in his training",
-            "donate": true,
-            "id": "626",
-            "level": 150,
-            "name": "Royal Ring of Strength",
-            "plural": "Royal Rings of Strength",
-            "prefix": "The",
-            "ring": {
-                "attribute": "strength",
-                "boost": 1.5
-            },
-            "sell": -1,
-            "sellable": false,
-            "tradable": false,
-            "type": "ring"
-        },
-        {
-            "cost": -1,
-            "desc": "Infused with the powers of the air.",
-            "id": "90",
-            "image": "items/aircrystal.png",
-            "level": 20,
-            "name": "Air Shard",
-            "plural": "Air Shards",
-            "prefix": "a",
-            "sell": "125",
-            "sellable": true,
-            "tradable": true,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "A popular ingredient passed down for generations, by the royal family",
-            "donate": true,
-            "id": "624",
-            "level": 1,
-            "name": "Royal Ingredient",
-            "plural": "Royal Ingredients",
-            "prefix": "a",
-            "sell": -1,
+            "name": "Mackans 19th Birthday Cake",
+            "plural": "Mackans 19th Birthday Cakes",
+            "prefix": "",
             "sellable": false,
             "tradable": false,
             "type": "dummy"
@@ -11199,116 +11496,6 @@
             "sell": "7",
             "sellable": true,
             "tradable": true,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "A pickaxe carefully crafted for the royals, but gifted down to the people by the royals",
-            "donate": true,
-            "id": "627",
-            "itemBoost": 7,
-            "level": 125,
-            "name": "Royal Pickaxe",
-            "plural": "Royal Pickaxes",
-            "prefix": "A",
-            "sellable": false,
-            "skillLevel": 20,
-            "toolType": "pickaxe",
-            "tradable": false,
-            "type": "tool"
-        },
-        {
-            "attributes": {
-                "xpBoost": 7
-            },
-            "cost": -1,
-            "desc": "An Amulet made with a gem of Pink Slime that boosts XP.",
-            "donate": true,
-            "id": "634",
-            "level": 100,
-            "name": "Amulet of Pink Slime",
-            "plural": "Amulets of Pink Slime",
-            "prefix": "The",
-            "sellable": false,
-            "tradable": false,
-            "type": "necklace"
-        },
-        {
-            "cost": -1,
-            "desc": "A delightfully shiny rod that attracts the rare sea creatures",
-            "donate": true,
-            "id": "637",
-            "itemBoost": 5,
-            "level": 160,
-            "name": "Sharkeys Golden Rod",
-            "plural": "Sharkeys Golden Rods",
-            "prefix": "",
-            "sellable": false,
-            "skillLevel": 17,
-            "toolData": {
-                "catchChance": 5
-            },
-            "toolType": "fishingRod",
-            "tradable": false,
-            "type": "tool"
-        },
-        {
-            "cost": -1,
-            "desc": "Proof that this player is/was a developer for Discord Dungeons.",
-            "id": "98",
-            "image": "items/developersbadge.png",
-            "level": 1,
-            "name": "Developer's Badge",
-            "plural": "Developer's Badges",
-            "prefix": "a",
-            "sellable": false,
-            "tradable": false,
-            "type": "dummy"
-        },
-        {
-            "attributes": {
-                "goldBoost": 5
-            },
-            "cost": -1,
-            "desc": "The Sword of Pink Slime Sucks gold from the enemy.",
-            "donate": true,
-            "id": "635",
-            "level": 600,
-            "name": "Sword of Pink Slime",
-            "plural": "Swords of Pink Slime",
-            "prefix": "The",
-            "sellable": false,
-            "tradable": false,
-            "type": "weapon",
-            "weapon": {
-                "dmg": {
-                    "max": 2615,
-                    "min": 2240
-                }
-            }
-        },
-        {
-            "cost": -1,
-            "desc": "Only a god (or, in this case, a Discord App developer) can hold this key.",
-            "id": "99",
-            "image": "items/keytodiscord.png",
-            "level": 1,
-            "name": "Key to Discord",
-            "plural": "Keys to Discord",
-            "prefix": "the",
-            "sellable": false,
-            "type": "dummy"
-        },
-        {
-            "cost": -1,
-            "desc": "Celebrating Mackan's 19th birthday!",
-            "id": "636",
-            "level": 1,
-            "name": "Mackans 19th Birthday Cake",
-            "plural": "Mackans 19th Birthday Cakes",
-            "prefix": "",
-            "sellable": false,
-            "tradable": false,
             "type": "dummy"
         },
         {
@@ -11345,6 +11532,20 @@
             "type": "necklace"
         },
         {
+            "cost": -1,
+            "desc": "Infused with the powers of the air.",
+            "id": "90",
+            "image": "items/aircrystal.png",
+            "level": 20,
+            "name": "Air Shard",
+            "plural": "Air Shards",
+            "prefix": "a",
+            "sell": "125",
+            "sellable": true,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
             "cost": 200000,
             "desc": "Found on the 3rd Floor. This Rapier was forged from an Agentium Ingot.",
             "id": "64",
@@ -11363,6 +11564,23 @@
                     "min": 200
                 }
             }
+        },
+        {
+            "cost": -1,
+            "desc": "Provides XP boost to user",
+            "donate": true,
+            "id": "642",
+            "level": 14,
+            "name": "Ring of Fast Life",
+            "plural": "Rings of Fast Life",
+            "prefix": "A",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
         },
         {
             "cost": -1,
@@ -11396,20 +11614,16 @@
         },
         {
             "cost": -1,
-            "desc": "Provides XP boost to user",
-            "donate": true,
-            "id": "642",
-            "level": 14,
-            "name": "Ring of Fast Life",
-            "plural": "Rings of Fast Life",
-            "prefix": "A",
-            "ring": {
-                "attribute": "xpBoost",
-                "boost": 1.5
-            },
+            "desc": "Proof that this player is/was a developer for Discord Dungeons.",
+            "id": "98",
+            "image": "items/developersbadge.png",
+            "level": 1,
+            "name": "Developer's Badge",
+            "plural": "Developer's Badges",
+            "prefix": "a",
             "sellable": false,
             "tradable": false,
-            "type": "ring"
+            "type": "dummy"
         },
         {
             "cost": -1,
@@ -11427,6 +11641,40 @@
                 "dmg": {
                     "max": 832,
                     "min": 736
+                }
+            }
+        },
+        {
+            "cost": -1,
+            "desc": "Only a god (or, in this case, a Discord App developer) can hold this key.",
+            "id": "99",
+            "image": "items/keytodiscord.png",
+            "level": 1,
+            "name": "Key to Discord",
+            "plural": "Keys to Discord",
+            "prefix": "the",
+            "sellable": false,
+            "type": "dummy"
+        },
+        {
+            "attributes": {
+                "crits": 2
+            },
+            "cost": -1,
+            "desc": "With some cybernetic nova cores, the nova dagger can be upgraded to this item.",
+            "id": "653",
+            "image": "items/nova_dagger.png",
+            "level": 750,
+            "name": "Cybernetic Nova Dagger",
+            "plural": "Cybernetic Nova Daggers",
+            "prefix": "A",
+            "sellable": false,
+            "tradable": false,
+            "type": "weapon",
+            "weapon": {
+                "dmg": {
+                    "max": 2980,
+                    "min": 2680
                 }
             }
         },
@@ -11465,28 +11713,6 @@
                 "dmg": {
                     "max": 360,
                     "min": 310
-                }
-            }
-        },
-        {
-            "attributes": {
-                "crits": 2
-            },
-            "cost": -1,
-            "desc": "With some cybernetic nova cores, the nova dagger can be upgraded to this item.",
-            "id": "653",
-            "image": "items/nova_dagger.png",
-            "level": 750,
-            "name": "Cybernetic Nova Dagger",
-            "plural": "Cybernetic Nova Daggers",
-            "prefix": "A",
-            "sellable": false,
-            "tradable": false,
-            "type": "weapon",
-            "weapon": {
-                "dmg": {
-                    "max": 2980,
-                    "min": 2680
                 }
             }
         },
@@ -12057,7 +12283,7 @@
             "cost": -1,
             "desc": "A mystical result of the combination between magic and nova technology that absorbs starlight and turns it into special materials.",
             "id": "696",
-            "image": "items/nova_trap.png",
+            "image": "items/nova_starlight.png",
             "level": 250,
             "name": "Nova Starlight Absorber",
             "plural": "Nova Starlight Absorbers",
@@ -12165,6 +12391,127 @@
             "type": "dummy"
         },
         {
+            "cost": 0,
+            "desc": "Celebrating the new year of 2019!",
+            "id": "705",
+            "level": 1,
+            "name": "2019 Firework",
+            "plural": "2019 Fireworks",
+            "prefix": "a",
+            "sellable": false,
+            "tradable": false,
+            "type": "dummy"
+        },
+        {
+            "cost": -1,
+            "desc": "Gotten from the 2018 advent calendar",
+            "id": "704",
+            "level": 1,
+            "name": "Christmas Stocking",
+            "plural": "Christmas Stockings",
+            "prefix": "A",
+            "price": -1,
+            "sell": -1,
+            "sellable": false,
+            "tradable": false,
+            "type": "dummy"
+        },
+        {
+            "cost": 0,
+            "desc": "Hello there! See this as a memory, thanks for all your support. If you are new here however... You might not know who I am, or who I was. Never the less, I’m long gone.",
+            "id": "706",
+            "level": 1,
+            "name": "Damien's note",
+            "plural": "Damien's notes",
+            "prefix": "",
+            "sell": -1,
+            "sellable": false,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
+            "cost": -1,
+            "desc": "Riolu Ring for XP",
+            "donate": true,
+            "id": "699",
+            "level": 45,
+            "membersOnly": false,
+            "name": "Ring of Riolu",
+            "plural": "Rings of Riolu",
+            "prefix": "A",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
+        },
+        {
+            "cost": -1,
+            "desc": "A ring created by Ancient Elven goldsmiths, it shine bright with a powerful aura.",
+            "donate": true,
+            "id": "714",
+            "level": 20,
+            "membersOnly": false,
+            "name": "Ring of Wisdom",
+            "plural": "Rings of Wisdom",
+            "prefix": "A",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
+        },
+        {
+            "cost": -1,
+            "def": 11,
+            "desc": "A helm born of only the strongest of rages from those that exceed, a gods strength.",
+            "donate": true,
+            "id": "715",
+            "level": 60,
+            "name": "🌀Void Fury🌀",
+            "plural": "🌀Void Furies🌀",
+            "prefix": "The",
+            "sellable": false,
+            "tradable": false,
+            "type": "helm"
+        },
+        {
+            "cost": -1,
+            "desc": "Don't give up on your dreams. Keep sleeping.",
+            "donate": true,
+            "id": "717",
+            "level": 1,
+            "membersOnly": false,
+            "name": "Oyasumi Ring",
+            "plural": "Oyasumi Rings",
+            "prefix": "The",
+            "ring": {
+                "attribute": "xpBoost",
+                "boost": 1.5
+            },
+            "sellable": false,
+            "tradable": false,
+            "type": "ring"
+        },
+        {
+            "cost": -1,
+            "desc": "An alloy made of iron and stardust.",
+            "id": "707",
+            "image": "items/starmetal.png",
+            "level": 250,
+            "name": "Starmetal Ingot",
+            "plural": "Starmetal Ingots",
+            "prefix": "A",
+            "sell": 1220,
+            "sellable": true,
+            "tradable": true,
+            "type": "dummy"
+        },
+        {
             "cost": 250,
             "desc": "Found Dory.",
             "fish": {
@@ -12244,21 +12591,17 @@
         },
         {
             "cost": -1,
-            "desc": "Riolu Ring for XP",
+            "def": 11,
+            "desc": "A Cloak made by the gods of chaos themselves.",
             "donate": true,
-            "id": "699",
-            "level": 45,
-            "membersOnly": false,
-            "name": "Ring of Riolu",
-            "plural": "Rings of Riolu",
-            "prefix": "A",
-            "ring": {
-                "attribute": "xpBoost",
-                "boost": 1.5
-            },
+            "id": "716",
+            "level": 60,
+            "name": "🌀Cloak of Oblivion🌀",
+            "plural": "🌀Cloaks of Oblivion🌀",
+            "prefix": "The",
             "sellable": false,
             "tradable": false,
-            "type": "ring"
+            "type": "chest"
         },
         {
             "cost": -1,

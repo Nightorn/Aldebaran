@@ -1,9 +1,9 @@
 exports.run = (bot, message, args) => {
     const { MessageEmbed } = require("discord.js");
-    const itemlist = require(`${process.cwd()}/Data/drpgitemlist.json`);
+    const itemlist = require(`${process.cwd()}/Data/drpgitemlist.json`).data;
     var level = (args.length > 0) ? parseInt(args[0]) : 1;
-    var levelmax = Math.floor(level + level)
-    var levelmin = Math.floor(level * .90)
+    var levelmax = (level + 1) * 1.5;
+    var levelmin = Math.floor(level * .90);
 
     let itemnames = [];
     let allWeapons = new Map();
@@ -19,7 +19,7 @@ exports.run = (bot, message, args) => {
     }
 
     for (let [weapon, weaponLevel] of allWeapons) {
-        if (weaponLevel <= levelmin || weaponLevel >= levelmax) {
+        if (weaponLevel < levelmin || weaponLevel > levelmax) {
             allWeapons.delete(weapon); 
         } else if (weaponLevel == level){
             exactWeaponLevelFound.set(weapon, weaponLevel);
