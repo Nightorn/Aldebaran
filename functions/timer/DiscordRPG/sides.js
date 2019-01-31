@@ -10,7 +10,7 @@ module.exports = async function(message) {
 		if (prefix !== null) {
 			const emoji = ["🥕","🍋","🥔","🐟"];
 			var randomemoji = (`${emoji[~~(Math.random() * emoji.length)]}`);
-			if (message.guild.settings.autoDelete !== `off`) message.delete({ timeout: 500 });
+			if (message.guild.settings.autoDelete === 'on') message.delete({ timeout: 500 });
 			const timerEmbed = new MessageEmbed()
 				.setAuthor(message.author.username, message.author.avatarURL())
 				.setColor(0x00AE86)
@@ -28,7 +28,7 @@ module.exports = async function(message) {
 							timerset.delete({ timeout: 5000 });
 							message.author.timers.sides = setTimeout(() => {
 								message.channel.send(`<@${message.author.id}> sides time! ${randomemoji}`).then(msg => {
-								  	msg.delete({ timeout: 180000 });
+									if (message.guild.settings.autoDelete === 'on') msg.delete({ timeout: 180000 });
 								});
 								message.author.timers.sides = null;
 							}, 312500);

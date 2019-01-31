@@ -11,7 +11,7 @@ module.exports = function(bot, message) {
                     user.timers.travel = setTimeout((locationName, message, user) => {
                         user.timers.travel = null;
                         message.channel.send(`<@${user.id}> has arrived at ${locationName} better lock your doors!!`).then(msg => {
-                            if (message.guild.settings.autoDelete !== 'off' && message.guild.settings.autoDelete !== undefined) msg.delete({ timeout: 60000 });
+                            if (message.guild.settings.autoDelete === 'on') msg.delete({ timeout: 60000 });
                         });
                     }, data.traveltime * 1000, locationName, message, user);
                 }
