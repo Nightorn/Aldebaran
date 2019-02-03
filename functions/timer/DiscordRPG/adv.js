@@ -10,7 +10,7 @@ module.exports = function(message) {
 			if (message.guild.settings.autoDelete === 'on') message.delete({ timeout: 1000 });
 			message.author.timers.adventure = setTimeout(() => {
 				message.channel.send(`<@${message.author.id}> adventure time! :crossed_swords:`).then(msg => {
-					if (message.guild.settings.autoDelete !== 'off') msg.delete({ timeout: 10000 });
+					if (message.guild.settings.autoDelete === 'on') msg.delete({ timeout: 10000 });
 				});
 				message.author.timers.adventure = null;
 			}, 13250);
