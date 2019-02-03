@@ -13,7 +13,7 @@ exports.run = async (bot, message) => {
         },
         timestamp: new Date(),
         footer: {
-            icon_url: bot.avatarURL(),
+            icon_url: bot.user.avatarURL(),
             text: "Powered By Nekos.life"
         }
     }});
