@@ -1,6 +1,14 @@
 module.exports = function(bot, message, args) {
-    console.log(message.content)
+	if (message.guild.polluxBoxPing.size === 0) {
+		for (let [id, member] of message.guild.members) {
+			if (member.user.settings.polluxBoxPing === 'on') message.guild.polluxBoxPing.set(id, member.user);
+		}
+	}
     if (message.content.endsWith(`a chance to claim it!`) && message.author.id == "271394014358405121") {
-      message.channel.send(`Come Grab My Box <@310296184436817930> <@384996823556685824> <@266632489546678273> <@207575115616092161> <@226358525410934794> <@267906052366794753> <@348317596606529536> <@196203663054733313> <@153870043590033408> <@152166636302893056> <@234858679168532480><@249645889814003713>\n<@&440727495906689024>`)
+		var list = "Come grab my box!\n ";
+		for (let [id, user] of message.guild.polluxBoxPing) {
+			list += `<@${id}> `;
+		}
+		message.channel.send(list);
     }
 }

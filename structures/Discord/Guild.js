@@ -1,3 +1,4 @@
+const { Collection } = require('discord.js');
 module.exports = (BaseGuild) => {
     return class Guild extends BaseGuild {
         constructor(client, data) {
@@ -14,6 +15,7 @@ module.exports = (BaseGuild) => {
             for (let [key, value] of Object.entries(data)) this[key] = value;
             this.settings = JSON.parse(this.settings);
             this.prefix = this.client.debugMode ? this.client.config.prefix : this.settings.aldebaranPrefix || this.client.config.prefix;
+            this.polluxBoxPing = new Collection();
         }
 
         async create() {
