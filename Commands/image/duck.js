@@ -16,7 +16,7 @@ exports.run = (bot, message, args) => {
 }
 exports.infos = {
     category: "Image",
-    description: "Displays a random duck picture or gif. ",
+    description: "Quack Quack",
     usage: "\`&duck\`",
     example: "\`&duck\`",
 }

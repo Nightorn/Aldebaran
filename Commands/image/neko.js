@@ -20,7 +20,7 @@ exports.run = async (bot, message, args) => {
 }
 exports.infos = {
     category: "Image",
-    description: "Displays a random neko picture or gif. ",
+    description: "Displays a random neko picture or gif.",
     usage: "\`&neko\`",
     example: "\`&neko\`",
 }

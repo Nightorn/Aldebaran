@@ -7,7 +7,7 @@ exports.run = async (bot, message, args) => {
             name: message.author.username,
             icon_url: message.author.avatarURL()
         },
-        description: `***Where off to see the lizard, the wonderful lizard of Oz!***`,
+        description: `***We're off to see the lizard, the wonderful lizard of Oz!***`,
         image: {
             url : data.url,
         },
@@ -20,7 +20,7 @@ exports.run = async (bot, message, args) => {
 }
 exports.infos = {
     category: "Image",
-    description: "Displays a random lizard picture or gif. ",
+    description: "Displays a random lizard picture or gif.",
     usage: "\`&lizard\`",
     example: "\`&lizard\`",
 }
