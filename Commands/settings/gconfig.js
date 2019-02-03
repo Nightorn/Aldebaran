@@ -4,7 +4,7 @@ exports.run = async function(bot, message, args) {
     const parametersAvailable = bot.models.settings.guild;
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
-        for (let [key, data] of Object.entries(parametersAvailable)) description += `**${key}** - ${data.help}\n`;
+        for (let [key, data] of Object.entries(parametersAvailable)) if (message.guild.members.get(data.showOnlyIfBotIsInGuild) !== undefined) description += `**${key}** - ${data.help}\n`;
         const embed = new MessageEmbed()
             .setAuthor(message.author.username, message.author.avatarURL())
             .setTitle('Config Command Help Page')
@@ -15,6 +15,8 @@ exports.run = async function(bot, message, args) {
         if (Object.keys(parametersAvailable).indexOf(args[0]) != -1) {
             if (parametersAvailable[args[0]].support(args[1])) {
                 if (!message.guild.existsInDb) await message.guild.create();
+                if (parametersAvailable[args[0]].postUpdate !== undefined) message.guild = parametersAvailable[args[0]].postUpdate(args[1], message.guild);
+                if (parametersAvailable[args[0]].postUpdateCommon !== undefined) [message.author, message.guild] = parametersAvailable[args[0]].postUpdateCommon(args[1], message.author, message.guild);
                 message.guild.changeSetting(args[0], args[1]).then(() => {
                     const embed = new MessageEmbed()
                         .setAuthor(message.author.username, message.author.avatarURL())
