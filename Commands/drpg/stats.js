@@ -30,7 +30,7 @@ exports.run = (bot, message, args) => {
             }
         });
     }).catch(() => {
-        message.reply("The ID of the user you specified is invalid. Please retry by mentionning him or by getting their right ID.");
+        message.reply("The ID of the user you specified is invalid. Please retry by mentioning them or by getting their right ID.");
     });
 };
 
