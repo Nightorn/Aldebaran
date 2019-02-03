@@ -8,7 +8,7 @@
     "omdb_apikey" : "1aa9cc94",
     "cat_apikey": "MzI0MDc4",
     "mysql": {
-        "connectionLimit": 10,
+        "connectionLimit": 80,
         "host": "nightorn.com",
         "user": "discord",
         "password": "6+bT3A~9v`s!",
@@ -28,5 +28,5 @@
     "apikeys": {
         "osu!": "989ce4ace5a53a97367559d373ac09be02637339"
     },
-    "version": "1.1.5"
+    "version": "1.2.8"
 }

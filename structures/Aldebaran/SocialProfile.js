@@ -2,10 +2,9 @@ module.exports = class SocialProfile {
     constructor(user) {
         this.user = user;
         this.client = this.user.client;
-        this.client.database.socialprofile.selectOneById(this.user.id).then(profile => {
-            if (profile !== undefined) return this.build(profile);
-            this.existsInDB = false;
-        });
+        if (this.client.profilesDatabaseData.get(this.user.id) !== undefined) {
+            this.build(this.client.profilesDatabaseData.get(this.user.id));
+        } else this.existsInDB = false;
     }
 
     build(data) {

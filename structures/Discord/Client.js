@@ -6,24 +6,7 @@ module.exports = class AldebaranClient extends Client {
     constructor() {
         super({
             disabledEvents: [
-                'GUILD_MEMBERS_CHUNK',
-                'GUILD_ROLE_CREATE',
-                'GUILD_ROLE_DELETE',
-                'GUILD_ROLE_UPDATE',
-                'GUILD_BAN_ADD',
-                'GUILD_BAN_REMOVE',
-                'CHANNEL_PINS_UPDATE',
-                'MESSAGE_DELETE',
-                'MESSAGE_UPDATE',
-                'MESSAGE_DELETE_BULK',
-                'MESSAGE_REACTION_REMOVE',
-                'MESSAGE_REACTION_REMOVE_ALL',
-                'USER_NOTE_UPDATE',
-                'USER_SETTINGS_UPDATE',
-                'PRESENCE_UPDATE',
-                'VOICE_STATE_UPDATE',
                 'TYPING_START',
-                'VOICE_SERVER_UPDATE'
             ]
         });
         this.commandGroups = {};
@@ -42,6 +25,26 @@ module.exports = class AldebaranClient extends Client {
             this.models.settings.guild[key] = value;
         }
         if (!fs.existsSync(`./cache/`)) fs.mkdirSync(`./cache/`);
+
+        var usersDatabaseData = new Map();
+        this.database.users.selectAll().then(users => {
+            for (let data of users) {
+                let id = data.userId;
+                delete data.userId;
+                usersDatabaseData.set(id, data);
+            }
+        });
+        this.usersDatabaseData = usersDatabaseData;
+
+        var profilesDatabaseData = new Map();
+        this.database.socialprofile.selectAll().then(profiles => {
+            for (let data of profiles) {
+                let id = data.userId;
+                delete data.userId;
+                profilesDatabaseData.set(id, data);
+            }
+        });
+        this.profilesDatabaseData = profilesDatabaseData;
         
         fs.readdir("./events/", (err, files) => {
             if (err) return console.error(err);

@@ -16,6 +16,12 @@ module.exports = class DatabasePool {
                 return (await this.query(`SELECT ${columns !== undefined ? columns.join(', ') : '*'} FROM users WHERE userId='${id}'`))[0];
             },
             /**
+             * Returns the data of all users from the database
+             */
+            selectAll: async () => {
+                return await this.query(`SELECT * FROM users`);
+            },
+            /**
              * Updates the data of the user specified on the database
              * @param {string} id Snowflake ID of the Discord User
              * @param {Map} changes Changes to make to the user, the map needs an entry for each column modified, with the column as the key, and the new value as the entry value
@@ -52,6 +58,12 @@ module.exports = class DatabasePool {
                 return (await this.query(`SELECT ${columns !== undefined ? columns.join(', ') : '*'} FROM guilds WHERE guildid='${id}'`))[0];
             },
             /**
+             * Returns the data of all users from the database
+             */
+            selectAll: async () => {
+                return await this.query(`SELECT * FROM guilds`);
+            },
+            /**
              * Updates the data of the guild specified on the database
              * @param {string} id Snowflake ID of the Discord Guild
              * @param {Map} changes Changes to make to the guild, the map needs an entry for each column modified, with the column as the key, and the new value as the entry value
@@ -86,6 +98,12 @@ module.exports = class DatabasePool {
             selectOneById: async (id, columns) => {
                 const check = this.checkSelectOneById(id, columns); if (check instanceof RangeError) return check;
                 return (await this.query(`SELECT ${columns !== undefined ? columns.join(', ') : '*'} FROM socialprofile WHERE userId='${id}'`))[0];
+            },
+            /**
+             * Returns the data of all users from the database
+             */
+            selectAll: async () => {
+                return await this.query(`SELECT * FROM socialprofile`);
             },
             /**
              * Updates the data of the profile specified on the database

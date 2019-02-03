@@ -9,9 +9,7 @@ module.exports = (BaseUser) => {
             this.generalCooldown = 0;
             this.profile = new SocialProfile(this);
             this.settings = {};
-            this.client.database.users.selectOneById(data.id).then(user => {
-                if (user !== undefined) return this.build(user);
-            });
+            if (this.client.usersDatabaseData.get(this.id) !== undefined) this.build(this.client.usersDatabaseData.get(this.id));
             this.timers = {
                 adventure: null,
                 padventure: null,
