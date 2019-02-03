@@ -9,7 +9,7 @@ exports.run = (bot, message, args) => {
             message.channel.send({embed:{
                 author:{
                     name: message.author.username,
-                    icon_url: message.author.avatarURL
+                    icon_url: message.author.avatarURL()
                 },
                 description: (message.author +` won't stop tickling  `+ target),
                 image: {
@@ -17,7 +17,7 @@ exports.run = (bot, message, args) => {
                 },
                 timestamp: new Date(),
                 footer: {
-                    icon_url: bot.avatarURL,
+                    icon_url: bot.user.avatarURL(),
                     text: "Powerd By Nekos.life"
                 }
             

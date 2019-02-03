@@ -5,7 +5,7 @@ exports.run = (bot, message, args) => {
     message.channel.send({embed:{
         author: {
             name: message.author.username,
-            icon_url: message.author.avatarURL
+            icon_url: message.author.avatarURL()
         },
         description: `${message.author}'s mind has been blown`,
         image: {
