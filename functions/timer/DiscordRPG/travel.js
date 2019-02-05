@@ -3,7 +3,7 @@ module.exports = function(bot, message) {
     if (message.author.id !== '170915625722576896') return;
     if (message.content.indexOf("started their journey to") !== -1) {
         const userName = message.content.substring(0, message.content.indexOf("started")).trim();
-        const matchedMessage = message.channel.messages.find(msg => msg.author.username === 'Ciborn');
+        const matchedMessage = message.channel.messages.find(msg => msg.author.username === userName);
         if (matchedMessage !== undefined) {
             const user = matchedMessage.author;
             if (user !== undefined) {
