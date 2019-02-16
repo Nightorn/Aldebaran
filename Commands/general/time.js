@@ -19,7 +19,7 @@ exports.run = async function (bot, message, args) {
                 title: `:clock: Time for ${user.username}`,
                 description: `The time for ${user.username} is \`${time.format("hh:mm:ss A Do of MMMM, dddd")}\`!`,
                 footer: {
-                    text: "Tip: if this in inaccurate, try setting an tz timezone instead of an GMT+ or GMT- timezone!"
+                    text: "Tip: if this is inaccurate, try setting an tz timezone instead of an GMT+ or GMT- timezone!"
                 }
             }})
         }
