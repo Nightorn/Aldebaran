@@ -4,7 +4,7 @@ exports.run = async function(bot, message, args) {
     const parametersAvailable = bot.models.settings.guild;
     if (args.length == 0 || args.indexOf('help') != -1) {
         var description = '';
-        for (let [key, data] of Object.entries(parametersAvailable)) if (message.guild.members.get(data.showOnlyIfBotIsInGuild) !== undefined) description += `**${key}** - ${data.help}\n`;
+        for (let [key, data] of Object.entries(parametersAvailable)) if (data.showOnlyIfBotIsInGuild !== undefined) if (message.guild.members.get(data.showOnlyIfBotIsInGuild) !== undefined || data.showOnlyIfBotIsInGuild === undefined) description += `**${key}** - ${data.help}\n`;
         const embed = new MessageEmbed()
             .setAuthor(message.author.username, message.author.avatarURL())
             .setTitle('Config Command Help Page')
