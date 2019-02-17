@@ -4,7 +4,7 @@ module.exports = async function(message) {
 	if (message.guild.settings.sidesTimer === 'on' && message.author.settings.sidesTimer === 'on') {
 		var prefix = null;
 		message.content = `${message.content} `;
-		for (let element of ["DiscordRPG", "#!", message.guild.settings.discordrpgPrefix]) {
+		for (let element of ["DiscordRPG", "#!", message.guild.settings.discordrpgPrefix, message.guild.settings.discordrpgPrefix]) {
 			if (message.content.indexOf(`${element}mine `) === 0) prefix = element;
 		}
 		if (prefix !== null) {

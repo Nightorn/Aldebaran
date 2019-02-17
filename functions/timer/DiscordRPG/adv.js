@@ -3,7 +3,7 @@ module.exports = function(message) {
 	if (message.guild.settings.adventureTimer === 'on' && message.author.settings.adventureTimer === 'on') {
 		var prefix = null;
 		message.content = `${message.content} `;
-		for (let element of ["DiscordRPG", "#!", message.guild.settings.discordrpgPrefix]) {
+		for (let element of ["DiscordRPG", "#!", "<@170915625722576896>", message.guild.settings.discordrpgPrefix]) {
 			if (message.content.indexOf(`${element}adv `) === 0 || message.content.indexOf(`${element}adventure `) === 0) prefix = element;
 		}
 		if (prefix !== null) {
