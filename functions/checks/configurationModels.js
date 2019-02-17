@@ -34,7 +34,7 @@ module.exports = {
             showOnlyIfBotIsInGuild: "170915625722576896"
         }, timezone: {
             support: require(`${process.cwd()}/functions/checks/timezoneSupport.js`), 
-            help: "Sets your timezone - [GMT+/-, or [tz database timezone (required for DST detection)](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]"
+            help: "Sets your timezone - [GMT, UTC, or [tz database timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]"
         }
     },
     guild: {

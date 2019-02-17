@@ -1,9 +1,22 @@
+const { MessageEmbed } = require('discord.js');
 const moment = require("moment-timezone");
 exports.run = async function (bot, message, args) {
     const user = message.mentions.users.size >= 1 ? message.mentions.users.first() : message.author;
     var timezone = user.settings.timezone;
+    if (timezone.indexOf('/') === -1) {
+        var symbol = timezone[3];
+        var base = timezone.split(symbol)[0];
+        var number = parseInt(timezone.split(symbol)[1]);
+        if (symbol === '-') number *= -1;
+        if (base !== 'GMT') {
+            if (base === 'UTC') base = 'GMT';
+        }
+        timezone = base + symbol + number.toString();
+    }
     if (timezone !== undefined) {
-        if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = "ETC/" + (timezone.search(/\+/i) ? timezone.replace("+", "-") : timezone.replace("-", "+"));
+        timezone = timezone.indexOf('+') !== -1 ? timezone.replace('+', '-') : timezone.replace('-', '+');
+        if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = "ETC/" + timezone;
+        console.log(timezone);
         if (moment.tz.zone(timezone) === null) {
             message.channel.send({embed: {
                 title: ":x: Ooof!",
@@ -15,16 +28,18 @@ exports.run = async function (bot, message, args) {
             }});
         } else {
             const time = moment().tz(timezone);
-            message.channel.send({embed: {
-                title: `:clock: Time for ${user.username}`,
-                description: `The time for ${user.username} is \`${time.format("hh:mm:ss A Do of MMMM, dddd")}\`!`,
-                footer: {
-                    text: "Tip: if this is inaccurate, try setting an tz timezone instead of an GMT+ or GMT- timezone!"
-                }
-            }})
+            const embed = new MessageEmbed()
+                .setAuthor(`${user.username}  |  Date and Time`, user.avatarURL())
+                .setDescription(`${time.format('dddd, Do of MMMM YYYY')}\n**${time.format('hh:mm:ss A')}**`)
+                .setFooter("If this is inaccurate, try setting a tz timezone instead of a GMT-based timezone!");
+            message.channel.send({embed});
         }
     } else {
-        message.reply(`it seems that the user specified or you does not have configured his timezone. Please check \`${message.guild.prefix}uconfig\` before retrying.`);
+        if (user.equals(message.author)) {
+            message.reply(`it seems that you do not have configured your timezone. Please check \`${message.guild.prefix}uconfig\` before retrying.`);
+        } else {
+            message.reply(`it seems that the specified user has not configured his timezone yet.`);
+        }
     }
 }
 
