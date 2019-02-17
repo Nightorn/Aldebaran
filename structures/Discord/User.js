@@ -9,7 +9,16 @@ module.exports = (BaseUser) => {
             this.generalCooldown = 0;
             this.profile = new SocialProfile(this);
             this.settings = {};
-            if (this.client.usersDatabaseData.get(this.id) !== undefined) this.build(this.client.usersDatabaseData.get(this.id));
+            var interval = setInterval(() => {
+                if (this.client.databaseFetch !== undefined) {
+                    if (this.client.databaseFetch.data.users.size === this.client.databaseFetch.counts.users) {
+                        clearInterval(interval);
+                        if (this.client.databaseFetch.data.users.get(this.id) !== undefined) {
+                            this.build(this.client.databaseFetch.data.users.get(this.id));
+                        }
+                    }
+                }
+            }, 100);
             this.timers = {
                 adventure: null,
                 padventure: null,

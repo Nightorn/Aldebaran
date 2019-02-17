@@ -6,9 +6,16 @@ module.exports = (BaseGuild) => {
             this.settings = {};
             this.prefix = this.client.config.prefix;
             this.existsInDB = false;
-            client.database.guilds.selectOneById(data.id).then(guild => {
-                if (guild !== undefined) return this.build(guild);
-            });
+            var interval = setInterval(() => {
+                if (this.client.databaseFetch !== undefined) {
+                    if (this.client.databaseFetch.data.guilds.size === this.client.databaseFetch.counts.guilds) {
+                        clearInterval(interval);
+                        if (this.client.databaseFetch.data.guilds.get(this.id) !== undefined) {
+                            this.build(this.client.databaseFetch.data.guilds.get(this.id));
+                        }
+                    }
+                }
+            }, 100);
         }
 
         build(data) {

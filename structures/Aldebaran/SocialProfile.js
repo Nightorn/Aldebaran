@@ -2,9 +2,17 @@ module.exports = class SocialProfile {
     constructor(user) {
         this.user = user;
         this.client = this.user.client;
-        if (this.client.profilesDatabaseData.get(this.user.id) !== undefined) {
-            this.build(this.client.profilesDatabaseData.get(this.user.id));
-        } else this.existsInDB = false;
+        this.existsInDB = false;
+        var interval = setInterval(() => {
+            if (this.client.databaseFetch !== undefined) {
+                if (this.client.databaseFetch.data.profiles.size === this.client.databaseFetch.counts.profiles) {
+                    clearInterval(interval);
+                    if (this.client.databaseFetch.data.profiles.get(this.id) !== undefined) {
+                        this.build(this.client.databaseFetch.data.profiles.get(this.id));
+                    }
+                }
+            }
+        }, 100);
     }
 
     build(data) {
