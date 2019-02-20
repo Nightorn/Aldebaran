@@ -20,6 +20,7 @@ module.exports = class AldebaranClient extends Client {
         this.models = {
             settings: require(`${process.cwd()}/functions/checks/configurationModels.js`)
         }
+        this.version = require('./../../package.json').version;
         if (process.argv[3] !== undefined && this.debugMode) this.config.prefix = process.argv[3];
         for (let [key, value] of Object.entries(this.models.settings.common)) {
             this.models.settings.user[key] = value;
