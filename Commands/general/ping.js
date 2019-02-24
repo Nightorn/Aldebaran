@@ -34,7 +34,7 @@ exports.run = async (bot, message) => {
     }
 
     const embedResult = new MessageEmbed()
-        .addField('WebSocket Heartbeat', `${Math.floor(bot.ping)} ms`, true)
+        .addField('WebSocket Heartbeat', `${Math.floor(bot.ws.ping)} ms`, true)
         .addField(`${bot.user.username} Ping`, `${ping} ms`, true)
         .setColor(color);
     newMessage.edit(desc, {embed: embedResult});
