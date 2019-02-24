@@ -4,7 +4,7 @@ module.exports = (beatmapId) => {
         if (!fs.existsSync(`./cache/osu!/`)) fs.mkdirSync(`./cache/osu!/`);
         if (fs.existsSync(`./cache/osu!/${beatmapId}.osu`)) return resolve();
         const fetch = require('node-fetch');
-        fetch(`https://bloodcat.com/osu/b/${beatmapId}`).then(res => {
+        fetch(`http://osu.ppy.sh/osu/${beatmapId}`).then(res => {
             const dest = fs.createWriteStream(`./cache/osu!/${beatmapId}.osu`);
             res.body.pipe(dest);
             res.body.on('error', reject);
