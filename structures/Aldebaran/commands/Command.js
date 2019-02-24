@@ -47,7 +47,11 @@ module.exports = class Command {
         this.log(canPass, message, args);
         if (canPass) {
             if (this.check(message.author)) {
-                if (this.name !== 'eval') await bot.database.commands.create(this.name, args, message)
+                try {
+                    await bot.database.commands.create(this.name, args, message);
+                } catch(err) {
+                    await bot.database.commands.create(this.name, "[]", message);
+                }
                 return this.commandFile.run(bot, message, args);
             } else {
                 return new Error('Insufficient Bot Permissions');
