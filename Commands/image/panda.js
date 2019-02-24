@@ -3,8 +3,10 @@ exports.run = (bot, message, args) => {
     const { MessageEmbed } = require(`discord.js`);
     var pandanumber = Math.floor((Math.random() * 52) + 1);
     request({uri: `https://api.pexels.com/v1/search?query=panda+query&per_page=1&page=${pandanumber}`,headers: {"Authorization":bot.config.pexels_apikey}}, function (err, response, body) {
-        if (err) return message.channel.send("There seems to be a prickly problem")
-        var data = JSON.parse(body).photos[0];
+        var parsed = JSON.parse(body);
+        if (err) return message.channel.send("There seems to be a prickly problem.");
+        if (data.error) return message.channel.send(`Someone has requested too many pandas recently, the only thing you can do is waiting for your turn!`);
+        var data = parsed.photos[0];
         const embed = new MessageEmbed()
             .setTitle(`**__Panda Panda Panda__**`)
             .setAuthor(message.author.username,message.author.avatarURL())
