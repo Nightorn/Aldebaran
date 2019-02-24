@@ -7,8 +7,8 @@ module.exports = class SocialProfile {
             if (this.client.databaseFetch !== undefined) {
                 if (this.client.databaseFetch.data.profiles.size === this.client.databaseFetch.counts.profiles) {
                     clearInterval(interval);
-                    if (this.client.databaseFetch.data.profiles.get(this.id) !== undefined) {
-                        this.build(this.client.databaseFetch.data.profiles.get(this.id));
+                    if (this.client.databaseFetch.data.profiles.get(this.user.id) !== undefined) {
+                        this.build(this.client.databaseFetch.data.profiles.get(this.user.id));
                     }
                 }
             }
