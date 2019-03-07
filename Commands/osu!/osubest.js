@@ -41,7 +41,7 @@ exports.run = (bot, message, args) => {
                 }
                 const user = (await client.user.get(maps[0].user_id, Nodesu.Mode[mode]));
                 const embed = new MessageEmbed()
-                    .setAuthor(`${user.username}'s 10 best plays`, `https://a.ppy.sh/${user.user_id}`, `https://osu.ppy.sh/users/${user.user_id}`)
+                    .setAuthor(`${user.username}'s 5 best plays`, `https://a.ppy.sh/${user.user_id}`, `https://osu.ppy.sh/users/${user.user_id}`)
                     .setDescription(list)
                     .setColor('#cc5288');
                 message.channel.send({embed});
