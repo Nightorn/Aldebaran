@@ -1,9 +1,9 @@
 module.exports = function(message) {
 	if (message.author.timers.adventure !== null) return;
-	message.content = `${message.content.toLowerCase()} `;
+	const content = `${message.content.toLowerCase()} `;
 	var prefix = null;
 	for (let element of ["DiscordRPG", "#!", "<@170915625722576896>", message.guild.settings.discordrpgPrefix]) {
-		if (message.content.indexOf(`${element}adv `) === 0 || message.content.indexOf(`${element}adventure `) === 0) prefix = element;
+		if (content.indexOf(`${element}adv `) === 0 || content.indexOf(`${element}adventure `) === 0) prefix = element;
 	}
 	if (prefix !== null) {
 		if (message.guild.settings.autoDelete === 'on') message.delete({ timeout: 1000 });
