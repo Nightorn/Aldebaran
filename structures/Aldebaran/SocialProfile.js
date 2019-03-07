@@ -31,12 +31,14 @@ module.exports = class SocialProfile {
     }
 
     async changeProperty(property, value) {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
             if (!this.existsInDB) await this.create();
             this.client.database.socialprofile.updateOneById(this.user.id, new Map([[property, value]])).then(async (result) => {
                 const newProfile = await this.client.database.socialprofile.selectOneById(this.user.id);
                 this.build(newProfile);
                 resolve(result);
+            }).catch(err => {
+                reject(err);
             });
         });
     }
