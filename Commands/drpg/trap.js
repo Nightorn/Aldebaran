@@ -27,7 +27,12 @@ exports.run = async (bot, message, args) => {
 
     if (userid !== null) {
         request({uri:`http://api.discorddungeons.me/v3/user/${userid}`, headers: {"Authorization": bot.config.drpg_apikey}}, async function(err, response, body) {
-            if (err) return;
+            if (err) throw err;
+            const data = JSON.parse(body);
+            if (data.status === 404) return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
+            const userData = data.data;
+            const user = await bot.users.fetch(userid);
+            data = null;
     
             const items = {
                 "78": "Raven Feathers",
@@ -88,10 +93,7 @@ exports.run = async (bot, message, args) => {
                     return `${f(date.getMonth() + 1)}/${f(date.getDate())}/${f(date.getFullYear())} at ${f(date.getHours())}:${f(date.getMinutes())} UTC`;
                 }
             }
-
-            var userData = JSON.parse(body).data;
-            const user = await bot.users.fetch(userid);
-            var data = null;
+            
             const errorMessage = `**${userData.name}**, it looks like you did not set any trap.`;
             if (userData.location === undefined) return message.channel.send(`Hey **${userData.name}**, travel somewhere and set a trap on your way!`)
             if (userData.location.traps !== undefined) {

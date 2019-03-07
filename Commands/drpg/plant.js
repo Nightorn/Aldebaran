@@ -5,8 +5,10 @@ exports.run = (bot, message, args) => {
     const locationdb = require(`${process.cwd()}/Data/drpglocationlist.json`);
     require(`${process.cwd()}/functions/action/userCheck.js`)(bot, message, args).then(usrid => {
         request({uri:`https://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization" : bot.config.drpg_apikey} }, async function(err, response, body) {
-            if (err) return;
-            const data = JSON.parse(body).data;
+            if (err) throw err;
+            const data = JSON.parse(body);
+            if (data.status === 404) return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
+            data = data.data;
             const user = await bot.users.fetch(usrid);
             if (data.location === undefined) return message.channel.send(`Hey **${data.name}**, travel somewhere and set a trap on your way!`);
             if (data.location.saplings === null || data.location.saplings === undefined) return message.channel.send(`Hey **${data.name}**, please plant some saplings at your purchased fields before!`);
