@@ -1,19 +1,29 @@
 const { MessageEmbed } = require("discord.js");
 module.exports = async function(message) {
+	const supportedST = ['on', 'mine', 'forage', 'chop', 'fish'];
 	var prefix = null;
 	var sidesPass = false;
-	message.content = `${message.content.toLowerCase()} `;
+	var primaryAction = null;
+	if (message.author.settings.sidesTimer !== undefined) {
+		if (message.author.settings.sidesTimer === 'on') primaryAction = 'mine';
+		else primaryAction = message.author.settings.sidesTimer;
+	} else primaryAction = 'mine';
+	const content = `${message.content.toLowerCase()} `;
 	for (let element of ["DiscordRPG", "#!", message.guild.settings.discordrpgPrefix]) {
 		for (let action of ['mine', 'forage', 'chop', 'fish']) {
-			if (message.content.indexOf(`${element}${action} `) === 0) prefix = element;
-			if (prefix !== null) if (message.content.indexOf(prefix + action) === 0) sidesPass = true;
+			if (content.indexOf(`${element}${action} `) === 0) prefix = element;
+			if (prefix !== null) if (content.indexOf(prefix + action) === 0) sidesPass = true;
 		}
 	}
 	if (message.guild.settings.autoDelete === 'on' && sidesPass) message.delete({ timeout: 500 });
-	if (message.content.indexOf(`${prefix}mine`) !== -1) {
+	if (content.indexOf(prefix + primaryAction) === 0) {
 		if (message.author.timers.sides !== null) return;
 		if (prefix !== null) {
-			if (message.guild.settings.sidesTimer === 'on' && message.author.settings.sidesTimer === 'on') {
+			console.log(supportedST);
+			console.log(message.author.settings.sidesTimer);
+			console.log(supportedST.indexOf(message.author.settings.sidesTimer) !== -1);
+			if (supportedST.indexOf(message.author.settings.sidesTimer) !== -1 && message.guild.settings.sidesTimer === 'on') {
+				console.log(prefix + primaryAction);
 				const emoji = ["🥕","🍋","🥔","🐟"];
 				var randomemoji = (`${emoji[~~(Math.random() * emoji.length)]}`);
 				const timerEmbed = new MessageEmbed()
