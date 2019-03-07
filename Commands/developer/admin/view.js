@@ -16,7 +16,7 @@ module.exports = (bot, message, args) => {
             guild.bots = guild.members.filter(m => m.user.bot === true);
             guild.humans = guild.members.filter(m => m.user.bot === false);
             guild.botRate = guild.bots.size * 100 / guild.members.size;
-            guild.admins = guild.members.filter(m => m.permissions.has('ADMINISTRATOR') && !m.user.bot);
+            guild.admins = guild.members.filter(m => m.permissions.has('ADMINISTRATOR') && !m.user.bot && m.id !== m.guild.ownerID);
             for (let [id, member] of guild.admins) admins += `\`${member.user.id}\` | **\`[${member.user.tag}]\`** <@${member.user.id}>\n`;
             const embed = new MessageEmbed()
                 .setAuthor(`${guild.name} | ${guild.id}`, guild.iconURL())
