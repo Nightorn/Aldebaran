@@ -15,7 +15,7 @@ exports.run = async (bot, message, args) => {
             timestamp: new Date(),
             footer: {
                 icon_url: bot.user.avatarURL(),
-                text: "Powerd By Nekos.life"
+                text: "Powered By Nekos.life"
             }
         
         }});
