@@ -15,6 +15,6 @@ exports.infos = {
     category: "General",
     description: "Purges Set Amount Of Messages",
     usage: "\`&purge <amount>\`",
-    example: "\`&pruge 15\`",
+    example: "\`&purge 15\`",
 }
 

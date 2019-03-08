@@ -4,7 +4,6 @@ module.exports = (bot, message, args) => {
         if (args[2] !== undefined) {
             if (args[3] !== undefined) {
                 bot.users.fetch(args[1]).then(async user => {
-                    console.log(user);
                     await user.changeSetting(args[2], args[3]);
                     const embed = new MessageEmbed()
                         .setAuthor(message.author.username, message.author.avatarURL())

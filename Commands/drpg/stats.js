@@ -6,10 +6,11 @@ exports.run = (bot, message, args) => {
         bot.users.fetch(usrid).then(user => {
             request({uri:`http://api.discorddungeons.me/v3/user/${usrid}`, headers: {"Authorization":bot.config.drpg_apikey} }, function(err, response, body) {
                 if (err) throw err;
-                const data = JSON.parse(body).data;
-                if (response === 404) return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
-                const format = (x) => { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") };
+                const data = JSON.parse(body);
+                if (data.status === 404) return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
+                data = data.data;
 
+                const format = (x) => { return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") };
                 var skills = [], attributes = [];
                 for (let [key, value] of Object.entries(data.skills)) skills.push(`**${key[0].toUpperCase() + key.slice(1)}** Lv${value.level}`);
                 if (data.attributes !== undefined) for (let [key, value] of Object.entries(data.attributes)) if (value !== 0) attributes.push(`**${key[0].toUpperCase() + key.slice(1)}** ${format(value)} Points`);
@@ -21,7 +22,7 @@ exports.run = (bot, message, args) => {
                     .addField(`Specifications`, `**Skills** - ${skills.join(', ')}\n**Attributes** - ${attributes.length !== 0 ? attributes.join(', ') : 'None'}`)
                     .setFooter(`${data.donate ? 'Donator, ' : ''}Last seen ${Math.floor((new Date() - data.lastseen) / 60000)} mins ago`);
                 if (data.quest !== '' && data.quest !== undefined) embed.addField(`Quests`, `${data.quest.current !== null ? `**Current** : ${data.quest.current.name}\n` : ''}${data.quest.completed !== undefined ? `**Completed (${data.quest.completed.length})** : ${data.quest.completed.join(`, `)}` : ''}`, false);
-                if (data.pet !== undefined) if (data.pet.xp !== undefined) embed.addField(`Pet (${data.pet.type})`, `**Name** : ${data.pet.name} | **Level** ${format(data.pet.level)}\n${format(data.pet.xp)} **XP** (XP Rate : ${data.pet.xprate}%) | **Damages** : [${format(data.pet.damage.min)} - ${format(data.pet.damage.max)}]`, false);
+                if (data.pet !== undefined) if (data.pet.xp !== undefined) embed.addField(`Pet (${data.pet.type})`, `**Name** : ${data.pet.name} | **Level** ${format(data.pet.level)}\n${format(data.pet.xp)} **XP** (XP Rate : ${data.pet.xprate === undefined ? 0 : data.pet.xprate}%) | **Damages** : [${format(data.pet.damage.min)} - ${format(data.pet.damage.max)}]`, false);
                 message.channel.send({embed});
             });
         });

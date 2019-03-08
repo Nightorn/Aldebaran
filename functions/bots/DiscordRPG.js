@@ -58,14 +58,24 @@ module.exports = function(client, message) {
 	player.healthPercent = Math.round(10 * player.currentHP * 100 / player.maxHP) / 10;
 	pet.healthPercent = Math.round(10 * pet.currentHP * 100 / pet.maxHP) / 10;
 	if (user !== undefined && player.name !== undefined && player.healthPercent !== pet.healthPercent) {
+		const check = (individual, playerHP, petHP, threshold) => {
+			threshold = threshold === 'on' ? 100 : parseInt(threshold);
+			if (['character', "pet"].indexOf(individual) !== -1) {
+				if (individual === 'character') return playerHP <= threshold;
+				else return petHP <= threshold;
+			} else {
+				return playerHP <= threshold || petHP <= threshold;
+			}
+		}
 		const execute = (individual, healthMonitor) => {
+			const checkArgs = [individual, player.healthPercent, pet.healthPercent];
 			const playerWarning = () => {
 				const embed = new Discord.MessageEmbed()
 					  .setTitle(`__${user.username} Health Warning!!! - ${player.healthPercent}%__`)
 					.setColor(0xff0000)
 					.setDescription(`**${user.username}** is at __**${player.currentHP}**__ health!!!\n`)
 					.setImage(`${senddeath}`)
-					.setFooter(`You are going to die aren't you?`)
+					.setFooter(`You are going to die, aren't you?`)
 				message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
 			}, petWarning = () => {
 				const embed = new Discord.MessageEmbed()
@@ -73,28 +83,28 @@ module.exports = function(client, message) {
 					.setColor(0xff0000)
 					.setDescription(`**${user.username}** your pet is at __**${pet.currentHP}**__ health!!!\n`)
 					.setImage(`${senddeath}`)
-					.setFooter(`OMG YOU ARE GOING TO LET YOUR PET DIE????`)
-			  message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
+					.setFooter(`OMG ARE YOU GOING TO LET YOUR PET DIE????`)
+			  	message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
 			}, general = () => {
 				var embed = new Discord.MessageEmbed()
-					 .setAuthor(user.username, user.avatarURL())
-					 .setFooter(`&uconfig To Change Health Monitor Settings`)
+					.setAuthor(user.username, user.avatarURL())
+					.setFooter(`Use "&uconfig healthMonitor" to change your health monitor settings`)
   
-				if (individual !== 'pet') embed.addField(`__Character Health__ - **${player.healthPercent}%**`,`(${player.currentHP} HP / ${player.maxHP} HP)`, false)
-				if (!isNaN(pet.healthPercent) && individual !== 'character') embed.addField(`__Pet Health__ - **${pet.healthPercent}%**`, `(${pet.currentHP} HP / ${pet.maxHP} HP)`, false);
+				if (individual === 'character') embed.addField(`__Character Health__ - **${player.healthPercent}%**`,`(${player.currentHP} HP / ${player.maxHP} HP)`, false);
+				if (!isNaN(pet.healthPercent) && individual === 'pet') embed.addField(`__Pet Health__ - **${pet.healthPercent}%**`, `(${pet.currentHP} HP / ${pet.maxHP} HP)`, false);
 				if ((isNaN(pet.healthPercent) || pet.healthPercent === 0) && individual !== 'character') embed.addField(`__Pet Condition__`, `**DEAD** or not able to do damages`);
 				if (embed.fields.length === 0) return;
-				if (player.healthPercent <= 20 || pet.healthPercent <= 20) embed.setColor('RED');
-				else if (player.healthPercent <= 40 || pet.healthPercent <= 40) embed.setColor('ORANGE');
-				else if (player.healthPercent <= 60 || pet.healthPercent <= 60) embed.setColor('GOLD');
-				else if (player.healthPercent <= 100 || pet.healthPercent <= 100) embed.setColor('GREEN');
+				if (check(...checkArgs, 15)) embed.setColor('RED');
+				else if (check(...checkArgs, 35)) embed.setColor('ORANGE');
+				else if (check(...checkArgs, 75)) embed.setColor('GOLD');
+				else if (check(...checkArgs, 100)) embed.setColor('GREEN');
 				message.channel.send({embed}).then(msg => msg.delete({ timeout: 30000 }));
 			}
 
 			if (['character', "pet"].indexOf(individual) !== -1) {
 				if (individual === 'character' && player.healthPercent < 11 && (player.healthPercent <= healthMonitor || healthMonitor === 'on')) return playerWarning();
 				if (individual === 'pet' && pet.healthPercent < 11 && (pet.healthPercent <= healthMonitor || healthMonitor === 'on')) return petWarning();
-				if (player.healthPercent <= healthMonitor || pet.healthPercent <= healthMonitor || healthMonitor === 'on') return general();
+				if (check(...checkArgs, healthMonitor) || healthMonitor === 'on') return general();
 			} else {
 				if (player.healthPercent < 11 && (player.healthPercent <= healthMonitor || healthMonitor === 'on')) return playerWarning();
 				else if (pet.healthPercent < 11 && (pet.healthPercent <= healthMonitor || healthMonitor === 'on')) return petWarning();
