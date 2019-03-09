@@ -30,7 +30,7 @@ exports.run = async (bot, message, args) => {
             if (err) throw err;
             const data = JSON.parse(body);
             if (data.status === 404) return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
-            const userData = data.data;
+            var userData = data.data;
             const user = await bot.users.fetch(userid);
             data = null;
     
