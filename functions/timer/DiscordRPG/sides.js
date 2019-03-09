@@ -19,9 +19,6 @@ module.exports = async function(message) {
 	if (content.indexOf(prefix + primaryAction) === 0) {
 		if (message.author.timers.sides !== null) return;
 		if (prefix !== null) {
-			console.log(supportedST);
-			console.log(message.author.settings.sidesTimer);
-			console.log(supportedST.indexOf(message.author.settings.sidesTimer) !== -1);
 			if (supportedST.indexOf(message.author.settings.sidesTimer) !== -1 && message.guild.settings.sidesTimer === 'on') {
 				console.log(prefix + primaryAction);
 				const emoji = ["🥕","🍋","🥔","🐟"];
