@@ -28,7 +28,7 @@ exports.run = async (bot, message, args) => {
     if (userid !== null) {
         request({uri:`http://api.discorddungeons.me/v3/user/${userid}`, headers: {"Authorization": bot.config.drpg_apikey}}, async function(err, response, body) {
             if (err) throw err;
-            const data = JSON.parse(body);
+            var data = JSON.parse(body);
             if (data.status === 404) return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
             var userData = data.data;
             const user = await bot.users.fetch(userid);
