@@ -74,7 +74,11 @@ exports.run = (bot, message, args) => {
                   (new Date() - data.lastseen) / 60000
                 )} mins ago`
               );
-            if (data.quest !== "" && data.quest !== undefined)
+            if (
+              data.quest !== "" &&
+              data.quest !== undefined &&
+              data.quest.current !== undefined
+            ) {
               embed.addField(
                 `Quests`,
                 `${
@@ -90,6 +94,7 @@ exports.run = (bot, message, args) => {
                 }`,
                 false
               );
+            }
             if (data.pet !== undefined)
               if (data.pet.xp !== undefined)
                 embed.addField(
