@@ -5,7 +5,9 @@ const deathimage = require("../../Data/imageurls.json");
 module.exports = (client, message) => {
   if (message.guild.settings.healthMonitor === "off") return;
   const senddeath =
-    deathimage.deathimage[Math.random() * deathimage.deathimage.length];
+    deathimage.deathimage[
+      Math.floor(Math.random() * deathimage.deathimage.length)
+    ];
   const player = {
     name: null,
     currentHP: 0,
