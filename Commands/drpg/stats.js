@@ -74,11 +74,7 @@ exports.run = (bot, message, args) => {
                   (new Date() - data.lastseen) / 60000
                 )} mins ago`
               );
-            if (
-              data.quest !== "" &&
-              data.quest !== undefined &&
-              data.quest.current !== undefined
-            ) {
+            if (data.quest && data.quest.current !== undefined) {
               embed.addField(
                 `Quests`,
                 `${
