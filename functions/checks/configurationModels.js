@@ -68,6 +68,17 @@ module.exports = {
       support: timezoneSupport,
       help:
         "Sets your timezone - [GMT, UTC, or [tz database timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]"
+    },
+    dateFormat: {
+      support: value => {
+        return (
+          value.indexOf("DD") !== -1 &&
+          value.indexOf("MM") !== -1 &&
+          value.indexOf("YYYY") !== -1
+        );
+      },
+      help:
+        "Time Format - Use DD (day of month), MM (month number) and YYYY (year)"
     }
   },
   guild: {
@@ -102,6 +113,12 @@ module.exports = {
       },
       help: "DiscordRPG Prefix",
       showOnlyIfBotIsInGuild: "170915625722576896"
+    },
+    language: {
+      support: value => {
+        return value === "en" || value === "fr";
+      },
+      help: "Aldebaran Language"
     }
   }
 };
