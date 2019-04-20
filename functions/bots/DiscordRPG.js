@@ -20,22 +20,24 @@ const checkPlayer = (message, username) => {
 const thirdAdventureEmbed = (player, playerHP, petHP, message) => {
   const user = checkPlayer(message, player);
   if (user === null) return;
-  const embed = new MessageEmbed()
-    .setAuthor(user.username, user.avatarURL())
-    .addField("__Character Health__", playerHP)
-    .addField("__Pet Health__", petHP)
-    .setColor(
-      embedColor(
-        parseInt(playerHP.replace("%", ""), 10),
-        parseInt(petHP.replace("%", ""), 10)
+  if (user.settings.healthMonitor === "on") {
+    const embed = new MessageEmbed()
+      .setAuthor(user.username, user.avatarURL())
+      .addField("__Character Health__", playerHP)
+      .addField("__Pet Health__", petHP)
+      .setColor(
+        embedColor(
+          parseInt(playerHP.replace("%", ""), 10),
+          parseInt(petHP.replace("%", ""), 10)
+        )
       )
-    )
-    .setFooter(
-      `Use ${
-        message.guild.prefix
-      }uconfig healthMonitor to change your settings.`
-    );
-  message.channel.send({ embed });
+      .setFooter(
+        `Use ${
+          message.guild.prefix
+        }uconfig healthMonitor to change your settings.`
+      );
+    message.channel.send({ embed });
+  }
 };
 
 module.exports = (client, message) => {
@@ -61,10 +63,11 @@ module.exports = (client, message) => {
           .replace("'s Adventure ]======!", "")
           .replace("!======[ ", "");
         const splitted = message.content.split("\n");
+        const critical = message.content.indexOf("Critical hit!") !== -1;
         return thirdAdventureEmbed(
           player.name,
-          splitted[3].replace(player.name, "").split(" ")[2],
-          splitted[4].substr(
+          splitted[critical ? 4 : 3].replace(player.name, "").split(" ")[2],
+          splitted[critical ? 5 : 4].substr(
             splitted[4].indexOf(":") + 2,
             splitted[4].indexOf("%") - splitted[4].indexOf(":") - 1
           ),
