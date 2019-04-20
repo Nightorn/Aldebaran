@@ -1,6 +1,42 @@
 /* eslint consistent-return: off */
-const Discord = require("discord.js");
+/* eslint no-else-return: off */
+const { MessageEmbed } = require("discord.js");
 const deathimage = require("../../Data/imageurls.json");
+
+const embedColor = (playerPercentage, petPercentage) => {
+  if (playerPercentage <= 20 || petPercentage <= 20) return "RED";
+  else if (playerPercentage <= 40 || petPercentage <= 40) return "ORANGE";
+  else if (playerPercentage <= 60 || petPercentage <= 60) return "GOLD";
+  else if (playerPercentage <= 100 || petPercentage <= 100) return "GREEN";
+};
+
+const checkPlayer = (message, username) => {
+  const matchedMessage = message.channel.messages.find(
+    msg => msg.author.username === username
+  );
+  return matchedMessage !== undefined ? matchedMessage.author : null;
+};
+
+const thirdAdventureEmbed = (player, playerHP, petHP, message) => {
+  const user = checkPlayer(message, player);
+  if (user === null) return;
+  const embed = new MessageEmbed()
+    .setAuthor(user.username, user.avatarURL())
+    .addField("__Character Health__", playerHP)
+    .addField("__Pet Health__", petHP)
+    .setColor(
+      embedColor(
+        parseInt(playerHP.replace("%", ""), 10),
+        parseInt(petHP.replace("%", ""), 10)
+      )
+    )
+    .setFooter(
+      `Use ${
+        message.guild.prefix
+      }uconfig healthMonitor to change your settings.`
+    );
+  message.channel.send({ embed });
+};
 
 module.exports = (client, message) => {
   if (message.guild.settings.healthMonitor === "off") return;
@@ -19,93 +55,78 @@ module.exports = (client, message) => {
   };
   if (message.embeds.length === 0) {
     if (message.content.indexOf("'s Adventure") !== -1) {
-      const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
-      const healthMessage = message.content.match(healthMessagePattern);
-      if (healthMessage) {
-        const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
-        player.currentHP = Number(nums[1].replace(/,/g, ""));
-        player.maxHP = Number(nums[2].replace(/,/g, ""));
+      if (message.content.indexOf(") | +") !== -1) {
         player.name = message.content
           .split(`\n`)[1]
           .replace("'s Adventure ]======!", "")
           .replace("!======[ ", "");
-      }
-      const messageArray = message.content.split("\n");
-      let dealtLine = null;
-      let tookLine = null;
-      for (const i in messageArray) {
-        if (messageArray[i].indexOf(" dealt ") !== -1)
-          dealtLine = parseInt(i, 10);
-        if (messageArray[i].indexOf(" took ") !== -1)
-          tookLine = parseInt(i, 10);
-      }
-      if (tookLine === dealtLine + 1) {
-        const petInfosLine = messageArray[tookLine + 1].split(" ");
-        pet.currentHP = parseInt(
-          petInfosLine[petInfosLine.indexOf("has") + 1]
-            .split("/")[0]
-            .replace(",", ""),
-          10
+        const splitted = message.content.split("\n");
+        return thirdAdventureEmbed(
+          player.name,
+          splitted[3].replace(player.name, "").split(" ")[2],
+          splitted[4].substr(
+            splitted[4].indexOf(":") + 2,
+            splitted[4].indexOf("%") - splitted[4].indexOf(":") - 1
+          ),
+          message
         );
-        pet.maxHP = parseInt(
-          petInfosLine[petInfosLine.indexOf("has") + 1]
-            .split("/")[1]
-            .replace(",", ""),
-          10
-        );
+      } else {
+        const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
+        const healthMessage = message.content.match(healthMessagePattern);
+        if (healthMessage) {
+          const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
+          player.currentHP = Number(nums[1].replace(/,/g, ""));
+          player.maxHP = Number(nums[2].replace(/,/g, ""));
+          player.name = message.content
+            .split(`\n`)[1]
+            .replace("'s Adventure ]======!", "")
+            .replace("!======[ ", "");
+        }
+        const messageArray = message.content.split("\n");
+        let dealtLine = null;
+        let tookLine = null;
+        for (const i in messageArray) {
+          if (messageArray[i].indexOf(" dealt ") !== -1)
+            dealtLine = parseInt(i, 10);
+          if (messageArray[i].indexOf(" took ") !== -1)
+            tookLine = parseInt(i, 10);
+        }
+        if (tookLine === dealtLine + 1) {
+          const petInfosLine = messageArray[tookLine + 1].split(" ");
+          pet.currentHP = parseInt(
+            petInfosLine[petInfosLine.indexOf("has") + 1]
+              .split("/")[0]
+              .replace(",", ""),
+            10
+          );
+          pet.maxHP = parseInt(
+            petInfosLine[petInfosLine.indexOf("has") + 1]
+              .split("/")[1]
+              .replace(",", ""),
+            10
+          );
+        }
       }
     }
   } else if (message.embeds[0].author !== undefined) {
+    const adventureEmbed = message.embeds[0];
     if (message.embeds[0].author.name.indexOf("Adventure") !== -1) {
-      const charField =
-        message.embeds[0].fields[1].name === "Critical Hit!"
-          ? message.embeds[0].fields[4]
-          : message.embeds[0].fields[3];
-      player.currentHP = parseInt(
-        charField.value
-          .split(" ")[1]
-          .split("/")[0]
-          .replace(",", ""),
-        10
-      );
-      player.maxHP = parseInt(
-        charField.value
-          .split(" ")[1]
-          .split("/")[1]
-          .replace(",", ""),
-        10
-      );
-
-      const petField =
-        message.embeds[0].fields[1].name === "Critical Hit!"
-          ? message.embeds[0].fields[3]
-          : message.embeds[0].fields[2];
-      pet.currentHP = parseInt(
-        petField.value
-          .split(" ")[1]
-          .split("/")[0]
-          .replace(",", ""),
-        10
-      );
-      pet.maxHP = parseInt(
-        petField.value
-          .split(" ")[1]
-          .split("/")[1]
-          .replace(",", ""),
-        10
-      );
-
-      player.name = charField.name;
+      const playerData = adventureEmbed.fields[0].value.split("\n")[3];
+      const petData = adventureEmbed.fields[
+        adventureEmbed.fields[1].name === "Critical Hit!" ? 2 : 1
+      ].value.split("\n")[2];
+      player.name = adventureEmbed.author.name.replace("'s Adventure", "");
+      [player.currentHP, player.maxHP] = playerData.split(" ")[1].split("/");
+      [pet.currentHP, pet.maxHP] = petData.split(" ")[1].split("/");
+      player.currentHP = parseInt(player.currentHP.replace(",", ""), 10);
+      player.maxHP = parseInt(player.maxHP.replace(",", ""), 10);
+      pet.currentHP = parseInt(pet.currentHP.replace(",", ""), 10);
+      pet.maxHP = parseInt(pet.maxHP.replace(",", ""), 10);
     }
   }
 
-  const matchedMessage = message.channel.messages.find(
-    msg => msg.author.username === player.name
-  );
-  let user = null;
-  if (matchedMessage !== undefined) {
-    user = matchedMessage.author;
-  } else return;
+  const user = checkPlayer(message, player.name);
+  if (user === null) return;
   player.healthPercent =
     Math.round((1000 * player.currentHP) / player.maxHP) / 10;
   pet.healthPercent = Math.round((10 * pet.currentHP * 100) / pet.maxHP) / 10;
@@ -117,7 +138,7 @@ module.exports = (client, message) => {
     if (user.settings.healthMonitor === "off") return;
     const { healthMonitor, individualHealthMonitor } = user.settings;
     const playerWarning = () => {
-      const embed = new Discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setTitle(
           `__${user.username} Health Warning!!! - ${player.healthPercent}%__`
         )
@@ -130,7 +151,7 @@ module.exports = (client, message) => {
       message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
     };
     const petWarning = () => {
-      const embed = new Discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setTitle(
           `__${user.username} PET Health Warning!!! - ${pet.healthPercent}%__`
         )
@@ -145,7 +166,7 @@ module.exports = (client, message) => {
       message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
     };
     const general = () => {
-      const embed = new Discord.MessageEmbed()
+      const embed = new MessageEmbed()
         .setAuthor(user.username, user.avatarURL())
         .setFooter(`&uconfig To Change Health Monitor Settings`);
 
