@@ -2,12 +2,16 @@ const CommandHandler = require(`${process.cwd()}/structures/Aldebaran/CommandHan
 const DatabasePool = require(`${process.cwd()}/structures/Aldebaran/DatabasePool.js`);
 const { Client } = require('discord.js');
 const fs = require('fs');
+
 module.exports = class AldebaranClient extends Client {
     constructor() {
         super({
             disabledEvents: [
                 'TYPING_START',
-            ]
+            ],
+            messageCacheMaxSize: 10,
+            messageCacheLifetime: 1800,
+            messageSweepInterval: 300
         });
         this.started = Date.now();
         this.commandGroups = {};
