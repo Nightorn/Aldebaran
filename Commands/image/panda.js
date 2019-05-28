@@ -16,9 +16,9 @@ exports.run = (bot, message, args) => {
         message.channel.send({embed})
     })
 }
-exports.infos = {
+/*exports.infos = {
     category: "Image",
     description: "Displays a random panda picture or gif.",
     usage: "\`&panda\`",
     example: "\`&panda\`",
-}
+}*/
