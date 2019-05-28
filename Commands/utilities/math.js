@@ -18,6 +18,6 @@ exports.run = (bot, message, args) => {
 exports.infos = {
   category: "Utilities",
   description: "Evaluates a math expression",
-  usage: "&math <expression>",
-  example: "&math 10 + 9"
+  usage: "&math `<expression>`",
+  example: "&math `sqrt(4) * 2`"
 };
