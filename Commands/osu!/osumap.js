@@ -52,7 +52,7 @@ exports.run = async (bot, message, args) => {
                     const embed = new MessageEmbed()
                         .setAuthor(beatmap.creator, `https://a.ppy.sh/${data[0].creator_id}`, `https://osu.ppy.sh/users/${data[0].creator_id}`)
                         .setTitle(`__**${beatmap.title}** by ${beatmap.artist}__ [${mode === 'mania' ? `[${results.cs}K] ` : ""}${beatmap.version}] (+${mods.join('')}${mode === 'osu' ? ` **\`${r(results.stars)}\` ★**` : ""})`)
-                        .setDescription(`${data[0].approved_date === null ? `**${approvalStatus}**  •  Last Updated on ${returnDate(new Date(data[0].last_update))}` : `**${approvalStatus}** on ${returnDate(new Date(data[0].approved_date))}`}\n${mode !== 'osu' ? "*Many informations may become unavailable as this is not an osu!standard map.*" : ""}`)
+                        .setDescription(`${data[0].approved_date === null ? `**${approvalStatus}**  •  Last Updated on ${returnDate(new Date(data[0].last_update))}` : `**${approvalStatus}** on ${returnDate(new Date(data[0].approved_date))}`}\n${mode !== 'osu' ? "*Many informations are unavailable as this is not a standard map.*" : ""}`)
                         .setURL(`https://osu.ppy.sh/beatmapsets/${beatmap.setId}/#${mode}/${beatmap.id}`)
                         .addField(`Map Length`, `**Drain Time** : ${mods.indexOf('DT') !== -1 || mods.indexOf('NC') !== -1 ? returnDuration(beatmap.hitLength / 1.5) : returnDuration(beatmap.hitLength)}\n**Song Duration** : ${mods.indexOf('DT') !== -1 || mods.indexOf('NC') !== -1 ? returnDuration(beatmap.totalLength / 1.5) : returnDuration(beatmap.totalLength)}`, true)
                         .setImage(`https://assets.ppy.sh/beatmaps/${beatmap.setId}/covers/cover.jpg`)
