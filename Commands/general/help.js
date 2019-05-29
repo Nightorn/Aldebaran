@@ -2,8 +2,8 @@ const { MessageEmbed } = require("discord.js");
 const categories = require("../../Data/categories.json");
 
 exports.run = (bot, message, args) => {
-  const category = categories[args[0].toLowerCase()];
   if (args[0] !== undefined) {
+    const category = categories[args[0].toLowerCase()];
     const commands = {};
 
     for (const [name, data] of bot.commandHandler.commands) {

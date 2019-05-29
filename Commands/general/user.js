@@ -62,10 +62,10 @@ exports.run = (bot, message, args) => {
             .addField(
               "Server Join Date",
               `${getDate(mjd)} - ${
-                message.author.id === user.id ? "You are" : "This user is"
-              } on this server for **${Math.floor(
+                message.author.id === user.id ? "You have" : "This user has"
+              } been on this server for **${Math.floor(
                 (Date.now() - mjd.getTime()) / 86400000
-              )} days** now.`
+              )} days**.`
             )
             .addField(`Roles`, `${rolesList.join(", ")}`)
             .addField(`Permissions`, allPermissions.join(", "))
