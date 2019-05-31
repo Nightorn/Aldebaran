@@ -1,45 +1,74 @@
 {
     "1": {
         "name" : "Silverkeep",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 25
+        "connections" : {
+            "2": 10,
+            "3": 25,
+            "6": 40,
+            "26": 5
+        },
+        "npc" : [
+            "Axhor",
+            "PlayTheFallen"
+        ]
     },
     "2": {
         "name" : "Dsian's House",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "1": 10
+        },
+        "npc" : [
+            "Dsian"
+        ]
     },
     "3": {
         "name" : "Mournstead",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 30
+        "connections" : {
+            "1": 25,
+            "4": 30
+        },
+        "npc" : []
     },
     "4": {
         "name" : "Rivermouth",
-        "connections" : [3, 44],
-        "npc" : [],
-        "traveltime": 30
+        "connections" : {
+            "3": 30,
+            "14": 30,
+            "16": 300,
+            "20": 250,
+            "iod": 180
+        },
+        "npc" : []
     },
     "5": {
         "name" : "Temple of MOUKN",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 60
+        "connections" : {
+            "6": 60
+        },
+        "npc" : [
+            "Pope Seth",
+            "Scarlett"
+        ]
     },
     "6": {
         "name" : "Copperfall",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 40
+        "connections" : {
+            "1": 40,
+            "5": 60,
+            "7": 30,
+            "13": 100,
+            "41": 20
+        },
+        "npc" : []
     },
     "7": {
         "name" : "Copperfall Swamp",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 30
+        "connections" : {
+            "6": 30
+        },
+        "npc" : [
+            "Priest"
+        ]
     },
     "8":{},
     "9":{},
@@ -47,176 +76,277 @@
     "11": {
         "name" : "Ravengate",
         "connections" : [],
-        "npc" : [],
-        "traveltime": 40
+        "npc" : []
     },
     "12":{},
     "13": {
         "name" : "Copperfall Summit",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 100
+        "connections" : {
+            "6": 100,
+            "21": 23
+        },
+        "npc" : [
+            "Oracle",
+            "Copperfall Monk"
+        ]
     },
     "14": {
         "name" : "Redhorn",
-        "connections" : [44],
-        "npc" : [],
-        "traveltime": 15
+        "connections" : {
+            "4": 30,
+            "44": 15
+        },
+        "npc" : []
     },
     "15":{},
     "16": {
         "name" : "Frostridge Shore",
-        "connections" : [4],
-        "npc" : [],
-        "traveltime": 300
+        "connections" : {
+            "4": 300,
+            "16": 32,
+            "19": 20
+        },
+        "npc" : [
+            "Angler John"
+        ]
     },
     "17": {
         "name" : "Frostridge",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 32
+        "connections" : {
+            "16": 32,
+            "17": 30,
+            "48": 10
+        },
+        "npc" : []
     },
     "18": {
         "name" : "Blackburn Mountain",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 30
+        "connections" : {
+            "17": 30
+        },
+        "npc" : []
     },
     "19": {
         "name" : "Mirror Isle",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 20
+        "connections" : {
+            "16": 32,
+            "lhw": 30
+        },
+        "npc" : []
     },
     "20": {
         "name" : "Sariila",
-        "connections" : [4],
-        "npc" : [],
-        "traveltime": 250
+        "connections" : {
+            "4": 250,
+            "22": 15,
+            "25": 20,
+            "30": 15,
+            "43": 10
+        },
+        "npc" : []
     },
     "21": {
         "name" : "Miree",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 23
+        "connections" : {
+            "47": 10
+        },
+        "npc" : []
     },
     "22": {
         "name" : "Dingerou Cavern",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 15
+        "connections" : {
+            "20": 15
+        },
+        "npc" : []
     },
     "23": {},
     "24": {},
     "25": {
         "name" : "Bazaar of Lights",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 20
+        "connections" : {
+            "20": 20
+        },
+        "npc" : [
+            "Bakoushi"
+        ]
     },
     "26": {
         "name" : "Silverkeep Altar",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 5
+        "connections" : {
+
+        },
+        "npc" : []
     },
     "27": {
         "name" : "Frostridge Tavern",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 5
+        "connections" : {
+
+        },
+        "npc" : []
     },
     "28":{},
     "29":{},
     "30": {
         "name" : "Scorched Desert",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 15
+        "connections" : {
+            "20": 15,
+            "31": 15,
+            "32": 15
+        },
+        "npc" : []
     },
     "31": {
         "name" : "Sandy Tomb",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 15
+        "connections" : {
+            "30": 15
+        },
+        "npc" : []
     },
     "32": {
         "name" : "Tower of Eternity",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 120
+        "connections" : {
+            "30": 15,
+            "33": 120
+        },
+        "npc" : [
+            "Captain William"
+        ]
     },
     "33": {
         "name" : "Buckleport",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 120
+        "connections" : {
+            "32": 120,
+            "34": 10
+        },
+        "npc" : [
+            "Catrina",
+            "Nathalie"
+        ]
     },
     "34": {
         "name" : "Ashgate",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "33": 10,
+            "35": 10
+        },
+        "npc" : [
+            "Nadia",
+            "Isabelle"
+        ]
     },
     "35": {
         "name" : "Lemontree Plaza",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "34": 10,
+            "36": 10,
+            "37": 10,
+            "38": 10,
+            "39": 10,
+            "40": 10,
+            "45": 10
+        },
+        "npc" : [
+            "Alex",
+            "Astrid",
+            "Felix"
+        ]
     },
     "36": {
         "name" : "Bibliothecam Magnum",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "35": 10
+        },
+        "npc" : [
+            "Maria",
+            "James",
+            "Clarck",
+            "Theodora the Enchantress"
+        ]
     },
     "37": {
         "name" : "Sanctum of Serenity",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "35": 10
+        },
+        "npc" : [
+            "Peter",
+            "Hubert"
+        ]
     },
     "38": {
         "name" : "The Sick Dahlia",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "35": 10
+        },
+        "npc" : [
+            "Elizabeth",
+            "John",
+            "Gregory",
+            "Mathilda"
+        ]
     },
     "39": {
         "name" : "Maple Grove",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "35": 10
+        },
+        "npc" : [
+            "Madeleine",
+            "Julian"
+        ]
     },
     "40": {
         "name" : "Dawnburg",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "connections" : {
+            "35": 10
+        },
+        "npc" : []
     },
     "41": {
         "name" : "Copperfall Altar",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 20
+        "connections" : {
+            "6": 20
+        },
+        "npc" : []
     },
-    "42":{},
+    "42": {},
     "43": {
-        "name" : "Sariila Altar",
-        "connections" : [],
-        "npc" : [],
-        "traveltime": 10
+        "name": "Sariila Altar",
+        "connections": {
+            "20": 10
+        },
+        "npc": []
     },
     "44": {
-        "name" : "Redhorn Dungeon",
-        "connections" : [14],
-        "npc" : [],
-        "traveltime": 15
+        "name": "Redhorn Dungeon",
+        "connections": {
+
+        },
+        "npc": []
     },
     "45": {
-        "name" : "Nightmare's Heaven",
-        "connections" : [35],
-        "npc" : ["Nightmare", "Jesie"],
-        "traveltime": 10
+        "name": "Nightmare's Heaven",
+        "connections": {
+
+        },
+        "npc": [
+            "Nightmare",
+            "Jesie"
+        ]
+    },
+    "46": {},
+    "47": {
+        "name": "Miree Altar",
+        "connections": {
+            "21": 10
+        },
+        "npc": []
+    },
+    "48": {
+        "name": "Frostridge Altar",
+        "connections": {
+            "17": 10
+        },
+        "npc": []
     }
 }

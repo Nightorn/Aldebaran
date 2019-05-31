@@ -1,7 +1,9 @@
 /* eslint consistent-return: off */
 /* eslint no-else-return: off */
 const { MessageEmbed } = require("discord.js");
-const deathimage = require("../../Data/imageurls.json");
+const { deathimage } = require("../../Data/imageurls.json");
+
+const senddeath = deathimage[Math.floor(Math.random() * deathimage.length)];
 
 const embedColor = (playerPercentage, petPercentage) => {
   if (playerPercentage <= 20 || petPercentage <= 20) return "RED";
@@ -17,35 +19,85 @@ const checkPlayer = (message, username) => {
   return matchedMessage !== undefined ? matchedMessage.author : null;
 };
 
-const thirdAdventureEmbed = (player, playerHP, petHP, message) => {
-  const user = checkPlayer(message, player);
+const general = (user, playerHP, petHP, message) => {
+  const { healthMonitor, individualHealthMonitor } = user.settings;
   if (user === null) return;
-  if (user.settings.healthMonitor === "on") {
+  if (healthMonitor !== undefined && healthMonitor !== "off") {
     const embed = new MessageEmbed()
       .setAuthor(user.username, user.avatarURL())
-      .addField("__Character Health__", playerHP)
-      .addField("__Pet Health__", petHP)
-      .setColor(
-        embedColor(
-          parseInt(playerHP.replace("%", ""), 10),
-          parseInt(petHP.replace("%", ""), 10)
-        )
-      )
+      .setColor(embedColor(playerHP, petHP))
       .setFooter(
         `Use ${
           message.guild.prefix
         }uconfig healthMonitor to change your settings.`
       );
+    if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
+      embed.addField(
+        ...(individualHealthMonitor === "character"
+          ? ["__Character Health__", `${playerHP}%`]
+          : ["__Pet Health__", petHP === 0 ? "**DEAD**" : `${petHP}%`]),
+        true
+      );
+    } else {
+      embed.addField("__Character Health__", `${playerHP}%`, true);
+      embed.addField(
+        "__Pet Health__",
+        petHP === "Dead" ? "**DEAD**" : `${petHP}%`,
+        true
+      );
+    }
     message.channel.send({ embed });
+  }
+};
+
+const playerWarning = (user, hp, message) => {
+  const embed = new MessageEmbed()
+    .setTitle(`__${user.username} Health Warning!!! - ${hp}%__`)
+    .setColor(0xff0000)
+    .setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
+    .setImage(senddeath)
+    .setFooter(`Pay attention to your health or you are going to die!`);
+  message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
+};
+
+const petWarning = (user, hp, message) => {
+  const embed = new MessageEmbed()
+    .setTitle(`${user.username} PET Health Warning!!! - ${hp}%__`)
+    .setColor(0xff0000)
+    .setDescription(
+      `**${user.username}** your pet is at __**${hp}%**__ health!!!\n`
+    )
+    .setImage(senddeath)
+    .setFooter(`Your pet is getting very weak, take care of it quickly!`);
+  message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
+};
+
+const percentageCheck = (name, msg, player, pet) => {
+  const user = checkPlayer(msg, name);
+  const { healthMonitor, individualHealthMonitor } = user.settings;
+  const percentage = !Number.isNaN(parseInt(healthMonitor, 10))
+    ? parseInt(healthMonitor, 10)
+    : 100;
+  if (healthMonitor === undefined || healthMonitor === "off") return false;
+  if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
+    if (individualHealthMonitor === "character") {
+      if (player <= percentage) {
+        if (player <= 11) return playerWarning(user, player, msg);
+        return general(user, player, pet, msg);
+      }
+    } else if (pet <= percentage) {
+      if (pet <= 11) return petWarning(user, pet, msg);
+      return general(user, player, pet, msg);
+    }
+  } else if (player <= percentage || pet <= percentage) {
+    if (player <= 11) return playerWarning(user, player, msg);
+    if (pet <= 11 && pet !== 0) return petWarning(user, pet, msg);
+    return general(user, player, pet, msg);
   }
 };
 
 module.exports = (client, message) => {
   if (message.guild.settings.healthMonitor === "off") return;
-  const senddeath =
-    deathimage.deathimage[
-      Math.floor(Math.random() * deathimage.deathimage.length)
-    ];
   const player = {
     name: null,
     currentHP: 0,
@@ -62,16 +114,16 @@ module.exports = (client, message) => {
           .split(`\n`)[1]
           .replace("'s Adventure ]======!", "")
           .replace("!======[ ", "");
-        const splitted = message.content.split("\n");
-        const critical = message.content.indexOf("Critical hit!") !== -1;
-        return thirdAdventureEmbed(
+        // eslint-disable-next-line no-useless-escape
+        const hpMatches = message.content.match(/(Dead|[\d\.]+% HP)/g);
+        const deadPet = hpMatches[1] === "Dead";
+        // eslint-disable-next-line no-param-reassign
+        message.content = message.content.replace(/%/g, "");
+        return percentageCheck(
           player.name,
-          splitted[critical ? 4 : 3].replace(player.name, "").split(" ")[2],
-          splitted[critical ? 5 : 4].substr(
-            splitted[4].indexOf(":") + 2,
-            splitted[4].indexOf("%") - splitted[4].indexOf(":") - 1
-          ),
-          message
+          message,
+          parseInt(hpMatches[0].split(" ")[0], 10),
+          deadPet ? 0 : parseInt(hpMatches[1].split(" ")[0], 10)
         );
       } else {
         const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
@@ -111,7 +163,10 @@ module.exports = (client, message) => {
         }
       }
     }
-  } else if (message.embeds[0].author !== undefined) {
+  } else if (
+    message.embeds[0].author !== undefined &&
+    message.embeds[0].author !== null
+  ) {
     const adventureEmbed = message.embeds[0];
     if (message.embeds[0].author.name.indexOf("Adventure") !== -1) {
       const playerData = adventureEmbed.fields[0].value.split("\n")[3];
@@ -139,117 +194,12 @@ module.exports = (client, message) => {
     player.healthPercent !== pet.healthPercent
   ) {
     if (user.settings.healthMonitor === "off") return;
-    const { healthMonitor, individualHealthMonitor } = user.settings;
-    const playerWarning = () => {
-      const embed = new MessageEmbed()
-        .setTitle(
-          `__${user.username} Health Warning!!! - ${player.healthPercent}%__`
-        )
-        .setColor(0xff0000)
-        .setDescription(
-          `**${user.username}** is at __**${player.currentHP}**__ health!!!\n`
-        )
-        .setImage(senddeath)
-        .setFooter(`You are going to die aren't you?`);
-      message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
-    };
-    const petWarning = () => {
-      const embed = new MessageEmbed()
-        .setTitle(
-          `__${user.username} PET Health Warning!!! - ${pet.healthPercent}%__`
-        )
-        .setColor(0xff0000)
-        .setDescription(
-          `**${user.username}** your pet is at __**${
-            pet.currentHP
-          }**__ health!!!\n`
-        )
-        .setImage(senddeath)
-        .setFooter(`OMG YOU ARE GOING TO LET YOUR PET DIE????`);
-      message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
-    };
-    const general = () => {
-      const embed = new MessageEmbed()
-        .setAuthor(user.username, user.avatarURL())
-        .setFooter(`&uconfig To Change Health Monitor Settings`);
 
-      if (individualHealthMonitor !== "pet")
-        embed.addField(
-          `__Character Health__ - **${player.healthPercent}%**`,
-          `(${player.currentHP} HP / ${player.maxHP} HP)`,
-          false
-        );
-      if (
-        !Number.isNaN(pet.healthPercent) &&
-        individualHealthMonitor !== "character"
-      ) {
-        embed.addField(
-          `__Pet Health__ - **${pet.healthPercent}%**`,
-          `(${pet.currentHP} HP / ${pet.maxHP} HP)`,
-          false
-        );
-      }
-      if (
-        (Number.isNaN(pet.healthPercent) || pet.healthPercent === 0) &&
-        individualHealthMonitor !== "character"
-      ) {
-        embed.addField(
-          `__Pet Condition__`,
-          `**DEAD** or not able to deal damages.`
-        );
-      }
-      if (embed.fields.length === 0) return;
-      if (player.healthPercent <= 20 || pet.healthPercent <= 20)
-        embed.setColor("RED");
-      else if (player.healthPercent <= 40 || pet.healthPercent <= 40)
-        embed.setColor("ORANGE");
-      else if (player.healthPercent <= 60 || pet.healthPercent <= 60)
-        embed.setColor("GOLD");
-      else if (player.healthPercent <= 100 || pet.healthPercent <= 100)
-        embed.setColor("GREEN");
-      message.channel
-        .send({ embed })
-        .then(msg => msg.delete({ timeout: 30000 }));
-    };
-
-    if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
-      if (
-        individualHealthMonitor === "character" &&
-        player.healthPercent < 11 &&
-        (player.healthPercent <= healthMonitor || healthMonitor === "on")
-      ) {
-        return playerWarning();
-      }
-      if (
-        individualHealthMonitor === "pet" &&
-        pet.healthPercent < 11 &&
-        (pet.healthPercent <= healthMonitor || healthMonitor === "on")
-      ) {
-        return petWarning();
-      }
-      if (
-        player.healthPercent <= healthMonitor ||
-        pet.healthPercent <= healthMonitor ||
-        healthMonitor === "on"
-      ) {
-        return general();
-      }
-    } else if (
-      player.healthPercent < 11 &&
-      (player.healthPercent <= healthMonitor || healthMonitor === "on")
-    ) {
-      return playerWarning();
-    } else if (
-      pet.healthPercent < 11 &&
-      (pet.healthPercent <= healthMonitor || healthMonitor === "on")
-    ) {
-      return petWarning();
-    } else if (
-      player.healthPercent <= healthMonitor ||
-      pet.healthPercent <= healthMonitor ||
-      healthMonitor === "on"
-    ) {
-      return general();
-    }
+    percentageCheck(
+      player.name,
+      message,
+      player.healthPercent,
+      pet.healthPercent
+    );
   }
 };

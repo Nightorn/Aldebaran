@@ -25,7 +25,7 @@ exports.run = (bot, message, args) => {
       bot.config.apikeys.yandex_translate
     }&lang=${
       !initialLang ? resultLang : `${initialLang}-${resultLang}`
-    }&text=${content}`,
+    }&text=${encodeURI(content)}`,
     (err, response, body) => {
       if (err) {
         message.channel.send(`A serious error occured.`);
@@ -64,6 +64,6 @@ exports.run = (bot, message, args) => {
 exports.infos = {
   category: "General",
   description: "Translates a word or a sentence in the specified language",
-  usage: "&translate <result language> [initial language] <text>",
-  example: "&translate fr hello paris"
+  usage: "&translate `<result language> [initial language] <text>`",
+  example: "&translate ̀`fr hello paris`"
 };
