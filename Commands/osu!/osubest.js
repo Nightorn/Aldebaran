@@ -68,7 +68,6 @@ exports.run = (bot, message, args) => {
           }
 
           const fetchMapMetadata = async mapsList => {
-            console.log(mapsList);
             const results = [];
             for (const map of mapsList) {
               results.push(
@@ -84,7 +83,6 @@ exports.run = (bot, message, args) => {
             return final;
           };
           const mapsData = await fetchMapMetadata(maps);
-          console.log(mapsData);
           for (const i in mapsData) {
             const map = maps[i];
             const metadata = mapsData[i][0];
