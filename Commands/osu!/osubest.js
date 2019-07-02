@@ -3,9 +3,9 @@ const Nodesu = require("nodesu");
 const oppai = require("oppai");
 const retrieveBeatmapFile = require("../../functions/osu!/retrieveBeatmapFile");
 const computeMods = require("../../functions/osu!/computeMods");
-const config = require("./../../config.json");
 
 exports.run = (bot, message, args) => {
+  const { config } = bot;
   const client = new Nodesu.Client(config.apikeys["osu!"]);
   if (args.length === 0)
     return message.channel.send(

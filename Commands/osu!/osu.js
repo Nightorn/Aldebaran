@@ -1,5 +1,5 @@
 exports.run = (bot, message, args) => {
-    const config = require('./../../config.json');
+    const { config } = bot;
     const { MessageEmbed } = require('discord.js');
     const Nodesu = require('nodesu');
     const client = new Nodesu.Client(config.apikeys["osu!"]);
