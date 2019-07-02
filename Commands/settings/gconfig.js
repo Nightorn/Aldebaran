@@ -1,25 +1,39 @@
 const { MessageEmbed } = require("discord.js");
 
 exports.run = async (bot, message, args) => {
+  const parametersAvailable = bot.models.settings.guild;
   if (!message.member.permissions.has("ADMINISTRATOR"))
     return message.reply(`How about you not do that!`);
-  const parametersAvailable = bot.models.settings.guild;
-  if (args.length === 0 || args.indexOf("help") !== -1) {
-    let description = "";
+  if (args.length === 0) {
+    const { prefix } = message.guild;
+    const embed = new MessageEmbed()
+      .setAuthor(`User Settings`, bot.user.avatarURL())
+      .setDescription(
+        `Welcome to your server settings! This command allows you to customize Aldebaran to your needs. The available properties are listed in \`${prefix}gconfig view\`. To change a property, you need to use this command like that: \`${prefix}gconfig property value\`, and one example is \`${prefix}gconfig adventureTimer on\`.`
+      )
+      .setColor("BLUE");
+    message.channel.send({ embed });
+  } else if (args.includes("view")) {
+    const list = {};
     for (const [key, data] of Object.entries(parametersAvailable))
       if (
         message.guild.members.get(data.showOnlyIfBotIsInGuild) !== undefined ||
         data.showOnlyIfBotIsInGuild === undefined
       ) {
-        description += `**${key}** - ${data.help}\n`;
+        if (list[data.category] === undefined) list[data.category] = {};
+        list[data.category][key] = data;
       }
     const embed = new MessageEmbed()
       .setAuthor(message.author.username, message.author.avatarURL())
       .setTitle("Config Command Help Page")
-      .setDescription(
-        `Here are the different parameters you can change to set the experience and the limitations of the members of your server.\n**Usage Example:** \`&gconfig adventureTimer off\`.\n__Note:__ This command can only be used by the owner of the server.\n${description}`
-      )
       .setColor("BLUE");
+    for (const [category, parameters] of Object.entries(list)) {
+      let entries = "";
+      for (const [key, data] of Object.entries(parameters)) {
+        entries += `**${key}** - ${data.help}\n`;
+      }
+      embed.addField(category, entries);
+    }
     message.channel.send({ embed });
   } else if (Object.keys(parametersAvailable).indexOf(args[0]) !== -1) {
     if (parametersAvailable[args[0]].support(args[1])) {

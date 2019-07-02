@@ -2,24 +2,47 @@ const { MessageEmbed } = require("discord.js");
 
 exports.run = async (bot, message, args) => {
   const parametersAvailable = bot.models.settings.user;
-  if (args.length === 0 || args.indexOf("help") !== -1) {
-    let description = "";
+  if (args.length === 0) {
+    const { prefix } = message.guild;
+    const embed = new MessageEmbed()
+      .setAuthor(`User Settings`, bot.user.avatarURL())
+      .setDescription(
+        `Welcome to your user settings! This command allows you to customize Aldebaran to your needs. The available properties are listed in \`${prefix}uconfig view\`. To change a property, you need to use this command like that: \`${prefix}uconfig property value\`, and one example is \`${prefix}uconfig adventureTimer on\`.`
+      )
+      .setColor("BLUE")
+      .setFooter(
+        `Make sure to also use \`${prefix}gconfig\` for server settings.`
+      );
+    message.channel.send({ embed });
+  } else if (args.includes("view")) {
+    const list = {};
     for (const [key, data] of Object.entries(parametersAvailable))
       if (
         message.guild.members.get(data.showOnlyIfBotIsInGuild) !== undefined ||
         data.showOnlyIfBotIsInGuild === undefined
       ) {
-        description += `**${key}** - ${data.help}\n`;
+        if (list[data.category] === undefined) list[data.category] = {};
+        list[data.category][key] = data;
       }
     const embed = new MessageEmbed()
       .setAuthor(message.author.username, message.author.avatarURL())
       .setTitle("Config Command Help Page")
       .setDescription(
-        `Here are the different parameters you can change to have a better experience of ${
-          bot.user.username
-        }\n(Note: If setting is disabled in &gconfig by guild owner, these settings will be ignored.\n**__Usage Example__** : \`&uconfig healthMonitor off\`\n${description}\n`
+        `**__IMPORTANT: If setting is disabled in &gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties.`
       )
       .setColor("BLUE");
+    for (const [category, parameters] of Object.entries(list)) {
+      let entries = "";
+      for (const [key, data] of Object.entries(parameters)) {
+        if (
+          message.guild.settings[key] === undefined &&
+          bot.models.settings.guild[key] !== undefined
+        )
+          entries += ":warning: ";
+        entries += `**${key}** - ${data.help}\n`;
+      }
+      embed.addField(category, entries);
+    }
     message.channel.send({ embed });
   } else if (Object.keys(parametersAvailable).indexOf(args[0]) !== -1) {
     if (parametersAvailable[args[0]].support(args[1])) {
