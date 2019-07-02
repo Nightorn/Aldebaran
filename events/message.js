@@ -1,6 +1,12 @@
 exports.run = async (bot, message) => {
-	if (message.author.id == `271394014358405121`) require('./../functions/bots/Pollux.js')(bot, message);
-	else if (message.author.id == `170915625722576896`) { 
+	if (message.guild.settings.aldebaran === "off") {
+		setTimeout(() => {
+			message.guild.changeSetting("aldebaran", "on");
+		}, 60000);
+		return;
+	}
+	if (message.author.id == "271394014358405121") require('./../functions/bots/Pollux.js')(bot, message);
+	else if (message.author.id === "170915625722576896") {
 		require(`${process.cwd()}/functions/bots/DiscordRPG.js`)(bot, message);
 		require(`${process.cwd()}/functions/timer/DiscordRPG/travel.js`)(bot, message); 
 	} else if (!message.author.bot) {
