@@ -34,11 +34,11 @@ module.exports = class Command {
                 if (user.asBotStaff.acknowledgements.indexOf("ADMIN") !== -1)
                   return true;
                 let pass = false;
-                for (const acknowledgement in this.permissions.bot)
+                for (const acknowledgement of Object.entries(
+                  this.permissions.bot
+                ))
                   if (
-                    user.asBotStaff.acknowledgements.indexOf(
-                      acknowledgement
-                    ) !== -1
+                    user.asBotStaff.acknowledgements.includes(acknowledgement)
                   )
                     pass = true;
                 return pass;
