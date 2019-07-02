@@ -11,7 +11,7 @@ exports.run = (bot, message, args) => {
                     name: message.author.username,
                     icon_url: message.author.avatarURL()
                 },
-                description: (message.author +` won't stop tickling  `+ target),
+                description: `${message.author} won't stop tickling ${target}!`,
                 image: {
                     url : (data.url),
                 },
