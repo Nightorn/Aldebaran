@@ -7,14 +7,14 @@ exports.run = async (bot, message, args) => {
     const embed = new MessageEmbed()
       .setAuthor(`User Settings`, bot.user.avatarURL())
       .setDescription(
-        `Welcome to your user settings! This command allows you to customize Aldebaran to your needs. The available properties are listed in \`${prefix}uconfig view\`. To change a property, you need to use this command like that: \`${prefix}uconfig property value\`, and one example is \`${prefix}uconfig adventureTimer on\`.`
+        `Welcome to your user settings! This command allows you to customize Aldebaran to your needs. The available properties are listed in \`${prefix}uconfig list\`, and your current settings are shown in \`${prefix}uconfig view\`. To change a property, you need to use this command like that: \`${prefix}uconfig property value\`, and one example is \`${prefix}uconfig adventureTimer on\`.`
       )
       .setColor("BLUE")
       .setFooter(
         `Make sure to also use \`${prefix}gconfig\` for server settings.`
       );
     message.channel.send({ embed });
-  } else if (args.includes("view")) {
+  } else if (args.includes("list")) {
     const list = {};
     for (const [key, data] of Object.entries(parametersAvailable))
       if (
@@ -43,6 +43,16 @@ exports.run = async (bot, message, args) => {
       }
       embed.addField(category, entries);
     }
+    message.channel.send({ embed });
+  } else if (args.includes("view")) {
+    let list = "";
+    for (const [key, value] of Object.entries(message.author.settings)) {
+      list += `**${key}** - \`${value}\`\n`;
+    }
+    const embed = new MessageEmbed()
+      .setAuthor(`User Settings  |  Overview`, bot.user.avatarURL())
+      .setDescription(list === "" ? "None" : list)
+      .setColor("BLUE");
     message.channel.send({ embed });
   } else if (Object.keys(parametersAvailable).indexOf(args[0]) !== -1) {
     if (parametersAvailable[args[0]].support(args[1])) {
