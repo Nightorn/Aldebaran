@@ -21,6 +21,8 @@
         "no-restricted-syntax": "off",
         "no-console": "off",
         "no-param-reassign": "warn",
+        "no-extend-native": "off",
+        "no-plusplus": "off",
         "import/no-webpack-loader-syntax": "off"
     }
 }

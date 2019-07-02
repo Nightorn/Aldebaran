@@ -2,7 +2,9 @@ const { MessageEmbed } = require("discord.js");
 
 exports.run = (bot, message) => {
   let adminMentions = "";
-  for (const id of bot.config.admins) adminMentions += `<@${id}>\n`;
+  for (const [id, member] of Object.entries(bot.config.aldebaranTeam))
+    if (member.acknowledgements.includes("DEVELOPER"))
+      adminMentions += `<@${id}>\n`;
   const minutesUptime = `${String(
     Math.floor((bot.uptime % 3600000) / 60000)
   )}m`;
@@ -28,12 +30,12 @@ exports.run = (bot, message) => {
     )
     .addField(
       "__Powered By__",
-      `**DigitalOcean** : VPS Host\n**Node.JS** : JavaScript Runtime`,
+      `VPS Host **DigitalOcean**\nEnvironment **Node.js** v10.16.0\nAPI Library **discord.js** v12.0.0-dev`,
       true
     )
     .addField(
       "__Note__",
-      `Aldebaran is not affiliated in any way with the following:\n - [DiscordRPG](https://discorddungeons.me): [Discord Server](https://discordapp.com/invite/xy3UbVb), support@discorddungeons.me;\n - [osu!](https://osu.ppy.sh): support@ppy.sh;\n - [Giphy](https://giphy.com): [Support](https://support.giphy.com/hc/en-us/requests/new);\n - [Pexels](https://www.pexels.com/): hello@pexels.com;\n - [TheCatAPI](https://thecatapi.com): aden.forshaw@gmail.com`
+      `Aldebaran uses but is not affiliated with the following:\n - **[DiscordRPG](https://discorddungeons.me)** : [Discord Server](https://discordapp.com/invite/xy3UbVb), support@discorddungeons.me\n - **[TheCatAPI](https://thecatapi.com)** : aden.forshaw@gmail.com\n - **[Dog API](https://dog.ceo/)** : dog@dog.ceo\n - **[nekos.life](https://nekos.life/)** : subspaceinteractivestudios@gmail.com\n - **[Giphy](https://giphy.com)** : [Support](https://support.giphy.com/hc/en-us/requests/new)\n - **[osu!](https://osu.ppy.sh)** : support@ppy.sh;\n - **[Some Random Api](https://some-random-api.ml/)**`
     )
     .setFooter(`The prefix in this guild is "${message.guild.prefix}".`)
     .setThumbnail(message.guild.iconURL())
