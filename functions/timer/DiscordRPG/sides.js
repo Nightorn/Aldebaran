@@ -30,7 +30,6 @@ module.exports = async message => {
         supportedST.indexOf(message.author.settings.sidesTimer) !== -1 &&
         message.guild.settings.sidesTimer === "on"
       ) {
-        console.log(prefix + primaryAction);
         const emoji = ["🥕", "🍋", "🥔", "🐟"];
         const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
         const timerEmbed = new MessageEmbed()
