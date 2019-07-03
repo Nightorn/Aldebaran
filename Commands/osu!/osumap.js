@@ -1,6 +1,6 @@
 exports.run = async (bot, message, args) => {
     const { MessageEmbed } = require('discord.js'), Nodesu = require('nodesu'), ojsama = require('ojsama');
-    const client = new Nodesu.Client(require('./../../config.json').apikeys["osu!"]);
+    const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
     if (args.length === 0) return message.channel.send(`You need to send a link of the beatmap or its ID. Check \`&osu ?\` for more informations.`);
     if (args[0].toLowerCase() === '?') {
         const embed = new MessageEmbed()

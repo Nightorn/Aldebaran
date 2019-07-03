@@ -1,0 +1,70 @@
+[
+    {
+        "text": "{NSERVERS} servers playing",
+        "type": "WATCHING"
+    },
+    {
+        "text": "{NUSERS} users' keyboard",
+        "type": "LISTENING"
+    },
+    {
+        "text": "version {VERSION}",
+        "type": "PLAYING"
+    },
+    {
+        "text": "you.",
+        "type": "WATCHING"
+    },
+    {
+        "text": "all your demands",
+        "type": "LISTENING"
+    },
+    {
+        "text": "DiscordRPG",
+        "type": "PLAYING"
+    },
+    {
+        "text": "osu!",
+        "type": "PLAYING"
+    },
+    {
+        "text": "with some &math",
+        "type": "PLAYING"
+    },
+    {
+        "text": "you type.",
+        "type": "WATCHING"
+    },
+    {
+        "text": "Ciborn's Spotify playlist with 264 songs, lasting 20 hours and 41 minutes",
+        "type": "LISTENING"
+    },
+    {
+        "text": "my &plant growing",
+        "type": "WATCHING"
+    },
+    {
+        "text": "items falling in my &trap",
+        "type": "LISTENING"
+    },
+    {
+        "text": "Nightmare lurking everywhere",
+        "type": "WATCHING"
+    },
+    {
+        "text": "Willard cosplaying as Herobrine",
+        "type": "WATCHING"
+    },
+    {
+        "text": "mount2010 asking for &pat",
+        "type": "LISTENING"
+    },
+    {
+        "text": "my new &osubest 2pp play",
+        "type": "WATCHING"
+    },
+    {
+        "text": "my &profile",
+        "type": "WATCHING"
+    }
+]

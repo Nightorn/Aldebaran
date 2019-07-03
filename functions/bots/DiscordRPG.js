@@ -16,7 +16,10 @@ const checkPlayer = (message, username) => {
   const matchedMessage = message.channel.messages.find(
     msg => msg.author.username === username
   );
-  return matchedMessage !== undefined ? matchedMessage.author : null;
+  const matchedAdventure = message.channel.drpgRecentADVs.get(username);
+  if (matchedMessage !== undefined) return matchedMessage.author;
+  if (matchedAdventure !== undefined) return matchedAdventure.user;
+  return null;
 };
 
 const general = (user, playerHP, petHP, message) => {

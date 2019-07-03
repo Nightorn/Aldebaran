@@ -11,7 +11,7 @@ exports.run = (bot, message, args) => {
                     name: message.author.username,
                     icon_url: message.author.avatarURL()
                 },
-                description: (message.author +`  is poking  `+ target),
+                description: `${message.author} is poking ${target}`,
                 image: {
                     url : (data.url),
                 },

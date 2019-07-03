@@ -1,24 +1,26 @@
-const { Structures } = require('discord.js'), AldebaranClient = require(`${process.cwd()}/structures/Discord/Client.js`);
+const { Structures } = require("discord.js");
 
-Object.defineProperty(Number.prototype, "formatNumber", {
-    enumerable: false,
-    writable: true,
-    value: function(){
-        return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
-    }
+const AldebaranClient = require("./structures/Discord/Client");
+const User = require("./structures/Discord/User");
+const Guild = require("./structures/Discord/Guild");
+const Message = require("./structures/Discord/Message");
+const Channel = require("./structures/Discord/TextChannel");
 
+Number.formatNumber = value => {
+  return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+};
+
+Structures.extend("User", BaseUser => {
+  return User(BaseUser);
+});
+Structures.extend("Guild", BaseGuild => {
+  return Guild(BaseGuild);
+});
+Structures.extend("Message", BaseMessage => {
+  return Message(BaseMessage);
+});
+Structures.extend("TextChannel", BaseTextChannel => {
+  return Channel(BaseTextChannel);
 });
 
-Object.defineProperty(String.prototype, "formatNumber", {
-    enumerable: false,
-    writable: true,
-    value: function(){
-        return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
-    }
-});
-
-Structures.extend('User', BaseUser => { return require(`${process.cwd()}/structures/Discord/User`)(BaseUser); });
-Structures.extend('Guild', BaseGuild => { return require(`${process.cwd()}/structures/Discord/Guild`)(BaseGuild); });
-Structures.extend('Message', BaseMessage => { return require(`${process.cwd()}/structures/Discord/Message`)(BaseMessage); });
-
-var bot = new AldebaranClient();
+const bot = new AldebaranClient(); // eslint-disable-line no-unused-vars

@@ -33,6 +33,13 @@ module.exports = (BaseUser) => {
             this.existsInDB = true;
         }
 
+        checkPerms(perm) {
+            if (this.asBotStaff === null) return false;
+            if (this.asBotStaff.acknowledgements.includes("ADMIN")) return true;
+            if (perm === "MODERATOR")
+            return this.asBotStaff.acknowledgements.includes("MODERATOR");
+        }
+
         async create() {
             this.existsInDB = true;
             return await this.client.database.users.createOneById(this.id);
