@@ -1,6 +1,6 @@
 {
   "name": "aldebaran",
-  "version": "1.6.1",
+  "version": "1.6.3",
   "description": "Utility",
   "main": "bot.js",
   "dependencies": {

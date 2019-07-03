@@ -4,7 +4,7 @@ module.exports = message => {
     message.guild.settings.adventureTimer === "off" ||
     message.guild.settings.adventureTimer === undefined ||
     message.author.settings.adventureTimer === "off" ||
-    message.author.settings.adventureTimer === "on"
+    message.author.settings.adventureTimer === undefined
   )
     return;
   const content = `${message.content.toLowerCase()} `;
