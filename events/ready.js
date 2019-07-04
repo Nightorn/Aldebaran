@@ -46,10 +46,6 @@ exports.run = client => {
     }
   }, 3600000);
   setInterval(() => {
-    presence.push({
-      text: "&presence entries",
-      type: "WATCHING"
-    });
     const selected = presence[Math.floor(Math.random() * presence.length)];
     client.user.setActivity(parseText(selected.text), { type: selected.type });
   }, 30000);
