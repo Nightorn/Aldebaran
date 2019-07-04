@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 const view = require("./admin/view");
 const clear = require("./admin/clear");
 const mod = require("./admin/mod");
-const ignore = require("./admin/ignore");
+// const ignore = require("./admin/ignore");
 
 exports.run = (bot, message, args) => {
   if (!message.author.checkPerms("MODERATOR")) return;
