@@ -6,8 +6,13 @@ const Guild = require("./structures/Discord/Guild");
 const Message = require("./structures/Discord/Message");
 const Channel = require("./structures/Discord/TextChannel");
 
-Number.formatNumber = value => {
-  return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+// With the contribution of holroy
+Number.formatNumber = n => {
+  const parts = n.toString().split(".");
+  return (
+    parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+    (parts[1] ? `.${parts[1]}` : "")
+  );
 };
 
 Structures.extend("User", BaseUser => {

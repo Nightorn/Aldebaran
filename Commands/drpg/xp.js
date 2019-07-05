@@ -2,41 +2,58 @@ const { MessageEmbed } = require("discord.js");
 
 exports.run = (bot, message, args) => {
   const level = parseInt(args[0], 10);
-  const xpboostperc = args[1] !== undefined ? parseInt(args[1], 10) : 0;
-  if (!Number.isNaN(level) && !Number.isNaN(xpboostperc)) {
-    const formula1 = Math.floor((1249297 * (level * level)) / 61200000);
-    const formula2 = Math.floor((1778779 * level) / 306000);
-    const formula3 = Math.floor(11291 / 51);
-    const finalnoring = Math.floor(
-      ((formula1 + formula2 + formula3) / 1.5) * (1 + xpboostperc / 100)
-    );
-    const finalxpring = Math.floor(
-      ((formula1 + formula2 + formula3) / 1.5) * (1.25 + xpboostperc / 100)
-    );
-    const finaldonorring = Math.floor(
-      (formula1 + formula2 + formula3) * (1 + xpboostperc / 100)
-    );
+  const enchant = args[1] !== undefined ? parseInt(args[1], 10) : 0;
+  let attributes = 0;
+  if (args[2] !== undefined) {
+    if (args[2] === "max") attributes = 6969696969696966696969696969;
+    else attributes = parseInt(args[2], 10);
+  }
+  if (
+    !Number.isNaN(level) &&
+    !Number.isNaN(enchant) &&
+    !Number.isNaN(attributes)
+  ) {
+    if (attributes > level * 5) attributes = level * 5;
+    const baseXP =
+      (50 + (level - 55) * 2.719047619 + 200 + level * 2.719047619) / 2;
+
+    const getXP = (ring = 1) => {
+      return Math.round(
+        (baseXP * (1 + (Math.floor(attributes / 10) + enchant) / 100) + level) *
+          ring
+      );
+    };
 
     const embed = new MessageEmbed()
       .setTitle(`Average Xp Kill At Lvl. ${level}`)
       .setAuthor(message.author.username, message.author.avatarURL())
       .setColor(0x00ae86)
       .setDescription(
-        `**Please note all infomation about XP are estimations!**\n*Estimations are based on full XP boost build, while grinding dynamobs.*\nYou have a +${xpboostperc}% XP Boost on your equipment.`
+        `**Please note all infomation about XP are estimations, and only works with dynamobs!**\nYou have a +${enchant}% XP Boost on your equipment, and you have ${attributes} points in your XP Boost attribute.`
       )
       .addField(
         "**With a ring of XP (x1.25)**",
-        `Around ${finalxpring} XP per kill`,
+        `${Number.formatNumber(getXP(1.25))} XP per kill on average`,
+        true
+      )
+      .addField(
+        "**With an enchanted ring of XP (x1.31)**",
+        `${Number.formatNumber(getXP(1.31))} XP per kill on average`,
         true
       )
       .addField(
         "**With a donor ring of XP (x1.5)**",
-        `Around ${finaldonorring} XP per kill`,
+        `${Number.formatNumber(getXP(1.5))} XP per kill on average`,
+        true
+      )
+      .addField(
+        "**With an enchanted donor ring of XP (x1.56)**",
+        `${Number.formatNumber(getXP(1.56))} XP per kill on average`,
         true
       )
       .addField(
         "**Without a ring of XP**",
-        `Around ${finalnoring} XP per kill`
+        `${Number.formatNumber(getXP())} XP per kill on average`
       );
     message.channel.send({ embed });
   } else {
@@ -49,6 +66,6 @@ exports.run = (bot, message, args) => {
 exports.infos = {
   category: "DRPG",
   description: "Displays estimated xp per kill at a certain level.",
-  usage: "&xp `<level> <xpboost bonus percentage>`",
+  usage: "&xp `<level> <xpboost bonus percentage> <xpboost attribute>`",
   example: "&xp `600 6`"
 };
