@@ -17,16 +17,23 @@ exports.run = async (bot, message, args)=>{
         return lvl;
     }
     function findKeyBelow (lvl) {
-        while (bases[lvl] === undefined) {
+        while (bases[lvl] === undefined && lvl > 0) {
             lvl--;
         }
         return lvl;
     }
     function userWall (lvl) {
-        const base = findKeyAbove(lvl);
-        const prevBase = findKeyBelow(lvl-1);
-        const wall = calcWall(base, bases[base], bases[prevBase]);
-        return [wall, base];
+        const baseLvl = findKeyAbove(lvl);
+        const prevBaseLvl = findKeyBelow(lvl-1);
+        const base = bases[baseLvl];
+        let prevBase = 0;
+        if (!bases[prevBaseLvl]) {
+            prevBase = 25;
+        }
+        else {prevBase = bases[prevBaseLvl];}
+        const wall = calcWall(baseLvl, base, prevBase);
+
+        return [wall, baseLvl];
     }
     function calcXPNeeded (base, lvl) {
         return base * (Math.pow(lvl, 2) + lvl);
