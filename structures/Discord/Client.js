@@ -1,7 +1,8 @@
 const { Client } = require("discord.js");
 const fs = require("fs");
 const CDBAHandler = require("../Aldebaran/CDBAHandler");
-const CommandHandler = require("../Aldebaran/CommandHandler.js");
+// const CommandHandler = require("../Aldebaran/CommandHandler.js");
+const CommandHandler = require("../commands/Handler");
 const DatabasePool = require("../Aldebaran/DatabasePool.js");
 
 module.exports = class AldebaranClient extends Client {
@@ -15,7 +16,8 @@ module.exports = class AldebaranClient extends Client {
     this.started = Date.now();
     this.CDBA = new CDBAHandler();
     this.commandGroups = {};
-    this.commandHandler = new CommandHandler(this);
+    this.commands = new CommandHandler(this);
+    // this.commandHandler = new CommandHandler(this);
     this.config = require(`${process.cwd()}/config/config.json`);
     this.config.presence = require("../../config/presence.json");
     this.config.aldebaranTeam = require(`${process.cwd()}/config/aldebaranTeam.json`);
@@ -33,6 +35,11 @@ module.exports = class AldebaranClient extends Client {
     }
     if (!fs.existsSync(`./cache/`)) fs.mkdirSync(`./cache/`);
 
+    this.databaseCounts = {
+      users: new Map(),
+      profiles: new Map(),
+      guilds: new Map()
+    };
     const usersDatabaseData = new Map();
     const profilesDatabaseData = new Map();
     const guildsDatabaseData = new Map();
@@ -60,20 +67,18 @@ module.exports = class AldebaranClient extends Client {
           this.database
             .query("SELECT COUNT(DISTINCT userId) FROM users")
             .then(count => {
-              usersDatabaseSize = count[0]["COUNT(DISTINCT userId)"];
+              this.databaseCounts.users = count[0]["COUNT(DISTINCT userId)"];
               this.database
                 .query("SELECT COUNT(*) FROM socialprofile")
                 .then(count => {
-                  profilesDatabaseSize = count[0]["COUNT(*)"];
+                  this.databaseCounts.profiles = count[0]["COUNT(*)"];
                   this.database
                     .query("SELECT COUNT(DISTINCT guildid) FROM guilds")
                     .then(count => {
-                      guildsDatabaseSize = count[0]["COUNT(DISTINCT guildid)"];
+                      this.databaseCounts.guilds = count[0]["COUNT(DISTINCT guildid)"];
                       this.buildDatabaseFetch({
                         counts: {
-                          users: usersDatabaseSize,
-                          profiles: profilesDatabaseSize,
-                          guilds: guildsDatabaseSize
+                          ...this.databaseCounts
                         },
                         data: {
                           users: usersDatabaseData,
@@ -100,6 +105,6 @@ module.exports = class AldebaranClient extends Client {
 
   buildDatabaseFetch(data) {
     this.databaseFetch = data;
-    console.log(`Ready. Took ${Date.now() - this.started}ms.`);
+    console.log(`\x1b[36m# Ready. Took ${Date.now() - this.started}ms.\x1b[0m`);
   }
 }

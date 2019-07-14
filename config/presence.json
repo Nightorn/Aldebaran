@@ -66,5 +66,9 @@
     {
         "text": "my &profile",
         "type": "WATCHING"
+    },
+    {
+        "text": "&presence entries",
+        "type": "WATCHING"
     }
 ]

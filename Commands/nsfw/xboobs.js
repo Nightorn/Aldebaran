@@ -1,28 +1,25 @@
-exports.run = async (bot, message) => {
-    const client = require('nekos.life');
-    const neko = new client();
+const { MessageEmbed } = require("discord.js");
+const Client = require("nekos.life");
+const NSFWCommand = require("../../structures/commands/NSFWCommand");
+
+module.exports = class XBoobsCommand extends NSFWCommand {
+  constructor(client) {
+    super(client, {
+      name: "xboobs",
+      description: "Displays a hentai picture or GIF showing boobs"
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async run(bot, message) {
+    const neko = new Client();
     const data = await neko.getNSFWBoobs();
-    message.channel.send({embed:{
-        author:{
-            name: message.author.username,
-            icon_url: message.author.avatarURL()
-        },
-        description: (message.author + " " + `You want boobs?, I give you...BOOBS!`),
-        image: {
-            url : (data.url),
-        },
-        timestamp: new Date(),
-        footer: {
-            icon_url: bot.user.avatarURL(),
-            text: "Powered By Nekos.life"
-        }
-    }});
-}
-exports.infos = {
-    category: "NSFW",
-    description: "Displays a hentai picture or gif containing Boobs",
-    usage: "\`&xboobs\`",
-    example: "\`&xboobs\`",
-    restrictions: "NSFW Channels Only",
-    nsfw: true
-}
+    const embed = new MessageEmbed()
+      .setAuthor("NSFW  |  Boobs", bot.user.avatarURL())
+      .setDescription(`${message.author} You want boobs? I give you... BOOBS!`)
+      .setImage(data.url)
+      .setColor("#A55000")
+      .setFooter("Powered by nekos.life");
+    message.channel.send({ embed });
+  }
+};

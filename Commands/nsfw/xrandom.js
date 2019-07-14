@@ -1,28 +1,26 @@
-exports.run = async (bot, message, args) => {
-    const client = require('nekos.life');
-    const neko = new client();
+const { MessageEmbed } = require("discord.js");
+const Client = require("nekos.life");
+const NSFWCommand = require("../../structures/commands/NSFWCommand");
+
+module.exports = class XRandomCommand extends NSFWCommand {
+  constructor(client) {
+    super(client, {
+      name: "xrandom",
+      description: "Displays a random hentai picture or GIF"
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async run(bot, message) {
+    const neko = new Client();
     const data = await neko.getNSFWRandomHentaiGif();
-    message.channel.send({embed:{
-        author:{
-            name: message.author.username,
-            icon_url: message.author.avatarURL()
-        },
-        description: message.author + " " + ` You wanted random...here you go!`,
-        image: {
-            url : (data.url),
-        },
-        timestamp: new Date(),
-        footer: {
-            icon_url: bot.user.avatarURL(),
-            text: "Powered By Nekos.life"
-        }
-    }});
-}
-exports.infos = {
-    category: "NSFW",
-    description: "Displays a random hentai picture or gif. ",
-    usage: "\`&xrandom\`",
-    example: "\`&random\`",
-    restrictions: "NSFW Channels Only",
-    nsfw: true
-}
+    const embed = new MessageEmbed()
+      .setAuthor(`NSFW  |  Random`)
+      .setDescription(
+        `${message.author}, you wanted something random? Here you go!`
+      )
+      .setImage(data.url)
+      .setFooter("Powered by nekos.life");
+    message.channel.send({ embed });
+  }
+};

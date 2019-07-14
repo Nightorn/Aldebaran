@@ -1,28 +1,24 @@
-exports.run = async (bot, message, args) => {
-    const client = require('nekos.life');
-    const neko = new client();
+const { MessageEmbed } = require("discord.js");
+const Client = require("nekos.life");
+const NSFWCommand = require("../../structures/commands/NSFWCommand");
+
+module.exports = class XNekoCommand extends NSFWCommand {
+  constructor(client) {
+    super(client, {
+      name: "xneko",
+      description: "Displays a hentai neko picture or GIF"
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async run(bot, message) {
+    const neko = new Client();
     const data = await neko.getNSFWNekoGif();
-    message.channel.send({embed:{
-        author:{
-            name: message.author.username,
-            icon_url: message.author.avatarURL()
-        },
-        description: message.author + " " + `Here is your Naughty Neko.`,
-        image: {
-            url : data.url,
-        },
-        timestamp: new Date(),
-        footer: {
-            icon_url: bot.user.avatarURL(),
-            text: "Powered By Nekos.life"
-        }
-    }});
-}
-exports.infos = {
-    category: "NSFW",
-    description: "Displays a hentai Neko picture or gif. ",
-    usage: "\`&xneko\`",
-    example: "\`&neko\`",
-    restrictions: "NSFW Channels Only",
-    nsfw: true
-}
+    const embed = new MessageEmbed()
+      .setAuthor(`NSFW  |  Neko`)
+      .setDescription(`${message.author}, here is your naughty neko.`)
+      .setImage(data.url)
+      .setFooter("Powered by Nekos.life");
+    message.channel.send({ embed });
+  }
+};

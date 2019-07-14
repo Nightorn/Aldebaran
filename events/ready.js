@@ -11,21 +11,16 @@ exports.run = client => {
   client.guilds.get("461792163525689345").channels.get("463094132248805376").messages.fetch(200);
   client.guilds.get("461792163525689345").channels.get("494129501077241857").messages.fetch(200);
 
-  if (client.debugMode) {
-    console.log(
-      `Bot has started in dev mode with prefix ${client.config.prefix}, with ${
-        client.users.size
-      } users, in ${client.channels.size} channels of ${
-        client.guilds.size
-      } guilds.`
-    );
-  } else {
-    console.log(
-      `Bot has started, with ${client.users.size} users, in ${
-        client.channels.size
-      } channels of ${client.guilds.size} guilds.`
-    );
-  }
+  console.log(
+    `\x1b[36m# ${client.user.username} has started!${
+      client.debugMode ? " The developer mode has been enabled." : ""
+    }\x1b[0m`
+  );
+  console.log(
+    `\x1b[36m# ${client.users.size} users, ${client.channels.size} channels, ${
+      client.guilds.size
+    } servers, ${client.commands.commands.size} commands\x1b[0m`
+  );
 
   const parseText = value => {
     let text = value;
