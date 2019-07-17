@@ -28,127 +28,132 @@ exports.run = async (bot, message, args) => {
     if (userid !== null) {
         request({uri:`http://api.discorddungeons.me/v3/user/${userid}`, headers: {"Authorization": bot.config.drpg_apikey}}, async function(err, response, body) {
             if (err) throw err;
-            var data = JSON.parse(body);
-            if (data.status === 404) return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
-            var userData = data.data;
-            const user = await bot.users.fetch(userid);
-            data = null;
+            if (response.statusCode === 404) {
+                return message.reply(`it looks like the user you specified has not started his adventure on DiscordRPG yet.`);
+            } else if (response.statusCode === 200) {
+                var data = JSON.parse(body);
+                var userData = data.data;
+                const user = await bot.users.fetch(userid);
+                data = null;
+        
+                const items = {
+                    "78": "Raven Feathers",
+                    "79": "Balls of Wool",
+                    "80": "Golden Feathers",
+                    "81": "Meats",
+                    "462": "Bear",
+                    "499": "Nova Crystal",
+                    "656": "Immortal King's Sacrament",
+                    "657": "Felix's Fur",
+                    "693": "Star Fragment",
+                    "694": "Nova Moonstone"
+                }
     
-            const items = {
-                "78": "Raven Feathers",
-                "79": "Balls of Wool",
-                "80": "Golden Feathers",
-                "81": "Meats",
-                "462": "Bear",
-                "499": "Nova Crystal",
-                "656": "Immortal King's Sacrament",
-                "657": "Felix's Fur",
-                "693": "Star Fragment",
-                "694": "Nova Moonstone"
-            }
-
-            const commonTrapLoot = (salvage, max, minTime) => {
-                let factor = max ? 14000 : 15000;
-                return trapelapsedraw >= minTime ? Math.floor(1 + (Math.floor(Math.sqrt(salvage) * (trapelapsedraw / 25) / factor))) : 0
-            };
-            const traps = {
-                "73": {
-                    name: "Bear Trap",
-                    loots: {
-                        "78": (salvage, max) => commonTrapLoot(salvage, max, 1200),
-                        "79": (salvage, max) => commonTrapLoot(salvage, max, 300),
-                        "80": (salvage, max) => commonTrapLoot(salvage, max, 86400),
-                        "81": (salvage, max) => commonTrapLoot(salvage, max, 3600),
-                        "462": () => trapelapsedraw >= 604800 ? 1 : 0
-                    }
-                },
-                "655": {
-                    name: "Felix's Trap",
-                    loots: {
-                        "78": (salvage, max) => commonTrapLoot(salvage, max, 1200),
-                        "79": (salvage, max) => commonTrapLoot(salvage, max, 1200),
-                        "81": (salvage, max) => commonTrapLoot(salvage, max, 3600),
-                        "656": (salvage, max) => commonTrapLoot(salvage, max, 21600),
-                        "657": () => trapelapsedraw >= 604800 ? 1 : 0
-                    }
-                },
-                "696": {
-                    name: "Nova Starlight Absorber",
-                    loots: {
-                        "78": (salvage, max) => commonTrapLoot(salvage, max, 1200),
-                        "81": (salvage, max) => commonTrapLoot(salvage, max, 3600),
-                        "499": () => trapelapsedraw >= 604800 ? 1 : 0,
-                        "693": (salvage, max) => commonTrapLoot(salvage, max, 300),
-                        "694": (salvage, max) => commonTrapLoot(salvage, max, 86400)
-                    }
-                }
-            }
-            
-            const f = (data) => { return String(data).length === 1 ? `0${data}` : data }
-            const getDate = (time, md) => {
-                const date = new Date(time);
-                if (md) {
-                    return `**${f(date.getMonth() + 1)}/${f(date.getDate())}/${f(date.getFullYear())}** at **${f(date.getHours())}:${f(date.getMinutes())}** UTC`;
-                } else {
-                    return `${f(date.getMonth() + 1)}/${f(date.getDate())}/${f(date.getFullYear())} at ${f(date.getHours())}:${f(date.getMinutes())} UTC`;
-                }
-            }
-            
-            const errorMessage = `**${userData.name}**, it looks like you did not set any trap.`;
-            if (userData.location === undefined) return message.channel.send(`Hey **${userData.name}**, travel somewhere and set a trap on your way!`)
-            if (userData.location.traps !== undefined) {
-                const trapsNumber = Object.keys(userData.location.traps).length;
-                if (trapsNumber !== 0) {
-                    if (trapsNumber > 1) {
-                        if (trapId === null) {
-                            var locations = "";
-                            for (let [locationId, trapData] of Object.entries(userData.location.traps)) {
-                                if (traps[trapData.id] !== undefined) {
-                                    if (locationsList[locationId] !== undefined) {
-                                        locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **${locationsList[locationId].name}** - ${getDate(trapData.time, true)}\n`;
-                                    } else locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **Unknown Location (\`${locationId}\`)** - ${getDate(trapData.time, true)}\n`;
-                                }
-                            }
-                            const embed = new MessageEmbed()
-                                .setAuthor(`${user.username}  |  Trap Informations`, user.avatarURL())
-                                .setDescription(`**${user.username}** has **${locations.split('\n').length - 1} traps** set. Please tell us which one you want to view the informations of. Use \`${message.guild.prefix}trap 4\` for example.\n${locations}`)
-                                .setColor(`BLUE`);
-                            return message.channel.send({embed});
-                        } else if (userData.location.traps[trapId] === undefined) {
-                            return message.channel.send(`Sorry **${message.author.username}**, but the specified trap does not exist.`);
-                        } else if (userData.location.traps[trapId].id === "") {
-                            return message.channel.send(`Sorry **${message.author.username}**, but the specified trap has been checked before and is no longer available.`);
+                const commonTrapLoot = (salvage, max, minTime) => {
+                    let factor = max ? 14000 : 15000;
+                    return trapelapsedraw >= minTime ? Math.floor(1 + (Math.floor(Math.sqrt(salvage) * (trapelapsedraw / 25) / factor))) : 0
+                };
+                const traps = {
+                    "73": {
+                        name: "Bear Trap",
+                        loots: {
+                            "78": (salvage, max) => commonTrapLoot(salvage, max, 1200),
+                            "79": (salvage, max) => commonTrapLoot(salvage, max, 300),
+                            "80": (salvage, max) => commonTrapLoot(salvage, max, 86400),
+                            "81": (salvage, max) => commonTrapLoot(salvage, max, 3600),
+                            "462": () => trapelapsedraw >= 604800 ? 1 : 0
                         }
-                    } else trapId = Object.keys(userData.location.traps)[0];
+                    },
+                    "655": {
+                        name: "Felix's Trap",
+                        loots: {
+                            "78": (salvage, max) => commonTrapLoot(salvage, max, 1200),
+                            "79": (salvage, max) => commonTrapLoot(salvage, max, 1200),
+                            "81": (salvage, max) => commonTrapLoot(salvage, max, 3600),
+                            "656": (salvage, max) => commonTrapLoot(salvage, max, 21600),
+                            "657": () => trapelapsedraw >= 604800 ? 1 : 0
+                        }
+                    },
+                    "696": {
+                        name: "Nova Starlight Absorber",
+                        loots: {
+                            "78": (salvage, max) => commonTrapLoot(salvage, max, 1200),
+                            "81": (salvage, max) => commonTrapLoot(salvage, max, 3600),
+                            "499": () => trapelapsedraw >= 604800 ? 1 : 0,
+                            "693": (salvage, max) => commonTrapLoot(salvage, max, 300),
+                            "694": (salvage, max) => commonTrapLoot(salvage, max, 86400)
+                        }
+                    }
+                }
+                
+                const f = (data) => { return String(data).length === 1 ? `0${data}` : data }
+                const getDate = (time, md) => {
+                    const date = new Date(time);
+                    if (md) {
+                        return `**${f(date.getMonth() + 1)}/${f(date.getDate())}/${f(date.getFullYear())}** at **${f(date.getHours())}:${f(date.getMinutes())}** UTC`;
+                    } else {
+                        return `${f(date.getMonth() + 1)}/${f(date.getDate())}/${f(date.getFullYear())} at ${f(date.getHours())}:${f(date.getMinutes())} UTC`;
+                    }
+                }
+                
+                const errorMessage = `**${userData.name}**, it looks like you did not set any trap.`;
+                if (userData.location === undefined) return message.channel.send(`Hey **${userData.name}**, travel somewhere and set a trap on your way!`)
+                if (userData.location.traps !== undefined) {
+                    const trapsNumber = Object.keys(userData.location.traps).length;
+                    if (trapsNumber !== 0) {
+                        if (trapsNumber > 1) {
+                            if (trapId === null) {
+                                var locations = "";
+                                for (let [locationId, trapData] of Object.entries(userData.location.traps)) {
+                                    if (traps[trapData.id] !== undefined) {
+                                        if (locationsList[locationId] !== undefined) {
+                                            locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **${locationsList[locationId].name}** - ${getDate(trapData.time, true)}\n`;
+                                        } else locations += `\`[${locationId}]\` **${traps[trapData.id].name}** @ **Unknown Location (\`${locationId}\`)** - ${getDate(trapData.time, true)}\n`;
+                                    }
+                                }
+                                const embed = new MessageEmbed()
+                                    .setAuthor(`${user.username}  |  Trap Informations`, user.avatarURL())
+                                    .setDescription(`**${user.username}** has **${locations.split('\n').length - 1} traps** set. Please tell us which one you want to view the informations of. Use \`${message.guild.prefix}trap 4\` for example.\n${locations}`)
+                                    .setColor(`BLUE`);
+                                return message.channel.send({embed});
+                            } else if (userData.location.traps[trapId] === undefined) {
+                                return message.channel.send(`Sorry **${message.author.username}**, but the specified trap does not exist.`);
+                            } else if (userData.location.traps[trapId].id === "") {
+                                return message.channel.send(`Sorry **${message.author.username}**, but the specified trap has been checked before and is no longer available.`);
+                            }
+                        } else trapId = Object.keys(userData.location.traps)[0];
+                    } else return message.channel.send(errorMessage);
                 } else return message.channel.send(errorMessage);
-            } else return message.channel.send(errorMessage);
-            data = userData.location.traps[trapId];
-
-            var trapelapsedraw = Math.floor((Date.now() - data.time) / 1000);
-            var traptimeelapsed = Math.floor((Date.now() - data.time) / 3600000) > 24 ? (Math.floor((Date.now() - data.time) / 86400000)) : (Math.floor((Date.now() - data.time) / 3600000));
-
-            const hour = Math.floor((Date.now() - data.time) / 3600000) > 24 ? 'Days' : 'Hours';
-            var currentSalvage = userData.attributes.salvaging !== undefined ? userData.attributes.salvaging : 0;
-            if (currentSalvage === 0) currentSalvage = 1;
-
-            const maxSalvage = Math.floor(userData.level * 5);
-
-            const beginning = `You will receive the following items (with ${isMax ? maxSalvage : currentSalvage === 1 ? 0 : currentSalvage} point(s) in salvaging) : \n`;
-            var results = beginning;
-            for (let [itemId, lootFunction] of Object.entries(traps[data.id].loots)) {
-                const minLoot = lootFunction(isMax ? maxSalvage : currentSalvage, false);
-                const maxLoot = lootFunction(isMax ? maxSalvage : currentSalvage, true);
-                if (minLoot === maxLoot && maxLoot !== 0) results += ` - **${maxLoot}** **${items[itemId]}**\n`;
-                else if (maxLoot !== 0) results += ` - Between **${minLoot}** and **${maxLoot}** **${items[itemId]}**\n`;
+                data = userData.location.traps[trapId];
+    
+                var trapelapsedraw = Math.floor((Date.now() - data.time) / 1000);
+                var traptimeelapsed = Math.floor((Date.now() - data.time) / 3600000) > 24 ? (Math.floor((Date.now() - data.time) / 86400000)) : (Math.floor((Date.now() - data.time) / 3600000));
+    
+                const hour = Math.floor((Date.now() - data.time) / 3600000) > 24 ? 'Days' : 'Hours';
+                var currentSalvage = userData.attributes.salvaging !== undefined ? userData.attributes.salvaging : 0;
+                if (currentSalvage === 0) currentSalvage = 1;
+    
+                const maxSalvage = Math.floor(userData.level * 5);
+    
+                const beginning = `You will receive the following items (with ${isMax ? maxSalvage : currentSalvage === 1 ? 0 : currentSalvage} point(s) in salvaging) : \n`;
+                var results = beginning;
+                for (let [itemId, lootFunction] of Object.entries(traps[data.id].loots)) {
+                    const minLoot = lootFunction(isMax ? maxSalvage : currentSalvage, false);
+                    const maxLoot = lootFunction(isMax ? maxSalvage : currentSalvage, true);
+                    if (minLoot === maxLoot && maxLoot !== 0) results += ` - **${maxLoot}** **${items[itemId]}**\n`;
+                    else if (maxLoot !== 0) results += ` - Between **${minLoot}** and **${maxLoot}** **${items[itemId]}**\n`;
+                }
+    
+                if (results === beginning) results = "You cannot receive any item yet, wait few minutes and some will eventually get in your trap!";
+                const embed = new MessageEmbed()
+                    .setAuthor(`${userData.name}  |  Trap Informations  |  ${traps[data.id].name} @ ${locationsList[trapId].name} `, user.avatarURL())
+                    .setDescription(results)
+                    .setFooter(`You have set this trap the ${getDate(data.time, false)}. You can use "--max" for results with max salvaging.`)
+                    .setColor(0x00AE86);
+                message.channel.send({embed});
+            } else {
+                return message.reply(`the DiscordRPG API seems down, please retry later.`);
             }
-
-            if (results === beginning) results = "You cannot receive any item yet, wait few minutes and some will eventually get in your trap!";
-            const embed = new MessageEmbed()
-                .setAuthor(`${userData.name}  |  Trap Informations  |  ${traps[data.id].name} @ ${locationsList[trapId].name} `, user.avatarURL())
-                .setDescription(results)
-                .setFooter(`You have set this trap the ${getDate(data.time, false)}. You can use "--max" for results with max salvaging.`)
-                .setColor(0x00AE86);
-            message.channel.send({embed});
         });
     } else {
         message.reply(`you must enter a valid UserID or User Mention.`);
