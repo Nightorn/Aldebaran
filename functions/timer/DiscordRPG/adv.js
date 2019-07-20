@@ -27,7 +27,7 @@ module.exports = message => {
   if (prefix !== null) {
     if (message.guild.settings.autoDelete === "on") {
       message.channel.addAdventure(message.author);
-      message.delete({ timeout: 1000 });
+      message.delete({ timeout: 2000 });
     }
     const delay =
       message.author.settings.adventureTimer === "random"
