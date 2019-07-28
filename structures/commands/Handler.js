@@ -1,4 +1,5 @@
 const fs = require("fs");
+const Command = require("../../structures/commands/Command");
 
 module.exports = class CommandHandler {
   constructor(client) {
@@ -52,8 +53,24 @@ module.exports = class CommandHandler {
           exploreFolder(`${path}${file}/`);
         } else {
           try {
+            let command = require(`../../${path + file}`)
+            if (typeof command === "object") {
+              const meta = {
+                description: "This is an auto-generated help message.",
+                name: file.replace(/\.js$/, "")
+              };
+              Object.assign(meta, command.infos);
+              class fakeClass extends Command {
+                constructor(client) {
+                  super(client, meta);
+                }
+              }
+              fakeClass.prototype.run = command.run;
+              command = fakeClass;
+              console.log(`${meta.name} needs to be converted to a class, but will still run in the meantime.`);
+            }
             // eslint-disable-next-line
-            this.register(require(`../../${path + file}`));
+            this.register(command);
           } catch (err) {
             console.error(
               `\x1b[31m${path +
