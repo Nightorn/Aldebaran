@@ -49,14 +49,13 @@ module.exports = BaseGuild => {
 
     async changeSetting(property, value) {
       if (!this.existsInDB) {
-        this.create().then(() => {
-          this.settings[property] = value;
-          return this.client.database.guilds.updateOneById(
-            this.id,
-            new Map([["settings", JSON.stringify(this.settings)]])
-          );
-        });
+        await this.create();
       }
+      this.settings[property] = value;
+      return this.client.database.users.updateOneById(
+        this.id,
+        new Map([["settings", JSON.stringify(this.settings)]])
+      );
     }
   };
 };
