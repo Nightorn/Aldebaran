@@ -22,7 +22,7 @@ module.exports = async message => {
     }
   }
   if (message.guild.settings.autoDelete === "on" && sidesPass)
-    message.delete({ timeout: 500 });
+    message.delete({ timeout: 2000 });
   if (content.indexOf(prefix + primaryAction) === 0) {
     if (message.author.timers.sides !== null) return;
     if (prefix !== null) {

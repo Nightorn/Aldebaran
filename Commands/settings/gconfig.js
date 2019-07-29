@@ -47,7 +47,6 @@ exports.run = async (bot, message, args) => {
     message.channel.send({ embed });
   } else if (Object.keys(parametersAvailable).indexOf(args[0]) !== -1) {
     if (parametersAvailable[args[0]].support(args[1])) {
-      if (!message.guild.existsInDb) await message.guild.create();
       if (parametersAvailable[args[0]].postUpdate !== undefined) {
         /* eslint-disable no-param-reassign */
         message.guild = parametersAvailable[args[0]].postUpdate(
