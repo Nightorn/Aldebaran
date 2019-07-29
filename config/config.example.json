@@ -27,6 +27,7 @@
     ],
     "apikeys": {
         "osu!": "abc123",
-        "yandex_translate": "abc123"
+        "yandex_translate": "abc123",
+        "fixer": "abc123"
     }
 }
