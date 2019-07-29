@@ -2,4 +2,4 @@ node_modules/
 cache/
 *.code-workspace
 .vscode
-./config/config.json
+config/config.json
