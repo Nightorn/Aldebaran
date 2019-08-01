@@ -5,6 +5,7 @@ module.exports = class DatabasePool {
    * Returns a MySQL pool connection to the Aldebaran's database
    */
   constructor(client) {
+    this.client = client;
     this.pool = mysql.createPool(client.config.mysql);
     this.users = {
       settings: {
