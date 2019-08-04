@@ -293,8 +293,10 @@ module.exports = class DatabasePool {
       return true;
     } catch (errU) {
       try {
-        await this.client.guilds.fetch(id);
-        return true;
+		const guild = await this.client.guilds.resolve(id);
+		if (guild instanceof Guild)
+			return true;
+		return false;
       } catch (errG) {
         return new RangeError("The id specified is not a string.");
       }
