@@ -52,7 +52,7 @@ module.exports = BaseGuild => {
         await this.create();
       }
       this.settings[property] = value;
-      return this.client.database.users.updateOneById(
+      return this.client.database.guilds.updateOneById(
         this.id,
         new Map([["settings", JSON.stringify(this.settings)]])
       );
