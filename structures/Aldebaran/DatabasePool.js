@@ -5,6 +5,7 @@ module.exports = class DatabasePool {
    * Returns a MySQL pool connection to the Aldebaran's database
    */
   constructor(client) {
+    this.client = client;
     this.pool = mysql.createPool(client.config.mysql);
     this.users = {
       settings: {
@@ -292,8 +293,10 @@ module.exports = class DatabasePool {
       return true;
     } catch (errU) {
       try {
-        await this.client.guilds.fetch(id);
-        return true;
+		const guild = await this.client.guilds.resolve(id);
+		if (guild instanceof Guild)
+			return true;
+		return false;
       } catch (errG) {
         return new RangeError("The id specified is not a string.");
       }
