@@ -1,43 +1,31 @@
-exports.run = (bot, message, args) => {
-    const client = require('nekos.life');
-    const Discord = require(`discord.js`)
-    const neko = new client();
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        async function poke() {
-            const data = (await neko.getSFWPoke());
-            message.channel.send({embed:{
-                author:{
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL()
-                },
-                description: `${message.author} is poking ${target}`,
-                image: {
-                    url : (data.url),
-                },
-                timestamp: new Date(),
-                footer: {
-                    icon_url: bot.user.avatarURL(),
-                    text: "Powerd By Nekos.life"
-                }
-            
-            }});
-        }
-        poke();
-        
-    } else {
-        message.reply("Please mention someone :thinking:")
-    }
-}
-exports.infos = {
-    category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&poke <usermention>\`",
-    example: "\`&poke @aldebaran\`",
-    cooldown: {
-        time: 1000,
-        rpm: 60,
-        resetTime: 60000,
-        commandGroup: "action"
-    }
-}
+const { MessageEmbed } = require("discord.js");
+const Client = require("nekos.life");
+const { Command } = require("../../structures/categories/ActionCategory");
+
+module.exports = class PokeCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "poke",
+			description: "Poke someone!",
+			usage: "UserMention",
+			example: "<@437802197539880970>"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	async run(bot, message) {
+		const neko = new Client();
+		if (message.mentions.users.first()) {
+			const target = message.mentions.users.first();
+			const data = await neko.getSFWPoke();
+			const embed = new MessageEmbed()
+				.setDescription(`${message.author} is poking ${target}`)
+				.setImage(data.url)
+				.setFooter("Powered by nekos.life", bot.user.avatarURL())
+				.setColor(this.color);
+			message.channel.send({ embed });
+		} else {
+			message.reply("Please mention someone :thinking:");
+		}
+	}
+};

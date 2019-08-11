@@ -51,11 +51,18 @@ module.exports = BaseUser => class User extends BaseUser {
 			.get("461792163525689345")
 			.members.get(this.id);
 		const perms = [];
+		let rank = 99;
 		if (roles !== undefined) {
 			roles.each(role => {
 				if (Object.keys(staffRoles).includes(role.id)) {
 					perms.push(staffRoles[role.id].name);
+					const permRank = staffRoles[role.id].rank;
+					if (rank > permRank) rank = permRank;
 				}
+			});
+			Object.values(staffRoles).forEach(data => {
+				if (data.rank >= rank && !perms.includes(data.name))
+					perms.push(data.name);
 			});
 		}
 		return perms.includes(perm);

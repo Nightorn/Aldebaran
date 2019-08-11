@@ -1,25 +1,23 @@
-exports.run = async (bot, message, args) => {
-    const client = require('nekos.life');
-    const neko = new client();
-    message.delete().catch(O_o=>{});
-    const data = (await neko.getSFWFact());
-    message.channel.send({embed:{
-        author:{
-            name: message.author.username,
-            icon_url: message.author.avatarURL()
-        },
-        title: (`The fact is....`),
-        description: (`*${data.fact}*`),
-        timestamp: new Date(),
-        footer: {
-            icon_url: bot.user.avatarURL(),
-            text: "Powerd By Nekos.life"
-        }
-    }});
-}
-exports.infos = {
-    category: "Fun",
-    description: "Get a random fact!",
-    usage: "\`&fact\`",
-    example: "\`&fact\`"
-}
+const Client = require("nekos.life");
+const { Command, Embed } = require("../../structures/categories/FunCategory");
+
+module.exports = class FactCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "fact",
+			description: "Get a random fact!"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	async run(bot, message) {
+		const neko = new Client();
+		message.delete().catch(() => {});
+		const data = await neko.getSFWFact();
+		const embed = new Embed(this)
+			.setTitle("The fact is...")
+			.setDescription(`*${data.fact}*`)
+			.setFooter("Powered by nekos.life", bot.user.avatarURL());
+		message.channel.send({ embed });
+	}
+};

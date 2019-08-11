@@ -1,70 +1,59 @@
 const { MessageEmbed } = require("discord.js");
+const ErrorEmbed = require("../../structures/Aldebaran/ErrorEmbed");
 const categories = require("../../Data/categories.json");
+const { Command } = require("../../structures/categories/GeneralCategory");
 
-exports.run = (bot, message, args) => {
-  if (args[0] !== undefined) {
-    const category = categories[args[0].toLowerCase()];
-    const commands = {};
+module.exports = class HelpCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "help",
+			description: "Displays detailled help about Aldebaran's commands"
+		});
+	}
 
-    for (const [name, data] of bot.commandHandler.commands) {
-      if (commands[data.category.toLowerCase()] === undefined)
-        commands[data.category.toLowerCase()] = new Map();
-      commands[data.category.toLowerCase()].set(name, data.description);
-    }
-
-    if (commands[args[0].toLowerCase()] instanceof Map) {
-      if (commands[args[0].toLowerCase()].size > 0) {
-        let list = ``;
-        for (const [command, description] of commands[args[0].toLowerCase()])
-          list += `:small_blue_diamond: **${command}** : ${description}\n`;
-        const embed = new MessageEmbed()
-          .setAuthor(message.author.username, message.author.avatarURL())
-          .setTitle(`__**${category.title}**__`)
-          .setDescription(`${category.description}\n${list}`)
-          .setColor("BLUE");
-        message.channel.send({ embed });
-      } else {
-        message.channel.send(
-          "**Error** No command of the specified category was found. Get a list of all available commands with `&commands`."
-        );
-      }
-    } else if (bot.commandHandler.commands.get(args[0]) !== undefined) {
-      const command = bot.commandHandler.commands.get(args[0]);
-      const embed = new MessageEmbed()
-        .setAuthor(message.author.username, message.author.avatarURL())
-        .setTitle(`Details of the ${args[0].toLowerCase()} Command`)
-        .setDescription(command.description)
-        .addField(`Category`, command.category, true)
-        .addField(`Usage`, command.usage, true)
-        .addField(`Example`, command.example, true)
-        .setColor(`BLUE`);
-      message.channel.send({ embed });
-    } else {
-      message.channel.send(
-        "**Error** No command was found. Get a list of all available commands with `&commands`."
-      );
-    }
-  } else {
-    const embed = new MessageEmbed()
-      .setAuthor("Aldebaran's Help Pages", bot.user.avatarURL())
-      .setDescription(
-        "Below are the different categories, each of them contains a list of commands which you can see with `&help <category name>`. You can get a brief overview of all available commands with `&commands`."
-      );
-    for (const [, data] of Object.entries(categories))
-      if (data.name !== "Developer")
-        embed.addField(`__**${data.title}**__`, data.description, true);
-    embed.addField(
-      "**__Have a command request or suggestion?__**",
-      "Join our support server by clicking [right here](https://discord.gg/3x6rXAv)!",
-      true
-    );
-    message.channel.send({ embed });
-  }
-};
-
-exports.infos = {
-  category: "General",
-  description: "Displays Detailed Help Info",
-  usage: "`&help`",
-  example: "`&help`"
+	run(bot, message, args) {
+		if (args[0] !== undefined) {
+			const category = categories[args[0].toLowerCase()];
+			if (category !== undefined) {
+				let list = "";
+				const categoryCommands = new Map();
+				for (const cmd of bot.commands.commands) categoryCommands.set(...cmd);
+				for (const [command, data] of categoryCommands)
+					if (data.category === category.name)
+						list += `:small_blue_diamond: **${command}** : ${data.shortDesc}\n`;
+				const categoryEmbed = new MessageEmbed()
+					.setAuthor("Category Help", bot.user.avatarURL())
+					.setTitle(`${category.title} - ${category.description}`)
+					.setDescription(list)
+					.setColor(this.color);
+				message.channel.send({ embed: categoryEmbed });
+			} else if (bot.commands.exists(args[0].toLowerCase())) {
+				message.channel.send({
+					embed: bot.commands.getHelp(args[0].toLowerCase(), message.prefix)
+				});
+			} else {
+				const errorEmbed = new ErrorEmbed(message)
+					.setTitle("The requested resource has not been found.")
+					.setDescription("You are trying to find help for a command or a category that does not exist. Make sure you did not make a typo in your request.");
+				message.channel.send({ embed: errorEmbed });
+			}
+		} else {
+			const embed = new MessageEmbed()
+				.setAuthor("Aldebaran's Help Pages", bot.user.avatarURL());
+			let categoriesList = "";
+			for (const [, data] of Object.entries(categories)) {
+				if (data.name !== "Developer")
+					categoriesList += `**${data.title}** - ${data.description}\n`;
+			}
+			embed.setDescription(
+				`Below are the different categories, each of them contains a list of commands which you can see with \`&help <category name>\`. You can get a brief overview of all available commands with \`&commands\`.\n${categoriesList}`
+			);
+			embed.addField(
+				"**__Have a command request or suggestion?__**",
+				`Join our support server by clicking [right here](https://discord.gg/3x6rXAv), or use \`${message.guild.prefix}suggest\` to suggest something using a command!`,
+				true
+			);
+			message.channel.send({ embed });
+		}
+	}
 };

@@ -1,28 +1,23 @@
-exports.run = (bot, message, args) => {
-    var request = require('request');
-    request({uri:`http://api.cutegirls.moe/json`}, function(err, response, body) {
-        if (err) return;
-        const data = JSON.parse(body);
-        message.channel.send({embed:{
-            author: {
-                name: message.author.username,
-                icon_url: message.author.avatarURL()
-            }, 
-            title: data.data.title,
-            image: {
-                url : data.data.image,
-            },
-            footer: {
-                text: "Source: " + data.data.link
-            },
-            timestamp: new Date()
-        }})
-    })
+const request = require("request");
+const { Command, Embed } = require("../../structures/categories/ImageCategory");
+
+module.exports = class CuteagCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "cuteag",
+			description: "Displays a random cute anime girl picture"
+		});
+	}
+
+	run(bot, message) {
+		request({ uri: "http://api.cutegirls.moe/json" }, (err, response, body) => {
+			if (err) return;
+			const { data } = JSON.parse(body);
+			const embed = new Embed(this)
+				.setTitle(data.title)
+				.setImage(data.image)
+				.setFooter(`Source: ${data.link}`);
+			message.channel.send({ embed });
+		});
+	}
 };
-    
-exports.infos = {
-    category: "Image",
-    description: "Displays a random cute anime girl picture.",
-    usage: "\`&cuteag\`",
-    example: "\`&cuteag\`",
-}

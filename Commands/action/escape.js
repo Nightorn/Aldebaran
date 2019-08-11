@@ -1,16 +1,18 @@
-const Discord = require(`discord.js`)
-exports.run = async (bot, message,args) => {
-    require(`../../functions/action/executeAction.js`)(bot,message,args);
+const { Command } = require("../../structures/categories/ActionCategory");
+const executeAction = require("../../functions/action/executeAction");
+
+module.exports = class EscapeCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "escape",
+			description: "Use for a quick escape.",
+			usage: "UserMention|UserID",
+			example: "320933389513523220"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(...args) {
+		executeAction(...args);
+	}
 };
-exports.infos = {
-    category: "Action",
-    description: "Use for a quick escape",
-    usage: "\`&escape <usermention>\` or \`&escape <userid>\`",
-    example: "\`&escape @aldebaran\` or \`&escape 320933389513523220\`",
-    cooldown: {
-        time: 1000,
-        rpm: 60,
-        resetTime: 60000,
-        commandGroup: "action"
-    }
-}

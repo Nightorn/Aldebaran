@@ -1,32 +1,22 @@
 const { MessageEmbed } = require("discord.js");
-const view = require("./admin/view");
-const clear = require("./admin/clear");
-const mod = require("./admin/mod");
-// const ignore = require("./admin/ignore");
+const { Command } = require("../../structures/categories/DeveloperCategory");
 
-exports.run = (bot, message, args) => {
-  if (!message.author.checkPerms("MODERATOR")) return;
-  if (args[0] === "view") {
-    view(bot, message, args);
-  } else if (args[0] === "clear") {
-    clear(bot, message, args);
-  } else if (args[0] === "mod") {
-    mod(bot, message, args);
-  } else if (args[0] === "ignore") {
-    ignore(bot, message, args);
-  } else {
-    const embed = new MessageEmbed()
-      .setAuthor(message.author.username, message.author.avatarURL())
-      .setTitle("Warning")
-      .setDescription(`The admin action specified is invalid.`)
-      .setColor(`ORANGE`);
-    message.channel.send({ embed });
-  }
-};
+module.exports = class AdminCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "admin",
+			description: "Admin Portal Command",
+			allowIndexCommand: true
+		});
+	}
 
-exports.infos = {
-  category: "Developer",
-  description: "Admin Portal Command",
-  usage: "`&admin`",
-  example: "`&admin`"
+	// eslint-disable-next-line class-methods-use-this
+	run(bot, message) {
+		const embed = new MessageEmbed()
+			.setAuthor(message.author.username, message.author.avatarURL())
+			.setTitle("Warning")
+			.setDescription("The admin action specified is invalid.")
+			.setColor("ORANGE");
+		message.channel.send({ embed });
+	}
 };

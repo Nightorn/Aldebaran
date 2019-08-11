@@ -1,0 +1,9 @@
+{
+    "CMD_INFO_STATISTICS": "Statistics",
+    "CMD_INFO_RESOURCES": "Resources",
+    "CMD_INFO_POWERED_BY": "Powered by",
+    "CMD_INFO_CHANNELS": "Channels",
+    "CMD_INFO_USERS": "Users",
+    "CMD_INFO_SERVERS": "Servers",
+    "CMD_INFO_PREFIX": "The prefix on this server is \"%prefix\"."
+}

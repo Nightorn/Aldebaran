@@ -1,27 +1,32 @@
 {
-    "320933389513523220": {
-        "titles": ["Maintainer", "Support"],
-        "acknowledgements": ["ADMIN", "DEVELOPER"],
-        "staffRank": 1
-    },
     "310296184436817930": {
         "titles": ["Owner", "Maintainer"],
         "acknowledgements": ["ADMIN", "DEVELOPER"],
-        "staffRank": 0
+        "staffRank": 0,
+        "text": "**maintainer of Aldebaran**"
+    },
+    "320933389513523220": {
+        "titles": ["Maintainer", "Support"],
+        "acknowledgements": ["ADMIN", "DEVELOPER"],
+        "staffRank": 1,
+        "text": "**responsible** of **Aldebaran** and its **API**"
     },
     "246302641930502145": {
         "titles": ["Support"],
         "acknowledgements": ["ADMIN", "SUPPORT"],
-        "staffRank": 3
-    },
-    "400476562752929804": {
-        "titles": ["Developer"],
-        "acknowledgements": ["ADMIN", "DEVELOPER"],
-        "staffRank": 2
+        "staffRank": 3,
+        "text": "**primary administrator** of Aldebaran"
     },
     "143026985763864576": {
         "titles": ["Developer"],
         "acknowledgements": ["ADMIN", "DEVELOPER"],
-        "staffRank": 2
+        "staffRank": 2,
+        "text": "**responsible** of **Aldebaran Web**"
+    },
+    "400476562752929804": {
+        "titles": ["Developer"],
+        "acknowledgements": ["ADMIN", "DEVELOPER"],
+        "staffRank": 2,
+        "text": "herobrine"
     }
 }

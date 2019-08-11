@@ -1,35 +1,33 @@
-const speakeasy = require('speakeasy');
-const { MessageAttachment } = require('discord.js');
-module.exports.run = (bot, message, args) => {
-    if (message.author.tfaKey === undefined || (message.author.id !== '320933389513523220' && message.author.id !== '246302641930502145' && message.author.id !== '310296184436817930')) return;
-    var verified = speakeasy.totp.verify({
-        secret: message.author.tfaKey,
-        encoding: 'base32',
-        token: args.shift()
-    });
-    if (verified) {
-        try {
-            const code = args.join(' ');
-            let evaled = eval(code);
-            
-            if (typeof evaled !== "string" && typeof evaled !== "number") {
-                evaled = require("util").inspect(evaled, false, null);
-            }
-    
-            message.channel.send(evaled, {code:"xl"}).catch(err => {
-                message.channel.send(`The result was too long to be sent on Discord. Everything is in the attachment.`, {
-                    files: [new MessageAttachment(Buffer.from(evaled), 'evaled.txt')]
-                });
-            });
-        } catch (err) {
-            message.channel.send(`An error occured.\n\`\`\`xl\n${require('util').inspect(err, false, null)}\n\`\`\``);
-        }
-    }
-}
+const util = require("util");
+const { MessageAttachment } = require("discord.js");
+const { Command } = require("../../structures/categories/DeveloperCategory");
 
-module.exports.infos = {
-    category: "Developer",
-    description: "Code Evaluation",
-    usage: "\`&eval\`",
-    example: "\`&eval\`"
-}
+module.exports = class EvalCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "eval",
+			description: "Evaluates JavaScript code"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(bot, message, args) {
+		try {
+			const code = args.join(" ");
+			// eslint-disable-next-line no-eval
+			let evaled = eval(code);
+
+			if (typeof evaled !== "string" && typeof evaled !== "number") {
+				evaled = util.inspect(evaled, false, null);
+			}
+
+			message.channel.send(evaled, { code: "xl" }).catch(() => {
+				message.channel.send("The result was too long to be sent on Discord. Everything is in the attachment.", {
+					files: [new MessageAttachment(Buffer.from(evaled), "evaled.txt")]
+				});
+			});
+		} catch (err) {
+			message.channel.send(`An error occured.\n\`\`\`xl\n${util.inspect(err, false, null)}\n\`\`\``);
+		}
+	}
+};
