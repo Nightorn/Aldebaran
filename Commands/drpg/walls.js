@@ -95,7 +95,7 @@ module.exports = class WallsCommand extends Command {
 				}
 				data = data.data;
 
-				const [wall, baseLvl] = userWall(data.level);
+				const [wall, baseLvl] = userWall(message, data.level);
 				const userAtWall = data.level === baseLvl;
 				const xpNeeded = calcXPNeeded(bases[baseLvl], baseLvl);
 				const wallProgress = xpNeeded - data.xp;
@@ -116,9 +116,9 @@ module.exports = class WallsCommand extends Command {
 					);
 					embed.addField(
 						`${user.username}'s progress`,
-						`${wallProgress} / ${wall} XP (**${Math.floor(
-							(wallProgress / wall) * 100
-						)}%**)`
+						`**${Number.formatNumber(wall - wallProgress)} XP** / ${Number.formatNumber(wall)} XP (**${Math.round(
+							100 * ((wall - wallProgress) * 100) / wall
+						) / 100}%**)`
 					);
 				} else {
 					embed.addField(
