@@ -1,3 +1,10 @@
+/**
+ * 
+ * 
+ *  THIS COMMAND REQUIRES A BIG REFACTOR! IF YOURE HERE TO FIX SOMETHING, MIGHT AS WELL REWRITE IT COMPLETELY!! !!!
+ *  WARNING!!!! SPAGHETTI CODE AHEAD!!!!!!!!
+ * 
+ */
 const Discord = require("discord.js");
 const request = require("request");
 const bases = require("../../Data/bases.json");
@@ -12,36 +19,61 @@ exports.run = async (bot, message, args) => {
   }
   function findKeyAbove(lvl) {
     let level = lvl;
+    let loops = 0; // prevent timeout
     while (bases[level] === undefined) {
       level++;
+      loops++;
+      if (loops > 50000) {
+        throw new Error("The level you entered was too high, command timed out.")
+      }
     }
     return level;
   }
   function findKeyBelow(lvl) {
     let level = lvl;
+    let loops = 0;
     while (bases[level] === undefined && level > 0) {
       level--;
+      loops++;
+      if (loops > 50000) {
+        throw new Error("The level you entered was too high, command timed out.");
+      }
     }
     return level;
   }
-  function userWall(lvl) {
-    const baseLvl = findKeyAbove(lvl);
-    const prevBaseLvl = findKeyBelow(lvl - 1);
-    const base = bases[baseLvl];
-    let prevBase = 0;
-    if (!bases[prevBaseLvl]) {
-      prevBase = 25;
-    } else {
-      prevBase = bases[prevBaseLvl];
-    }
-    const wall = calcWall(baseLvl, base, prevBase);
+  function userWall(message, lvl) {
+    try {
+      const baseLvl = findKeyAbove(lvl);
+      const prevBaseLvl = findKeyBelow(lvl - 1);
+      
+      const base = bases[baseLvl];
+      let prevBase = 0;
+      if (!bases[prevBaseLvl]) {
+        prevBase = 25;
+      } else {
+        prevBase = bases[prevBaseLvl];
+      }
+      const wall = calcWall(baseLvl, base, prevBase);
 
-    return [wall, parseInt(baseLvl, 10)];
+      return [wall, parseInt(baseLvl, 10)];
+    }
+    catch (e) {
+      message.reply(e.message);
+    }
   }
   function calcXPNeeded(base, lvl) {
     return base * (lvl ** 2 + lvl);
   }
+  function doArgChecks(args) {
+    if (args.length < 1) {
+      throw new Error("Not enough arguments!");
+    }
+  }
 
+  try {
+    doArgChecks(args);
+  }
+  catch(e) {message.reply(e.message)}
   try {
     const userid = await userCheck(bot, message, args);
     const user = await bot.users.fetch(userid);
@@ -101,7 +133,7 @@ exports.run = async (bot, message, args) => {
       }
     );
   } catch (err) {
-    const [wall, baseLvl] = userWall(args[0]);
+    const [wall, baseLvl] = userWall(message, args[0]);
     const xpNeeded = calcXPNeeded(bases[baseLvl], baseLvl);
 
     const embed = new Discord.MessageEmbed()

@@ -56,7 +56,6 @@ exports.run = async (bot, message, args) => {
     message.channel.send({ embed });
   } else if (Object.keys(parametersAvailable).indexOf(args[0]) !== -1) {
     if (parametersAvailable[args[0]].support(args[1])) {
-      if (!message.author.existsInDb) await message.author.create();
       message.author
         .changeSetting(args[0], args[1])
         .then(() => {

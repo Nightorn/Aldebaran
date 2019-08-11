@@ -1,5 +1,4 @@
 const SocialProfile = require("../Aldebaran/SocialProfile.js");
-const staffRoles = require("../../Data/staffRoles.json");
 
 module.exports = BaseUser => {
   return class User extends BaseUser {
@@ -48,43 +47,6 @@ module.exports = BaseUser => {
       return false;
     }
 
-    hasPerm(perm) {
-      const { roles } = this.client.guilds
-        .get("461792163525689345")
-        .members.get(this.id);
-      const perms = [];
-      if (roles !== undefined) {
-        roles.each(role => {
-          if (Object.keys(staffRoles).includes(role.id)) {
-            perms.push(staffRoles[role.id].name);
-          }
-        });
-      }
-      return perms.includes(perm);
-    }
-
-    get highestPerm() {
-      let rank = 99;
-      let perm = null;
-      const { roles } = this.client.guilds
-        .get("461792163525689345")
-        .members.get(this.id);
-      if (roles !== undefined) {
-        roles.each(role => {
-          for (const [id, data] of Object.entries(staffRoles)) {
-            if (role.id === id) {
-              if (data.rank < rank) {
-                // eslint-disable-next-line prefer-destructuring
-                rank = data.rank;
-                perm = data.name;
-              }
-            }
-          }
-        });
-      }
-      return perm;
-    }
-
     async create() {
       this.existsInDB = true;
       return this.client.database.users.createOneById(this.id);
@@ -97,6 +59,9 @@ module.exports = BaseUser => {
     }
 
     async changeSetting(property, value) {
+      if (!this.existsInDB) {
+        await this.create();
+      }
       this.settings[property] = value;
       return this.client.database.users.updateOneById(
         this.id,
