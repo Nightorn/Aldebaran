@@ -1,22 +1,23 @@
-exports.run = (bot, message, args) => {
-    const images = require(`${process.cwd()}/Data/imageurls.json`);
-    const randomGif = images.mindblown[~~(Math.random() * images.mindblown.length)];
-    
-    message.channel.send({embed:{
-        author: {
-            name: message.author.username,
-            icon_url: message.author.avatarURL()
-        },
-        description: `${message.author}'s mind has been blown`,
-        image: {
-            url: randomGif
-        },
-        timestamp: new Date()
-    }});
-}
-exports.infos = {
-    category: "Image",
-    description: "Shows a GIF showing everyone how much your mind was blown",
-    usage: "\`&mindblown",
-    example: "\`&mindblown\`"
-}
+const { MessageEmbed } = require("discord.js");
+const { Command } = require("../../structures/categories/ActionCategory");
+const images = require("../../Data/imageurls.json");
+
+module.exports = class Mindblown extends Command {
+	constructor(client) {
+		super(client, {
+			name: "mindblown",
+			description: "Show everyone how your mind was blown!"
+		});
+	}
+
+	run(bot, message) {
+		const randomGif = images.mindblown[
+			Math.floor(Math.random() * images.mindblown.length)
+		];
+		const embed = new MessageEmbed()
+			.setDescription(`${message.author}'s mind has been blown.`)
+			.setImage(randomGif)
+			.setColor(this.color);
+		message.channel.send({ embed });
+	}
+};

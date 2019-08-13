@@ -1,19 +1,22 @@
-const { MessageEmbed } = require("discord.js");
+const { Command, Embed } = require("../../structures/categories/FunCategory");
 
-exports.run = async (bot, message, args) => {
-  let text = args.join(" ");
-  text = text.replace(/r|l/g, "w");
-  const embed = new MessageEmbed()
-    .setAuthor(message.author.username, message.author.avatarURL())
-    .setTitle("owoifier")
-    .setDescription(text)
-    .setColor("PINK");
-  message.channel.send({ embed });
-};
+module.exports = class OwoifyCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "owoify",
+			description: "Sends an owoified text",
+			usage: "Text",
+			example: "why is the grass green?"
+		});
+	}
 
-exports.infos = {
-  category: "Fun",
-  description: "OwOify Text Sent (150 Char. Limit)",
-  usage: "`&owoify <text>`",
-  example: "`&owoify why is the grass green`"
+	// eslint-disable-next-line class-methods-use-this
+	run(bot, message, args) {
+		let text = args.join(" ");
+		text = text.replace(/r|l/g, "w");
+		const embed = new Embed(this)
+			.setTitle("owoifier")
+			.setDescription(text);
+		message.channel.send({ embed });
+	}
 };

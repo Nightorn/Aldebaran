@@ -1,16 +1,18 @@
-const Discord = require(`discord.js`)
-exports.run = async (bot, message,args) => {
-    require(`../../functions/action/executeAction.js`)(bot,message,args);
+const { Command } = require("../../structures/categories/ActionCategory");
+const executeAction = require("../../functions/action/executeAction");
+
+module.exports = class AdorableCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "adorable",
+			description: "Show how adorable you think someone is!",
+			usage: "UserMention|UserID",
+			example: "320933389513523220"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(...args) {
+		executeAction(...args);
+	}
 };
-exports.infos = {
-    category: "Action",
-    description: "Used to show how adorable you think someone is!",
-    usage: "\`&adorable <usermention>\` or \`&adorable <userid>\`",
-    example: "\`&adorable @aldebaran\` or \`&adorable 320933389513523220\`",
-    cooldown: {
-        time: 1000,
-        rpm: 60,
-        resetTime: 60000,
-        commandGroup: "action"
-    }
-}

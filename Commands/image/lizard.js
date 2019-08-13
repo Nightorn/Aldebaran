@@ -1,26 +1,21 @@
-exports.run = async (bot, message, args) => {
-    const client = require('nekos.life');
-    const neko = new client();
-    const data = await neko.getSFWLizard();
-    message.channel.send({embed:{
-        author:{
-            name: message.author.username,
-            icon_url: message.author.avatarURL()
-        },
-        description: `***We're off to see the lizard, the wonderful lizard of Oz!***`,
-        image: {
-            url : data.url,
-        },
-        timestamp: new Date(),
-        footer: {
-            icon_url: bot.user.avatarURL(),
-            text: "Powered By Nekos.life"
-        }
-    }});
-}
-exports.infos = {
-    category: "Image",
-    description: "Displays a random lizard picture or gif.",
-    usage: "\`&lizard\`",
-    example: "\`&lizard\`",
-}
+const Client = require("nekos.life");
+const { Command, Embed } = require("../../structures/categories/ImageCategory");
+
+module.exports = class NekoCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "neko",
+			description: "Displays a random lizard picture or a GIF"
+		});
+	}
+
+	async run(bot, message) {
+		const client = new Client();
+		const data = await client.getSFWLizard();
+		const embed = new Embed(this)
+			.setTitle("We're off to see the lizard, the wonderful lizard of Oz!")
+			.setImage(data.url)
+			.setFooter("Powered by nekos.life", bot.user.avatarURL());
+		message.channel.send({ embed });
+	}
+};

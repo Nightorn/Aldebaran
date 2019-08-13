@@ -66,5 +66,13 @@
     {
         "text": "my &profile",
         "type": "WATCHING"
+    },
+    {
+        "text": "&presence entries",
+        "type": "WATCHING"
+    },
+    {
+        "text": "neko pictures at nekos.life",
+        "type": "WATCHING"
     }
 ]

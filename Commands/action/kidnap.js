@@ -1,16 +1,18 @@
-const Discord = require(`discord.js`)
-exports.run = async (bot, message,args) => {
-    require(`../../functions/action/executeAction.js`)(bot,message,args);
+const { Command } = require("../../structures/categories/ActionCategory");
+const executeAction = require("../../functions/action/executeAction");
+
+module.exports = class KidnapCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "kidnap",
+			description: "Kidnap your friends!",
+			usage: "UserMention|UserID",
+			example: "320933389513523220"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(...args) {
+		executeAction(...args);
+	}
 };
-exports.infos = {
-    category: "Action",
-    description: "Use to kidnap your favorite person!",
-    usage: "\`&kidnap <usermention>\` or \`&kidnap <userid>\`",
-    example: "\`&kidnap @aldebaran\` or \`&kidnap 320933389513523220\`",
-    cooldown: {
-        time: 1000,
-        rpm: 60,
-        resetTime: 60000,
-        commandGroup: "action"
-    }
-}

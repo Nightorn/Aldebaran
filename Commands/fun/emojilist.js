@@ -1,11 +1,17 @@
-exports.run = (bot, message) => {
-    const emojilist = message.guild.emojis.map(e=>e.toString()).join("");
-    message.delete();
-    message.channel.send(emojilist);
-}
-exports.infos = {
-    category: "Fun",
-    description: "Display All Emojis For The Server (Spam Alert)",
-    usage: "\`&emojilist\`",
-    example: "\`&emojilist\`"
-}
+const { Command } = require("../../structures/categories/FunCategory");
+
+module.exports = class EmojilistCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "emojilist",
+			description: "Displays all emojis for a the server"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(bot, message) {
+		const emojilist = message.guild.emojis.map(e => e.toString()).join("");
+		message.delete();
+		message.channel.send(emojilist);
+	}
+};

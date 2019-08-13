@@ -1,72 +1,114 @@
 const SocialProfile = require("../Aldebaran/SocialProfile.js");
+const staffRoles = require("../../Data/staffRoles.json");
 
-module.exports = BaseUser => {
-  return class User extends BaseUser {
-    constructor(client, data) {
-      super(client, data);
-      this.asBotStaff = this.client.config.aldebaranTeam[this.id] || null;
-      this.banned = false;
-      this.existsInDB = false;
-      this.generalCooldown = 0;
-      this.profile = new SocialProfile(this);
-      this.settings = {};
-      const interval = setInterval(() => {
-        if (this.client.databaseFetch !== undefined) {
-          if (
-            this.client.databaseFetch.data.users.size ===
-            this.client.databaseFetch.counts.users
-          ) {
-            clearInterval(interval);
-            if (
-              this.client.databaseFetch.data.users.get(this.id) !== undefined
-            ) {
-              this.build(this.client.databaseFetch.data.users.get(this.id));
-            }
-          }
-        }
-      }, 100);
-      this.timers = {
-        adventure: null,
-        padventure: null,
-        sides: null,
-        travel: null
-      };
-    }
+module.exports = BaseUser => class User extends BaseUser {
+	constructor(client, data) {
+		super(client, data);
+		this.asBotStaff = this.client.config.aldebaranTeam[this.id] || null;
+		this.banned = false;
+		this.existsInDB = false;
+		this.generalCooldown = 0;
+		this.profile = new SocialProfile(this);
+		this.settings = {};
+		const interval = setInterval(() => {
+			if (this.client.databaseFetch !== undefined) {
+				if (
+					this.client.databaseFetch.data.users.size
+            === this.client.databaseFetch.counts.users
+				) {
+					clearInterval(interval);
+					if (
+						this.client.databaseFetch.data.users.get(this.id) !== undefined
+					) {
+						this.build(this.client.databaseFetch.data.users.get(this.id));
+					}
+				}
+			}
+		}, 100);
+		this.timers = {
+			adventure: null,
+			padventure: null,
+			sides: null,
+			travel: null
+		};
+	}
 
-    build(data) {
-      for (const [key, value] of Object.entries(data)) this[key] = value;
-      this.settings = JSON.parse(this.settings);
-      this.existsInDB = true;
-    }
+	build(data) {
+		for (const [key, value] of Object.entries(data)) this[key] = value;
+		this.settings = JSON.parse(this.settings);
+		this.existsInDB = true;
+	}
 
-    checkPerms(perm) {
-      if (this.asBotStaff === null) return false;
-      if (this.asBotStaff.acknowledgements.includes("ADMIN")) return true;
-      if (perm === "MODERATOR")
-        return this.asBotStaff.acknowledgements.includes("MODERATOR");
-      return false;
-    }
+	checkPerms(perm) {
+		if (this.asBotStaff === null) return false;
+		if (this.asBotStaff.acknowledgements.includes("ADMIN")) return true;
+		if (perm === "MODERATOR") return this.asBotStaff.acknowledgements.includes("MODERATOR");
+		return false;
+	}
 
-    async create() {
-      this.existsInDB = true;
-      return this.client.database.users.createOneById(this.id);
-    }
+	hasPerm(perm) {
+		const { roles } = this.client.guilds
+			.get("461792163525689345")
+			.members.get(this.id);
+		const perms = [];
+		let rank = 99;
+		if (roles !== undefined) {
+			roles.each(role => {
+				if (Object.keys(staffRoles).includes(role.id)) {
+					perms.push(staffRoles[role.id].name);
+					const permRank = staffRoles[role.id].rank;
+					if (rank > permRank) rank = permRank;
+				}
+			});
+			Object.values(staffRoles).forEach(data => {
+				if (data.rank >= rank && !perms.includes(data.name))
+					perms.push(data.name);
+			});
+		}
+		return perms.includes(perm);
+	}
 
-    async clear() {
-      this.existsInDB = false;
-      this.settings = {};
-      return this.client.database.users.deleteOneById(this.id);
-    }
+	get highestPerm() {
+		let rank = 99;
+		let perm = null;
+		const { roles } = this.client.guilds
+			.get("461792163525689345")
+			.members.get(this.id);
+		if (roles !== undefined) {
+			roles.each(role => {
+				for (const [id, data] of Object.entries(staffRoles)) {
+					if (role.id === id) {
+						if (data.rank < rank) {
+							// eslint-disable-next-line prefer-destructuring
+							rank = data.rank;
+							perm = data.name;
+						}
+					}
+				}
+			});
+		}
+		return perm;
+	}
 
-    async changeSetting(property, value) {
-      if (!this.existsInDB) {
-        await this.create();
-      }
-      this.settings[property] = value;
-      return this.client.database.users.updateOneById(
-        this.id,
-        new Map([["settings", JSON.stringify(this.settings)]])
-      );
-    }
-  };
+	async create() {
+		this.existsInDB = true;
+		return this.client.database.users.createOneById(this.id);
+	}
+
+	async clear() {
+		this.existsInDB = false;
+		this.settings = {};
+		return this.client.database.users.deleteOneById(this.id);
+	}
+
+	async changeSetting(property, value) {
+		if (!this.existsInDB) {
+			await this.create();
+		}
+		this.settings[property] = value;
+		return this.client.database.users.updateOneById(
+			this.id,
+			new Map([["settings", JSON.stringify(this.settings)]])
+		);
+	}
 };

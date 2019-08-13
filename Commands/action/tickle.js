@@ -1,43 +1,31 @@
-exports.run = (bot, message, args) => {
-    const client = require('nekos.life');
-    const Discord = require(`discord.js`)
-    const neko = new client();
-    if(message.mentions.users.first()) { //Check if the message has a mention in it.
-        let target = message.mentions.users.first();
-        async function tickle() {
-            const data = (await neko.getSFWTickle());
-            message.channel.send({embed:{
-                author:{
-                    name: message.author.username,
-                    icon_url: message.author.avatarURL()
-                },
-                description: `${message.author} won't stop tickling ${target}!`,
-                image: {
-                    url : (data.url),
-                },
-                timestamp: new Date(),
-                footer: {
-                    icon_url: bot.user.avatarURL(),
-                    text: "Powerd By Nekos.life"
-                }
-            
-            }});
-        }
-        tickle();
-        
-    } else {
-        message.reply("Please mention someone :thinking:")
-    }
-}
-exports.infos = {
-    category: "Action",
-    description: "Performs Action On Mentioned User & Displays Gif To Accompany",
-    usage: "\`&tickle <usermention>\`",
-    example: "\`&tickle @aldebaran\`",
-    cooldown: {
-        time: 1000,
-        rpm: 60,
-        resetTime: 60000,
-        commandGroup: "action"
-    }
-}
+const Client = require("nekos.life");
+const { MessageEmbed } = require("discord.js");
+const { Command } = require("../../structures/categories/ActionCategory");
+
+module.exports = class TickleCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "tickle",
+			description: "Tickle someone!",
+			usage: "UserMention",
+			example: "<@437802197539880970>"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	async run(bot, message) {
+		const neko = new Client();
+		if (message.mentions.users.first()) { // Check if the message has a mention in it.
+			const target = message.mentions.users.first();
+			const data = await neko.getSFWTickle();
+			const embed = new MessageEmbed()
+				.setDescription(`${message.author} won't stop tickling ${target}!`)
+				.setImage(data.url)
+				.setFooter("Powered by nekos.life", bot.user.avatarURL())
+				.setColor(this.color);
+			message.channel.send({ embed });
+		} else {
+			message.reply("Please mention someone :thinking:");
+		}
+	}
+};

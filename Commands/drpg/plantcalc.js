@@ -1,16 +1,31 @@
-exports.run = (bot, message, args) => {
-    if (args.length == 2){
-        var seconds = args[1] * 3600    
-        var formulamin = Math.floor(1+((Math.floor(args[0]))*(seconds/25)/15000));
-        var formulamax = Math.floor(1+((Math.floor(args[0]))*(seconds/25)/14000));
-        var hours = args[1]
-        message.channel.send(`Estimated ${formulamin} - ${formulamax} when planted for ${hours} hours. `)
-    } else return message.channel.send("You must provide both reaping and hours set. Example (&plantcalc 1 24)")
-}
+const math = require("mathjs");
+const { Command } = require("../../structures/categories/DRPGCategory");
+const itemList = require("../../Data/drpgitemlist.json").data;
 
-exports.infos = {
-    category: "DRPG",
-    description: "Displays estimated plant harvest based on time and lvl given.",
-    usage: "\`&plantcalc <salvagingstats> <minutes>\`",
-    example: "\`&plantcalc 3600 360\`"
-}
+module.exports = class PlantcalcCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "plantcalc",
+			description: "Displays estimated plant harvest based on time an level given",
+			usage: "ReapingPoints Hours ItemName",
+			example: "3600 24 Olive Seed"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(bot, message, args) {
+		if (args.length >= 3) {
+			const points = args.shift();
+			const hours = parseInt(args.shift(), 10);
+			const itemName = args.join(" ");
+			let item = null;
+			itemList.forEach(element => {
+				if (element.name.toLowerCase() === itemName) item = element;
+			});
+			const scope = { luck: points, passed: hours * 3600 };
+			const min = math.eval(item.sapling.loot.amount.min, scope);
+			const max = math.eval(item.sapling.loot.amount.max, scope);
+			message.channel.send(`Estimated ${min} - ${max} when planted for ${hours} hours. `);
+		} else message.channel.send("You must provide reaping points, hours set and item name. Example (&plantcalc 1 24 olive)");
+	}
+};

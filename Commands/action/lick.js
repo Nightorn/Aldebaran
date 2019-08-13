@@ -1,16 +1,18 @@
-const Discord = require(`discord.js`)
-exports.run = async (bot, message,args) => {
-    require(`../../functions/action/executeAction.js`)(bot,message,args);
+const { Command } = require("../../structures/categories/ActionCategory");
+const executeAction = require("../../functions/action/executeAction");
+
+module.exports = class LickCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "lick",
+			description: "Lick your friends!",
+			usage: "UserMention|UserID",
+			example: "320933389513523220"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(...args) {
+		executeAction(...args);
+	}
 };
-exports.infos = {
-    category: "Action",
-    description: "Licky Licky that someone special.",
-    usage: "\`&lick <usermention>\` or \`&lick <userid>\`",
-    example: "\`&lick @aldebaran\` or \`&lick 320933389513523220\`",
-    cooldown: {
-        time: 1000,
-        rpm: 60,
-        resetTime: 60000,
-        commandGroup: "action"
-    }
-}

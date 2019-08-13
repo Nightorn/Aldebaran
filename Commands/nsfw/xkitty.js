@@ -1,28 +1,21 @@
-exports.run = async (bot, message, args) => {
-    const client = require('nekos.life');
-    const neko = new client();
-    const data = await neko.getNSFWPussy();
-    message.channel.send({embed:{
-        author:{
-            name: message.author.username,
-            icon_url: message.author.avatarURL()
-        },
-        description: message.author + " " + `Yup thats a kitty.`,
-        image: {
-            url : data.url,
-        },
-        timestamp: new Date(),
-        footer: {
-            icon_url: bot.user.avatarURL(),
-            text: "Powered By Nekos.life"
-        }
-    }});
-}
-exports.infos = {
-    category: "NSFW",
-    description: "Displays a hentai picture or gif containing \"Kitty\". ",
-    usage: "\`&xkitty\`",
-    example: "\`&kitty\`",
-    restrictions: "NSFW Channels Only",
-    nsfw: true
-}
+const Client = require("nekos.life");
+const { Command, Embed } = require("../../structures/categories/NSFWCategory");
+
+module.exports = class XKittyCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "xkitty",
+			description: "Displays a hentai picture or a GIF with a kitty"
+		});
+	}
+
+	async run(bot, message) {
+		const neko = new Client();
+		const data = await neko.getNSFWPussy();
+		const embed = new Embed(this)
+			.setDescription(`${message.author}, here is your kitty!`)
+			.setImage(data.url)
+			.setFooter("Powered by nekos.life");
+		message.channel.send({ embed });
+	}
+};

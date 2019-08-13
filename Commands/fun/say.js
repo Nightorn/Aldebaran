@@ -1,16 +1,20 @@
-const { MessageEmbed } = require('discord.js');
-exports.run = (bot, message, args) => {
-    message.delete().catch(() => {});
-    const embed = new MessageEmbed()
-        .setAuthor(message.author.username, message.author.avatarURL())
-        .setDescription(args.join(' '))
-        .setTimestamp(new Date());
-    message.channel.send({embed});
-};
+const { Command, Embed } = require("../../structures/categories/FunCategory");
 
-exports.infos = {
-    category: "Fun",
-    description: "Make the bot say something.",
-    usage: "\`&say <text>\`",
-    example: "\`&say hello how are you today?\`"
-}
+module.exports = class SayCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: "say",
+			description: "Make the bot say something",
+			usage: "Text",
+			example: "i am gay"
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	run(bot, message, args) {
+		message.delete().catch(() => {});
+		const embed = new Embed(this)
+			.setDescription(args.join(" "));
+		message.channel.send({ embed });
+	}
+};

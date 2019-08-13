@@ -1,47 +1,53 @@
 {
-    "general": {
-        "name": "General",
-        "title": ":bulb: General Commands :flashlight:",
-        "description": "General use commands"
-    },
     "action": {
         "name": "Action",
-        "title": ":projector: Action Commands :movie_camera:",
+        "title": ":projector: Action :movie_camera:",
         "description": "Fun commands to perform on others"
-    },
-    "image": {
-        "name": "Image",
-        "title": ":cat: Image Commands :bird:",
-        "description": "Commands to display images"
-    },
-    "fun": {
-        "name": "Fun",
-        "title": ":tickets: Fun Commands :performing_arts:",
-        "description": "Commands used for fun or entertainment"
-    },
-    "drpg": {
-        "name": "DRPG",
-        "title": ":crossed_swords: DRPG Commands :shield:",
-        "description": "Utility commands for DiscordRPG"
-    },
-    "settings": {
-        "name": "Settings",
-        "title": ":wrench: Settings Commands :gear:",
-        "description": "Pimp My Aldebaran"
     },
     "developer": {
         "name": "Developer",
-        "title": ":hammer: Developer Commands :tools:",
+        "title": ":hammer: Development :tools:",
         "description": "Commands for Aldebaran developers"
+    },
+    "drpg": {
+        "name": "DiscordRPG",
+        "title": "<:drpg:608217182362533898> DiscordRPG <:drpg:608217182362533898>",
+        "description": "Utility commands for DiscordRPG",
+        "aliases": ["discordrpg"]
+    },
+    "fun": {
+        "name": "Fun",
+        "title": ":tickets: Fun :performing_arts:",
+        "description": "Commands used for fun or entertainment"
+    },
+    "general": {
+        "name": "General",
+        "title": ":bulb: General :flashlight:",
+        "description": "General use commands"
+    },
+    "image": {
+        "name": "Image",
+        "title": ":cat: Image :bird:",
+        "description": "Commands to display images"
+    },
+    "nsfw": {
+        "name": "NSFW",
+        "title": ":no_entry_sign: NSFW :no_entry:",
+        "description": "NSFW image and action commands"
+    },
+    "osu!": {
+        "name": "osu!",
+        "title": "<:osu:607652111160836173> osu! <:osu:607652111160836173>",
+        "description": "osu! related commands"
+    },
+    "settings": {
+        "name": "Settings",
+        "title": ":wrench: Settings :gear:",
+        "description": "Pimp My Aldebaran"
     },
     "utilities": {
         "name": "Utilities",
         "title": ":scissors: Utilities :triangular_ruler:",
         "description": "Various tools through commands!"
-    },
-    "nsfw": {
-        "name": "NSFW",
-        "title": ":no_entry_sign: NSFW Commands :no_entry:",
-        "description": "NSFW image and action commands"
     }
 }
