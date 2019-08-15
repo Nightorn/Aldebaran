@@ -20,11 +20,10 @@ module.exports = class AldebaranClient extends Client {
 		this.started = Date.now();
 		this.CDBA = new CDBAHandler();
 		this.commandGroups = {};
-		this.commands = new CommandHandler(this);
-		// this.commandHandler = new CommandHandler(this);
 		this.config = config;
 		this.config.presence = presences;
 		this.config.aldebaranTeam = aldebaranTeam;
+		this.commands = new CommandHandler(this);
 		this.database = new DatabasePool(this);
 		this.debugMode = process.argv[2] === "dev";
 		this.login(this.debugMode ? this.config.tokendev : this.config.token);

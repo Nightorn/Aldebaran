@@ -6,6 +6,11 @@ module.exports = class DatabasePool {
 	 * Returns a MySQL pool connection to the Aldebaran's database
 	 */
 	constructor(client) {
+		if (client.config.mysql === undefined)
+			throw new TypeError("The database configuration is missing.");
+		if (!client.config.mysql.host || !client.config.mysql.user
+			|| !client.config.mysql.password || !client.config.mysql.database
+		) throw new TypeError("The database configuration is invalid");
 		this.client = client;
 		this.pool = mysql.createPool(client.config.mysql);
 		this.users = {
@@ -260,6 +265,10 @@ module.exports = class DatabasePool {
 		return new Promise((resolve, reject) => {
 			this.pool.getConnection((err, connection) => {
 				if (err) {
+					if (err.code === "ER_ACCESS_DENIED_ERROR" || err.code === "ER_DBACCESS_DENIED_ERROR") {
+						console.error(err);
+						process.exit(1);
+					}
 					reject(err);
 				} else {
 					connection.query(query, (error, result) => {

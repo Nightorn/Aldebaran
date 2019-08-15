@@ -113,6 +113,11 @@ module.exports.Command = class Command {
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	registerCheck() {
+		return true;
+	}
+
 	toHelpEmbed(command, prefix = "&") {
 		const embed = new MessageEmbed()
 			.setAuthor(
@@ -134,7 +139,10 @@ module.exports.Command = class Command {
 	}
 
 	get shortDesc() {
-		return `${this.metadata.description.substr(0, 60)}...`;
+		const desc = this.metadata.description;
+		if (desc.length > 60)
+			return `${this.metadata.description.substr(0, 60)}...`;
+		return desc;
 	}
 };
 

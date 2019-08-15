@@ -20,10 +20,15 @@
         "title": ":tickets: Fun :performing_arts:",
         "description": "Commands used for fun or entertainment"
     },
-    "general": {
-        "name": "General",
+    "games": {
+        "name": "Games",
         "title": ":bulb: General :flashlight:",
         "description": "General use commands"
+    },
+    "general": {
+        "name": "General",
+        "title": "::joystick: Games :tv:",
+        "description": "Games through commands!"
     },
     "image": {
         "name": "Image",

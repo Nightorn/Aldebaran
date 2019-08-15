@@ -24,4 +24,9 @@ module.exports = class CatCommand extends Command {
 			return true;
 		});
 	}
+
+	registerCheck() {
+		return this.client.config.cat_apikey !== undefined
+			&& this.client.config.cat_apikey !== null;
+	}
 };

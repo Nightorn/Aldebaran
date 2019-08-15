@@ -74,4 +74,9 @@ module.exports = class TranslateCommand extends Command {
 			}
 		);
 	}
+
+	registerCheck() {
+		return this.client.config.apikeys.yandex_translate !== undefined
+			&& this.client.config.apikeys.yandex_translate !== null;
+	}
 };

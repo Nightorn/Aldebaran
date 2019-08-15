@@ -26,4 +26,9 @@ module.exports = class DuckCommand extends Command {
 			return message.channel.send({ embed });
 		});
 	}
+
+	registerCheck() {
+		return this.client.config.pexels_apikey !== undefined
+			&& this.client.config.pexels_apikey !== null;
+	}
 };

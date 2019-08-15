@@ -132,4 +132,9 @@ module.exports = class CurConvCommand extends Command {
 			);
 		}
 	}
+
+	registerCheck() {
+		return this.client.config.apikeys.fixer !== undefined
+			&& this.client.config.apikeys.fixer !== null;
+	}
 };
