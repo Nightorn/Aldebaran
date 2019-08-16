@@ -67,12 +67,14 @@ module.exports = class CommandHandler {
 
 	register(Structure, path) {
 		const command = new Structure(this.client);
-		command.checkSubcommands(path);
-		if (!command.metadata.subcommand) {
-			this.commands.set(command.name, command);
-			command.aliases.forEach(alias => {
-				this.commands.set(alias, command);
-			});
+		if (command.registerCheck()) {
+			command.checkSubcommands(path);
+			if (!command.metadata.subcommand) {
+				this.commands.set(command.name, command);
+				command.aliases.forEach(alias => {
+					this.commands.set(alias, command);
+				});
+			}
 		}
 	}
 

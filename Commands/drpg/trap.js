@@ -120,4 +120,9 @@ module.exports = class TrapCommand extends Command {
 			message.channel.send({ embed });
 		}
 	}
+
+	registerCheck() {
+		return this.client.config.drpg_apikey !== undefined
+			&& this.client.config.drpg_apikey !== null;
+	}
 };

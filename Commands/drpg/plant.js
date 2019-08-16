@@ -76,4 +76,9 @@ module.exports = class PlantCommand extends Command {
 			message.reply("**Error** you must enter a valid UserID or User Mention");
 		});
 	}
+
+	registerCheck() {
+		return this.client.config.drpg_apikey !== undefined
+			&& this.client.config.drpg_apikey !== null;
+	}
 };

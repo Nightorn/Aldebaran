@@ -1,6 +1,6 @@
 const { Command, Embed } = require("./GeneralCategory");
 
-module.exports.Command = class FunCommand extends Command {
+module.exports.Command = class GamesCommand extends Command {
 	constructor(...args) {
 		super(...args);
 		this.category = "Games";

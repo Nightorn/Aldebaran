@@ -127,4 +127,9 @@ module.exports = class StatsCommand extends Command {
 				);
 			});
 	}
+
+	registerCheck() {
+		return this.client.config.drpg_apikey !== undefined
+			&& this.client.config.drpg_apikey !== null;
+	}
 };
