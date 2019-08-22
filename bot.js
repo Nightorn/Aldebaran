@@ -17,7 +17,7 @@ Number.formatNumber = n => {
 
 Date.getTimeString = (timeInMs, format) => {
 	const days = Math.floor(timeInMs / 86400000);
-	const hours = Math.floor((timeInMs / 3600000) % 60);
+	const hours = Math.floor((timeInMs / 3600000) % 24);
 	const minutes = Math.floor((timeInMs / 60000) % 60);
 	const seconds = Math.floor((timeInMs / 1000) % 60);
 
@@ -27,6 +27,8 @@ Date.getTimeString = (timeInMs, format) => {
 	format = format.replace("SS", seconds < 10 ? `0${seconds}` : seconds);
 	return format;
 };
+
+RegExp.escape = s => s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 
 Structures.extend("User", BaseUser => User(BaseUser));
 Structures.extend("Guild", BaseGuild => Guild(BaseGuild));

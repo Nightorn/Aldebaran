@@ -14,7 +14,7 @@ module.exports = message => {
 		"<@170915625722576896> ",
 		message.guild.settings.discordrpgPrefix
 	]) {
-		if (content.match(`^${element}adv(\\b|enture\\b)`)) prefix = element;
+		if (content.match(`^${RegExp.escape(element)}adv(\\b|enture\\b)`)) prefix = element;
 	}
 	if (prefix !== null) {
 		if (message.guild.settings.autoDelete === "on") {
