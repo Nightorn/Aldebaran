@@ -42,7 +42,8 @@ module.exports = class UserCommand extends Command {
 							}
 							/* eslint-enable prefer-const */
 						}
-						for (const [id, data] of user.roles) { if (data.name !== "@everyone") allRoles.set(id, data.rawPosition); }
+						for (const [id, data] of user.roles)
+							if (data.name !== "@everyone") allRoles.set(id, data.rawPosition);
 						/* eslint-disable func-names */
 						allRoles[Symbol.iterator] = function* () {
 							/* eslint-enable func-names */
@@ -74,8 +75,8 @@ module.exports = class UserCommand extends Command {
 									user.displayName
 								}\n${
 									highestPerm !== null
-										? `**Aldebaran Staff Role** ${highestPerm.slice(0, 1)
-                        + highestPerm.toLowerCase().slice(1)}`
+										? `*This user is a member of the Aldebaran staff (${highestPerm.slice(0, 1)
+											+ highestPerm.toLowerCase().slice(1)}).*`
 										: ""
 								}`
 							)

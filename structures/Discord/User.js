@@ -14,7 +14,7 @@ module.exports = BaseUser => class User extends BaseUser {
 			if (this.client.databaseFetch !== undefined) {
 				if (
 					this.client.databaseFetch.data.users.size
-            === this.client.databaseFetch.counts.users
+					=== this.client.databaseFetch.counts.users
 				) {
 					clearInterval(interval);
 					if (
@@ -47,9 +47,11 @@ module.exports = BaseUser => class User extends BaseUser {
 	}
 
 	hasPerm(perm) {
-		const { roles } = this.client.guilds
-			.get("461792163525689345")
-			.members.get(this.id);
+		const guild = this.client.guilds.get("461792163525689345");
+		if (guild === undefined) return false;
+		const member = guild.members.get(this.id);
+		if (member === undefined) return false;
+		const { roles } = member;
 		const perms = [];
 		let rank = 99;
 		if (roles !== undefined) {
@@ -71,9 +73,11 @@ module.exports = BaseUser => class User extends BaseUser {
 	get highestPerm() {
 		let rank = 99;
 		let perm = null;
-		const { roles } = this.client.guilds
-			.get("461792163525689345")
-			.members.get(this.id);
+		const guild = this.client.guilds.get("461792163525689345");
+		if (guild === undefined) return null;
+		const member = guild.members.get(this.id);
+		if (member === undefined) return null;
+		const { roles } = member;
 		if (roles !== undefined) {
 			roles.each(role => {
 				for (const [id, data] of Object.entries(staffRoles)) {
