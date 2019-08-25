@@ -22,7 +22,7 @@ module.exports = class BStats extends Command {
 			.setDescription(
 				"Multiple informations about Aldebaran are shown on this page, mainly the used ressources and the global usage statistics."
 			)
-			.addField(`Memory Usage (${memPRC}%)`, `**${mem} MB** / ${memTTL} MB`, true)
+			.addField(`Memory Usage (${memPRC}%)`, `**${mem} MB** / ${Number.formatNumber(memTTL)} MB`, true)
 			.addField(
 				"System CPU Load",
 				`**${Math.round(100 * os.loadavg()[0]) / 100}** (${Math.round(100 * os.loadavg()[0] * 25) / 100}%)`,
