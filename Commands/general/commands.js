@@ -5,7 +5,9 @@ module.exports = class CommandsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: "commands",
-			description: "Lists all the available commands"
+			description: "Lists all the available commands",
+			allowIndexCommand: true,
+			allowUnknownSubcommands: true
 		});
 	}
 
@@ -19,7 +21,9 @@ module.exports = class CommandsCommand extends Command {
 		for (const [name, data] of bot.commands.commands) {
 			amount++;
 			if (data.check(message)) {
-				if (!data.hidden || hiddenBypass) {
+				if ((!data.hidden || hiddenBypass)
+					&& message.guild.commands[name] !== false
+				) {
 					if (commands[data.category] === undefined)
 						commands[data.category] = [];
 					if (name === data.name) {
@@ -31,6 +35,13 @@ module.exports = class CommandsCommand extends Command {
 					}
 				}
 			}
+		}
+		for (const [name, data] of Object.entries(message.guild.commands)) {
+			if (data !== false) {
+				amount++;
+				amountShown++;
+				commands[bot.commands.get(data).category].push(`**${name}**`);
+			} else commands[bot.commands.get(name).category].push(`~~${name}~~`);
 		}
 
 		const embed = new MessageEmbed()
