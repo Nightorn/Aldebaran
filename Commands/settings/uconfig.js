@@ -112,7 +112,7 @@ module.exports = class UconfigCommand extends Command {
 						color: 0xff0000,
 						title: "Not supported",
 						description:
-				"This value is not vaild. Please check `&uconfig help` for the vaild values for this setting."
+							"This value is not vaild. Please check `&uconfig list` for the vaild values for this setting."
 					}
 				});
 			}
@@ -121,7 +121,7 @@ module.exports = class UconfigCommand extends Command {
 				embed: {
 					color: 0xff0000,
 					title: "Invaild key",
-					description: "This key does not exist. Check `&uconfig help` for the keys accepted.."
+					description: "This key does not exist. Check `&uconfig list` for the keys accepted.."
 				}
 			});
 		}
