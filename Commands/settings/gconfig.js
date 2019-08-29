@@ -101,12 +101,12 @@ module.exports = class GconfigCommand extends Command {
 					});
 			} else {
 				message.channel.send(
-					"**Error** This value is not supported, check `&gconfig help` for more informations."
+					"**Error** This value is not supported, check `&gconfig list` for more informations."
 				);
 			}
 		} else {
 			message.channel.send(
-				"**Error** This key does not exist, check `&gconfig help` for more informations."
+				"**Error** This key does not exist, check `&gconfig list` for more informations."
 			);
 		}
 		return true;
