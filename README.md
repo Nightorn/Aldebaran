@@ -7,7 +7,9 @@
     <a href="/issues">
         <img src="https://img.shields.io/github/issues/Nightorn/Aldebaran" alt="Issues">
     </a>
+    <a href="https://www.codacy.com/app/mount2010/Aldebaran?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Nightorn/Aldebaran&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/ea232f66422c49bc934cf1e1e44d28b8"/></a>
 </p>
+
 <p align="center">
     <a href="https://discordapp.com/api/oauth2/authorize?client_id=437802197539880970&permissions=126016&scope=bot">
         <img src="https://img.shields.io/badge/Invite!-brightgreen" alt="Invite!">
