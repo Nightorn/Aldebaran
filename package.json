@@ -4,6 +4,7 @@
   "description": "Utility",
   "main": "bot.js",
   "dependencies": {
+    "canvas": "^2.6.0",
     "discord.js": "git://github.com/discordjs/discord.js.git#master",
     "mathjs": "^5.10.3",
     "moment": "^2.24.0",
