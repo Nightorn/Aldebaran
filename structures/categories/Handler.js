@@ -9,6 +9,9 @@ module.exports = class CommandHandler {
 	}
 
 	execute(command, message) {
+		const override = this.checkOverrides(message.guild.commands, command);
+		if (override === false) return;
+		command = override;
 		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
 		command = this.get(command);
 		if (message.args.length === 0)
@@ -54,6 +57,13 @@ module.exports = class CommandHandler {
 		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
 		const args = [this.client, message, this.constructor.createArgs(message)];
 		return this.commands.get(command).run(...args);
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	checkOverrides(commands, command) {
+		const cmd = commands[command];
+		if (cmd === undefined) return command;
+		return cmd;
 	}
 
 	exists(command) {

@@ -95,6 +95,7 @@ module.exports = BaseUser => class User extends BaseUser {
 	}
 
 	async create() {
+		if (this.existsInDB) return false;
 		this.existsInDB = true;
 		return this.client.database.users.createOneById(this.id);
 	}
@@ -106,9 +107,6 @@ module.exports = BaseUser => class User extends BaseUser {
 	}
 
 	async changeSetting(property, value) {
-		if (!this.existsInDB) {
-			await this.create();
-		}
 		this.settings[property] = value;
 		return this.client.database.users.updateOneById(
 			this.id,

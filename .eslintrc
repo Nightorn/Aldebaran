@@ -41,6 +41,7 @@
         "curly": "off",
         "nonblock-statement-body-position": "off",
         "no-confusing-arrow": "off",
-        "no-mixed-operators": "off"
+        "no-mixed-operators": "off",
+        "prefer-destructuring": ["error", { "array": false }]
     }
 }

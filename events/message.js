@@ -57,6 +57,17 @@ exports.run = async (bot, message) => {
 					console.error(err);
 				}
 			}
+		} else if (command.indexOf("-") === 0) {
+			try {
+				bot.commands.get(sliced).image(bot, message, args);
+			} catch (err) {
+				const embed = new MessageEmbed()
+					.setTitle("The requested resource has not been found.")
+					.setDescription("By using `-`, you are trying to view the image version of this command, however, the image version of this command is not available. Try again without `-`.")
+					.setFooter(message.author.username, message.author.avatarURL())
+					.setColor("RED");
+				message.channel.send({ embed });
+			}
 		} else {
 			bot.commands.execute(command, message);
 		}

@@ -5,6 +5,7 @@ const { Collection } = require("discord.js");
 module.exports = BaseGuild => class Guild extends BaseGuild {
 	constructor(client, data) {
 		super(client, data);
+		this.commands = {};
 		this.settings = {};
 		this.prefix = this.client.config.prefix;
 		this.existsInDB = false;
@@ -12,7 +13,7 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 			if (this.client.databaseFetch !== undefined) {
 				if (
 					this.client.databaseFetch.data.guilds.size
-            === this.client.databaseFetch.counts.guilds
+						=== this.client.databaseFetch.counts.guilds
 				) {
 					clearInterval(interval);
 					if (
@@ -28,6 +29,7 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 	build(data) {
 		for (const [key, value] of Object.entries(data)) this[key] = value;
 		this.settings = JSON.parse(this.settings);
+		this.commands = JSON.parse(this.commands);
 		this.prefix = this.client.debugMode
 			? this.client.config.prefix
 			: this.settings.aldebaranPrefix || this.client.config.prefix;
@@ -36,6 +38,7 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 	}
 
 	async create() {
+		if (this.existsInDB) return false;
 		this.existsInDB = true;
 		return this.client.database.guilds.createOneById(this.id);
 	}
@@ -47,13 +50,19 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 	}
 
 	async changeSetting(property, value) {
-		if (!this.existsInDB) {
-			await this.create();
-		}
 		this.settings[property] = value;
 		return this.client.database.guilds.updateOneById(
 			this.id,
 			new Map([["settings", JSON.stringify(this.settings)]])
+		);
+	}
+
+	async changeCommandSetting(property, value) {
+		this.commands[property] = value;
+		if (value === true) delete this.commands[property];
+		return this.client.database.guilds.updateOneById(
+			this.id,
+			new Map([["commands", JSON.stringify(this.commands)]])
 		);
 	}
 };
