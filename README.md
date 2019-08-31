@@ -10,23 +10,18 @@
     <a href="https://www.codacy.com/app/mount2010/Aldebaran?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Nightorn/Aldebaran&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/ea232f66422c49bc934cf1e1e44d28b8"/></a>
 </p>
 
-<p align="center">
-    <a href="https://discordapp.com/api/oauth2/authorize?client_id=437802197539880970&permissions=126016&scope=bot">
-        <img src="https://img.shields.io/badge/Invite!-brightgreen" alt="Invite!">
-    </a>
-</p>
-
 Aldebaran is a Discord multi-purposes bot which offers a lot of assistance regarding DiscordRPG, but which also has a lot of commands of all kinds such as action, image and NSFW commands!
 
 ## Commands
-Aldebaran has currently 81 commands over 11 categories, check them out by [adding Aldebaran on your server](https://discordapp.com/api/oauth2/authorize?client_id=437802197539880970&permissions=126016&scope=bot) now!
+Aldebaran currently has 81 commands over 11 categories - check them out by adding Aldebaran to your server now!
 
-![Commands](https://cdn.discordapp.com/attachments/461792249080971294/612992150329753600/unknown.png "Commands")
+[![Invite Aldebaran](https://res.nightorn.com/assets/images/invite.png "Invite Aldebaran")](https://discordapp.com/api/oauth2/authorize?client_id=437802197539880970&permissions=126016&scope=bot)
+
 
 ## Main server
 Join the main server to stay updated about the new updates!
 
-[![Discord's Server](https://cdn.discordapp.com/attachments/461792249080971294/612971980299304961/unknown.png "Discord Server")](https://discord.gg/3x6rXAv)
+[![Discord Server](https://res.nightorn.com/assets/images/supportserver.png "Discord Server")](https://discord.gg/3x6rXAv)
 
 ## Aldebaran Development
 ### Contribute as a normal user
