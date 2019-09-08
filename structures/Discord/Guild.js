@@ -50,11 +50,15 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 	}
 
 	async changeSetting(property, value) {
-		this.settings[property] = value;
-		return this.client.database.guilds.updateOneById(
-			this.id,
-			new Map([["settings", JSON.stringify(this.settings)]])
-		);
+		const create = await this.create();
+		if (create !== false) {
+			this.settings[property] = value;
+			return this.client.database.guilds.updateOneById(
+				this.id,
+				new Map([["settings", JSON.stringify(this.settings)]])
+			);
+		}
+		return false;
 	}
 
 	async changeCommandSetting(property, value) {

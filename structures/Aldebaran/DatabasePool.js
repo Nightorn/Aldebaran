@@ -131,11 +131,10 @@ module.exports = class DatabasePool {
 			 * @param {string} id Snowflake ID of the Discord Guild
 			 */
 			createOneById: async id => {
-				console.log("...");
 				const check = await this.checkId(id);
 				if (check instanceof RangeError) return check;
 				return this.query(
-					`INSERT INTO guilds (guildid, settings) VALUES ('${id}', '{}')`
+					`INSERT INTO guilds (guildid, settings, commands) VALUES ('${id}', '{}', '{}')`
 				);
 			}
 		};
