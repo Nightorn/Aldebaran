@@ -107,14 +107,11 @@ module.exports = BaseUser => class User extends BaseUser {
 	}
 
 	async changeSetting(property, value) {
-		const create = await this.create();
-		if (create !== false) {
-			this.settings[property] = value;
-			return this.client.database.users.updateOneById(
-				this.id,
-				new Map([["settings", JSON.stringify(this.settings)]])
-			);
-		}
-		return false;
+		await this.create();
+		this.settings[property] = value;
+		return this.client.database.users.updateOneById(
+			this.id,
+			new Map([["settings", JSON.stringify(this.settings)]])
+		);
 	}
 };
