@@ -30,7 +30,7 @@ module.exports = class UconfigCommand extends Command {
 			const list = {};
 			for (const [key, data] of Object.entries(parametersAvailable)) if (
 				message.guild.members.get(data.showOnlyIfBotIsInGuild) !== undefined
-			|| data.showOnlyIfBotIsInGuild === undefined
+					|| data.showOnlyIfBotIsInGuild === undefined
 			) {
 				if (list[data.category] === undefined) list[data.category] = {};
 				list[data.category][key] = data;
@@ -71,15 +71,14 @@ module.exports = class UconfigCommand extends Command {
 					.then(() => {
 						if (parametersAvailable[args[0]].postUpdate !== undefined) {
 							/* eslint-disable no-param-reassign */
-							message.author = parametersAvailable[args[0]].postUpdate(
+							parametersAvailable[args[0]].postUpdate(
 								args[1],
 								message.author
 							);
 						}
 						if (parametersAvailable[args[0]].postUpdateCommon !== undefined) {
-							[message.author, message.guild] = parametersAvailable[
-								args[0]
-							].postUpdateCommon(args[1], message.author, message.guild);
+							parametersAvailable[args[0]]
+								.postUpdateCommon(args[1], message.author, message.guild);
 							/* eslint-disable no-param-reassign */
 						}
 						const embed = new MessageEmbed()

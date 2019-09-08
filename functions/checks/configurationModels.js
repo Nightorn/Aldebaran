@@ -30,7 +30,6 @@ module.exports = {
 			postUpdateCommon: (value, user, guild) => {
 				if (value === "on") guild.polluxBoxPing.set(user.id, user);
 				else guild.polluxBoxPing.delete(user.id);
-				return [user, guild];
 			},
 			showOnlyIfBotIsInGuild: "271394014358405121",
 			category: "Pollux"
@@ -90,11 +89,7 @@ module.exports = {
 		aldebaranPrefix: {
 			support: () => true,
 			help: "Aldebaran's Prefix - [& | Guild Customized]",
-			postUpdate: (value, guild) => {
-				const newGuild = guild;
-				newGuild.prefix = value;
-				return newGuild;
-			},
+			postUpdate: (value, guild) => { guild.prefix = value; },
 			category: "Aldebaran"
 		},
 		aldebaran: {

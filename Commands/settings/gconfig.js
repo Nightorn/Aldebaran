@@ -61,13 +61,13 @@ module.exports = class GconfigCommand extends Command {
 			if (parametersAvailable[args[0]].support(args[1])) {
 				if (parametersAvailable[args[0]].postUpdate !== undefined) {
 					/* eslint-disable no-param-reassign */
-					message.guild = parametersAvailable[args[0]].postUpdate(
+					parametersAvailable[args[0]].postUpdate(
 						args[1],
 						message.guild
 					);
 				}
 				if (parametersAvailable[args[0]].postUpdateCommon !== undefined) {
-					[message.author, message.guild] = parametersAvailable[
+					parametersAvailable[
 						args[0]
 					].postUpdateCommon(args[1], message.author, message.guild);
 					/* eslint-enable no-param-reassign */
