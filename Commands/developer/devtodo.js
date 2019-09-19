@@ -1,6 +1,6 @@
 // Command Developed with the help of Akashic Bearer#2305
 const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../structures/categories/GeneralCategory");
+const { Command } = require("../../structures/categories/DeveloperCategory");
 
 module.exports = class CommandDevtodo extends Command {
 	constructor(client) {
