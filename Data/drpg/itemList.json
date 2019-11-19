@@ -10727,7 +10727,7 @@
 	},
 	"604": {
 		"cost": -1,
-		"desc": " A problem has been detected and	  has been shut down to prevent damage to your computer. If this is the first time you've encountered this error, please find the nearest computer disposal team as your computer has gained sentience. If this screen appears again, please leave the premises in the most expedient manner possible, also known as run for your life.",
+		"desc": "A problem has been detected and has been shut down to prevent damage to your computer. If this is the first time you've encountered this error, please find the nearest computer disposal team as your computer has gained sentience. If this screen appears again, please leave the premises in the most expedient manner possible, also known as run for your life.",
 		"donate": true,
 		"id": "604",
 		"level": 4,

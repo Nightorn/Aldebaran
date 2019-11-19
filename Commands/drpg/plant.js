@@ -1,7 +1,7 @@
 const request = require("request");
 const { MessageEmbed } = require("discord.js");
 const math = require("mathjs");
-const itemlist = require("../../Data/drpgitemlist.json").data;
+const itemlist = require("../../Data/drpg/itemList.json");
 const locationdb = require("../../Data/drpglocationlist.json");
 const userCheck = require("../../functions/action/userCheck");
 const { Command } = require("../../structures/categories/DRPGCategory");
@@ -44,10 +44,8 @@ module.exports = class PlantCommand extends Command {
 					for (const [key, value] of Object.entries(data.location.saplings)) {
 						if (value !== null) {
 							let item = null;
-							itemlist.forEach(element => {
-								if (element.id === value.id)
-									item = element;
-							});
+							for (const [id, itemData] of Object.entries(itemlist))
+								if (id === value.id) item = itemData;
 							const lootFormulas = item.sapling.loot.amount;
 							const currentReap = data.attributes.reaping !== 0
 								? data.attributes.reaping : 1;
