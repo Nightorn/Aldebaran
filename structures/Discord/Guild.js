@@ -32,7 +32,7 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 
 	build(data) {
 		for (const [key, value] of Object.entries(data)) this[key] = value;
-		if (this.settings.includes("\\") && !this.settings.includes("\\\\")) {
+		if (this.settings.includes("\\") && !this.settings.includes("\\\\") && !this.settings.includes("\\\"")) {
 			// Escape the escape symbol if it's not escaped. Should only run for like 1 guild maybe.
 			this.settings = this.settings.replace(/\\/g, "\\\\");
 		}
