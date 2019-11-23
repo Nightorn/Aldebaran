@@ -25,7 +25,7 @@ module.exports = class CommandCredits extends Command {
 			)
 			.addField(
 				"Other Contributions",
-				"**`[Akashic Bearer#2305]`** Development Help\n**`[PlayTheFallen#8318]`** Development Help\n**`[Gyth8#8778]** Ex-Support\n**`[Discord Pedestrian#7331]`** Unofficial Support"
+				"**`[Akashic Bearer#2305]`** Development Help\n**`[PlayTheFallen#8318]`** Development Help\n**`[Gyth8#8778]`** Ex-Support\n**`[Discord Pedestrian#7331]`** Unofficial Support"
 			)
 			.setColor("PURPLE");
 		message.channel.send({ embed });
