@@ -3,12 +3,12 @@ const { MessageEmbed } = require("discord.js");
 const Pollux = require("../functions/bots/Pollux");
 const DiscordRPG = require("../functions/bots/DiscordRPG");
 const DRPGAdventure = require("../functions/timer/DiscordRPG/adv.js");
-const DRPGTravel = require("../functions/timer/DiscordRPG/travel.js");
 const DRPGSides = require("../functions/timer/DiscordRPG/sides.js");
 const DRPGPadventure = require("../functions/timer/DiscordRPG/padv.js");
 
 exports.run = async (bot, message) => {
 	if (!message.guild) return;
+	if (message.author.banned) return;
 	if (message.guild.settings.aldebaran === "off") {
 		setTimeout(() => {
 			message.guild.changeSetting("aldebaran", "on");
@@ -18,7 +18,6 @@ exports.run = async (bot, message) => {
 	if (message.author.id === "271394014358405121") Pollux(bot, message);
 	else if (message.author.id === "170915625722576896") {
 		DiscordRPG(bot, message);
-		DRPGTravel(bot, message);
 	} else if (!message.author.bot) {
 		DRPGAdventure(message);
 		DRPGSides(message);
