@@ -49,7 +49,10 @@ module.exports = class UserCommand extends Command {
 				allRoles[Symbol.iterator] = function* () {
 					yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
 				};
-				for (const [id] of allRoles) rolesList.push(`<@&${id}>`);
+				for (const [id] of allRoles) {
+					if (rolesList.length > 39) break;
+					rolesList.push(`<@&${id}>`);
+				}
 			}
 
 			const getDate = date => {
@@ -93,7 +96,7 @@ module.exports = class UserCommand extends Command {
 					)} days**.`
 				);
 			if (rolesList.length > 0)
-				embed.addField("Roles", `${rolesList.join(", ")}`);
+				embed.addField(`Roles (${member.roles.size - 1})`, `${rolesList.join(", ")}`);
 			if (allPermissions.length > 0)
 				embed.addField("Permissions", allPermissions.join(", "));
 			message.channel.send({ embed });
