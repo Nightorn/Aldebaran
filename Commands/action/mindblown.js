@@ -1,5 +1,4 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../structures/categories/ActionCategory");
+const { Command, Embed } = require("../../structures/categories/ActionCategory");
 const images = require("../../Data/imageurls.json");
 
 module.exports = class Mindblown extends Command {
@@ -14,10 +13,9 @@ module.exports = class Mindblown extends Command {
 		const randomGif = images.mindblown[
 			Math.floor(Math.random() * images.mindblown.length)
 		];
-		const embed = new MessageEmbed()
+		const embed = new Embed(this)
 			.setDescription(`${message.author}'s mind has been blown.`)
-			.setImage(randomGif)
-			.setColor(this.color);
+			.setImage(randomGif);
 		message.channel.send({ embed });
 	}
 };

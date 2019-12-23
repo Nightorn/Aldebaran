@@ -1,10 +1,11 @@
 const userCheck = require("./userCheck");
 const getImage = require("./getImage");
 const text = require("../../Data/actiontext.json");
+const { Embed } = require("../../structures/categories/ActionCategory");
 
-module.exports = (bot, message, args, command) => {
+module.exports = (bot, message, args) => {
 	userCheck(bot, message, args).then(userId => {
-		[command] = message.content.slice(message.guild.prefix.length).split(" ");
+		const [command] = message.content.slice(message.guild.prefix.length).split(" ");
 		const target = `<@${userId}>`;
 		const sender = message.author.username;
 
@@ -19,19 +20,11 @@ module.exports = (bot, message, args, command) => {
 		}
 
 		getImage(bot, message, args).then(image => {
-			message.channel.send({
-				embed: {
-					author: {
-						name: message.author.username,
-						icon_url: message.author.avatarURL()
-					},
-					description: (comment),
-					image: {
-						url: (image)
-					},
-					timestamp: new Date()
-				}
-			});
+			const embed = new Embed(bot.commands.get(command))
+				.setAuthor(message.author.username, message.author.avatarURL())
+				.setDescription(comment)
+				.setImage(image);
+			message.channel.send({ embed });
 		});
 	}).catch(err => {
 		throw err;
