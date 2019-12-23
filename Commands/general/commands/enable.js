@@ -34,17 +34,17 @@ module.exports = class EnableCommandsSubcommand extends Command {
 				}
 				const embed = new ErrorEmbed(message)
 					.setAuthor("The requested resource has not been found.")
-					.setDescription("The command you want to disable is incorrect. Make sure you did not make a mistake when typing it.");
+					.setDescription("The command you want to enable does not exist. Make sure you did not make a mistake when typing it.");
 				return message.channel.send({ embed });
 			}
 			const embed = new ErrorEmbed(message)
 				.setAuthor("You are doing something wrong.")
-				.setDescription("You are trying to do something that has already been done before.");
+				.setDescription("You are trying to enable a command that is already enabled.");
 			return message.channel.send({ embed });
 		}
 		const embed = new ErrorEmbed(message)
 			.setAuthor("You are using this command incorrectly.")
-			.setDescription("One or multiple arguments are missing for this command. You need to specify the command you want to disable.");
+			.setDescription("One or multiple arguments are missing for this command. You need to specify the command you want to enable.");
 		return message.channel.send({ embed });
 	}
 };

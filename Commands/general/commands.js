@@ -1,5 +1,4 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../structures/categories/GeneralCategory");
+const { Command, Embed } = require("../../structures/categories/GeneralCategory");
 
 module.exports = class CommandsCommand extends Command {
 	constructor(client) {
@@ -44,17 +43,12 @@ module.exports = class CommandsCommand extends Command {
 			} else commands[bot.commands.get(name).category].push(`~~${name}~~`);
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new Embed(this)
 			.setAuthor(
 				`Aldebaran  |  List of ${amountShown}/${amount} commands`,
 				bot.user.avatarURL()
-			)
-			.setColor(message.guild.me.displayColor);
-		if (!hiddenBypass && !hideAliases) {
-			embed.setFooter(
-				"Use --show-hidden to view all commands and --hide-aliases to hide aliases."
 			);
-		}
+		embed.setFooter(`${!hiddenBypass && !hideAliases ? "Use --show-hidden to view all commands and --hide-aliases to hide aliases." : ""} To learn how to use the customized commands, check ${message.guild.prefix}commands guide.`);
 		for (const [category, list] of Object.entries(commands)) {
 			embed.addField(category, list.join(", "), true);
 		}
