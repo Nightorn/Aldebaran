@@ -14,6 +14,7 @@ module.exports = class SayCommand extends Command {
 	run(bot, message, args) {
 		message.delete().catch(() => {});
 		const embed = new Embed(this)
+			.setAuthor(message.author.username, message.author.avatarURL())
 			.setDescription(args.join(" "));
 		message.channel.send({ embed });
 	}
