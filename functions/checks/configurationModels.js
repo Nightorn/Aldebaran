@@ -8,12 +8,6 @@ module.exports = {
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
-		travelTimer: {
-			support: value => value === "on" || value === "off",
-			help: "Travel Timer - [on | off]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
 		healthMonitor: {
 			support: value => (
 				value === "on"
@@ -71,6 +65,16 @@ module.exports = {
 			help:
         "Time Format - Use DD (day of month), MM (month number) and YYYY (year)",
 			category: "Aldebaran"
+		},
+		osuUsername: {
+			support: () => true,
+			help: "osu! default username (for osu! commmands)",
+			category: "osu!"
+		},
+		osuMode: {
+			support: () => true,
+			help: "osu! default mode (for osu! commmands) [osu | mania | taiko | ctb]",
+			category: "osu!"
 		}
 	},
 	guild: {
