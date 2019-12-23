@@ -110,12 +110,9 @@ module.exports = (client, message) => {
 		maxHP: 0
 	};
 	if (message.embeds.length === 0) {
-		if (message.content.indexOf("'s Adventure") !== -1) {
+		if (message.content.includes("'s Adventure") || message.content.includes("Party Adventure")) {
 			if (message.content.indexOf(") | +") !== -1) {
-				player.name = message.content
-					.split("\n")[1]
-					.replace("'s Adventure ]======!", "")
-					.replace("!======[ ", "");
+				player.name = message.content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/)[1];
 				// eslint-disable-next-line no-useless-escape
 				const hpMatches = message.content.match(/(Dead|[\d\.]+% HP)/g);
 				const deadPet = hpMatches[1] === "Dead";
@@ -134,10 +131,7 @@ module.exports = (client, message) => {
 					const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
 					player.currentHP = Number(nums[1].replace(/,/g, ""));
 					player.maxHP = Number(nums[2].replace(/,/g, ""));
-					player.name = message.content
-						.split("\n")[1]
-						.replace("'s Adventure ]======!", "")
-						.replace("!======[ ", "");
+					player.name = message.content.match(/\+ (.*) has [\d,]+\/[\d,]+ HP left\./)[1];
 				}
 				const messageArray = message.content.split("\n");
 				let dealtLine = null;
@@ -168,18 +162,18 @@ module.exports = (client, message) => {
     && message.embeds[0].author !== null
 	) {
 		const adventureEmbed = message.embeds[0];
-		if (message.embeds[0].author.name.indexOf("Adventure") !== -1) {
-			const playerData = adventureEmbed.fields[0].value.split("\n")[3];
+		if (message.embeds[0].author.name.includes("Adventure")) {
 			const petData = adventureEmbed.fields[
 				adventureEmbed.fields[1].name === "Critical Hit!" ? 2 : 1
 			].value.split("\n")[2];
-			player.name = adventureEmbed.author.name.replace("'s Adventure", "");
-			[player.currentHP, player.maxHP] = playerData.split(" ")[1].split("/");
+			player.name = adventureEmbed.fields[0].name;
 			[pet.currentHP, pet.maxHP] = petData.split(" ")[1].split("/");
-			player.currentHP = parseInt(player.currentHP.replace(",", ""), 10);
-			player.maxHP = parseInt(player.maxHP.replace(",", ""), 10);
+			const healthLine = adventureEmbed.fields[0].value.match(/Has ([\d,]+)\/([\d,]+) HP left/);
+			player.currentHP = Number(healthLine[1].replace(/,/g, ""));
+			player.maxHP = Number(healthLine[2].replace(/,/g, ""));
 			pet.currentHP = parseInt(pet.currentHP.replace(",", ""), 10);
 			pet.maxHP = parseInt(pet.maxHP.replace(",", ""), 10);
+			console.log([player, pet]);
 		}
 	}
 

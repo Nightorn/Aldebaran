@@ -1,19 +1,33 @@
 module.exports = message => {
-	if (message.author.timers.padventure !== null) return;
+	if (
+		message.author.timers.padventure !== null
+		|| message.guild.settings.adventureTimer === "off"
+		|| message.guild.settings.adventureTimer === undefined
+		|| message.author.settings.adventureTimer === "off"
+		|| message.author.settings.adventureTimer === undefined
+	) return;
+	const content = message.content.toLowerCase();
 	let prefix = null;
-	const content = `${message.content.toLowerCase()} `;
-	for (const element of ["DiscordRPG", "#!", message.guild.settings.discordrpgPrefix]) {
-		if (content.indexOf(`${element}padv `) === 0 || content.indexOf(`${element}padventure `) === 0) prefix = element;
+	for (const element of [
+		"discordrpg ",
+		"#!",
+		"<@170915625722576896> ",
+		message.guild.settings.discordrpgPrefix
+	]) {
+		if (element !== undefined)
+			if (content.match(`^${RegExp.escape(element)}padv(\\b|enture\\b)`)) prefix = element;
 	}
 	if (prefix !== null) {
-		if (message.guild.settings.autoDelete === "on") message.delete({ timeout: 1000 });
-		if (message.guild.settings.adventureTimer === "on" && message.author.settings.adventureTimer === "on") {
-			message.author.timers.padventure = setTimeout(() => {
-				message.channel.send(`<@${message.author.id}> Party Time! :tada:`).then(msg => {
+		if (message.guild.settings.autoDelete === "on")
+			message.delete({ timeout: 1000 });
+		message.author.timers.padventure = setTimeout(() => {
+			message.channel
+				.send(`<@${message.author.id}> party adventure time! :crossed_swords:`)
+				.then(msg => {
 					if (message.guild.settings.autoDelete === "on") msg.delete({ timeout: 10000 });
 				});
-				message.author.timers.padventure = null;
-			}, 19000);
-		}
+			// eslint-disable-next-line no-param-reassign
+			message.author.timers.padventure = null;
+		}, 19900);
 	}
 };
