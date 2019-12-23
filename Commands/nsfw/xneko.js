@@ -1,5 +1,5 @@
-const Client = require("nekos.life");
-const { Command, Embed } = require("../../structures/categories/NSFWCategory");
+const origin = require("../../structures/categories/NSFWCategory");
+const { Command, Embed } = require("../../structures/categories/multi/NekoslifeSubcategory")(origin);
 
 module.exports = class XNekoCommand extends Command {
 	constructor(client) {
@@ -10,12 +10,8 @@ module.exports = class XNekoCommand extends Command {
 	}
 
 	async run(bot, message) {
-		const neko = new Client();
-		const data = await neko.getNSFWNekoGif();
-		const embed = new Embed(this)
-			.setDescription(`${message.author}, here is your naughty neko.`)
-			.setImage(data.url)
-			.setFooter("Powered by Nekos.life");
-		message.channel.send({ embed });
+		const embed = new Embed(this,
+			`${message.author}, here is your naughty neko.`);
+		embed.send(message, this.nekoslife.getNSFWNekoGif);
 	}
 };
