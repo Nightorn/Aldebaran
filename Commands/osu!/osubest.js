@@ -1,9 +1,7 @@
-const { MessageEmbed } = require("discord.js");
 const Nodesu = require("nodesu");
-const oppai = require("oppai");
-const retrieveBeatmapFile = require("../../functions/osu!/retrieveBeatmapFile");
-const computeMods = require("../../functions/osu!/computeMods");
-const { Command } = require("../../structures/categories/OsuCategory");
+const ojsama = require("ojsama");
+const ppv2Results = require("../../functions/osu!/ppv2Results");
+const { Command, Embed } = require("../../structures/categories/OsuCategory");
 
 module.exports = class OsubestCommand extends Command {
 	constructor(client) {
@@ -16,27 +14,19 @@ module.exports = class OsubestCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		const { config } = bot;
-		const client = new Nodesu.Client(config.apikeys["osu!"]);
-		if (args.length === 0) {
-			return message.channel.send(
-				"You need to specify the name of the user you want to the stats. Check `&osu ?` for more informations."
-			);
-		}
-		if (args[0].toLowerCase() === "?") {
-			const embed = new MessageEmbed()
+		const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
+		if (args.length > 0 ? args[0] === "?" : false) {
+			const embed = new Embed(this)
 				.setAuthor(message.author.username, message.author.avatarURL())
-				.setTitle("Documentation for the osu! (User Profile) command")
+				.setTitle("Documentation for the osu! (Best Plays) command")
 				.setDescription(
-					"First, you have to run the command with the osu! username of the user you want to see the stats, or eventually his user ID. After that, you can choose the mode to show stats from, note that the default mode is standard."
+					"First, you have to run the command with the osu! username of the user you want to see the stats of, or eventually his user ID. After that, you can choose the mode to show stats from, note that the default mode is standard."
 				)
 				.addField(
 					"Supported Modes",
 					"**osu!standard** : BY DEFAULT, --osu\n**osu!taiko** : --taiko\n**osu!ctb** : --ctb\n**osu!mania** : --mania"
-				)
-				.setColor("BLUE");
+				);
 			message.channel.send({ embed });
 		} else {
 			const ranks = {
@@ -44,98 +34,75 @@ module.exports = class OsubestCommand extends Command {
 				X: "SS",
 				XH: "SS+"
 			};
-			let mode = "osu";
-			for (const element of args) { if (element.indexOf("--") === 0) mode = element.replace("--", ""); }
+			let mode = message.author.settings.osuMode || "osu";
+			for (const i in args) {
+				if (args[i].indexOf("--") === 0) {
+					mode = args[i].replace("--", "");
+					args.splice(i, 1);
+				}
+			}
 			if (Nodesu.Mode[mode] !== undefined) {
-				client.user
-					.getBest(args[0], Nodesu.Mode[mode], 5)
+				client.user.getBest(args[0] || message.author.settings.osuUsername,
+					Nodesu.Mode[mode], 5)
 					.then(async data => {
+						const user = await client.user
+							.get(data[0].user_id, Nodesu.Mode[mode]);
 						const f = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-						const ctx = oppai.Ctx();
-						const maps = [];
-						let list = "";
-						for (const score of data) {
-							retrieveBeatmapFile(score.beatmap_id);
-							const b = oppai.Beatmap(ctx);
-							const buf = oppai.Buffer(2000000);
-							const dctx = oppai.DiffCalcCtx(ctx);
-							b.parse(
-								`./cache/osu!/${score.beatmap_id}.osu`,
-								buf,
-								2000000,
-								true
+						const beatmapQueries = [];
+						for (const map of data) {
+							beatmapQueries.push(
+								client.beatmaps.getByBeatmapId(map.beatmap_id,
+									Nodesu.Mode[mode], 1, 1, map.enabled_mods)
 							);
-							b.applyMods(score.enabled_mods);
-							const diff = dctx.diffCalc(b);
-							const res = ctx.ppCalc(
-								diff.aim,
-								diff.speed,
-								b,
-								oppai.nomod,
-								parseInt(score.maxcombo, 10),
-								parseInt(score.countmiss, 10),
-								parseInt(score.count300, 10),
-								parseInt(score.count100, 10),
-								parseInt(score.count50, 10)
-							);
-							score.accuracy = res.accPercent;
-							score.stars = diff.stars;
-							maps.push(score);
 						}
-
-						const fetchMapMetadata = async mapsList => {
-							const results = [];
-							for (const map of mapsList) {
-								results.push(
-									client.beatmaps.getByBeatmapId(
-										map.beatmap_id,
-										Nodesu.Mode[mode],
-										1,
-										true
-									)
+						Promise.all(beatmapQueries).then(maps => {
+							const scores = [];
+							const accuracyQueries = [];
+							if (mode === "osu") {
+								for (const s of data) accuracyQueries.push(
+									ppv2Results(s.beatmap_id, s.enabled_mods, s.maxcombo,
+										undefined, Number(s.countmiss), Number(s.count300),
+										Number(s.count100), Number(s.count50))
 								);
 							}
-							return Promise.all(results);
-						};
-						fetchMapMetadata(maps)
-							.then(async mapsData => {
-								for (const i in mapsData) {
-									const map = maps[i];
-									const metadata = mapsData[i][0];
-									const mods = computeMods.run(parseInt(map.enabled_mods, 10));
-									list += `**\`[${
-										ranks[map.rank] === undefined ? map.rank : ranks[map.rank]
-									}]\` ${f(map.pp)}pp** | [__${metadata.artist} - **${
-										metadata.title
-									}**__ [${metadata.version}]](https://osu.ppy.sh/b/${
-										map.beatmap_id
-									}) (**${Math.round(parseFloat(map.stars) * 100)
-                    / 100}★ +${mods.join("")}**)\n**Score** \`${f(
-										map.score
-									)}\` | **Accuracy** ${Math.round(map.accuracy * 100)
-                    / 100}% | **300** \`${f(map.count300)}\` | **100** \`${
-										map.count100
-									}\` | **50** \`${map.count50}\` | **Misses** \`${
-										map.countmiss
-									}\`\n\n`;
+							Promise.all(accuracyQueries).then(async accuracies => {
+								for (const i in maps) {
+									scores.push({
+										id: maps[i][0].beatmap_id,
+										user: data[i].user_id,
+										link: `https://osu.ppy.sh/b/${maps[i][0].beatmap_id}`,
+										pp: Number(data[i].pp).toFixed(2),
+										rank: ranks[data[i].rank] || data[i].rank,
+										artist: maps[i][0].artist,
+										title: maps[i][0].title,
+										diff: maps[i][0].version,
+										mapper: maps[i][0].creator,
+										sr: Number(maps[i][0].difficultyrating).toFixed(2),
+										mods: ojsama.modbits.string(data[i].enabled_mods),
+										score: data[i].score,
+										combo: data[i].maxcombo,
+										maxcombo: maps[i][0].max_combo,
+										nmiss: data[i].countmiss,
+										n300: data[i].count300,
+										n100: data[i].count100,
+										n50: data[i].count50,
+										acc: mode === "osu" ? accuracies[i].accuracy : null
+									});
 								}
-								const user = await client.user.get(
-									maps[0].user_id,
-									Nodesu.Mode[mode]
-								);
-								const embed = new MessageEmbed()
-									.setAuthor(
-										`${user.username}'s 5 best plays`,
+								let description = "";
+								for (const s of scores) {
+									description += `[__${s.artist} - **${s.title}**__ [${s.diff}]](${s.link}) (${s.mapper}) [**${s.sr}★${s.mods !== "" ? ` +${s.mods}` : ""}**]\n**\`[${s.rank}]\`** (${mode === "osu" ? `**${s.acc}%**, ` : ""}**x${s.combo}**${["osu", "ctb"].includes(mode) ? `/${s.maxcombo}` : ""}) - **${f(s.pp)}pp** - \`${s.n300}\` 300, \`${s.n100}\` 100, \`${s.n50}\` 50, \`${s.nmiss}\` miss\n\n`;
+								}
+								const embed = new Embed(this)
+									.setAuthor(`${user.username}  |  Top 5 Best Plays  |  osu!${mode === "osu" ? "" : mode}`,
 										`https://a.ppy.sh/${user.user_id}`,
-										`https://osu.ppy.sh/users/${user.user_id}`
-									)
-									.setDescription(list)
-									.setColor("#cc5288");
+										`https://osu.ppy.sh/users/${user.user_id}`)
+									.setDescription(description);
+								if (mode !== "osu") embed.setFooter("Because this is not an osu!standard map, some informations about the scores are unavailable.");
 								message.channel.send({ embed });
-							})
-							.catch(() => {});
-					})
-					.catch(() => {
+							});
+						});
+					}).catch(() => {
 						message.reply(
 							"the user you specified does not exist, or at least in the mode specified."
 						);
