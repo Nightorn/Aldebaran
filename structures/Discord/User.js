@@ -5,38 +5,33 @@ module.exports = BaseUser => class User extends BaseUser {
 	constructor(client, data) {
 		super(client, data);
 		this.asBotStaff = this.client.config.aldebaranTeam[this.id] || null;
-		this.banned = false;
 		this.existsInDB = false;
 		this.generalCooldown = 0;
 		this.profile = new SocialProfile(this);
 		this.settings = {};
-		const interval = setInterval(() => {
-			if (this.client.databaseFetch !== undefined) {
-				if (
-					this.client.databaseFetch.data.users.size
-					=== this.client.databaseFetch.counts.users
-				) {
-					clearInterval(interval);
-					if (
-						this.client.databaseFetch.data.users.get(this.id) !== undefined
-					) {
-						this.build(this.client.databaseFetch.data.users.get(this.id));
-					}
-				}
-			}
-		}, 100);
+		if (this.client.databaseData.users.get(this.id) !== undefined) {
+			const dbData = this.client.databaseData.users.get(this.id);
+			for (const [key, value] of Object.entries(dbData)) this[key] = value;
+			this.settings = JSON.parse(this.settings);
+			this.existsInDB = true;
+		}
 		this.timers = {
 			adventure: null,
 			padventure: null,
-			sides: null,
-			travel: null
+			sides: null
 		};
 	}
 
-	build(data) {
-		for (const [key, value] of Object.entries(data)) this[key] = value;
-		this.settings = JSON.parse(this.settings);
-		this.existsInDB = true;
+	get banned() {
+		return this.timeout > Date.now();
+	}
+
+	get customTimers() {
+		const timers = new Map();
+		for (const [id, timer] of this.client.customTimers)
+			if (timer.userId === this.id)
+				timers.set(id, timer);
+		return timers;
 	}
 
 	checkPerms(perm) {
@@ -92,6 +87,11 @@ module.exports = BaseUser => class User extends BaseUser {
 			});
 		}
 		return perm;
+	}
+
+	get permToString() {
+		const perm = this.highestPerm;
+		return perm.slice(0, 1) + perm.toLowerCase().slice(1);
 	}
 
 	async create() {
