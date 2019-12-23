@@ -4,7 +4,7 @@ module.exports = BaseMessage => class Message extends BaseMessage {
 	constructor(client, data, channel) {
 		super(client, data, channel);
 		if (this.channel.guild) {
-			this.prefix = this.content.slice(0, this.channel.guild.prefix.length);
+			this.prefix = this.content.slice(0, this.guild.prefix.length);
 			this.valid = this.content.indexOf(this.prefix) === 0;
 		}
 	}
@@ -29,8 +29,9 @@ module.exports = BaseMessage => class Message extends BaseMessage {
 	}
 
 	get mode() {
-		if (this.content.indexOf(`${this.prefix}#`)) return "ADMIN";
-		if (this.content.indexOf(`${this.prefix}?`)) return "HELP";
+		if (this.content.indexOf(`${this.prefix}#`) === 0) return "ADMIN";
+		if (this.content.indexOf(`${this.prefix}?`) === 0) return "HELP";
+		if (this.content.indexOf(`${this.prefix}-`) === 0) return "IMAGE";
 		return "NORMAL";
 	}
 
