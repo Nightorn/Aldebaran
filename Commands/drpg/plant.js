@@ -44,9 +44,14 @@ module.exports = class PlantCommand extends Command {
 					for (const [key, value] of Object.entries(data.location.saplings)) {
 						if (value !== null) {
 							let item = null;
+							let reward = null;
 							itemlist.forEach(element => {
 								if (element.id === value.id)
 									item = element;
+							});
+							itemlist.forEach(element => {
+								if (element.id === item.sapling.loot.id[0])
+									reward = element;
 							});
 							const lootFormulas = item.sapling.loot.amount;
 							const currentReap = data.attributes.reaping !== 0
@@ -63,9 +68,10 @@ module.exports = class PlantCommand extends Command {
 							const locationName = locationdb[`${key}`] !== undefined ? locationdb[`${key}`].name : "???";
 							const pronoun = message.author.id === usrid ? "you" : "they";
 							const ownership = message.author.id === usrid ? "your" : "their";
-							embed.addField(`${item.name} @ ${locationName} - ${Math.floor(plantTime / 86400)} days old`, `Planted the ${getDate(plantDate)}.\nWith ${ownership} **current** reaping skills, ${pronoun} would get between **${currentMin}** and **${currentMax}** items.\nWith the **highest** reaping skills, ${pronoun} would get between **${maxMin}** and **${maxMax}** items.`, false);
+							embed.addField(`${item.name} @ ${locationName} - ${Math.floor(plantTime / 86400)} days old`, `Planted the ${getDate(plantDate)}.\nWith ${ownership} **current** reaping skills, ${pronoun} would get between **${currentMin}** and **${currentMax}** ${reward.plural.toLowerCase()}.\nWith the **highest** reaping skills, ${pronoun} would get between **${maxMin}** and **${maxMax}** ${reward.plural.toLowerCase()}.`, false);
 						}
 					}
+					if (embed.fields.length === 0) embed.setDescription("You do not have any seed set!");
 					message.channel.send({ embed });
 				} else {
 					return message.reply("the DiscordRPG API seems down, please retry later.");
