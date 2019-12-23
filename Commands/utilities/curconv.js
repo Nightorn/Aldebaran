@@ -1,6 +1,5 @@
 const request = require("request");
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../structures/categories/UtilitiesCategory");
+const { Command, Embed } = require("../../structures/categories/UtilitiesCategory");
 const config = require("../../config/config.json");
 const ErrorEmbed = require("../../structures/Aldebaran/ErrorEmbed");
 
@@ -61,7 +60,7 @@ module.exports = class CurConvCommand extends Command {
 					new ErrorEmbed(this.message)
 						.setTitle("Sorry, the API request limit has been reached!")
 						.setDescription(
-							"Aldebaran has ran out of API requests for Fixer this month. Sorry for the inconvience!"
+							"Aldebaran has ran out of API requests for Fixer this month. Sorry for the inconvenience!"
 						)
 				);
 				return false;
@@ -106,25 +105,23 @@ module.exports = class CurConvCommand extends Command {
 			const fromCurrencyRate = data.rates[this.fromCurrency];
 			const toCurrencyRate = data.rates[this.toCurrency];
 
-			// How much EUR is this value of fromCurrency worth?
-			const valueInBase = this.value / fromCurrencyRate;
-
 			// How much in the target currency is this amount of EUR worth?
-			const valueInTarget = valueInBase * toCurrencyRate;
+			const valueInTarget = this.value / fromCurrencyRate * toCurrencyRate;
 
 			// Rates to each other
 			// Find value of 1 target currency in the other currency
 			const rate = (1 / fromCurrencyRate) * toCurrencyRate;
 
-			const str = `**${valueInBase.toFixed(2)} ${this.fromCurrency}** is equal to **${valueInTarget.toFixed(2)} ${this.toCurrency}**\n*as of ${new Date(data.timestamp * 1000).toISOString()}*.\nRate: ${rate.toFixed(2)}`;
+			const f = number => String(number).length === 1 ? `0${number}` : number;
+			const getDate = time => {
+				const date = new Date(time);
+				return `**${f(date.getMonth() + 1)}/${f(date.getDate())}/${f(date.getFullYear())}** at **${f(date.getHours())}:${f(date.getMinutes())}** UTC`;
+			};
+
+			const str = `**${this.value.toFixed(2)} ${this.fromCurrency}** is equal to **${valueInTarget.toFixed(2)} ${this.toCurrency}** as of ${getDate(data.timestamp * 1000)}, with a **${rate.toFixed(2)} rate**.`;
 
 			this.message.channel.send(
-				new MessageEmbed()
-					.setFooter(
-						this.message.author.username,
-						this.message.author.avatarURL()
-					)
-					.setColor(this.message.member.displayColor)
+				new Embed(this)
 					.setTitle(
 						`Conversion from ${this.fromCurrency} to ${this.toCurrency}`
 					)

@@ -1,6 +1,5 @@
-const { MessageEmbed } = require("discord.js");
 const request = require("request");
-const { Command } = require("../../structures/categories/UtilitiesCategory");
+const { Command, Embed } = require("../../structures/categories/UtilitiesCategory");
 
 module.exports = class TranslateCommand extends Command {
 	constructor(client) {
@@ -46,7 +45,7 @@ module.exports = class TranslateCommand extends Command {
 					console.err(err);
 				} else if (response.statusCode === 200) {
 					const result = JSON.parse(body);
-					const embed = new MessageEmbed()
+					const embed = new Embed(this)
 						.setTitle(
 							`Text Translation (${
 								!initialLang
@@ -61,8 +60,7 @@ module.exports = class TranslateCommand extends Command {
 									: result.text[0]
 							}`
 						)
-						.setFooter("Powered by Yandex.Translate")
-						.setColor("e61400");
+						.setFooter("Powered by Yandex.Translate");
 					message.channel.send({ embed });
 				} else {
 					message.channel.send(
