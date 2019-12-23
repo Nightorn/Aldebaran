@@ -86,7 +86,13 @@ module.exports = class WallsCommand extends Command {
 				headers: { Authorization: bot.config.drpg_apikey }
 			}, (err, res, body) => {
 				if (err) throw err;
-				let data = JSON.parse(body);
+				let data;
+				try {
+					data = JSON.parse(body);
+				} catch (e) {
+					message.reply("the DiscordRPG API seems down, please retry later.");
+					return;
+				}
 				if (data.status === 404) {
 					message.reply(
 						"It looks like the player you mentioned hasn't started their adventure on DiscordRPG."
