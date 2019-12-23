@@ -25,25 +25,25 @@ module.exports = class ProfileCommand extends Command {
 			const { profile } = user;
 			if (profile.existsInDB) {
 				let userDetails = "";
-				if (profile.name !== null) userDetails += `**Name**: ${profile.name}\n`;
-				if (profile.country !== null) userDetails += `**Country**: ${profile.country}\n`;
-				if (profile.timezone !== null) userDetails += `**Timezone**: ${profile.timezone}\n`;
-				if (profile.birthday !== null) userDetails += `**Birthday**: ${profile.birthday}\n`;
-				if (profile.zodiacName !== null) userDetails += `**Zodiac Sign**: ${profile.zodiacName}\n`;
-				if (profile.age !== null) userDetails += `**Age**: ${profile.age}\n`;
-				if (profile.gender !== null) userDetails += `**Gender**: ${profile.gender}\n`;
+				if (profile.name) userDetails += `**Name**: ${profile.name}\n`;
+				if (profile.country) userDetails += `**Country**: ${profile.country}\n`;
+				if (profile.timezone) userDetails += `**Timezone**: ${profile.timezone}\n`;
+				if (profile.birthday) userDetails += `**Birthday**: ${profile.birthday}\n`;
+				if (profile.zodiacName) userDetails += `**Zodiac Sign**: ${profile.zodiacName}\n`;
+				if (profile.age) userDetails += `**Age**: ${profile.age}\n`;
+				if (profile.gender) userDetails += `**Gender**: ${profile.gender}\n`;
 				const embed = new MessageEmbed()
 					.setAuthor(`${user.username}'s Profile`, user.avatarURL())
 					.setColor(profile.profileColor)
 					.setFooter(`${/yes/i.test(profile.dmFriendly) ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`);
-				if (profile.profilePictureLink !== null) embed.setImage(`${profile.profilePictureLink}`);
-				if (profile.flavorText !== null)
+				if (profile.profilePictureLink) embed.setImage(`${profile.profilePictureLink}`);
+				if (profile.flavorText)
 					embed.setDescription(profile.flavorText);
-				if (userDetails !== "") embed.addField("__**User Details**__", userDetails, true);
-				if (profile.aboutMe !== null) embed.addField("__**About me**__", profile.aboutMe, true);
-				if (profile.favoriteGames !== null) embed.addField("__**Favorite Game(s)**__", profile.favoriteGames, true);
-				if (profile.favoriteMusic !== null) embed.addField("__**Favorite Music(s)/Artist(s)**__", profile.favoriteMusic, true);
-				if (profile.socialLinks !== null) embed.addField("__**Social Network(s) Link**__", profile.socialLinks, true);
+				if (userDetails !== "") embed.addField("__**User Details**__", userDetails);
+				if (profile.aboutMe) embed.addField("__**About me**__", profile.aboutMe);
+				if (profile.favoriteGames) embed.addField("__**Favorite Game(s)**__", profile.favoriteGames);
+				if (profile.favoriteMusic) embed.addField("__**Favorite Music(s)/Artist(s)**__", profile.favoriteMusic);
+				if (profile.socialLinks) embed.addField("__**Social Network(s) Link**__", profile.socialLinks);
 				message.channel.send({ embed });
 			} else {
 				const embed = new MessageEmbed()
