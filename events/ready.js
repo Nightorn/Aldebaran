@@ -1,6 +1,11 @@
 const { MessageEmbed } = require("discord.js");
+const CustomTimer = require("../structures/Aldebaran/CustomTimer");
 
 exports.run = client => {
+	for (const element of client.preCustomTimers) {
+		const timer = new CustomTimer(client, element);
+		client.customTimers.set(timer.id, timer);
+	}
 	const embed = new MessageEmbed()
 		.setTitle(`Started ${client.user.username}`)
 		.setDescription(`**Uptime** : ${Math.floor(client.uptime)}ms`)
