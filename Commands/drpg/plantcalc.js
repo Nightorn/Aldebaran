@@ -1,6 +1,6 @@
 const math = require("mathjs");
 const { Command } = require("../../structures/categories/DRPGCategory");
-const itemList = require("../../Data/drpgitemlist.json").data;
+const itemList = require("../../Data/drpg/itemList.json");
 
 module.exports = class PlantcalcCommand extends Command {
 	constructor(client) {
@@ -19,9 +19,8 @@ module.exports = class PlantcalcCommand extends Command {
 			const hours = parseInt(args.shift(), 10);
 			const itemName = args.join(" ");
 			let item = null;
-			itemList.forEach(element => {
+			for (const element of Object.values(itemList))
 				if (element.name.toLowerCase() === itemName) item = element;
-			});
 			const scope = { luck: points, passed: hours * 3600 };
 			const min = math.eval(item.sapling.loot.amount.min, scope);
 			const max = math.eval(item.sapling.loot.amount.max, scope);
