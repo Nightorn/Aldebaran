@@ -9,10 +9,8 @@ const Channel = require("./structures/Discord/TextChannel");
 // With the contribution of holroy
 Number.formatNumber = n => {
 	const parts = n.toString().split(".");
-	return (
-		parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    + (parts[1] ? `.${parts[1]}` : "")
-	);
+	return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+		+ (parts[1] ? `.${parts[1]}` : "");
 };
 
 Date.getTimeString = (timeInMs, format) => {
