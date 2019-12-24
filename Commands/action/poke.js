@@ -1,6 +1,5 @@
-const { MessageEmbed } = require("discord.js");
-const Client = require("nekos.life");
-const { Command } = require("../../structures/categories/ActionCategory");
+const origin = require("../../structures/categories/ActionCategory");
+const { Command, Embed } = require("../../structures/categories/multi/NekoslifeSubcategory")(origin);
 
 module.exports = class PokeCommand extends Command {
 	constructor(client) {
@@ -12,18 +11,12 @@ module.exports = class PokeCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(bot, message) {
-		const neko = new Client();
 		if (message.mentions.users.first()) {
 			const target = message.mentions.users.first();
-			const data = await neko.getSFWPoke();
-			const embed = new MessageEmbed()
-				.setDescription(`${message.author} is poking ${target}`)
-				.setImage(data.url)
-				.setFooter("Powered by nekos.life", bot.user.avatarURL())
-				.setColor(this.color);
-			message.channel.send({ embed });
+			const embed = new Embed(this,
+				`${message.author} is poking ${target}`);
+			embed.send(message, this.nekoslife.getSFWPoke);
 		} else {
 			message.reply("Please mention someone :thinking:");
 		}

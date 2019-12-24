@@ -1,9 +1,8 @@
-const { MessageEmbed } = require("discord.js");
 const Nodesu = require("nodesu");
 const ojsama = require("ojsama");
 const retrieveBeatmapFile = require("../../functions/osu!/retrieveBeatmapFile");
 const ppv2Results = require("../../functions/osu!/ppv2Results");
-const { Command } = require("../../structures/categories/OsuCategory");
+const { Command, Embed } = require("../../structures/categories/OsuCategory");
 
 module.exports = class OsumapCommand extends Command {
 	constructor(client) {
@@ -15,7 +14,6 @@ module.exports = class OsumapCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(bot, message, args) {
 		const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
 		if (args.length === 0) {
@@ -24,19 +22,18 @@ module.exports = class OsumapCommand extends Command {
 			);
 		}
 		if (args[0].toLowerCase() === "?") {
-			const embed = new MessageEmbed()
+			const embed = new Embed(this)
 				.setAuthor(message.author.username, message.author.avatarURL())
 				.setTitle("Documentation for the osu! (Beatmap) command")
 				.setDescription(
-					"First, you have to send the link of the beatmap you want to see the informations, or you also use its ID. After that, you can choose the mode to show the informations from, note that the default mode is standard. See more informations below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `&osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps."
+					"First, you have to send the link of the beatmap you want to see the informations of, or you also use its ID. After that, you can choose the mode to show the informations from, note that the default mode is standard. See more informations below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `&osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps."
 				)
 				.addField(
 					"Supported Modes",
 					"**osu!standard** : BY DEFAULT, --osu\n**osu!taiko** : --taiko\n**osu!ctb** : --ctb\n**osu!mania** : --mania",
 					true
 				)
-				.addField("Supported Mods", "NF, EZ, HT, SO, HR, DT, NC, HD, FL", true)
-				.setColor("BLUE");
+				.addField("Supported Mods", "NF, EZ, HT, SO, HR, DT, NC, HD, FL", true);
 			message.channel.send({ embed });
 		} else {
 			const supportedMods = [
@@ -61,7 +58,7 @@ module.exports = class OsumapCommand extends Command {
 				else if (element.indexOf("+") === 0) {
 					stringMods = element.replace("+", "");
 					mods = element.replace("+", "").split(/([A-Z]{2})/g);
-					mods = mods.filter(v => v !== "" && supportedMods.indexOf(v) !== -1);
+					mods = mods.filter(v => v !== "" && supportedMods.includes(v));
 				} else if (element.indexOf("x") === 0) {
 					if (!Number.isNaN(parseInt(element.replace("x", ""), 10))) { combo = parseInt(element.replace("x", ""), 10); }
 				} else if (element.indexOf("%") === element.length - 1) {
@@ -82,11 +79,15 @@ module.exports = class OsumapCommand extends Command {
 						.split("/")
 						.pop(),
 					Nodesu.Mode[mode],
-					undefined,
-					"string"
+					1, true, ojsama.modbits.from_string(stringMods)
 				);
 				if (data.length > 0) {
 					const beatmap = new Nodesu.Beatmap(data[0]);
+					beatmap.countNormal = data[0].count_normal;
+					beatmap.countSlider = data[0].count_slider;
+					beatmap.countSpinner = data[0].count_spinner;
+					const hitobjects = Number(beatmap.countNormal)
+						+ Number(beatmap.countSlider) + Number(beatmap.countSpinner);
 					retrieveBeatmapFile(beatmap.id).then(async () => {
 						let approvalStatus = null;
 						for (const [key, value] of Object.entries(Nodesu.ApprovalStatus)) {
@@ -105,34 +106,35 @@ module.exports = class OsumapCommand extends Command {
 							? `${Math.floor(x / 60)}m${d(Math.floor(x % 60))}s`
 							: `${Math.floor(x)}s`);
 						combo = combo === null ? beatmap.maxCombo : combo;
-						const results = await ppv2Results(
-							beatmap.id,
-							ojsama.modbits.from_string(stringMods),
-							beatmap.maxCombo,
-							100,
-							0
-						);
-						const resultsAcc = await ppv2Results(
-							beatmap.id,
-							ojsama.modbits.from_string(stringMods),
-							combo,
-							accuracy,
-							nmiss === null ? undefined : nmiss
-						);
-						if (mods.length === 0) mods = ["NoMod"];
+						let results = null;
+						let resultsAcc = null;
+						if (mode === "osu") {
+							results = await ppv2Results(
+								beatmap.id,
+								ojsama.modbits.from_string(stringMods),
+								beatmap.maxCombo,
+								100,
+								0,
+								hitobjects
+							);
+							resultsAcc = await ppv2Results(
+								beatmap.id,
+								ojsama.modbits.from_string(stringMods),
+								combo,
+								accuracy,
+								nmiss === null ? undefined : nmiss,
+								hitobjects
+							);
+						}
 
-						const embed = new MessageEmbed()
+						const embed = new Embed(this)
 							.setAuthor(
 								beatmap.creator,
 								`https://a.ppy.sh/${data[0].creator_id}`,
 								`https://osu.ppy.sh/users/${data[0].creator_id}`
 							)
 							.setTitle(
-								`__**${beatmap.title}** by ${beatmap.artist}__ [${
-									mode === "mania" ? `[${results.cs}K] ` : ""
-								}${beatmap.version}] (+${mods.join("")}${
-									mode === "osu" ? ` **\`${r(results.stars)}\` ★**` : ""
-								})`
+								`__${beatmap.artist} - **${beatmap.title}**__ [${beatmap.version}] (**\`${r(beatmap.difficultyRating)}\`★${mods.length === 0 ? "" : ` +${mods.join("")}`}**)`
 							)
 							.setDescription(
 								`${
@@ -171,8 +173,7 @@ module.exports = class OsumapCommand extends Command {
 								`https://assets.ppy.sh/beatmaps/${
 									beatmap.setId
 								}/covers/cover.jpg`
-							)
-							.setColor("#cc5288");
+							);
 						if (mode === "osu") {
 							embed.addField(
 								"Estimated PPs",
@@ -184,28 +185,27 @@ module.exports = class OsumapCommand extends Command {
 						}
 						embed.addField(
 							"Specifications",
-							`${
-								mode === "osu"
-									? `${results.hitobjects} **Hitobjects** (${
-										results.circles
-									} **Circles** / ${results.sliders} **Sliders** / ${
-										results.spinners
-									} **Spinners**)\n**Max Combo** x${
-										data[0].max_combo
-									} | **Speed** ${t(results.aim)} | **Aim Difficulty** ${t(
-										results.speed
-									)}`
-									: ""
+							`${hitobjects} **Hitobjects** (${
+								beatmap.countNormal
+							} **Circles** / ${beatmap.countSlider} **Sliders** / ${
+								beatmap.countSpinner
+							} **Spinners**)${["osu", "ctb"].includes(mode) ? `\n**Max Combo** x${data[0].max_combo}` : ""}${["osu", "ctb"].includes(mode) ? ` | **Aim Difficulty** ${t(
+								Number(beatmap.diffAim)
+							)}` : ""}${mode === "osu"
+								? ` | **Aim Difficulty** ${t(Number(beatmap.diffSpeed))}`
+								: ""
 							}\n${
 								mods.indexOf("DT") !== -1 || mods.indexOf("NC") !== -1
 									? Math.round(beatmap.bpm * 1.5)
 									: beatmap.bpm
 							} **BPM** ${
 								mode === "osu" ? `| **CS** ${r(results.cs)} ` : ""
-							}| **AR** ${r(results.ar)} | **HP** ${r(results.hp)} | **OD** ${r(
-								results.od
-							)}`,
-							true
+							}${mode === "ctb" ? `| **CS** ${r(beatmap.diffSize)} ` : ""}${
+								mode === "mania" ? `| **KA** ${beatmap.diffSize} ` : ""
+							}${mode === "osu" ? `| **AR** ${r(results.ar)} ` : ""}${
+								mode === "ctb" ? `| **AR** ${r(beatmap.diffApproach)} ` : ""}| **HP** ${
+								r(results === null ? beatmap.diffDrain : results.hp)
+							} | **${mode === "osu" ? "OD" : "AC"}** ${r(results === null ? beatmap.diffOverall : results.od)}`
 						);
 						if (beatmap.source !== null) { embed.setFooter(`Source: ${beatmap.source}`); }
 						message.channel.send({ embed });

@@ -3,27 +3,11 @@ module.exports = class SocialProfile {
 		this.user = user;
 		this.client = this.user.client;
 		this.existsInDB = false;
-		const interval = setInterval(() => {
-			if (this.client.databaseFetch !== undefined) {
-				if (this.client.databaseFetch.data.profiles.size
-					=== this.client.databaseFetch.counts.profiles
-				) {
-					clearInterval(interval);
-					if (this.client.databaseFetch.data.profiles.get(this.user.id)
-						!== undefined
-					) {
-						this.build(this.client.databaseFetch.data.profiles.get(
-							this.user.id
-						));
-					}
-				}
-			}
-		}, 100);
-	}
-
-	build(data) {
-		for (const [key, value] of Object.entries(data)) this[key] = value;
-		this.existsInDB = true;
+		if (this.client.databaseData.profiles.get(this.user.id) !== undefined) {
+			const dbData = this.client.databaseData.profiles.get(this.user.id);
+			for (const [key, value] of Object.entries(dbData)) this[key] = value;
+			this.existsInDB = true;
+		}
 	}
 
 	async create() {
@@ -37,19 +21,13 @@ module.exports = class SocialProfile {
 	}
 
 	async changeProperty(property, value) {
+		this[property] = value;
 		return new Promise(async (resolve, reject) => {
 			if (!this.existsInDB) await this.create();
 			this.client.database.socialprofile.updateOneById(
 				this.user.id,
 				new Map([[property, value]])
-			).then(async result => {
-				const newProfile = await this.client.database.socialprofile
-					.selectOneById(this.user.id);
-				this.build(newProfile);
-				resolve(result);
-			}).catch(err => {
-				reject(err);
-			});
+			).then(resolve).catch(reject);
 		});
 	}
 };

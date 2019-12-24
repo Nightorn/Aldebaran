@@ -189,6 +189,9 @@ module.exports = class DatabasePool {
 				);
 			}
 		};
+		this.timers = {
+			selectAll: async () => this.query("SELECT * FROM timers")
+		};
 		this.photogallery = {
 			/**
 			 * Returns the data of the photo specified from the database

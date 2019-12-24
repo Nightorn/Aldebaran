@@ -30,12 +30,20 @@ module.exports = class PingCommand extends Command {
 			bad: [
 				"Oops, looks like we are running slow.",
 				"This number is way too high!"
+			],
+			negative: [
+				"I am speed!"
 			]
 		};
 		let color = "BLUE";
 		let desc = "Hi.";
 
-		if (ping <= 500) {
+		if (ping < 0) {
+			color = "PURPLE";
+			desc = messages.negative[
+				Math.floor(Math.random() * messages.negative.length)
+			];
+		} else if (ping <= 500) {
 			color = "GREEN";
 			desc = messages.good[Math.floor(Math.random() * messages.good.length)];
 		} else if (ping > 1000) {

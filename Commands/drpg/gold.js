@@ -62,7 +62,7 @@ module.exports = class GoldCommand extends Command {
 			message.channel.send({ embed });
 		} else {
 			message.reply(
-				"You need to specify a level and the XP Boost percentage the used equipment has (if you want to take it in account)."
+				"You need to specify a level and the Gold Boost percentage the used equipment has (if you want to take it in account)."
 			);
 		}
 		return true;

@@ -17,7 +17,9 @@ module.exports = class DisableCommandsSubcommand extends Command {
 		args.shift();
 		if (args[0] !== undefined) {
 			if (message.guild.commands[args[0]] !== false) {
-				if (bot.commands.exists(args[0])) {
+				if (bot.commands.exists(args[0])
+					|| message.guild.commands[args[0]] !== undefined
+				) {
 					return message.guild.changeCommandSetting(args[0], false)
 						.then(() => {
 							const embed = new Embed(this)
@@ -39,7 +41,7 @@ module.exports = class DisableCommandsSubcommand extends Command {
 			}
 			const embed = new ErrorEmbed(message)
 				.setAuthor("You are doing something wrong.")
-				.setDescription("You are trying to do something that has already been done before.");
+				.setDescription("You are trying to disable a command you have already disabled.");
 			return message.channel.send({ embed });
 		}
 		const embed = new ErrorEmbed(message)

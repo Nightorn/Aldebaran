@@ -25,25 +25,10 @@ module.exports = class BStats extends Command {
 			.addField(`Memory Usage (${memPRC}%)`, `**${mem} MB** / ${Number.formatNumber(memTTL)} MB`, true)
 			.addField(
 				"System CPU Load",
-				`**${Math.round(100 * os.loadavg()[0]) / 100}** (${Math.round(100 * os.loadavg()[0] * 25) / 100}%)`,
+				`**${Math.round(100 * os.loadavg()[0]) / 100}** (${Math.round(100 * os.loadavg()[0] * (100 / 6)) / 100}%)`,
 				true
 			)
 			.addField("Uptime", Date.getTimeString(bot.uptime, "DD day(s), HH:MM:SS"), true)
-			.addField(
-				"Users in DB",
-				Number.formatNumber(bot.databaseCounts.users),
-				true
-			)
-			.addField(
-				"Profiles in DB",
-				Number.formatNumber(bot.databaseCounts.profiles),
-				true
-			)
-			.addField(
-				"Servers in DB",
-				Number.formatNumber(bot.databaseCounts.guilds),
-				true
-			)
 			.addField(
 				"Commands (Session)",
 				Number.formatNumber(bot.stats.commands.total),

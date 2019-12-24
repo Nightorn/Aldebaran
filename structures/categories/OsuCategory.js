@@ -1,4 +1,4 @@
-const { Command } = require("./GeneralCategory");
+const { Command, Embed } = require("./GeneralCategory");
 
 module.exports.Command = class OsuCategory extends Command {
 	constructor(client, metadata) {
@@ -19,3 +19,5 @@ module.exports.Command = class OsuCategory extends Command {
 			&& this.client.config.apikeys["osu!"] !== null;
 	}
 };
+
+module.exports.Embed = Embed;

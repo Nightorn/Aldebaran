@@ -67,7 +67,8 @@ module.exports.Command = class Command {
 		let check = true;
 		if (this.perms.discord !== undefined) {
 			this.perms.discord.forEach(perm => {
-				if (!message.member.permissions.has(perm)) check = false;
+				if (!message.member.permissionsIn(message.channel).has(perm))
+					check = false;
 			});
 		}
 		if (this.perms.aldebaran !== undefined) {
@@ -130,6 +131,7 @@ module.exports.Command = class Command {
 			.addField("Example", `${prefix}${command} ${this.example}`, true)
 			.setColor("BLUE");
 		if (this.aliases.length > 0) { embed.addField("Aliases", this.aliases.join(", "), true); }
+		if (this.subcommands.size > 0) { embed.addField("Subcommands", Array.from(this.subcommands.keys()).join(", "), true); }
 		if (this.cooldown.fixed > 0) { embed.addField("Cooldown", `${Math.ceil(this.cooldown.fixed)}s`, true); }
 		if (this.cooldown.group !== undefined) { embed.addField("CCG", this.cooldown.group, true); }
 		if (this.args !== undefined) embed.addField("Arguments", this.args, true);
@@ -149,10 +151,6 @@ module.exports.Command = class Command {
 module.exports.Embed = class NSFWEmbed extends MessageEmbed {
 	constructor(command) {
 		super();
-		this.setAuthor(
-			`${command.category}  |  ${command.name}`,
-			command.client.user.avatarURL()
-		);
 		this.setColor(command.color);
 	}
 };

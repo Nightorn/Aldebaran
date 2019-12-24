@@ -1,5 +1,5 @@
-const Client = require("nekos.life");
-const { Command, Embed } = require("../../structures/categories/ImageCategory");
+const origin = require("../../structures/categories/ImageCategory");
+const { Command, Embed } = require("../../structures/categories/multi/NekoslifeSubcategory")(origin);
 
 module.exports = class NekoCommand extends Command {
 	constructor(client) {
@@ -10,12 +10,8 @@ module.exports = class NekoCommand extends Command {
 	}
 
 	async run(bot, message) {
-		const client = new Client();
-		const data = await client.getSFWNeko();
-		const embed = new Embed(this)
-			.setDescription(`${message.author}, here is your innocent neko.`)
-			.setImage(data.url)
-			.setFooter("Powered by nekos.life", bot.user.avatarURL());
-		message.channel.send({ embed });
+		const embed = new Embed(this,
+			`${message.author}, here is your innocent neko.`);
+		embed.send(message, this.nekoslife.getSFWNeko);
 	}
 };

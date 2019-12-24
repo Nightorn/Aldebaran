@@ -184,7 +184,12 @@
         },
         "npc" : []
     },
-    "28":{},
+    "28": {
+        "name": "Thornwood Grave",
+        "connections": [],
+        "npc": [],
+        "membership": true
+    },
     "29":{},
     "30": {
         "name" : "Scorched Desert",

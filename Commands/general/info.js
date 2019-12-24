@@ -17,7 +17,7 @@ module.exports = class InfoCommand extends Command {
 		}
 		const embed = new MessageEmbed()
 			.setAuthor(`${bot.user.username} v${bot.version}`, bot.user.avatarURL(), "https://aldebaran.nightorn.com/")
-			.addField("Developers of Aldebaran", adminMentions, true)
+			.addField("Developers of Aldebaran", adminMentions)
 			.addField(
 				"Statistics",
 				`Playing with **${Number.formatNumber(bot.guilds.size)} servers**\nWatching **${Number.formatNumber(bot.channels.size)} channels**\nListening to **${Number.formatNumber(bot.users.size)} users**`,

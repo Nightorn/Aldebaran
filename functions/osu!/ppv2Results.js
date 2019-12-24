@@ -1,55 +1,48 @@
 const ojsama = require("ojsama");
-const oppai = require("oppai");
 const fs = require("fs");
 const retrieveBeatmapFile = require("./retrieveBeatmapFile");
 
-module.exports = (beatmapId, mods, combo, acc, nmiss) => new Promise(
+module.exports = (beatmapId, mods, combo, acc,
+	nmiss, n300, n100, n50) => new Promise(
 	resolve => {
 		retrieveBeatmapFile(beatmapId).then(() => {
 			const file = fs.readFileSync(`./cache/osu!/${beatmapId}.osu`, { encoding: "utf8" });
-			const ctx = oppai.Ctx(); const
-				b = oppai.Beatmap(ctx);
-			b.parse(`./cache/osu!/${beatmapId}.osu`, oppai.Buffer(2000000), 2000000, true);
-			b.applyMods(mods);
-			// const dctx = oppai.DiffCalcCtx(ctx);
-			// const diff = dctx.diffCalc(b);
 			// eslint-disable-next-line new-cap
 			const parser = new ojsama.parser().feed(file.toString());
 			const { map } = parser;
 			if (map.mode === 0) {
-				// eslint-disable-next-line new-cap
-				const stars = new ojsama.diff().calc({
-					map,
-					mods
-				});
+			// eslint-disable-next-line new-cap
+				const stars = new ojsama.diff().calc({ map, mods });
 				const pp = ojsama.ppv2({
 					stars,
 					combo,
 					nmiss,
-					acc_percent: acc
+					acc_percent: acc,
+					n100,
+					n50
 				});
+				// eslint-disable-next-line new-cap
+				const statsWithMods = new ojsama.std_beatmap_stats(
+					{ ...stars.map }
+				).with_mods(mods);
 				resolve({
-					aim: stars.aim,
-					ar: b.ar(),
-					circles: stars.map.ncircles,
-					cs: b.cs(),
-					hitobjects:
-						stars.map.ncircles + stars.map.nsliders + stars.map.nspinners,
-					hp: b.hp(),
-					od: b.od(),
 					pp: pp.total,
-					sliders: stars.map.nsliders,
-					speed: stars.speed,
-					spinners: stars.map.nspinners,
-					stars: stars.total
+					// eslint-disable-next-line new-cap
+					accuracy: Math.round(new ojsama.std_accuracy({
+						nmiss, n300, n100, n50
+					}).value() * 10000) / 100,
+					ar: Math.round(100 * statsWithMods.ar) / 100,
+					cs: Math.round(100 * statsWithMods.cs) / 100,
+					od: Math.round(100 * statsWithMods.od / 100),
+					hp: Math.round(100 * statsWithMods.hp) / 100
 				});
 			} else {
-				resolve({
+			/* resolve({
 					ar: b.ar(),
 					cs: b.cs(),
 					hp: b.hp(),
 					od: b.od()
-				});
+				}); */
 			}
 		});
 	}

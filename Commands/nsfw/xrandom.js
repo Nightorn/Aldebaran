@@ -1,5 +1,5 @@
-const Client = require("nekos.life");
-const { Command, Embed } = require("../../structures/categories/NSFWCategory");
+const origin = require("../../structures/categories/NSFWCategory");
+const { Command, Embed } = require("../../structures/categories/multi/NekoslifeSubcategory")(origin);
 
 module.exports = class XRandomCommand extends Command {
 	constructor(client) {
@@ -10,14 +10,8 @@ module.exports = class XRandomCommand extends Command {
 	}
 
 	async run(bot, message) {
-		const neko = new Client();
-		const data = await neko.getNSFWRandomHentaiGif();
-		const embed = new Embed(this)
-			.setDescription(
-				`${message.author}, you wanted something random? Here you go!`
-			)
-			.setImage(data.url)
-			.setFooter("Powered by nekos.life");
-		message.channel.send({ embed });
+		const embed = new Embed(this,
+			`${message.author}, you wanted something random? Here you go!`);
+		embed.send(message, this.nekoslife.getNSFWRandomHentaiGif);
 	}
 };

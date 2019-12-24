@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const mathjs = require("mathjs");
-const { Command } = require("../../structures/categories/UtilitiesCategory");
+const { Command, Embed } = require("../../structures/categories/UtilitiesCategory");
 
 module.exports = class MathCommand extends Command {
 	constructor(client) {
@@ -24,10 +24,9 @@ module.exports = class MathCommand extends Command {
 			} catch (err) {
 				result = "The specified math expression is invalid.";
 			}
-			const embed = new MessageEmbed()
+			const embed = new Embed(this)
 				.setTitle("Math Expression Evaluation")
-				.addField("Result", `\`\`\`${Number.formatNumber(result)}\`\`\``)
-				.setColor("#dc3912");
+				.addField("Result", `\`\`\`${Number.formatNumber(result)}\`\`\``);
 			message.channel.send({ embed });
 		} else {
 			const embed = new MessageEmbed()

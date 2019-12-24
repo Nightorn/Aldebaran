@@ -21,8 +21,8 @@ module.exports = class CommandSetprofile extends Command {
 			.addField("**__Available Sections__**", `${availableSections.join(" | ")}`, false);
 		if (args.length <= 0) return message.channel.send((embed));
 
-		const profiletarget = args[0].toLowerCase();
-		const inputdata = args.join(" ").slice(profiletarget.length);
+		const profiletarget = args.shift().toLowerCase();
+		const inputdata = args.join(" ");
 
 		message.author.profile.changeProperty(profiletarget, inputdata).then(() => {
 			message.channel.send(`Your ${profiletarget} has been updated to \`${inputdata}\`.`);

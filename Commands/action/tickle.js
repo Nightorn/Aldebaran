@@ -1,6 +1,5 @@
-const Client = require("nekos.life");
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../structures/categories/ActionCategory");
+const origin = require("../../structures/categories/ActionCategory");
+const { Command, Embed } = require("../../structures/categories/multi/NekoslifeSubcategory")(origin);
 
 module.exports = class TickleCommand extends Command {
 	constructor(client) {
@@ -12,18 +11,12 @@ module.exports = class TickleCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(bot, message) {
-		const neko = new Client();
-		if (message.mentions.users.first()) { // Check if the message has a mention in it.
+		if (message.mentions.users.first()) {
 			const target = message.mentions.users.first();
-			const data = await neko.getSFWTickle();
-			const embed = new MessageEmbed()
-				.setDescription(`${message.author} won't stop tickling ${target}!`)
-				.setImage(data.url)
-				.setFooter("Powered by nekos.life", bot.user.avatarURL())
-				.setColor(this.color);
-			message.channel.send({ embed });
+			const embed = new Embed(this,
+				`${message.author} won't stop tickling ${target}!`);
+			embed.send(message, this.nekoslife.getSFWTickle);
 		} else {
 			message.reply("Please mention someone :thinking:");
 		}

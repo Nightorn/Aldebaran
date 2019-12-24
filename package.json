@@ -1,6 +1,6 @@
 {
   "name": "aldebaran",
-  "version": "1.7.0-dev",
+  "version": "1.9.0",
   "description": "Utility",
   "main": "bot.js",
   "dependencies": {
@@ -14,11 +14,11 @@
     "node-fetch": "^2.6.0",
     "nodesu": "^0.6.7",
     "ojsama": "^1.2.1",
-    "oppai": "^0.1.19",
     "os": "^0.1.1",
     "prettier": "^1.18.2",
     "regenerator-runtime": "^0.13.3",
     "request": "^2.88.0",
+    "tenorjs": "^1.0.7",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
@@ -35,6 +35,7 @@
   "scripts": {
     "start": "node bot.js",
     "test": "node bot.js dev !",
+    "sos": "node bot.js sos",
     "configure": "node bin/configure.js"
   },
   "repository": {

@@ -23,7 +23,7 @@ module.exports = class AliasCommandsSubcommand extends Command {
 							.then(() => {
 								const embed = new Embed(this)
 									.setAuthor("Your settings have been successfully updated.")
-									.setDescription(`**${args[1]}** is now an alias of **${args[0]}**. Make use of it by doing \`${message.guild.prefix}${args[1]}\`!`);
+									.setDescription(`**${args[1]}** is now an alias of **${args[0]}**. Make use of it by doing \`${message.guild.prefix}${args[1]}\`!${bot.commands.exists(args[1]) ? `\n:warning: By making this alias, you have disabled the default **${args[1]}** command.` : ""}`);
 								message.channel.send({ embed });
 							}).catch(err => {
 								console.error(err);

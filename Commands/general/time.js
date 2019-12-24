@@ -17,17 +17,17 @@ module.exports = class TimeCommand extends Command {
 			? message.mentions.users.first()
 			: message.author;
 		let { timezone } = user.settings;
-		if (timezone.indexOf("/") === -1) {
-			const symbol = timezone[3];
-			let base = timezone.split(symbol)[0];
-			let number = parseInt(timezone.split(symbol)[1], 10);
-			if (symbol === "-") number *= -1;
-			if (base !== "GMT") {
-				if (base === "UTC") base = "GMT";
-			}
-			timezone = base + symbol + number.toString();
-		}
 		if (timezone !== undefined) {
+			if (timezone.includes("/")) {
+				const symbol = timezone[3];
+				let base = timezone.split(symbol)[0];
+				let number = parseInt(timezone.split(symbol)[1], 10);
+				if (symbol === "-") number *= -1;
+				if (base !== "GMT") {
+					if (base === "UTC") base = "GMT";
+				}
+				timezone = base + symbol + number.toString();
+			}
 			timezone = timezone.indexOf("+") !== -1
 				? timezone.replace("+", "-")
 				: timezone.replace("-", "+");

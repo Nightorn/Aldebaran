@@ -46,7 +46,7 @@ module.exports = class WallsCommand extends Command {
 			}
 			return level;
 		}
-		function userWall(message, lvl) {
+		function userWall(msg, lvl) {
 			try {
 				const baseLvl = findKeyAbove(lvl);
 				const prevBaseLvl = findKeyBelow(lvl - 1);
@@ -62,22 +62,14 @@ module.exports = class WallsCommand extends Command {
 
 				return [wall, parseInt(baseLvl, 10)];
 			} catch (e) {
-				message.reply(e.message);
+				msg.reply(e.msg);
 				throw e;
 			}
 		}
 		function calcXPNeeded(base, lvl) {
 			return base * (lvl ** 2 + lvl);
 		}
-		function doArgChecks(args) {
-			if (args.length < 1) {
-				throw new Error("Not enough arguments!");
-			}
-		}
 
-		try {
-			doArgChecks(args);
-		} catch (e) { message.reply(e.message); }
 		try {
 			const userid = await userCheck(bot, message, args);
 			const user = await bot.users.fetch(userid);
@@ -108,8 +100,8 @@ module.exports = class WallsCommand extends Command {
 
 				const embed = new Discord.MessageEmbed()
 					.setColor(0x00ae86)
-					.setAuthor(message.author.username, message.author.displayAvatarURL())
-					.setTitle(`${user.username}'s DRPG Walls`)
+					.setAuthor(`${user.username}  |  DiscordRPG Walls`,
+						user.displayAvatarURL())
 					.addField(
 						`Base at Level ${baseLvl}`,
 						`The baseXP (the increment of XP needed to level up - the "XP ramp") for Level ${baseLvl} is ${bases[baseLvl]}.`
