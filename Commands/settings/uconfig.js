@@ -5,7 +5,7 @@ module.exports = class UconfigCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: "uconfig",
-			description: "Enables or disables specific Aldebaran features",
+			description: "Manages your Aldebaran personal settings",
 			usage: "Parameter Value",
 			example: "adventureTimer on"
 		});
