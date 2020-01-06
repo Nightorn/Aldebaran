@@ -13,7 +13,16 @@ module.exports = class CommandSetprofile extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		const availableSections = ["name", "country", "timezone", "birthday", "profilePictureLink", "favoriteGames", "profileColor", "favoriteMusic", "socialLinks", "zodiacName"];
+		const availableSections = ["name", "country", "timezone", "birthday", "profilePictureLink", "favoriteGames", "profileColor", "favoriteMusic", "socialLinks", "zodiacName", "flavorText"];
+		const sectionMatches = {
+			profilepicturelink: "profilePictureLink",
+			favoritegames: "favoriteGames",
+			profilecolor: "profileColor",
+			favoritemusic: "favoriteMusic",
+			sociallinks: "socialLinks",
+			zodiacname: "zodiacName",
+			flavortext: "flavorText"
+		};
 		const embed = new MessageEmbed()
 			.setAuthor(message.author.username, message.author.avatarURL())
 			.setDescription("Please specify a section and value")
@@ -21,7 +30,8 @@ module.exports = class CommandSetprofile extends Command {
 			.addField("**__Available Sections__**", `${availableSections.join(" | ")}`, false);
 		if (args.length <= 0) return message.channel.send((embed));
 
-		const profiletarget = args.shift().toLowerCase();
+		const section = args.shift().toLowerCase();
+		const profiletarget = sectionMatches[section] || section;
 		const inputdata = args.join(" ");
 
 		message.author.profile.changeProperty(profiletarget, inputdata).then(() => {
