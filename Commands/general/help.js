@@ -19,7 +19,7 @@ module.exports = class HelpCommand extends Command {
 				const categoryCommands = new Map();
 				for (const cmd of bot.commands.commands) categoryCommands.set(...cmd);
 				for (const [command, data] of categoryCommands)
-					if (data.category === category.name)
+					if (data.category === category.name && !data.aliases.includes(command))
 						list += `:small_blue_diamond: **${command}** : ${data.shortDesc}\n`;
 				const categoryEmbed = new MessageEmbed()
 					.setAuthor("Category Help", bot.user.avatarURL())

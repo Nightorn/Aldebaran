@@ -244,7 +244,7 @@ module.exports = class StatsCommand extends Command {
 						ctx.font = "26px Exo 2";
 						ctx.fillStyle = "#FFFFFF";
 						ctx.fillText(`${data.pet.type} • Level ${Number.formatNumber(data.pet.level)} (${Number.formatNumber(data.pet.xp)} XP) • XP Rate: ${data.pet.xprate}%`, 50, 661);
-						ctx.fillText(`Your pet is doing between ${Number.formatNumber(data.pet.damage.min)} and ${Number.formatNumber(data.pet.damage.max)} damages.`, 50, 697);
+						ctx.fillText(`Your pet is dealing between ${Number.formatNumber(data.pet.damage.min)} and ${Number.formatNumber(data.pet.damage.max)} damage.`, 50, 697);
 
 						ctx.fillText(`${data.donate ? "Donator, " : ""}Last seen ${Date.getTimeString(Date.now() - data.lastseen, "DD days, HH hours, MM minutes and SS seconds")} ago`, 20, 755);
 

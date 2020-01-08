@@ -1,4 +1,4 @@
-const { Command } = require("./GeneralCategory");
+const { Command, Embed } = require("./GeneralCategory");
 
 module.exports.Command = class DRPGCommand extends Command {
 	constructor(...args) {
@@ -7,3 +7,5 @@ module.exports.Command = class DRPGCommand extends Command {
 		this.color = "GREEN";
 	}
 };
+
+module.exports.Embed = Embed;

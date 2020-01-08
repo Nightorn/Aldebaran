@@ -8,7 +8,8 @@ module.exports = class TimeCommand extends Command {
 			name: "time",
 			description: "Prints a user's time based on their configured timezone",
 			usage: "UserMention",
-			example: "<@143026985763864576>"
+			example: "<@143026985763864576>",
+			aliases: ["heure"]
 		});
 	}
 
@@ -18,7 +19,7 @@ module.exports = class TimeCommand extends Command {
 			: message.author;
 		let { timezone } = user.settings;
 		if (timezone !== undefined) {
-			if (timezone.includes("/")) {
+			if (!timezone.includes("/")) {
 				const symbol = timezone[3];
 				let base = timezone.split(symbol)[0];
 				let number = parseInt(timezone.split(symbol)[1], 10);
@@ -32,7 +33,8 @@ module.exports = class TimeCommand extends Command {
 				? timezone.replace("+", "-")
 				: timezone.replace("-", "+");
 			if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = `ETC/${timezone}`;
-			if (moment.tz.zone(timezone) === null) {
+			const time = moment().tz(timezone);
+			if (time === null) {
 				message.channel.send({
 					embed: {
 						title: ":x: Ooof!",
@@ -50,7 +52,6 @@ module.exports = class TimeCommand extends Command {
 					}
 				});
 			} else {
-				const time = moment().tz(timezone);
 				const embed = new MessageEmbed()
 					.setAuthor(`${user.username}  |  Date and Time`, user.avatarURL())
 					.setDescription(

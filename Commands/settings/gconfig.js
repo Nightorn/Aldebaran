@@ -5,7 +5,7 @@ module.exports = class GconfigCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: "gconfig",
-			description: "Used to enable or disable specific features of Aldebaran",
+			description: "Manages the Aldebaran settings of your server",
 			usage: "Parameter Value",
 			example: "adventureTimer on",
 			perms: {
