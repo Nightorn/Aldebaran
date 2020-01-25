@@ -14,7 +14,8 @@ module.exports = class EnableDRPGCommand extends Command {
 		super(client, {
 			name: "enabledrpg",
 			description:
-				"Utility command to enable configuration values for DiscordRPG usage"
+				"Utility command to enable configuration values for DiscordRPG usage",
+			aliases: [ "edrpg" ]
 		});
 	}
 
@@ -77,7 +78,7 @@ module.exports = class EnableDRPGCommand extends Command {
 		const embed = new MessageEmbed()
 			.setTitle("Done!")
 			.setDescription(
-				`Aldebaran's DRPG features are now enabled. Feel free to use DRPG normally. Aldebaran will respond appropriately when your adventure and sides are ready, and when you have low health.\nYou can always turn off features in \`${prefix}uconfig\` and \`${prefix}gconfig\`.`
+				`Aldebaran's DRPG features are now enabled. Feel free to use DRPG normally. Aldebaran will respond appropriately when your adventure and sides are ready, and when you have low health.\nYou can always turn off features in \`${prefix}uconfig\` and \`${prefix}gconfig\`.\n*If this guild has changed it's DRPG prefix, it must also be set using \`${prefix}gconfig discordrpgPrefix <prefix>\`.*`
 			)
 			.setColor("GREEN");
 		message.channel.send({ embed });
