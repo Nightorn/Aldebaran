@@ -123,6 +123,10 @@ module.exports = class EnableDRPGCommand extends Command {
                     await this.setUserSettings(message);
                     this.done(message);
                 }
+                else if (!guildEnabled) {
+                    await this.setGuildSettings(message);
+                    this.done(message);
+                }
                 else if (!userEnabled) {
                     await this.setUserSettings(message);
                     this.done(message);
