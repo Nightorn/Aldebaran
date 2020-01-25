@@ -34,7 +34,7 @@
   },
   "scripts": {
     "start": "node bot.js",
-    "test": "node bot.js dev !",
+    "dev": "node bot.js dev !",
     "sos": "node bot.js sos",
     "configure": "node bin/configure.js"
   },
