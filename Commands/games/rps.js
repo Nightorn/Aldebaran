@@ -3,10 +3,7 @@ const { Command } = require("../../structures/categories/GamesCategory");
 
 module.exports = class RpsCommand extends Command {
 	constructor(client) {
-		super(client, {
-			name: "rps",
-			description: "Rock. Paper. Scissors!"
-		});
+		super(client, { description: "Rock. Paper. Scissors!" });
 	}
 
 	// eslint-disable-next-line class-methods-use-this

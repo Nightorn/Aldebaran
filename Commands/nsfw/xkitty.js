@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/multi/NekoslifeS
 module.exports = class XKittyCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "xkitty",
 			description: "Displays a hentai picture or a GIF with a kitty"
 		});
 	}

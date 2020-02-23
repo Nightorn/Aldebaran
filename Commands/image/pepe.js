@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 module.exports = class PepeCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "pepe",
 			description: "Shows a random GIF of pepe"
 		});
 	}

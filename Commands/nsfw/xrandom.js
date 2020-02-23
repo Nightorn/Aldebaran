@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/multi/NekoslifeS
 module.exports = class XRandomCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "xrandom",
 			description: "Displays a random hentai picture or GIF"
 		});
 	}

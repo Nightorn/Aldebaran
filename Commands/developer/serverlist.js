@@ -4,11 +4,8 @@ const { Command } = require("../../structures/categories/DeveloperCategory");
 module.exports = class ServerlistCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "serverlist",
 			description: "Lists the servers Aldebaran is in",
-			perms: {
-				aldebaran: ["MODERATOR"]
-			}
+			perms: { aldebaran: ["MODERATOR"] }
 		});
 	}
 

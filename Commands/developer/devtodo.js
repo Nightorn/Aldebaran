@@ -5,7 +5,6 @@ const { Command } = require("../../structures/categories/DeveloperCategory");
 module.exports = class CommandDevtodo extends Command {
 	constructor(client) {
 		super(client, {
-			name: "devtodo",
 			description: "Sends a suggestion",
 			usage: "Suggestion",
 			example: "fix bugs"

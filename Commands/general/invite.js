@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class InviteCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "invite",
 			description: "Displays the bot and server invites"
 		});
 	}

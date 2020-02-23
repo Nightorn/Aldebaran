@@ -3,10 +3,7 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 
 module.exports = class HedgehogCommand extends Command {
 	constructor(client) {
-		super(client, {
-			name: "hedgehog",
-			description: "Huff Huff Huff"
-		});
+		super(client, { description: "Huff Huff Huff" });
 	}
 
 	run(bot, message) {

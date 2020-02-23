@@ -8,7 +8,6 @@ const { Command, Embed } = require("../../structures/categories/DRPGCategory");
 module.exports = class PlantCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "plant",
 			description: "Displays users plant informations and estimated loots",
 			usage: "UserMention|UserID",
 			example: "320933389513523220"
@@ -31,7 +30,7 @@ module.exports = class PlantCommand extends Command {
 			} catch (err) { /* does nothing */ }
 			[, plantId] = args;
 		}
-		
+
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${userid}`,
 			headers: { Authorization: bot.config.drpg_apikey }

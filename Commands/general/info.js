@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class InfoCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "info",
 			description: "Displays informations about Aldebaran"
 		});
 	}
@@ -13,7 +12,7 @@ module.exports = class InfoCommand extends Command {
 	run(bot, message) {
 		let adminMentions = "";
 		for (const [id, member] of Object.entries(bot.config.aldebaranTeam)) {
-			if (member.acknowledgements.includes("DEVELOPER")) { adminMentions += `<@${id}> as ${member.text}\n`; }
+			if (member.acknowledgements.includes("DEVELOPER")) { adminMentions += `<@${id}>, ${member.text}\n`; }
 		}
 		const embed = new MessageEmbed()
 			.setAuthor(`${bot.user.username} v${bot.version}`, bot.user.avatarURL(), "https://aldebaran.nightorn.com/")

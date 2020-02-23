@@ -5,7 +5,6 @@ const CustomTimer = require("../../structures/Aldebaran/CustomTimer");
 module.exports = class CustomTimerCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "customtimer",
 			description: "Manages your custom timers",
 			usage: "Action",
 			example: "create",

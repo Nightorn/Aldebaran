@@ -3,7 +3,6 @@ const { Command, Embed } = require("../../../structures/categories/GeneralCatego
 module.exports = class AliasCommandsSubcommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "guide",
 			description: "Displays help on how to use the customized commands",
 			subcommand: true
 		});

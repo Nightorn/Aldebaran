@@ -6,7 +6,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class HelpCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "help",
 			description: "Displays detailled help about Aldebaran's commands"
 		});
 	}

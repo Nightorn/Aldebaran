@@ -3,10 +3,7 @@ const { Command, Embed } = require("../../structures/categories/FunCategory");
 
 module.exports = class FactCommand extends Command {
 	constructor(client) {
-		super(client, {
-			name: "fact",
-			description: "Get a random fact!"
-		});
+		super(client, { description: "Get a random fact!" });
 	}
 
 	// eslint-disable-next-line class-methods-use-this

@@ -5,7 +5,6 @@ const { Command } = require("../../structures/categories/DeveloperCategory");
 module.exports = class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "eval",
 			description: "Evaluates JavaScript code"
 		});
 	}

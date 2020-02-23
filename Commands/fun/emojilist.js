@@ -3,7 +3,6 @@ const { Command } = require("../../structures/categories/FunCategory");
 module.exports = class EmojilistCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "emojilist",
 			description: "Displays all emojis for a the server"
 		});
 	}

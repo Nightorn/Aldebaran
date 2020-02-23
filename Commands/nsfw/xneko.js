@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/multi/NekoslifeS
 module.exports = class XNekoCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "xneko",
 			description: "Displays a hentai neko picture or GIF"
 		});
 	}

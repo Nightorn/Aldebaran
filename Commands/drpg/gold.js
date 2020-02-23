@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/DRPGCategory");
 module.exports = class GoldCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "gold",
 			description: "Displays the estimated gold per kill at a certain level",
 			usage: "Level EquipmentBoost GoldboostPoints",
 			example: "323 18 max"

@@ -5,7 +5,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class BStats extends Command {
 	constructor(client) {
 		super(client, {
-			name: "bstats",
 			description: "Displays the bot usage statistics since the last start"
 		});
 	}

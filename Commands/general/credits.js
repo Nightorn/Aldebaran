@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class CommandCredits extends Command {
 	constructor(client) {
 		super(client, {
-			name: "credits",
 			description: "Lists the people who contributed to Aldebaran"
 		});
 	}

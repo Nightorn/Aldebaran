@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/DRPGCategory");
 module.exports = class XpCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "xp",
 			description: "Displays estimated XP per kill at a certain level",
 			usage: "Level EquipmentBonus XPBoostAttribute",
 			example: "323 18 max"

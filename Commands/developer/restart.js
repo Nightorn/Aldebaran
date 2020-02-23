@@ -5,11 +5,8 @@ const AldebaranClient = require("../..//structures/Discord/Client.js");
 module.exports = class RestartCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "restart",
 			description: "Restarts Aldebaran",
-			perms: {
-				aldebaran: ["SUPPORT"]
-			}
+			perms: { aldebaran: ["SUPPORT"] }
 		});
 	}
 

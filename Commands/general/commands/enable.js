@@ -4,12 +4,9 @@ const ErrorEmbed = require("../../../structures/Aldebaran/ErrorEmbed");
 module.exports = class EnableCommandsSubcommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "enable",
 			description: "Enables back a command for your server",
 			subcommand: true,
-			perms: {
-				discord: ["ADMINISTRATOR"]
-			}
+			perms: { discord: ["ADMINISTRATOR"] }
 		});
 	}
 

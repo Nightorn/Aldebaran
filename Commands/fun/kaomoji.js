@@ -3,10 +3,7 @@ const { Command } = require("../../structures/categories/FunCategory");
 
 module.exports = class KaomojiCommand extends Command {
 	constructor(client) {
-		super(client, {
-			name: "kaomoji",
-			description: "Displays a random kaomoji"
-		});
+		super(client, { description: "Displays a random kaomoji" });
 	}
 
 	// eslint-disable-next-line class-methods-use-this

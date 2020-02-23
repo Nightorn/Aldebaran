@@ -4,10 +4,7 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 
 module.exports = class CatCommand extends Command {
 	constructor(client) {
-		super(client, {
-			name: "cat",
-			description: "Meowwwwwwwwwww"
-		});
+		super(client, { description: "Meowwwwwwwwwww" });
 	}
 
 	run(bot, message) {

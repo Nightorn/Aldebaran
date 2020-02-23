@@ -5,7 +5,6 @@ const { Command, Embed } = require("../../structures/categories/UtilitiesCategor
 module.exports = class MathCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "math",
 			description: "Evaluates a math expression",
 			usage: "Expression",
 			example: "sqrt(4) * 2",
