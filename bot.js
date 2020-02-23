@@ -1,4 +1,5 @@
 const { Structures } = require("discord.js");
+const { registerFont } = require("canvas");
 
 const AldebaranClient = require("./structures/Discord/Client");
 const User = require("./structures/Discord/User");
@@ -27,6 +28,10 @@ Date.getTimeString = (timeInMs, format) => {
 };
 
 RegExp.escape = s => s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+
+registerFont("./assets/fonts/Exo2-Regular.ttf", {
+	family: "Exo 2"
+});
 
 Structures.extend("User", BaseUser => User(BaseUser));
 Structures.extend("Guild", BaseGuild => Guild(BaseGuild));
