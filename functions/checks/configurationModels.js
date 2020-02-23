@@ -1,4 +1,4 @@
-const timezoneSupport = require("../../functions/checks/timezoneSupport");
+const timezoneSupport = require("./timezoneSupport");
 
 module.exports = {
 	common: {
