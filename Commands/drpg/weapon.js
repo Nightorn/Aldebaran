@@ -5,18 +5,20 @@ const itemlist = require("../../Data/drpg/itemList.json");
 module.exports = class WeaponCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "weapon",
 			description: "Recommends you the best weapons for your level",
 			usage: "Level",
-			example: "150"
+			example: "150",
+			args: { level: { as: "number" } }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		if (!Number(args[0]) || args[0] < 1)
+		const { level } = args;
+		if (level === undefined)
+			return message.channel.send("You need to specify a level!");
+		if (level < 1)
 			return message.channel.send("You cannot search for weapons requiring a negative level!");
-		const level = (args.length > 0) ? parseInt(args[0], 10) : 1;
 
 		let weapons = Object.values(itemlist).filter(
 			w => w.type === "weapon"

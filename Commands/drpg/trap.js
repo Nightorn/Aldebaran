@@ -4,40 +4,27 @@ const math = require("mathjs");
 const locations = require("./../../Data/drpg/locations.json");
 const itemList = require("../../Data/drpg/itemList.json");
 const { Command } = require("../../structures/categories/DRPGCategory");
-const userCheck = require("../../functions/action/userCheck");
 
 module.exports = class TrapCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "trap",
 			description: "Displays users' trap informations and estimated loots",
 			usage: "User TrapLocationID Max?",
-			example: "240971835330658305 4 --max"
+			example: "240971835330658305 4 --max",
+			args: {
+				user: { as: "user" },
+				trap: { as: "number" },
+				max: { as: "boolean", flag: { short: "m", long: "max" } }
+			}
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	async run(bot, message, args) {
-		let userid = message.author.id;
-		let trapId = null;
-		let isMax = false;
-		if (args.indexOf("--max") !== -1) {
-			args.pop();
-			isMax = true;
-		}
-		if (args.length === 1) {
-			try {
-				userid = await userCheck(bot, message, args);
-			} catch (err) {
-				[trapId] = args;
-			}
-		} else if (args.length >= 2) {
-			try {
-				userid = await userCheck(bot, message, args);
-			} catch (err) { /* does nothing */ }
-			[, trapId] = args;
-		}
-		
+		const userid = args.user || message.author.id;
+		const trapId = args.trap || null;
+		const isMax = args.max || false;
+
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${userid}`,
 			headers: { Authorization: bot.config.drpg_apikey }

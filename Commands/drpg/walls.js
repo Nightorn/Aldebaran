@@ -1,16 +1,15 @@
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const request = require("request");
 const bases = require("../../Data/bases.json");
-const userCheck = require("../../functions/action/userCheck");
 const { Command } = require("../../structures/categories/DRPGCategory");
 
 module.exports = class WallsCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "walls",
 			description: "Displays user's wall informations",
 			usage: "UserMention|UserID",
-			example: "246302641930502145"
+			example: "246302641930502145",
+			args: { user: { as: "user" } }
 		});
 	}
 
@@ -71,10 +70,9 @@ module.exports = class WallsCommand extends Command {
 		}
 
 		try {
-			const userid = await userCheck(bot, message, args);
-			const user = await bot.users.fetch(userid);
+			const user = await bot.users.fetch(args.user || message.author.id);
 			request({
-				uri: `http://api.discorddungeons.me/v3/user/${userid}`,
+				uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
 				headers: { Authorization: bot.config.drpg_apikey }
 			}, (err, res, body) => {
 				if (err) throw err;
@@ -98,7 +96,7 @@ module.exports = class WallsCommand extends Command {
 				const xpNeeded = calcXPNeeded(bases[baseLvl], baseLvl);
 				const wallProgress = xpNeeded - data.xp;
 
-				const embed = new Discord.MessageEmbed()
+				const embed = new MessageEmbed()
 					.setColor(0x00ae86)
 					.setAuthor(`${user.username}  |  DiscordRPG Walls`,
 						user.displayAvatarURL())
@@ -134,7 +132,7 @@ module.exports = class WallsCommand extends Command {
 			const [wall, baseLvl] = userWall(message, args[0]);
 			const xpNeeded = calcXPNeeded(bases[baseLvl], baseLvl);
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new MessageEmbed()
 				.setColor(0x00ae86)
 				.setAuthor(message.author.username, message.author.displayAvatarURL())
 				.setTitle(`Wall closest to Level ${args[0]}`)

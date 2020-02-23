@@ -4,21 +4,16 @@ const { Command, Embed } = require("../../structures/categories/multi/NekoslifeS
 module.exports = class PokeCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "poke",
 			description: "Poke someone!",
-			usage: "UserMention",
-			example: "<@437802197539880970>"
+			example: "<@437802197539880970>",
+			args: { target: { as: "user", desc: "The person to poke" } }
 		});
 	}
 
-	async run(bot, message) {
-		if (message.mentions.users.first()) {
-			const target = message.mentions.users.first();
-			const embed = new Embed(this,
-				`${message.author} is poking ${target}`);
+	async run(bot, message, args) {
+		bot.users.fetch(args.target).then(target => {
+			const embed = new Embed(this, `${message.author} is poking ${target}`);
 			embed.send(message, this.nekoslife.getSFWPoke);
-		} else {
-			message.reply("Please mention someone :thinking:");
-		}
+		}).catch(() => { message.reply("Please mention someone :thinking:"); });
 	}
 };
