@@ -5,7 +5,6 @@ module.exports = class SlapCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Slap that deserving someone!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

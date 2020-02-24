@@ -5,7 +5,6 @@ module.exports = class PatCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Send pats, everyone loves pats!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

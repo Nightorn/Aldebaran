@@ -5,7 +5,6 @@ module.exports = class BopCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Bop your friend!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

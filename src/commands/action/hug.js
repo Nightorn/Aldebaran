@@ -5,7 +5,6 @@ module.exports = class HugCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Send warm hugs!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

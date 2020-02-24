@@ -5,7 +5,6 @@ module.exports = class NomCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "It's nom nom time, invite your friends!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

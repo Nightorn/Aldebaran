@@ -5,7 +5,6 @@ module.exports = class RubCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Softly rub someone!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

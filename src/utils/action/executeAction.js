@@ -1,17 +1,17 @@
-const userCheck = require("./userCheck");
 const getImage = require("./getImage");
 const text = require("../../../assets/data/actiontext.json");
 const { Embed } = require("../../groups/ActionCommand");
 
 module.exports = (bot, message, args) => {
-	userCheck(bot, message, args).then(userId => {
+	const user = args.user || message.author.id;
+	bot.users.fetch(user).then(() => {
 		const [command] = message.content.slice(message.guild.prefix.length).split(" ");
-		const target = `<@${userId}>`;
+		const target = `<@${user}>`;
 		const sender = message.author.username;
 
 		let comment = "";
 		let randNumber = null;
-		if (message.author.id === userId) {
+		if (message.author.id === user) {
 			randNumber = Math.floor(Math.random() * text[`${command}`].self.length);
 			comment = text[`${command}`].self[randNumber].replace("{target}", target);
 		} else {

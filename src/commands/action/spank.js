@@ -5,7 +5,6 @@ module.exports = class SpankCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Spank someone!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

@@ -5,7 +5,6 @@ module.exports = class CprCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Perform CPR on someone!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

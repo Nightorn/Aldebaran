@@ -5,7 +5,6 @@ module.exports = class KidnapCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Kidnap your friends!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

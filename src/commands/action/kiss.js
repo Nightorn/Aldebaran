@@ -5,7 +5,6 @@ module.exports = class KissCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Kiss someone!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

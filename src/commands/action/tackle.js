@@ -5,7 +5,6 @@ module.exports = class TackleCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Tackle someone!",
-			usage: "UserMention|UserID",
 			example: "320933389513523220"
 		});
 	}

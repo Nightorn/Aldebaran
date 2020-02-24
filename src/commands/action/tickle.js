@@ -5,7 +5,6 @@ module.exports = class TickleCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Tickle someone!",
-			usage: "UserMention",
 			example: "<@437802197539880970>"
 		});
 	}
