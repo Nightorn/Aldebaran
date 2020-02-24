@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const ErrorEmbed = require("../../errors/ErrorEmbed");
 const categories = require("../../../assets/data/categories.json");
 const { Command } = require("../../groups/Command");
 
@@ -31,10 +30,7 @@ module.exports = class HelpCommand extends Command {
 					embed: bot.commands.getHelp(args[0].toLowerCase(), message.prefix)
 				});
 			} else {
-				const errorEmbed = new ErrorEmbed(message)
-					.setTitle("The requested resource has not been found.")
-					.setDescription("You are trying to find help for a command or a category that does not exist. Make sure you did not make a typo in your request.");
-				message.channel.send({ embed: errorEmbed });
+				message.channel.error("NOT_FOUND", "You are trying to find help for a command or a category that does not exist. Make sure you did not make a typo in your request.");
 			}
 		} else {
 			const embed = new MessageEmbed()

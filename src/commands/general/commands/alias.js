@@ -1,5 +1,4 @@
 const { Command, Embed } = require("../../../groups/Command");
-const ErrorEmbed = require("../../../errors/ErrorEmbed");
 
 module.exports = class AliasCommandsSubcommand extends Command {
 	constructor(client) {
@@ -24,26 +23,14 @@ module.exports = class AliasCommandsSubcommand extends Command {
 								message.channel.send({ embed });
 							}).catch(err => {
 								console.error(err);
-								const embed = new ErrorEmbed(message)
-									.setAuthor("Something went wrong.")
-									.setDescription(`An error occured trying to update your settings. Please contact the developers or fill a bug report with \`${message.guild.prefix}bugreport\`.`);
-								message.channel.send({ embed });
+								message.channel.error("UNEXPECTED_BEHAVIOR", "An error occured trying to update your settings.");
 							});
 					}
-					const embed = new ErrorEmbed(message)
-						.setAuthor("The requested resource has not been found.")
-						.setDescription("The command you want to set an alias on is incorrect. Make sure you did not make a mistake when typing it.");
-					return message.channel.send({ embed });
+					message.channel.error("NOT_FOUND", "The command you want to set an alias on is incorrect. Make sure you did not make a mistake when typing it.", "command");
 				}
-				const embed = new ErrorEmbed(message)
-					.setAuthor("You are doing something wrong.")
-					.setDescription("You are trying to do something that has already been done before.");
-				return message.channel.send({ embed });
+				message.channel.error("WRONG_USAGE", "You are trying to do set an alias that has already been set before.");
 			}
 		}
-		const embed = new ErrorEmbed(message)
-			.setAuthor("You are using this command incorrectly.")
-			.setDescription(`One or multiple arguments are missing for this command. You need to specify both the original command you want to set an alias on and its alias, like \`${message.guild.prefix}commands alias stats dstats\`.`);
-		return message.channel.send({ embed });
+		message.channel.error("INCORRECT_CMD_USAGE", `One or multiple arguments are missing for this command. You need to specify both the original command you want to set an alias on and its alias, like \`${message.guild.prefix}commands alias stats dstats\`.`);
 	}
 };

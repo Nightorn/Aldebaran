@@ -2,7 +2,6 @@ const request = require("request");
 const math = require("mathjs");
 const items = require("../../../assets/data/drpg/itemList.json");
 const locations = require("../../../assets/data/drpg/locations.json");
-const userCheck = require("../../utils/action/userCheck");
 const { Command, Embed } = require("../../groups/DRPGCommand");
 
 module.exports = class PlantCommand extends Command {
@@ -10,27 +9,15 @@ module.exports = class PlantCommand extends Command {
 		super(client, {
 			description: "Displays users plant informations and estimated loots",
 			usage: "UserMention|UserID",
-			example: "320933389513523220"
+			example: "320933389513523220",
+			args: { user: { as: "user" }, plant: { as: "number" } }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	async run(bot, message, args) {
-		let userid = message.author.id;
-		let plantId = null;
-		if (args.length === 1) {
-			try {
-				userid = await userCheck(bot, message, args);
-			} catch (err) {
-				[plantId] = args;
-			}
-		} else if (args.length >= 2) {
-			try {
-				userid = await userCheck(bot, message, args);
-			} catch (err) { /* does nothing */ }
-			[, plantId] = args;
-		}
-
+		const userid = args.user || message.author.id;
+		const plantId = args.plant || null;
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${userid}`,
 			headers: { Authorization: bot.config.drpg_apikey }
@@ -82,23 +69,26 @@ module.exports = class PlantCommand extends Command {
 							.setFooter(`${pronoun} have set this plant the ${getDate(plant.time)}.`);
 						message.channel.send({ embed });
 					} else {
-						const embed = new Embed(this)
-							.setAuthor("The requested resource has not been found.")
-							.setDescription(`You have specified a location where there is no sapling. Make sure you are checking the right location by using \`${message.guild.prefix}plant\`.`)
-							.setColor("RED")
-							.setFooter(target.username, target.avatarURL());
-						message.channel.send({ embed });
+						message.channel.error("NOT_FOUND", `You have specified a location where there is no sapling. Make sure you are checking the right location by using \`${message.guild.prefix}plant\`.`, "location");
 					}
 				} else {
 					let plantsList = "";
 					for (const [location, plant] of Object.entries(plants)) {
-						if (plant.id !== "")
-						plantsList += `\`[${location}]\` **${items[plant.id].name}** @ **${locations[location]}** - ${getDate(plant.time, true)}\n`;
+						if (plant !== null)
+							if (plant.id !== "")
+								plantsList += `\`[${location}]\` **${items[plant.id].name}** @ **${locations[location]}** - ${getDate(plant.time, true)}\n`;
 					}
-					const embed = new Embed(this)
-						.setAuthor(`${target.username}  |  Sapling Informations`, target.avatarURL())
-						.setDescription(`${message.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g).length} plants** set. Please tell us which one you want to view the informations of. Use \`${message.guild.prefix}plant 4\` for example.\n${plantsList}`);
-					message.channel.send({ embed });
+					if (plantsList !== "") {
+						const embed = new Embed(this)
+							.setAuthor(`${target.username}  |  Sapling Informations`, target.avatarURL())
+							.setDescription(`${message.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g).length} plants** set. Please tell us which one you want to view the informations of. Use \`${message.guild.prefix}plant 4\` for example.\n${plantsList}`);
+						message.channel.send({ embed });
+					} else {
+						const embed = new Embed(this)
+							.setAuthor(`${target.username}  |  Sapling Informations`, target.avatarURL())
+							.setDescription(`${message.author.id === userid ? "You have" : `**${target.username}** has`} no plant set.`);
+						message.channel.send({ embed });
+					}
 				}
 			} else {
 				message.reply("the DiscordRPG API seems down, please retry later.");

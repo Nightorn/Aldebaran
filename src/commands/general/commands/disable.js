@@ -1,5 +1,4 @@
 const { Command, Embed } = require("../../../groups/Command");
-const ErrorEmbed = require("../../../errors/ErrorEmbed");
 
 module.exports = class DisableCommandsSubcommand extends Command {
 	constructor(client) {
@@ -25,25 +24,13 @@ module.exports = class DisableCommandsSubcommand extends Command {
 							message.channel.send({ embed });
 						}).catch(err => {
 							console.error(err);
-							const embed = new ErrorEmbed(message)
-								.setAuthor("Something went wrong.")
-								.setDescription(`An error occured trying to update your settings. Please contact the developers or fill a bug report with \`${message.guild.prefix}bugreport\`.`);
-							message.channel.send({ embed });
+							message.channel.error("UNEXPECTED_BEHAVIOR", "An error occured trying to update your settings.");
 						});
 				}
-				const embed = new ErrorEmbed(message)
-					.setAuthor("The requested resource has not been found.")
-					.setDescription("The command you want to disable is incorrect. Make sure you did not make a mistake when typing it.");
-				return message.channel.send({ embed });
+				message.channel.error("NOT_FOUND", "The command you want to disable is incorrect. Make sure you did not make a mistake when typing it.", "command");
 			}
-			const embed = new ErrorEmbed(message)
-				.setAuthor("You are doing something wrong.")
-				.setDescription("You are trying to disable a command you have already disabled.");
-			return message.channel.send({ embed });
+			message.channel.error("WRONG_USAGE", "You are trying to disable a command that you have already disabled.");
 		}
-		const embed = new ErrorEmbed(message)
-			.setAuthor("You are using this command incorrectly.")
-			.setDescription("One or multiple arguments are missing for this command. You need to specify the command you want to disable.");
-		return message.channel.send({ embed });
+		message.channel.error("INCORRECT_CMD_USAGE", "One or multiple arguments are missing for this command. You need to specify the command you want to disable.");
 	}
 };

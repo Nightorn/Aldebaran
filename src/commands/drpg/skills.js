@@ -1,20 +1,20 @@
 const { MessageEmbed } = require("discord.js");
 const request = require("request");
 const { Command } = require("../../groups/DRPGCommand");
-const userCheck = require("../../utils/action/userCheck");
 
 module.exports = class SkillsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays users' skills informations",
 			usage: "UserMention|UserID",
-			example: "246302641930502145"
+			example: "246302641930502145",
+			args: { user: { as: "user" } }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		userCheck(bot, message, args).then(usrid => {
+		bot.users.fetch(args.user || message.author.id).then(usrid => {
 			request({ uri: `http://api.discorddungeons.me/v3/user/${usrid}`, headers: { Authorization: bot.config.drpg_apikey } }, (err, response, body) => {
 				if (err) return;
 				const { data } = JSON.parse(body);
@@ -45,9 +45,7 @@ module.exports = class SkillsCommand extends Command {
 					message.channel.send(embed);
 				}
 			});
-		}).catch(() => {
-			message.reply("Error you must enter a valid UserID or User Mention");
-		});
+		}).catch(() => { message.channel.error("INVALID_USER"); });
 	}
 
 	registerCheck() {

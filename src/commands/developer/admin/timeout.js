@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
 const { Command } = require("../../../groups/DeveloperCommand");
-const ErrorEmbed = require("../../../errors/ErrorEmbed");
 
 module.exports = class ModSubcommand extends Command {
 	constructor(client) {
@@ -35,10 +34,7 @@ module.exports = class ModSubcommand extends Command {
 					user.send({ embed });
 				}).catch(err => {
 					console.error(err);
-					const embed = new ErrorEmbed(message)
-						.setAuthor("Something went wrong.")
-						.setDescription("An error occurred trying to timeout this user.");
-					message.channel.send({ embed });
+					message.channel.error("UNEXPECTED_BEHAVIOR", "An error occurred trying to timeout this user.");
 				});
 			}).catch(() => {
 				const embed = new MessageEmbed()
