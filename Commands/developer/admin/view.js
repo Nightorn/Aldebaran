@@ -5,7 +5,6 @@ const { Command } = require("../../../structures/categories/DeveloperCategory");
 module.exports = class ViewSubcommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "view",
 			description: "Shows detailled informations about the specified user or guild",
 			subcommand: true
 		});

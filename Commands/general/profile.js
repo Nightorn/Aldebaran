@@ -1,27 +1,20 @@
 const { MessageEmbed } = require("discord.js");
 const { Command } = require("../../structures/categories/GeneralCategory");
+const CanvasCard = require("../../structures/CanvasCard");
 
 module.exports = class ProfileCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "profile",
 			description: "Shows your Aldebaran's profile",
 			usage: "UserMention|UserID",
-			example: "320933389513523220"
+			example: "320933389513523220",
+			args: { user: { as: "user" } }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		let userId = message.author.id;
-		if (args.length > 0) {
-			if (message.mentions.users.size > 0) {
-				userId = message.mentions.users.first().id;
-			} else {
-				[userId] = args;
-			}
-		}
-		bot.users.fetch(userId).then(user => {
+		bot.users.fetch(args.user || message.author.id).then(user => {
 			const { profile } = user;
 			if (profile.existsInDB) {
 				let userDetails = "";
@@ -45,6 +38,37 @@ module.exports = class ProfileCommand extends Command {
 				if (profile.favoriteMusic) embed.addField("__**Favorite Music(s)/Artist(s)**__", profile.favoriteMusic);
 				if (profile.socialLinks) embed.addField("__**Social Network(s) Link**__", profile.socialLinks);
 				message.channel.send({ embed });
+			} else {
+				const embed = new MessageEmbed()
+					.setAuthor(message.author.username, message.author.avatarURL())
+					.setTitle("No Profile Found")
+					.setDescription(`Please use \`${message.guild.prefix}setprofile name <yournamehere>\` to create your profile`)
+					.setColor("RED");
+				message.channel.send({ embed });
+			}
+		}).catch(() => {
+			message.reply("the user specified does not exist.");
+		});
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	async image(bot, message, args) {
+		bot.users.fetch(args.user).then(async user => {
+			const { profile } = user;
+			if (profile.existsInDB) {
+				const canvas = new CanvasCard(800, 600);
+				canvas.setBackground();
+				await canvas.setBanner(message.author.username,
+					message.author.displayAvatarURL({ format: "png", size: 128 }),
+					message.member.displayHexColor);
+				if (profile.flavorText)
+					canvas.writeTextBlock(`        ${profile.flavorText}`,
+						undefined, "26px Exo 2");
+				message.channel.send({
+					files: [
+						canvas.toBuffer()
+					]
+				});
 			} else {
 				const embed = new MessageEmbed()
 					.setAuthor(message.author.username, message.author.avatarURL())

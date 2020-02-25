@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/SettingsCategory");
 module.exports = class CommandSetprofile extends Command {
 	constructor(client) {
 		super(client, {
-			name: "setprofile",
 			description: "Changes your profile informations",
 			usage: "Section Input",
 			example: "aboutme My name is Xxx_FortnitePro_xxX!"

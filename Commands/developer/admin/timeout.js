@@ -5,7 +5,6 @@ const ErrorEmbed = require("../../../structures/Aldebaran/ErrorEmbed");
 module.exports = class ModSubcommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "timeout",
 			description: "Timeouts the specified user",
 			subcommand: true
 		});

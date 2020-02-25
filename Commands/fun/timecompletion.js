@@ -3,7 +3,6 @@ const { Command, Embed } = require("../../structures/categories/FunCategory");
 module.exports = class YearcompletionCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "timecompletion",
 			description: "Shows the week, month, year and decade completions."
 		});
 	}

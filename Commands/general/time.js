@@ -1,22 +1,20 @@
-const { MessageEmbed } = require("discord.js");
 const moment = require("moment-timezone");
-const { Command } = require("../../structures/categories/GeneralCategory");
+const { Command, Embed } = require("../../structures/categories/GeneralCategory");
 
 module.exports = class TimeCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "time",
 			description: "Prints a user's time based on their configured timezone",
-			usage: "UserMention",
 			example: "<@143026985763864576>",
-			aliases: ["heure"]
+			args: {
+				user: { as: "user?" },
+				clean: { as: "boolean?", flag: { short: "c", long: "clean" }, desc: "Whether to remove the footer or not" }
+			}
 		});
 	}
 
-	run(bot, message, args) {
-		const user = message.mentions.users.size >= 1
-			? message.mentions.users.first()
-			: message.author;
+	async run(bot, message, args) {
+		const user = await bot.users.fetch(args.user || message.author.id);
 		let { timezone } = user.settings;
 		if (timezone !== undefined) {
 			if (!timezone.includes("/")) {
@@ -35,35 +33,23 @@ module.exports = class TimeCommand extends Command {
 			if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = `ETC/${timezone}`;
 			const time = moment().tz(timezone);
 			if (time === null) {
-				message.channel.send({
-					embed: {
-						title: ":x: Ooof!",
-						description: `The timezone setting for ${
-							user.username
-						} seems to be invaild! Tell them to set it again with &uconfig timezone!`,
-						fields: [
-							{
-								name: ":information_source:",
-								value: `${
-									user.username
-								}'s timezone is set to ${timezone}.\nMake sure the timezone is a vaild [tz timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), or in the format: GMT+ or - <number>`
-							}
-						]
-					}
-				});
+				const embed = new Embed(this)
+					.setTitle(":x: Ooof!")
+					.setDescription(`The timezone setting for ${user.username} seems to be invaild! Tell them to set it again with &uconfig timezone!`)
+					.addField(":information_source:", `${
+						user.username
+					}'s timezone is set to ${timezone}.\nMake sure the timezone is a vaild [tz timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), or in the format: GMT+ or - <number>`);
+				message.channel.send({ embed });
 			} else {
-				const embed = new MessageEmbed()
+				const embed = new Embed(this)
 					.setAuthor(`${user.username}  |  Date and Time`, user.avatarURL())
 					.setDescription(
 						`${time.format("dddd, Do of MMMM YYYY")}\n**${time.format(
 							"hh:mm:ss A"
 						)}**`
-					)
-					.setColor(this.color);
-				if (!args.includes("-c"))
-					embed.setFooter(
-						"If this is inaccurate, try setting a tz timezone instead of a GMT-based timezone!"
 					);
+				if (!args.clean)
+					embed.setFooter("If this is inaccurate, try setting a tz timezone instead of a GMT-based timezone!");
 				message.channel.send({ embed });
 			}
 		} else if (user.equals(message.author)) {

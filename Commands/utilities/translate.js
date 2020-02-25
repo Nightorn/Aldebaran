@@ -4,9 +4,7 @@ const { Command, Embed } = require("../../structures/categories/UtilitiesCategor
 module.exports = class TranslateCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "translate",
-			description:
-        "Translates the specified word or the sentence into the specified language",
+			description: "Translates the specified word or the sentence into the specified language",
 			usage: "To (From) ToTranslate",
 			example: "fr en hello"
 		});

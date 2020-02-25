@@ -4,12 +4,9 @@ const ErrorEmbed = require("../../../structures/Aldebaran/ErrorEmbed");
 module.exports = class AliasCommandsSubcommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "alias",
 			description: "Sets a command alias for your server",
 			subcommand: true,
-			perms: {
-				discord: ["ADMINISTRATOR"]
-			}
+			perms: { discord: ["ADMINISTRATOR"] }
 		});
 	}
 

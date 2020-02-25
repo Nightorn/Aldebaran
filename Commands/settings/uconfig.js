@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/SettingsCategory");
 module.exports = class UconfigCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "uconfig",
 			description: "Manages your Aldebaran personal settings",
 			usage: "Parameter Value",
 			example: "adventureTimer on"

@@ -8,9 +8,11 @@ module.exports.Command = class Command {
    * @param {object} metadata Command Metadata
    * @param {string} metadata.name Name
    * @param {string} metadata.description Description
+   * @param {string} metadata.help Help
    * @param {string} metadata.usage Usage
    * @param {string} metadata.example Example
    * @param {string[]} metadata.aliases Aliases
+   * @param {object} metadata.args Command Arguments
    * @param {object} metadata.cooldown Cooldown Metadata
    * @param {string} metadata.cooldown.group Group
    * @param {number} metadata.cooldown.amount Amount
@@ -27,7 +29,7 @@ module.exports.Command = class Command {
 		}
 		if (!(client instanceof Client)) { throw new TypeError("The specified Client is invalid"); }
 		if (metadata === undefined) throw new TypeError("The metadata are invalid");
-		if (metadata.name === undefined || metadata.description === undefined) { throw new TypeError("The metadata are invalid"); }
+		if (metadata.description === undefined) { throw new TypeError("The metadata are invalid"); }
 		this.perms = {
 			discord: [],
 			aldebaran: []
@@ -54,7 +56,6 @@ module.exports.Command = class Command {
 		this.example = !metadata.example ? "" : `\`${metadata.example}\``;
 		this.hidden = false;
 		this.metadata = metadata;
-		this.name = metadata.name;
 		this.subcommands = new Map();
 		this.usage = !metadata.usage ? "" : `\`${metadata.usage}\``;
 	}
@@ -91,7 +92,8 @@ module.exports.Command = class Command {
 		const args = message.content.split(" ");
 		args.shift();
 		if (this.check(message)) {
-			return this.run(this.client, message, args);
+			return this.run(this.client, message,
+				message.getArgs(this.metadata.args));
 		}
 		throw new Error("INVALID_PERMISSIONS");
 	}
@@ -105,6 +107,7 @@ module.exports.Command = class Command {
 						// eslint-disable-next-line import/no-dynamic-require, global-require
 						const Structure = require(`../../${path}${file}`);
 						const command = new Structure(this.client);
+						command.name = file.match(/\w+(?=(.js))/g)[0];
 						this.subcommands.set(command.name, command);
 					} catch (error) {
 						console.log(`\x1b[31m${path}${file} is seen as a subcommand but is invalid.\x1b[0m`);
@@ -125,18 +128,42 @@ module.exports.Command = class Command {
 				`Aldebaran  |  Command Help  |  ${this.name}`,
 				this.client.user.avatarURL()
 			)
-			.setDescription(this.metadata.description)
+			.setTitle(this.metadata.description)
 			.addField("Category", this.category, true)
-			.addField("Usage", `${prefix}${command} ${this.usage}`, true)
 			.addField("Example", `${prefix}${command} ${this.example}`, true)
 			.setColor("BLUE");
-		if (this.aliases.length > 0) { embed.addField("Aliases", this.aliases.join(", "), true); }
-		if (this.subcommands.size > 0) { embed.addField("Subcommands", Array.from(this.subcommands.keys()).join(", "), true); }
-		if (this.cooldown.fixed > 0) { embed.addField("Cooldown", `${Math.ceil(this.cooldown.fixed)}s`, true); }
-		if (this.cooldown.group !== undefined) { embed.addField("CCG", this.cooldown.group, true); }
-		if (this.args !== undefined) embed.addField("Arguments", this.args, true);
-		if (this.perms.discord.length > 0) { embed.addField("Discord Perms", this.perms.discord.join(", "), true); }
-		if (this.perms.aldebaran.length > 0) { embed.addField("Aldebaran Perms", this.perms.aldebaran.join(", "), true); }
+		if (this.metadata.usage !== undefined)
+			embed.addField("Usage", `${prefix}${command} ${this.usage}`, true);
+		if (this.metadata.help !== undefined)
+			embed.setDescription(this.metadata.help);
+		if (this.aliases.length > 0)
+			embed.addField("Aliases", this.aliases.join(", "), true);
+		if (this.subcommands.size > 0)
+			embed.addField("Subcommands", Array.from(this.subcommands.keys()).join(", "), true);
+		/* if (this.cooldown.fixed > 0)
+			embed.addField("Cooldown", `${Math.ceil(this.cooldown.fixed)}s`, true);
+		if (this.cooldown.group !== undefined)
+			embed.addField("CCG", this.cooldown.group, true); */
+		if (this.args !== undefined)
+			embed.addField("Arguments", this.args, true);
+		if (this.perms.discord.length > 0)
+			embed.addField("Discord Perms", this.perms.discord.join(", "), true);
+		if (this.perms.aldebaran.length > 0)
+			embed.addField("Aldebaran Perms", this.perms.aldebaran.join(", "), true);
+		if (this.metadata.args !== undefined) {
+			let args = "";
+			let usage = "";
+			for (const [id, data] of Object.entries(this.metadata.args)) {
+				const as = data.as.replace("?", "");
+				const begin = `\`${id}\` (${as}${data.as.includes("?") ? ", optional" : ""})`;
+				const t = data.as.includes("?") ? ["[", "]"] : ["<", ">"];
+				if (data.flag === undefined) args += `${begin}${data.desc ? ` - *${data.desc}*` : ""}\n`;
+				else args += `${begin} - \`-${data.flag.short}\`/\`--${data.flag.long}\`${data.desc ? ` - *${data.desc}*` : ""}\n`;
+				usage += data.flag === undefined ? `${t[0]}${id}${t[1]} ` : `${t[0]}-${data.flag.short}|--${data.flag.long}${as !== "boolean" ? ` ${id}` : ""}${t[1]} `;
+			}
+			embed.addField("Usage", `${prefix}${command} \`${usage.trim()}\``, true);
+			embed.addField("Arguments", args);
+		}
 		return embed;
 	}
 

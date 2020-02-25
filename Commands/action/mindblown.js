@@ -4,7 +4,6 @@ const images = require("../../Data/imageurls.json");
 module.exports = class Mindblown extends Command {
 	constructor(client) {
 		super(client, {
-			name: "mindblown",
 			description: "Show everyone how your mind was blown!"
 		});
 	}

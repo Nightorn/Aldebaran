@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 module.exports = class PandaCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "panda",
 			description: "Displays a random panda picture or GIF"
 		});
 	}

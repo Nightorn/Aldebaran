@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/DeveloperCategory");
 module.exports = class AdminCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "admin",
 			description: "Admin Portal Command",
 			allowIndexCommand: true
 		});

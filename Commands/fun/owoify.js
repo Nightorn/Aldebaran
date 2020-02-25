@@ -3,7 +3,6 @@ const { Command, Embed } = require("../../structures/categories/FunCategory");
 module.exports = class OwoifyCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "owoify",
 			description: "Sends an owoified text",
 			usage: "Text",
 			example: "why is the grass green?"

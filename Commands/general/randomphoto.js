@@ -3,7 +3,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class RandomphotoCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "randomphoto",
 			description: "Displays a random image from the gallery"
 		});
 	}

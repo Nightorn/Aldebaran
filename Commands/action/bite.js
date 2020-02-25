@@ -4,7 +4,6 @@ const executeAction = require("../../functions/action/executeAction");
 module.exports = class BiteCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "bite",
 			description: "Go ahead, bite someone!",
 			usage: "UserMention|UserID",
 			example: "320933389513523220"

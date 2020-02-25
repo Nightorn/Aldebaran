@@ -5,7 +5,6 @@ const itemList = require("../../Data/drpg/itemList.json");
 module.exports = class PlantcalcCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "plantcalc",
 			description: "Displays estimated plant harvest based on time an level given",
 			usage: "ReapingPoints Hours ItemName",
 			example: "3600 24 Olive Seed"

@@ -4,7 +4,6 @@ const executeAction = require("../../functions/action/executeAction");
 module.exports = class LickCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "lick",
 			description: "Lick your friends!",
 			usage: "UserMention|UserID",
 			example: "320933389513523220"

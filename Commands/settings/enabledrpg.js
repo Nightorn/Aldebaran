@@ -12,10 +12,9 @@ const userParameters = ["healthMonitor", "adventureTimer", "sidesTimer"];
 module.exports = class EnableDRPGCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "enabledrpg",
 			description:
 				"Utility command to enable configuration values for DiscordRPG usage",
-			aliases: [ "edrpg" ]
+			aliases: ["edrpg"]
 		});
 	}
 

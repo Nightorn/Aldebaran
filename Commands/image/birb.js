@@ -3,10 +3,7 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 
 module.exports = class BirbCommand extends Command {
 	constructor(client) {
-		super(client, {
-			name: "birb",
-			description: "Cui-Cui"
-		});
+		super(client, { description: "Cui-Cui" });
 	}
 
 	run(bot, message) {

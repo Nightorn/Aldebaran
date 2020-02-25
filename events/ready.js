@@ -24,7 +24,7 @@ exports.run = client => {
 	console.log(
 		`\x1b[36m# ${client.users.size} users, ${client.channels.size} channels, ${
 			client.guilds.size
-		} servers, ${client.commands.commands.size} commands\x1b[0m`
+		} servers, ${client.commands.size} commands\x1b[0m`
 	);
 
 	const parseText = value => {

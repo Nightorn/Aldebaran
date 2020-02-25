@@ -4,7 +4,6 @@ const executeAction = require("../../functions/action/executeAction");
 module.exports = class SlapCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "slap",
 			description: "Slap that deserving someone!",
 			usage: "UserMention|UserID",
 			example: "320933389513523220"

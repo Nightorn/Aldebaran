@@ -5,11 +5,8 @@ const { Command } = require("../../structures/categories/DeveloperCategory");
 module.exports = class QueryCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "query",
 			description: "Queries the database",
-			perms: {
-				aldebaran: ["SUPERADMIN"]
-			}
+			perms: { aldebaran: ["SUPERADMIN"] }
 		});
 	}
 

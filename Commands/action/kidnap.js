@@ -4,7 +4,6 @@ const executeAction = require("../../functions/action/executeAction");
 module.exports = class KidnapCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "kidnap",
 			description: "Kidnap your friends!",
 			usage: "UserMention|UserID",
 			example: "320933389513523220"

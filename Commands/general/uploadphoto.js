@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class UploadphotoCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "uploadphoto",
 			description: "Uploads a photo to the gallery",
 			usage: "Link Name Tag NSFW?",
 			example: "http://example.com/image.jpg Image Picture yes"

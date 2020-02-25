@@ -3,13 +3,13 @@
         "titles": ["Owner", "Maintainer"],
         "acknowledgements": ["ADMIN", "DEVELOPER"],
         "staffRank": 0,
-        "text": "**maintainer of Aldebaran**"
+        "text": "**owner and funder** of **Aldebaran**"
     },
     "320933389513523220": {
         "titles": ["Maintainer", "Support"],
         "acknowledgements": ["ADMIN", "DEVELOPER"],
         "staffRank": 1,
-        "text": "**responsible** of **Aldebaran** and its **API**"
+        "text": "**maintainer** of **Aldebaran**"
     },
     "246302641930502145": {
         "titles": ["Support"],
@@ -21,12 +21,12 @@
         "titles": ["Developer"],
         "acknowledgements": ["ADMIN", "DEVELOPER"],
         "staffRank": 2,
-        "text": "**responsible** of **Aldebaran Web**"
+        "text": "**responsible** for **Aldebaran Web**"
     },
     "400476562752929804": {
         "titles": ["Developer"],
         "acknowledgements": ["ADMIN", "DEVELOPER"],
         "staffRank": 2,
-        "text": "herobrine"
+        "text": "Herobrine"
     }
 }

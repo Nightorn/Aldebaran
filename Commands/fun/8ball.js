@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/FunCategory");
 module.exports = class EightballCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "8ball",
 			description: "Ask the magic 8ball a question, you will be given the right answer",
 			usage: "Question",
 			example: "Should Allen get a hug?"

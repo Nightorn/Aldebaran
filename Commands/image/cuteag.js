@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 module.exports = class CuteagCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "cuteag",
 			description: "Displays a random cute anime girl picture"
 		});
 	}

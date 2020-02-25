@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/multi/NekoslifeS
 module.exports = class NekoCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "neko",
 			description: "Displays a random neko picture or a GIF"
 		});
 	}

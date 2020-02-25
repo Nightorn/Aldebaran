@@ -4,7 +4,6 @@ const executeAction = require("../../functions/action/executeAction");
 module.exports = class AdorableCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "adorable",
 			description: "Show how adorable you think someone is!",
 			usage: "UserMention|UserID",
 			example: "320933389513523220"

@@ -6,7 +6,6 @@ const userCheck = require("../../functions/action/userCheck");
 module.exports = class SkillsCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "skills",
 			description: "Displays users' skills informations",
 			usage: "UserMention|UserID",
 			example: "246302641930502145"

@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { Command } = require("./GeneralCategory");
 
 module.exports = class CommandHandler {
 	constructor(client) {
@@ -48,6 +47,13 @@ module.exports = class CommandHandler {
 		return args;
 	}
 
+	get size() {
+		let size = 0;
+		for (const [name, data] of this.commands)
+			if (name === data.name) size++;
+		return size;
+	}
+
 	get(command) {
 		return this.commands.get(command);
 	}
@@ -77,6 +83,7 @@ module.exports = class CommandHandler {
 
 	register(Structure, path) {
 		const command = new Structure(this.client);
+		command.name = path.match(/\w+(?=(.js))/g)[0];
 		if (command.registerCheck()) {
 			command.checkSubcommands(path);
 			if (!command.metadata.subcommand) {
@@ -98,28 +105,10 @@ module.exports = class CommandHandler {
 				} else if (path !== "Commands/inProgress/") {
 					try {
 						// eslint-disable-next-line import/no-dynamic-require, global-require
-						let command = require(`../../${path + file}`);
-						if (typeof command === "object") {
-							const meta = {
-								description: "This is an auto-generated help message.",
-								name: file.replace(/\.js$/, "")
-							};
-							Object.assign(meta, command.infos);
-							class fakeClass extends Command {
-								constructor(client) {
-									super(client, meta);
-								}
-							}
-							fakeClass.prototype.run = command.run;
-							command = fakeClass;
-							console.log(`${meta.name} needs to be converted to a class, but will still run in the meantime.`);
-						}
+						const command = require(`../../${path + file}`);
 						this.register(command, path + file);
 					} catch (err) {
-						console.error(
-							`\x1b[31m${path
-							+ file} is invalid and incompatible with Aldebaran 1.7.\x1b[0m`
-						);
+						console.error(`\x1b[31m${path + file} is invalid.\x1b[0m`);
 						console.error(err);
 					}
 				}

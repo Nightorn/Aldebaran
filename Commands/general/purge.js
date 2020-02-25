@@ -3,11 +3,8 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class PurgeCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "purge",
 			description: "Purges messages in channel",
-			perms: {
-				discord: ["MANAGE_MESSAGES"]
-			}
+			perms: { discord: ["MANAGE_MESSAGES"] }
 		});
 	}
 

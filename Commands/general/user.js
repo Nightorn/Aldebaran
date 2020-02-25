@@ -1,23 +1,21 @@
 const { MessageEmbed } = require("discord.js");
-const userCheck = require("./../../functions/action/userCheck");
 const getDateWithTimezone = require("../../functions/utils/getDateWithTimezone");
 const { Command } = require("../../structures/categories/GeneralCategory");
 
 module.exports = class UserCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "user",
 			description: "Shows detailled user informations",
 			usage: "UserMention/UserID",
-			example: "437802197539880970"
+			example: "437802197539880970",
+			args: { user: { as: "user" } }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		userCheck(bot, message, args).then(async userId => {
-			const member = message.guild.members.get(userId);
-			const user = await bot.users.fetch(userId);
+		bot.users.fetch(args.user || message.author.id).then(user => {
+			const member = message.guild.members.get(user.id);
 			const allRoles = new Map();
 			const rolesList = [];
 			const allPermissions = [];
@@ -100,8 +98,6 @@ module.exports = class UserCommand extends Command {
 			if (allPermissions.length > 0)
 				embed.addField("Permissions", allPermissions.join(", "));
 			message.channel.send({ embed });
-		}).catch(err => {
-			throw err;
-		});
+		}).catch(err => { throw err; });
 	}
 };

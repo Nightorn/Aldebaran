@@ -4,7 +4,6 @@ const { Command } = require("../../../structures/categories/DeveloperCategory");
 module.exports = class ClearSubcommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "clear",
 			description: "Clears the data of the specified user or server",
 			subcommand: true
 		});

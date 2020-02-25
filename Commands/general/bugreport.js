@@ -5,7 +5,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class CommandBugreport extends Command {
 	constructor(client) {
 		super(client, {
-			name: "bugreport",
 			description: "Sends a bug report",
 			usage: "BugReport",
 			example: "ur bot doesnt work"

@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 module.exports = class RandimalCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "randimal",
 			description: "Shows a random animal picture or GIF"
 		});
 	}

@@ -4,7 +4,6 @@ const { Command } = require("../../../structures/categories/DeveloperCategory");
 module.exports = class ModSubcommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "mod",
 			description: "Changes the settings of the specified user or guild",
 			subcommand: true
 		});

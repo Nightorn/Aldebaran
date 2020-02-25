@@ -4,7 +4,6 @@ const { Command, Embed } = require("../../structures/categories/multi/NekoslifeS
 module.exports = class TickleCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "tickle",
 			description: "Tickle someone!",
 			usage: "UserMention",
 			example: "<@437802197539880970>"

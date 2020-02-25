@@ -8,7 +8,6 @@ const fixerURL = "http://data.fixer.io/api";
 module.exports = class CurConvCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "curconv",
 			description:
 				"Converts from one currency unit to another, or lists currency equalivents",
 			example: "USD GBP 10"

@@ -13,9 +13,9 @@ module.exports = class AldebaranClient extends Client {
 	constructor() {
 		super({
 			disabledEvents: ["TYPING_START"],
-			messageCacheMaxSize: -1,
+			messageCacheMaxSize: 10,
 			messageCacheLifetime: 1800,
-			messageSweepInterval: 300
+			messageSweepInterval: 60
 		});
 		this.started = Date.now();
 		this.config = config;

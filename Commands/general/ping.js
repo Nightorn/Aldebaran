@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class PingCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "ping",
 			description: "Displays the bot's current ping to Discord",
 			aliases: ["pong"]
 		});

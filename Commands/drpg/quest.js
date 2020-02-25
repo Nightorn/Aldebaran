@@ -5,7 +5,6 @@ const { Command } = require("../../structures/categories/DRPGCategory");
 module.exports = class QuestCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "quest",
 			description: "Displays the DiscordRPG quests list and detailled informations about each quest",
 			usage: "QuestName",
 			example: "Cult of MOUKN"

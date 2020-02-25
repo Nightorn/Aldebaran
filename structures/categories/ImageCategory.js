@@ -1,5 +1,4 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("./GeneralCategory");
+const { Command, Embed } = require("./GeneralCategory");
 
 module.exports.Command = class OsuCommand extends Command {
 	constructor(...args) {
@@ -9,9 +8,4 @@ module.exports.Command = class OsuCommand extends Command {
 	}
 };
 
-module.exports.Embed = class Embed extends MessageEmbed {
-	constructor(command) {
-		super();
-		this.setColor(command.color);
-	}
-};
+module.exports.Embed = Embed;

@@ -3,10 +3,7 @@ const { Command, Embed } = require("../../structures/categories/ImageCategory");
 
 module.exports = class DogCommand extends Command {
 	constructor(client) {
-		super(client, {
-			name: "dog",
-			description: "WoooOOF"
-		});
+		super(client, { description: "WoooOOF" });
 	}
 
 	run(bot, message) {

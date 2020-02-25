@@ -4,7 +4,6 @@ const { Command } = require("../../structures/categories/GeneralCategory");
 module.exports = class PresenceCommand extends Command {
 	constructor(client) {
 		super(client, {
-			name: "presence",
 			description: "Access the community-driven bot's activity feature"
 		});
 	}

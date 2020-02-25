@@ -1,4 +1,4 @@
-const { Command } = require("./GeneralCategory");
+const { Command, Embed } = require("./GeneralCategory");
 
 module.exports.Command = class SettingsCategory extends Command {
 	constructor(client, metadata) {
@@ -6,3 +6,5 @@ module.exports.Command = class SettingsCategory extends Command {
 		this.category = "Settings";
 	}
 };
+
+module.exports.Embed = Embed;
