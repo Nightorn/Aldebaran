@@ -22,6 +22,15 @@ exports.run = async (bot, message) => {
 		DRPGAdventure(message);
 		DRPGSides(message);
 		DRPGPadventure(message);
+		const drpgMatch = message.content.toLowerCase().match(/.+(?=stats|adv)/);
+		if (drpgMatch !== null) {
+			const filter = msg => msg.author.id === "170915625722576896";
+			message.channel.awaitMessages(filter, { max: 1, time: 2000 })
+				.then(() => {
+					if (message.guild.prefix !== undefined)
+						message.guild.prefix = drpgMatch[0];
+				});
+		}
 	}
 
 	if (message.author.bot) return;
