@@ -96,7 +96,7 @@ module.exports = BaseMessage => class Message extends BaseMessage {
 
 	get command() {
 		return this.content
-			.slice(this.prefix.length + this.mode !== "NORMAL")
+			.slice(this.prefix.length + (this.mode !== "NORMAL"))
 			.split(" ")[0];
 	}
 };
