@@ -22,8 +22,8 @@ module.exports = class WeaponCommand extends Command {
 
 		let weapons = Object.values(itemlist).filter(
 			w => w.type === "weapon"
-			&& (w.cost > 0 || ["2", "617", "134", "641", "526", "653", "805"].includes(w.id))
-			&& w.id !== "13"
+			&& (w.cost > 0 || ["2", "447", "526", "528", "617", "641", "653", "805", "850", "851"].includes(w.id))
+			&& w.id !== "13" && w.id !== "49"
 		);
 		weapons = weapons.sort(
 			// eslint-disable-next-line no-nested-ternary

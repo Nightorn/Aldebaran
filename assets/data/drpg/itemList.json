@@ -10337,6 +10337,7 @@
 		"desc": "Owned by Felix Argyle",
 		"donate": true,
 		"id": "581",
+		"image": "items/Felixs_Potion.png",
 		"level": 300,
 		"name": "Felix's Potion",
 		"plural": "Felix's Potions",
@@ -14501,7 +14502,7 @@
 				"min": "1+skillLevel+floor(strength/40)"
 			},
 			"chance": 15,
-			"location": "50",
+			"location": "51",
 			"minlevel": 15,
 			"xp": {
 				"regular": {
@@ -14529,7 +14530,7 @@
 		"plural": "Glimmerhelm Runes",
 		"prefix": "A",
 		"sellable": false,
-		"teleports": "49",
+		"teleports": "50",
 		"tradable": false,
 		"type": "rune"
 	},
@@ -14633,7 +14634,7 @@
 				"min": "1+skillLevel+floor(strength/40)"
 			},
 			"chance": 15,
-			"location": "59",
+			"location": "60",
 			"minlevel": 10,
 			"xp": {
 				"regular": {
@@ -14661,7 +14662,7 @@
 		"plural": "Clayder Runes",
 		"prefix": "A",
 		"sellable": false,
-		"teleports": "61",
+		"teleports": "62",
 		"tradable": false,
 		"type": "rune"
 	},
@@ -14677,7 +14678,7 @@
 				"min": "1+skillLevel+floor(strength/40)"
 			},
 			"chance": 15,
-			"location": "68",
+			"location": "69",
 			"minlevel": 10,
 			"xp": {
 				"regular": {
@@ -14701,11 +14702,11 @@
 		"desc": "A rune allowing you to teleport to Aeston",
 		"id": "821",
 		"level": 50,
-		"name": "Aestom Rune",
+		"name": "Aeston Rune",
 		"plural": "Aeston Runes",
 		"prefix": "A",
 		"sellable": false,
-		"teleports": "67",
+		"teleports": "68",
 		"tradable": false,
 		"type": "rune"
 	},
@@ -15188,6 +15189,566 @@
 		"name": "Thick Thighs Amulet",
 		"plural": "Thick Thighs Amulets",
 		"prefix": "A",
+		"sellable": false,
+		"tradable": false,
+		"type": "necklace"
+	},
+	"849": {
+		"cost": -1,
+		"desc": "Felix owns this.",
+		"donate": true,
+		"id": "849",
+		"level": 1234,
+		"membersOnly": false,
+		"name": "Felix's Gold Ring",
+		"plural": "Felix's Gold Rings",
+		"prefix": " ",
+		"ring": {
+			"attribute": "goldBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"850": {
+		"attributes": {
+			"strength": 4
+		},
+		"cost": -1,
+		"desc": "Here is your use for Catfish, happy now?",
+		"donate": false,
+		"id": "850",
+		"level": 1234,
+		"membersOnly": false,
+		"name": "Felix's Trident",
+		"plural": "Felix's Tridents",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": false,
+		"type": "weapon",
+		"weapon": {
+			"dmg": {
+				"max": 5555,
+				"min": 4444
+			}
+		}
+	},
+	"851": {
+		"cost": -1,
+		"desc": "The storm that has been raging over the lands of over the badlands are overshadowed by the light, emitting from this very blade. The blade can lighten up the wielder's spirit, destroying the evil spirits within the Cod's, Ploiloinin and all other monsters that may roam the lands. It has more speed and does more damage then the number one with over 10k hp!  Has some considerable Rucoy references.",
+		"donate": false,
+		"id": "851",
+		"image": "items/Storm_Wand.png",
+		"level": 2500,
+		"membersOnly": false,
+		"name": "Golden Royal Storm Sword",
+		"plural": "Golden Royal Storm Swords",
+		"prefix": "The",
+		"sellable": false,
+		"tradable": false,
+		"type": "weapon",
+		"weapon": {
+			"dmg": {
+				"max": 11111,
+				"min": 10001
+			}
+		}
+	},
+	"852": {
+		"cost": -1,
+		"desc": "It's a shot of rum",
+		"donate": true,
+		"id": "852",
+		"level": 420,
+		"membersOnly": false,
+		"name": "Dread Pirate's Rum",
+		"plural": "Dread Pirate's Rum",
+		"potion": {
+			"effects": {
+				"xpBoost": 1.25
+			},
+			"time": 3600000
+		},
+		"prefix": "a",
+		"sellable": false,
+		"tradable": false,
+		"type": "effectpotion"
+	},
+	"853": {
+		"cost": -1,
+		"desc": "Fork used by the Dread Pirate that glimmers with unknown magical properties.",
+		"donate": true,
+		"id": "853",
+		"level": 4001,
+		"membersOnly": false,
+		"name": "Dread Pirate's Fork",
+		"plural": "Dread Pirate's Forks",
+		"prefix": "a",
+		"sellable": false,
+		"tradable": false,
+		"type": "dummy"
+	},
+	"854": {
+		"attributes": {
+			"strength": 10
+		},
+		"cost": -1,
+		"def": 20,
+		"defense": 20,
+		"desc": "Felix owns this.",
+		"donate": true,
+		"id": "854",
+		"level": 1000,
+		"membersOnly": false,
+		"name": "Felix's Cat Ears",
+		"plural": "Felix's Cat Ears",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": false,
+		"type": "helm"
+	},
+	"855": {
+		"attributes": {
+			"strength": 10
+		},
+		"cost": -1,
+		"def": 20,
+		"defense": 20,
+		"desc": "Felix owns this",
+		"donate": true,
+		"id": "855",
+		"level": 1000,
+		"membersOnly": false,
+		"name": "Felix's Dress",
+		"plural": "Felix's Dresses",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": false,
+		"type": "chest"
+	},
+	"856": {
+		"attributes": {
+			"strength": 10
+		},
+		"cost": -1,
+		"def": 20,
+		"defense": 20,
+		"desc": "Felix owns this",
+		"donate": true,
+		"id": "856",
+		"level": 1000,
+		"membersOnly": false,
+		"name": "Felix's Paws",
+		"plural": "Felix's Paws",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": false,
+		"type": "boots"
+	},
+	"857": {
+		"cost": -1,
+		"desc": ": A key developed to open even the most stubborn of locks.",
+		"id": "857",
+		"level": 30,
+		"name": "Enhanced Key",
+		"plural": "Enhanced Keys",
+		"prefix": "An",
+		"sellable": false,
+		"tradable": false,
+		"type": "dummy"
+	},
+	"858": {
+		"cost": -1,
+		"desc": "Dust from the hair of the Triplet Trolls, will you use it for good or evil?",
+		"id": "858",
+		"level": 30,
+		"name": "Green Dust",
+		"plural": "Green Dust",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": false,
+		"type": "dummy"
+	},
+	"859": {
+		"cost": -1,
+		"desc": "Foraging shears decorated with a lot of Christmas Spirit",
+		"id": "859",
+		"itemBoost": 4,
+		"level": 30,
+		"name": "Garland Garden Shears",
+		"plural": "Garland Garden Shears",
+		"prefix": "",
+		"sellable": false,
+		"skillLevel": 15,
+		"toolType": "shears",
+		"tradable": false,
+		"type": "tool"
+	},
+	"860": {
+		"bookID": "8",
+		"cost": -1,
+		"desc": "Cryptogram booklet, but for what?",
+		"id": "860",
+		"level": 30,
+		"name": "Cryptogram Booklet",
+		"plural": "Cryptogram Booklets",
+		"prefix": "A",
+		"sellable": false,
+		"tradable": false,
+		"type": "book"
+	},
+	"861": {
+		"cost": -1,
+		"desc": "Used to be filled with glee and presents!",
+		"id": "861",
+		"level": 30,
+		"name": "Santas Sack",
+		"plural": "Santas Sacks",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": false,
+		"type": "dummy"
+	},
+	"862": {
+		"cost": -1,
+		"desc": "This ring has the mysterious ability to increase wealth",
+		"donate": true,
+		"id": "862",
+		"level": 50,
+		"membersOnly": false,
+		"name": "Ring of Affluence",
+		"plural": "Rings of Affluence",
+		"prefix": "The",
+		"ring": {
+			"attribute": "goldBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"863": {
+		"attributes": {
+			"strength": 30
+		},
+		"cost": -1,
+		"desc": "Despite the shabby appearance, this necklace imbues the user with seemingly superhuman strength",
+		"donate": true,
+		"id": "863",
+		"level": 1550,
+		"membersOnly": false,
+		"name": "Casual Necklace",
+		"plural": "Casual Necklaces",
+		"prefix": "The",
+		"sellable": false,
+		"tradable": false,
+		"type": "necklace"
+	},
+	"864": {
+		"cost": -1,
+		"desc": "Filled with sparkles!",
+		"donate": false,
+		"id": "864",
+		"level": 1,
+		"membersOnly": false,
+		"name": "Snow Globe",
+		"plural": "Snow Globes",
+		"prefix": "A",
+		"sellable": false,
+		"tradable": false,
+		"type": "dummy"
+	},
+	"865": {
+		"cost": -1,
+		"desc": "A shining charm with an inscription on it. All you can make out is “-y Felix”.",
+		"donate": false,
+		"id": "865",
+		"level": 50,
+		"membersOnly": false,
+		"name": "Luck charm",
+		"plural": "Luck Charms",
+		"potion": {
+			"effects": {
+				"xpBoost": 1.2
+			},
+			"time": 7200000
+		},
+		"prefix": "A",
+		"sellable": false,
+		"tradable": false,
+		"type": "effectpotion"
+	},
+	"866": {
+		"cost": -1,
+		"def": 30,
+		"defense": 30,
+		"desc": "When you combine an engine, gasoline and Dragoneyr, you end up with a motorcycle speed.  It's mind boggling!",
+		"donate": true,
+		"id": "866",
+		"level": 300,
+		"membersOnly": false,
+		"name": "Dragoneyr's Motorcycle",
+		"plural": "Dragoneyr's Motorcycles",
+		"prefix": "The",
+		"sellable": false,
+		"tradable": false,
+		"type": "boots"
+	},
+	"867": {
+		"cost": -1,
+		"def": 30,
+		"defense": 30,
+		"desc": "Safety first, head over heels with the wheels.  I can still smell the rubber... oh hey there rolls a wheel! Wee",
+		"donate": true,
+		"id": "867",
+		"level": 300,
+		"membersOnly": false,
+		"name": "Dragoneyr's Helmet",
+		"plural": "Dragoneyr's Helmets",
+		"prefix": "The",
+		"sellable": false,
+		"tradable": false,
+		"type": "helm"
+	},
+	"868": {
+		"cost": -1,
+		"desc": "it just be like that",
+		"donate": true,
+		"id": "868",
+		"level": 45,
+		"membersOnly": false,
+		"name": "Ring of sorrow",
+		"plural": "Rings of sorrow",
+		"prefix": "a",
+		"ring": {
+			"attribute": "xpBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"869": {
+		"cost": -1,
+		"desc": "A divine essence harvested by professionals in the mines near Caeli.",
+		"id": "869",
+		"level": 125,
+		"name": "Caeli Essence",
+		"ore": {
+			"amount": {
+				"max": "1+skillLevel+floor(strength/100)",
+				"min": "1+skillLevel+floor(strength/40)"
+			},
+			"chance": 15,
+			"location": "80",
+			"minlevel": 15,
+			"xp": {
+				"regular": {
+					"max": "round(sqrt((sqrt(level)*0.25)*random(10, 15) / 2))",
+					"min": "round(sqrt((sqrt(level)*0.25)*random(5, 10) / 2))"
+				},
+				"skill": {
+					"max": "round(sqrt((sqrt(skillLevel)*0.25)*random(10, 15) / 2))",
+					"min": "round(sqrt((sqrt(skillLevel)*0.25)*random(5, 10) / 2))"
+				}
+			}
+		},
+		"plural": "Caeli Essence",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": true,
+		"type": "ore"
+	},
+	"870": {
+		"cost": -1,
+		"desc": "A rune allowing you to teleport to Caeli City",
+		"id": "870",
+		"level": 125,
+		"name": "Caeli Rune",
+		"plural": "Caeli Runes",
+		"prefix": "A",
+		"sellable": false,
+		"teleports": "81",
+		"tradable": false,
+		"type": "rune"
+	},
+	"871": {
+		"cost": -1,
+		"desc": "When worn gives an XP boost",
+		"donate": true,
+		"id": "871",
+		"level": 9,
+		"membersOnly": false,
+		"name": "Infinite's Ring",
+		"plural": "Infinite's Rings",
+		"prefix": "An",
+		"ring": {
+			"attribute": "xpBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"872": {
+		"cost": -1,
+		"desc": "Look at those fluffy paws, don't you want to be petted by them?",
+		"donate": true,
+		"id": "872",
+		"level": 42,
+		"membersOnly": false,
+		"name": "Neko Paw",
+		"plural": "Neko Paws",
+		"prefix": "A",
+		"ring": {
+			"attribute": "xpBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"873": {
+		"cost": -1,
+		"desc": "A long-forgotten remnant of the past. Once stolen by a legendary hunter who traveled through time to prevent the paralysis of the planet, this artifact controls the flow of time around it.  Ancient folklore spins tales of its mystical attributes, including guidance towards precious minerals through the manipulation of terrain formation. When active alongside the illustrious hunter, its power knew no distinguishable boundaries.",
+		"donate": true,
+		"id": "873",
+		"image": "items/time-gear.png",
+		"level": 555,
+		"membersOnly": false,
+		"name": "Time Gear",
+		"plural": "Time Gears",
+		"prefix": "The",
+		"ring": {
+			"attribute": "mineBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"874": {
+		"cost": -1,
+		"desc": "This weapon has been made of the fallen souls of Kitsunes",
+		"donate": true,
+		"id": "874",
+		"level": 5,
+		"membersOnly": false,
+		"name": "Kitsune's Wrath",
+		"plural": "Kitsune's Wraths",
+		"prefix": "A",
+		"sellable": false,
+		"tradable": false,
+		"type": "weapon",
+		"weapon": {
+			"dmg": {
+				"max": 13,
+				"min": 8
+			}
+		}
+	},
+	"875": {
+		"attributes": {
+			"strength": 30
+		},
+		"cost": -1,
+		"desc": "As Leon's pain grow, a grand wizard decided to take that pain and forge an amulet on his special day. The grand wizard is known as Seido",
+		"donate": true,
+		"id": "875",
+		"level": 999,
+		"membersOnly": false,
+		"name": "Pain amulet",
+		"plural": "Pain amulets",
+		"prefix": "A",
+		"sellable": false,
+		"tradable": false,
+		"type": "necklace"
+	},
+	"876": {
+		"cost": -1,
+		"desc": "Premium Shears for the Distinguished Gentleman, does the job more effectively",
+		"donator": true,
+		"id": "876",
+		"itemBoost": 9,
+		"level": 240,
+		"name": "Sharkeys Golden Shears",
+		"plural": "Sharkeys Golden Shears",
+		"prefix": "",
+		"sellable": false,
+		"skillLevel": 30,
+		"toolType": "shears",
+		"tradable": false,
+		"type": "tool"
+	},
+	"877": {
+		"attributes": {
+			"xpBoost": 15
+		},
+		"cost": -1,
+		"def": 0,
+		"defense": "0",
+		"desc": "I'm a child of god",
+		"donate": true,
+		"id": "877",
+		"level": 156,
+		"membersOnly": false,
+		"name": "Konato's chastity belt",
+		"plural": "Konato's chastity belts",
+		"prefix": " ",
+		"sellable": false,
+		"tradable": false,
+		"type": "chest"
+	},
+	"878": {
+		"cost": -1,
+		"desc": "Forged in the heart of the Royal Kingdom, a golden ring arises from the flames in the shape of a Wolf's Eye dubbed as the \"Eye of the Wolf\".",
+		"donate": true,
+		"id": "878",
+		"level": 369,
+		"membersOnly": false,
+		"name": "Eye of Wolf ",
+		"plural": "Eyes of Wolf ",
+		"prefix": "The",
+		"ring": {
+			"attribute": "goldBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"879": {
+		"cost": -1,
+		"desc": "It's just a ring sprayed with gold paint and then dipped in pain",
+		"donate": true,
+		"id": "879",
+		"level": 300,
+		"membersOnly": false,
+		"name": "Golden Ring Of Pain",
+		"plural": "Golden Rings Of Pain",
+		"prefix": "The",
+		"ring": {
+			"attribute": "goldBoost",
+			"boost": 1.5
+		},
+		"sellable": false,
+		"tradable": false,
+		"type": "ring"
+	},
+	"880": {
+		"attributes": {
+			"xpBoost": 30
+		},
+		"cost": -1,
+		"desc": "Doubled banded necklace worn by the adventurer Iddeku found on the skeleton in the Shimmercoast ruins",
+		"donate": true,
+		"id": "880",
+		"level": 300,
+		"membersOnly": false,
+		"name": "Iridescent Deku Ornament",
+		"plural": "Iridescent Deku Ornaments",
+		"prefix": " ",
 		"sellable": false,
 		"tradable": false,
 		"type": "necklace"
