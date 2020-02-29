@@ -22,7 +22,7 @@ module.exports = class WeaponCommand extends Command {
 
 		let weapons = Object.values(itemlist).filter(
 			w => w.type === "weapon"
-			&& (w.cost > 0 || ["2", "447", "526", "528", "617", "641", "653", "805", "850", "851"].includes(w.id))
+			&& (w.cost > 0 || ["2", "134", "447", "526", "528", "617", "641", "653", "805", "850", "851"].includes(w.id))
 			&& w.id !== "13" && w.id !== "49"
 		);
 		weapons = weapons.sort(
