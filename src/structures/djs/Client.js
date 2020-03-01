@@ -94,6 +94,7 @@ module.exports = class AldebaranClient extends Client {
 		if (!fs.existsSync("./cache/")) fs.mkdirSync("./cache/");
 		this.drpgCache = {};
 		if (fs.existsSync("./cache/drpgCache.json")) {
+			// eslint-disable-next-line global-require, import/no-unresolved
 			this.drpgCache = require("../../../cache/drpgCache.json");
 		}
 

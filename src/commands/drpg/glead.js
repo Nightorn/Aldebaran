@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-await-in-loop */
 const fs = require("fs");
-const Message = require("discord.js");
+const { Message } = require("discord.js"); // eslint-disable-line no-unused-vars
 const request = require("request");
 const locationdb = require("../../../assets/data/drpg/locations.json");
 const { Command } = require("../../groups/DRPGCommand");
@@ -46,27 +46,23 @@ async function paginate(list, page, headerText, message, footerText) {
 
 	const msg = await message.channel.send(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
 	if (maxPage > 1) {
-		const reactions = ["⬅", "❌", "➡"]
+		const reactions = ["⬅", "❌", "➡"];
 		for (const react of reactions) {
 			await msg.react(react);
 		}
-		// eslint-disable-next-line no-constant-condition
 		while (true) {
-			const collect = await msg.awaitReactions((reaction, user) => user.id === message.author.id && reactions.includes(reaction.emoji.name), { time: 60000, max: 1 }).catch(console.error);
+			const collect = await msg.awaitReactions(
+				(reaction, user) => user.id === message.author.id
+					&& reactions.includes(reaction.emoji.name),
+				{ time: 60000, max: 1 }
+			).catch(console.error);
 
 			if (collect.size) {
 				const reaction = collect.first();
 				const emoji = collect.first().emoji.name;
 				const prevPage = page;
-				if (emoji === "⬅") {
-					if (page > 1) {
-						page--;
-					}
-				} else if (emoji === "➡") {
-					if (page < maxPage) {
-						page++;
-					}
-				}
+				if (emoji === "⬅" && page > 1) page--;
+				else if (emoji === "➡" && page < maxPage) page++;
 
 				if (emoji !== "❌") reaction.users.remove(message.author);
 
@@ -127,15 +123,17 @@ async function updateCache(bot) {
 }
 
 async function getUserData(userID, bot) {
-	if (bot.drpgCache[userID] && bot.drpgCache[userID].lastUpdate > Date.now() - 3600000) {
-		return bot.drpgCache[userID];
+	const userCache = bot.drpgCache[userID];
+	if (userCache && userCache.lastUpdate > Date.now() - 3600000) {
+		return userCache;
 	}
 	return apiFetch(`user/${userID}`, bot).catch(console.error);
 }
 
 async function getGuild(guildID, bot) {
-	if (bot.drpgCache[guildID] && bot.drpgCache[guildID].lastUpdate > Date.now() - 3600000) {
-		return bot.drpgCache[guildID];
+	const guildCache = bot.drpgCache[guildID];
+	if (guildCache && guildCache.lastUpdate > Date.now() - 3600000) {
+		return guildCache;
 	}
 	const guildData = await apiFetch(`guild/${guildID}`, bot).catch(console.error);
 	if (!guildData) return false;
@@ -254,7 +252,8 @@ module.exports = class GleadCommand extends Command {
 
 		case "lastseen":
 			guildUsers.sort((a, b) => (b[index] || 0) - (a[index] || 0));
-			sum = timeSince(Math.floor(guildUsers.reduce((p, c) => (c[index] || 0) + (p || 0), 0) / guildUsers.length));
+			sum = timeSince(Math.floor(guildUsers
+				.reduce((p, c) => (c[index] || 0) + (p || 0), 0) / guildUsers.length));
 			list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${timeSince(user[index] || 0)} >`);
 			break;
 
@@ -274,10 +273,14 @@ module.exports = class GleadCommand extends Command {
 			break;
 
 		default:
-			itemIndex = items.filter(item => index.toLowerCase() === item.name.toLowerCase());
+			itemIndex = items
+				.filter(item => index.toLowerCase() === item.name.toLowerCase());
 			if (itemIndex.length === 1) {
-				filteredUsers = guildUsers.filter(user => user.inv && user.inv[itemIndex[0].id] && user.inv[itemIndex[0].id] > 0);
-				filteredUsers.sort((a, b) => b.inv[itemIndex[0].id] - a.inv[itemIndex[0].id]);
+				filteredUsers = guildUsers.filter(user => user.inv
+					&& user.inv[itemIndex[0].id]
+					&& user.inv[itemIndex[0].id] > 0);
+				filteredUsers
+					.sort((a, b) => b.inv[itemIndex[0].id] - a.inv[itemIndex[0].id]);
 				sum = filteredUsers.reduce((p, c) => c.inv[itemIndex[0].id] + p, 0);
 				list = filteredUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id].toLocaleString()} >`);
 			}
