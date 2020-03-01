@@ -92,6 +92,10 @@ module.exports = class AldebaranClient extends Client {
 			this.models.settings.guild[key] = value;
 		}
 		if (!fs.existsSync("./cache/")) fs.mkdirSync("./cache/");
+		this.drpgCache = {};
+		if (fs.existsSync("./cache/drpgCache.json")) {
+			this.drpgCache = require("../../../cache/drpgCache.json");
+		}
 
 		fs.readdir("./src/events/", (err, files) => {
 			if (err) throw console.error(err);
