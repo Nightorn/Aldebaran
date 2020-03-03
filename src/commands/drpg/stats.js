@@ -4,7 +4,7 @@ const fs = require("fs");
 const {
 	createCanvas, Image, registerFont, loadImage
 } = require("canvas");
-const locationdb = require("../../../assets/data/drpglocationlist.json");
+const locations = require("../../../assets/data/drpg/locations.json");
 const { Command } = require("../../groups/DRPGCommand");
 const lightOrDark = require("../../utils/utils/lightOrDark");
 
@@ -41,24 +41,14 @@ module.exports = class StatsCommand extends Command {
 						skills.push(`**${key[0].toUpperCase() + key.slice(1)}** Lv${value.level}`);
 					if (data.attributes !== undefined)
 						for (const [key, value] of Object.entries(data.attributes))
-							if (value !== 0) attributes.push(
-								`**${key[0].toUpperCase() + key.slice(1)}** ${format(
-									value
-								)} Points`
-							);
+							if (value !== 0) attributes.push(`**${key[0].toUpperCase() + key.slice(1)}** ${format(value)} Points`);
+					const location = locations[data.location.current];
 					const embed = new MessageEmbed()
 						.setAuthor(data.name, user.avatarURL())
 						.setColor(data.donate ? "GOLD" : 0x00ae86)
 						.setDescription(
-							`${
-								data.location !== undefined
-									? `Currently In **${
-										locationdb[`${data.location.current}`] !== undefined
-											? `${locationdb[`${data.location.current}`].name}**`
-											: "The Abyss**"
-									}`
-									: ""
-							}`
+							`${data.location !== undefined
+								? `Currently In **${location || "The Abyss"}**` : ""}`
 						)
 						.addField(
 							`Level ${format(data.level)}`,
