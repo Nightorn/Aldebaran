@@ -162,7 +162,8 @@ module.exports = class GleadCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays a DiscordRPG user's guild leaderboard",
-			usage: "[user] [showid] [--desc] [level |\nitem name |\ngold |\nxp |\nlux |\ndeaths |\nkills |\npoints |\nquestPoints |\nmine |\nchop |\nfish |\nforage |\ncrits |\ndefense |\ngoldBoost |\nlumberBoost |\nmineBoost |\nreaping |\nsalvaging |\nscavenge |\nstrength |\ntaming |\nxpBoost |\nlastseen |\nlocation]",
+			help: "These are the attributes you can use as the \"attribute\" argument: `level`, `item name`, `gold`, `xp`, `lux`, `deaths`, `kills`, `points`, `questPoints`, `mine`, `chop`, `fish`, `forage`, `crits`, `defense`, `goldBoost`, `lumberBoost`, `mineBoost`, `reaping`, `salvaging`, `scavenge`, `strength`, `taming`, `xpBoost`, `lastseen` and `location`.",
+			usage: "[user] [showid] [--desc] [attribute]",
 			example: "141610251299454976 showid --desc lastseen",
 			args: {
 				user: { as: "user?" }
