@@ -173,7 +173,6 @@ module.exports = (client, message) => {
 			player.maxHP = Number(healthLine[2].replace(/,/g, ""));
 			pet.currentHP = parseInt(pet.currentHP.replace(",", ""), 10);
 			pet.maxHP = parseInt(pet.maxHP.replace(",", ""), 10);
-			console.log([player, pet]);
 		}
 	}
 

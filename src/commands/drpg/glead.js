@@ -118,8 +118,7 @@ async function updateCache(bot) {
 			delete bot.drpgCache[id];
 		}
 	}
-
-	fs.writeFile("./cache/drpgCache.json", JSON.stringify(bot.drpgCache), console.error);
+	fs.writeFile("./cache/drpgCache.json", JSON.stringify(bot.drpgCache));
 }
 
 async function getUserData(userID, bot) {
