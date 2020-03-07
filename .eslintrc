@@ -18,6 +18,7 @@
         "no-constant-condition": ["error", { "checkLoops": false }],
         "guard-for-in": "off",
         "no-restricted-syntax": "off",
+        "no-bitwise": "off",
         "no-console": "off",
         "no-param-reassign": "off",
         "no-extend-native": "off",
