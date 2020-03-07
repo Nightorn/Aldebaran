@@ -1,4 +1,3 @@
-const { MessageEmbed } = require("discord.js");
 const CustomTimer = require("../structures/aldebaran/CustomTimer");
 
 exports.run = client => {
@@ -6,15 +5,6 @@ exports.run = client => {
 		const timer = new CustomTimer(client, element);
 		client.customTimers.set(timer.id, timer);
 	}
-	const embed = new MessageEmbed()
-		.setTitle(`Started ${client.user.username}`)
-		.setDescription(`**Uptime** : ${Math.floor(client.uptime)}ms`)
-		.setColor("BLUE");
-	client.guilds.get("461792163525689345").channels.get("485023018045669396").send({ embed });
-
-	client.guilds.get("461792163525689345").channels.get("461802546642681872").messages.fetch(200);
-	client.guilds.get("461792163525689345").channels.get("463094132248805376").messages.fetch(200);
-	client.guilds.get("461792163525689345").channels.get("494129501077241857").messages.fetch(200);
 
 	console.log(
 		`\x1b[36m# ${client.user.username} has started!${
@@ -22,15 +12,15 @@ exports.run = client => {
 		}\x1b[0m`
 	);
 	console.log(
-		`\x1b[36m# ${client.users.size} users, ${client.channels.size} channels, ${
-			client.guilds.size
+		`\x1b[36m# ${client.users.cache.size} users, ${client.channels.cache.size} channels, ${
+			client.guilds.cache.size
 		} servers, ${client.commands.size} commands\x1b[0m`
 	);
 
 	const parseText = value => {
 		let text = value;
-		text = text.replace("{NSERVERS}", Number.formatNumber(client.guilds.size));
-		text = text.replace("{NUSERS}", Number.formatNumber(client.users.size));
+		text = text.replace("{NSERVERS}", Number.formatNumber(client.guilds.cache.size));
+		text = text.replace("{NUSERS}", Number.formatNumber(client.users.cache.size));
 		text = text.replace("{VERSION}", client.version);
 		return text;
 	};

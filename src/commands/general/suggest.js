@@ -1,5 +1,5 @@
 // Command Developed with the help of Akashic Bearer#2305
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, WebhookClient } = require("discord.js");
 const { Command } = require("../../groups/Command");
 
 module.exports = class SuggestCommand extends Command {
@@ -15,11 +15,13 @@ module.exports = class SuggestCommand extends Command {
 	run(bot, message, args) {
 		if (args.length === 0) return message.channel.send("You can't send an empty suggestion.");
 		const embed = new MessageEmbed()
-			.setAuthor(`${message.author.tag} | ${message.author.id}`, message.author.avatarURL())
-			.setTitle("New Suggestion")
 			.setDescription(args.join(" "))
-			.setFooter(`Channel : #${message.channel.name} [ID: ${message.channel.id}] • Server : ${message.guild.name} [ID: ${message.guild.id}]`);
-		bot.guilds.get("461792163525689345").channels.get("461802546642681872").send({ embed }).then(() => {
+			.setFooter(`User: ${message.author.tag} [ID: ${message.author.id}]\nChannel: #${message.channel.name} [ID: ${message.channel.id}]\nServer: ${message.guild.name} [ID: ${message.guild.id}]`);
+		new WebhookClient("685901108262076565", "Qy3jDeK9uUO3bIqpYgkZ6MrkspZ9m5H8T6r2IjxWITAiEtNlpFUuaJz-snayg8bXUJWy").send({
+			username: message.author.username,
+			avatarURL: message.author.displayAvatarURL(),
+			embeds: [embed]
+		}).then(() => {
 			message.channel.send("Your suggestion has been sent to the main server!");
 		});
 		return true;
