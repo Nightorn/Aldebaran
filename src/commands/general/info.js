@@ -19,7 +19,7 @@ module.exports = class InfoCommand extends Command {
 			.addField("Developers of Aldebaran", adminMentions)
 			.addField(
 				"Statistics",
-				`Playing with **${Number.formatNumber(bot.guilds.size)} servers**\nWatching **${Number.formatNumber(bot.channels.size)} channels**\nListening to **${Number.formatNumber(bot.users.size)} users**`,
+				`Playing with **${Number.formatNumber(bot.guilds.cache.size)} servers**\nWatching **${Number.formatNumber(bot.channels.cache.size)} channels**\nListening to **${Number.formatNumber(bot.users.cache.size)} users**`,
 				true
 			)
 			.addField(

@@ -24,7 +24,7 @@ module.exports = class ModSubcommand extends Command {
 							.setColor("GREEN");
 						message.channel.send({ embed });
 					}).catch(async () => {
-						const guild = bot.guilds.get(args[1]);
+						const guild = bot.guilds.cache.get(args[1]);
 						if (guild !== undefined) {
 							await guild.changeSetting(args[2], args[3]);
 							const embed = new MessageEmbed()

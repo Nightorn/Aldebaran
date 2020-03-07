@@ -28,7 +28,7 @@ module.exports = class ClearSubcommand extends Command {
 				});
 			});
 		}).catch(() => {
-			const guild = bot.guilds.get(id);
+			const guild = bot.guilds.cache.get(id);
 			if (guild !== undefined) {
 				message.channel.send(`**${message.author.username}**, are you sure you want to clear the data of **${guild.name}**?`).then(msg => {
 					msg.react("✅");

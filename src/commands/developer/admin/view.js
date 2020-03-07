@@ -31,7 +31,7 @@ module.exports = class ViewSubcommand extends Command {
 			if (guilds.length > 0) embed.addField("Servers", guilds.join("\n"));
 			message.channel.send({ embed });
 		}).catch(() => {
-			const guild = bot.guilds.get(id);
+			const guild = bot.guilds.cache.get(id);
 			if (guild !== undefined) {
 				let admins = "";
 				guild.bots = guild.members.filter(m => m.user.bot === true);
