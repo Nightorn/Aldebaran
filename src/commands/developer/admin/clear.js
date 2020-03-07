@@ -5,7 +5,8 @@ module.exports = class ClearSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Clears the data of the specified user or server",
-			subcommand: true
+			subcommand: true,
+			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}
 

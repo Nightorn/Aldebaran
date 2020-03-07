@@ -59,7 +59,7 @@ module.exports = class CommandHandler {
 	}
 
 	bypassRun(command, message) {
-		if (!message.author.checkPerms("ADMIN")) { throw new Error("UNALLOWED_ADMIN_BYPASS"); }
+		if (!message.author.hasPermission("ADMINISTRATOR")) { throw new Error("UNALLOWED_ADMIN_BYPASS"); }
 		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
 		const args = [this.client, message, this.constructor.createArgs(message)];
 		return this.commands.get(command).run(...args);

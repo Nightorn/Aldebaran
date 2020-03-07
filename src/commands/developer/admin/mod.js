@@ -5,7 +5,8 @@ module.exports = class ModSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Changes the settings of the specified user or guild",
-			subcommand: true
+			subcommand: true,
+			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}
 

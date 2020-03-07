@@ -5,7 +5,8 @@ module.exports = class AdminCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Admin Portal Command",
-			allowIndexCommand: true
+			allowIndexCommand: true,
+			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}
 

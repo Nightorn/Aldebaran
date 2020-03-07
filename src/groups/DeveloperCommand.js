@@ -5,7 +5,7 @@ module.exports.Command = class DeveloperCategory extends Command {
 		super(client, {
 			...metadata,
 			perms: metadata.perms === undefined
-				? { aldebaran: ["DEVELOPER"] }
+				? { aldebaran: ["ADMINISTRATOR"] }
 				: { ...metadata.perms }
 		});
 		this.category = "Developer";

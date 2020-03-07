@@ -7,7 +7,8 @@ module.exports = class CommandDevtodo extends Command {
 		super(client, {
 			description: "Sends a suggestion",
 			usage: "Suggestion",
-			example: "fix bugs"
+			example: "fix bugs",
+			perms: { aldebaran: ["DEVELOPER"] }
 		});
 	}
 

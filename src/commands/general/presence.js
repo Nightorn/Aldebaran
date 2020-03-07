@@ -65,7 +65,7 @@ module.exports = class PresenceCommand extends Command {
 				);
 			}
 		} else if (args[0] === "delete") {
-			if (!message.author.checkPerms("MODERATOR")) return;
+			if (!message.author.hasPermission("MODERATE_ACTIVITIES")) return;
 			if (args[1] !== undefined) {
 				bot.CDBA.entries.delete(bot.CDBA.getEntryById(args[1]));
 				message.channel.send("The specified entry has been deleted.");

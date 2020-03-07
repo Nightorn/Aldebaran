@@ -5,7 +5,8 @@ const { Command } = require("../../groups/DeveloperCommand");
 module.exports = class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
-			description: "Evaluates JavaScript code"
+			description: "Evaluates JavaScript code",
+			perms: { aldebaran: ["EVALUATE_CODE"] }
 		});
 	}
 

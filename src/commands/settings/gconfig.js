@@ -7,9 +7,7 @@ module.exports = class GconfigCommand extends Command {
 			description: "Manages the Aldebaran settings of your server",
 			usage: "Parameter Value",
 			example: "adventureTimer on",
-			perms: {
-				discord: ["ADMINISTRATOR"]
-			}
+			perms: { discord: ["ADMINISTRATOR"] }
 		});
 	}
 

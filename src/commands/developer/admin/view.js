@@ -6,7 +6,8 @@ module.exports = class ViewSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows detailled informations about the specified user or guild",
-			subcommand: true
+			subcommand: true,
+			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}
 

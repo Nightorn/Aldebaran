@@ -66,17 +66,12 @@ module.exports.Command = class Command {
    */
 	permsCheck(message) {
 		let check = true;
-		if (this.perms.discord !== undefined) {
-			this.perms.discord.forEach(perm => {
-				if (!message.member.permissionsIn(message.channel).has(perm))
-					check = false;
-			});
-		}
-		if (this.perms.aldebaran !== undefined) {
-			this.perms.aldebaran.forEach(perm => {
-				if (!message.author.hasPerm(perm)) check = false;
-			});
-		}
+		if (this.perms.discord !== undefined)
+			check = this.perms.discord
+				.every(perm => message.member.permissionsIn(message.channel).has(perm));
+		if (this.perms.aldebaran !== undefined && check)
+			check = this.perms.aldebaran
+				.every(perm => message.author.hasPermission(perm));
 		return check;
 	}
 

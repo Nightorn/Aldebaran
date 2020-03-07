@@ -6,7 +6,7 @@ module.exports = class RestartCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Restarts Aldebaran",
-			perms: { aldebaran: ["SUPPORT"] }
+			perms: { aldebaran: ["RESTART_BOT"] }
 		});
 	}
 

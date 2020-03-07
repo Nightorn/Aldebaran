@@ -5,7 +5,8 @@ module.exports = class ModSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Timeouts the specified user",
-			subcommand: true
+			subcommand: true,
+			perms: { aldebaran: ["BAN_USERS"] }
 		});
 	}
 

@@ -5,7 +5,7 @@ module.exports = class ServerlistCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Lists the servers Aldebaran is in",
-			perms: { aldebaran: ["MODERATOR"] }
+			perms: { aldebaran: ["VIEW_SERVERLIST"] }
 		});
 	}
 

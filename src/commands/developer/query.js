@@ -6,7 +6,7 @@ module.exports = class QueryCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Queries the database",
-			perms: { aldebaran: ["SUPERADMIN"] }
+			perms: { aldebaran: ["EXECUTE_DB_QUERIES"] }
 		});
 	}
 
