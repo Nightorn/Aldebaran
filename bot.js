@@ -1,11 +1,11 @@
 const { Structures } = require("discord.js");
 const { registerFont } = require("canvas");
 
-const AldebaranClient = require("./structures/Discord/Client");
-const User = require("./structures/Discord/User");
-const Guild = require("./structures/Discord/Guild");
-const Message = require("./structures/Discord/Message");
-const Channel = require("./structures/Discord/TextChannel");
+const AldebaranClient = require("./src/structures/djs/Client");
+const User = require("./src/structures/djs/User");
+const Guild = require("./src/structures/djs/Guild");
+const Message = require("./src/structures/djs/Message");
+const Channel = require("./src/structures/djs/TextChannel");
 
 // With the contribution of holroy
 Number.formatNumber = n => {
