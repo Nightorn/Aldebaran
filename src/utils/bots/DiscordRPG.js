@@ -17,7 +17,7 @@ const emojiColor = percentage => {
 };
 
 const checkPlayer = (message, username) => {
-	const matchedMessage = message.channel.messages.find(
+	const matchedMessage = message.channel.messages.cache.find(
 		msg => msg.author.username === username
 	);
 	const matchedAdventure = message.channel.drpgRecentADVs.get(username);
