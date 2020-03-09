@@ -15,7 +15,7 @@ module.exports = class UserCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
 		bot.users.fetch(args.user || message.author.id).then(user => {
-			const member = message.guild.members.get(user.id);
+			const member = message.guild.members.cache.get(user.id);
 			const allRoles = new Map();
 			const rolesList = [];
 			const allPermissions = [];
@@ -41,7 +41,7 @@ module.exports = class UserCommand extends Command {
 						}
 					}
 				}
-				for (const [id, data] of member.roles)
+				for (const [id, data] of member.roles.cache)
 					if (data.name !== "@everyone") allRoles.set(id, data.rawPosition);
 				// eslint-disable-next-line func-names
 				allRoles[Symbol.iterator] = function* () {
@@ -66,20 +66,12 @@ module.exports = class UserCommand extends Command {
 				);
 			};
 
-			const { highestPerm } = user;
 			const embed = new MessageEmbed()
 				.setAuthor(
 					`${user.tag}  |  ${member !== undefined ? `${message.guild.name}  |  Member Details` : "User Details"}`,
 					user.avatarURL()
 				)
-				.setDescription(
-					`**User ID** ${user.id}\n${memberNick !== null ? `**Nickname** ${memberNick}\n` : ""}${
-						highestPerm !== null
-							? `*This user is a member of the Aldebaran staff (${highestPerm.slice(0, 1)
-									+ highestPerm.toLowerCase().slice(1)}).*`
-							: ""
-					}`
-				)
+				.setDescription(`**User ID** ${user.id}\n${memberNick !== null ? `**Nickname** ${memberNick}\n` : ""}`)
 				.setThumbnail(user.avatarURL())
 				.setColor(member !== undefined ? member.displayColor : this.color)
 				.setFooter("User account created on")
@@ -94,7 +86,7 @@ module.exports = class UserCommand extends Command {
 					)} days**.`
 				);
 			if (rolesList.length > 0)
-				embed.addField(`Roles (${member.roles.size - 1})`, `${rolesList.join(", ")}`);
+				embed.addField(`Roles (${member.roles.cache.size - 1})`, `${rolesList.join(", ")}`);
 			if (allPermissions.length > 0)
 				embed.addField("Permissions", allPermissions.join(", "));
 			message.channel.send({ embed });

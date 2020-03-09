@@ -25,12 +25,12 @@ module.exports = class GconfigCommand extends Command {
 			message.channel.send({ embed });
 		} else if (args.includes("list")) {
 			const list = {};
-			for (const [key, data] of Object.entries(parametersAvailable)) if (
-				message.guild.members.get(data.showOnlyIfBotIsInGuild) !== undefined
-			|| data.showOnlyIfBotIsInGuild === undefined
-			) {
-				if (list[data.category] === undefined) list[data.category] = {};
-				list[data.category][key] = data;
+			for (const [key, data] of Object.entries(parametersAvailable)) {
+				if (message.guild.members.cache.get(data.showOnlyIfBotIsInGuild)
+					|| data.showOnlyIfBotIsInGuild === undefined) {
+					if (list[data.category] === undefined) list[data.category] = {};
+					list[data.category][key] = data;
+				}
 			}
 			const embed = new MessageEmbed()
 				.setAuthor(message.author.username, message.author.avatarURL())
