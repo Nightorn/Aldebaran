@@ -8,26 +8,32 @@ module.exports = class OsubestCommand extends Command {
 		super(client, {
 			description: "Displays the most recent play of the specified user",
 			help: "Run the command with the osu! username of the user you want to see the stats of, or maybe their user ID and the according mode (osu, mania, taiko, ctb).\n**Supported Modes** : **osu!standard** : (by default), --osu; **osu!taiko**: --taiko; **osu!ctb**: --ctb; **osu!mania**: --mania.",
-			usage: "Username/ID",
 			example: "Ciborn",
-			aliases: ["osurs"]
+			aliases: ["osurs"],
+			args: {
+				user: { as: "word", desc: "Username/UserID" },
+				mode: { as: "mode" }
+			}
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
+		console.log(args.user || message.author.settings.osuUsername);
 		const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
 		const ranks = {
 			SH: "S+",
 			X: "SS",
 			XH: "SS+"
 		};
-		let mode = message.author.settings.osuMode || "osu";
-		for (const element of args) { if (element.indexOf("--") === 0) mode = element.replace("--", ""); }
+		const mode = args.mode || message.author.settings.osuMode || "osu";
 		if (Nodesu.Mode[mode] !== undefined) {
-			client.user.getRecent(args[0] || message.author.settings.osuUsername,
+			client.user.getRecent(args.user || message.author.settings.osuUsername,
 				Nodesu.Mode[mode], 1)
 				.then(async data => {
+					console.log(args.user || message.author.settings.osuUsername);
+					console.log(mode);
+					console.log(data);
 					const user = await client.user
 						.get(data[0].user_id, Nodesu.Mode[mode]);
 					const f = number => String(number).length === 1 ? `0${number}` : number;

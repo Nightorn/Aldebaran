@@ -6,10 +6,12 @@ module.exports = class OsuProfileCommand extends Command {
 		super(client, {
 			description: "Shows the osu! stats of the user specified",
 			help: "Run the command with the osu! username of the user you want to see the stats of, or maybe their user ID and the according mode (osu, mania, taiko, ctb).\n**Supported Modes** : **osu!standard** : (by default), --osu; **osu!taiko**: --taiko; **osu!ctb**: --ctb; **osu!mania**: --mania.",
-			usage: "Username/UserID Mode",
 			example: "Ciborn --mania",
 			aliases: ["osuprofile"],
-			args: { user: { as: "user" }, mode: { as: "mode" } }
+			args: {
+				user: { as: "word", desc: "Username/UserID" },
+				mode: { as: "mode" }
+			}
 		});
 	}
 

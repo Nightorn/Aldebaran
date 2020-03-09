@@ -28,14 +28,16 @@ module.exports = class SkillsCommand extends Command {
 					const skillinfo = data.skills;
 					const attribs = data.attributes;
 
-					const axebonus = itemList[data.tool.axe || "370"].itemBoost || 0;
+					const axe = (data.tool.axe || "370").includes(":") ? undefined : data.tool.axe;
+					const axebonus = itemList[axe || "370"].itemBoost || 0;
 					const lumbercurrent = Math.floor((
 						((attribs.lumberBoost / 25) + 1) + skillinfo.chop.level)
 					+ axebonus);
 					const lumbermax = Math.floor(
 						(((maxpoints / 25) + 1) + skillinfo.chop.level) + axebonus
 					);
-					const pickbonus = itemList[data.tool.pickaxe || "369"].itemBoost || 0;
+					const pickaxe = (data.tool.pickaxe || "370").includes(":") ? undefined : data.tool.pickaxe;
+					const pickbonus = itemList[pickaxe || "369"].itemBoost || 0;
 					const miningCurrent = 1 + skillinfo.mine.level
 						+ Math.floor(attribs.mineBoost / 40) + pickbonus;
 					const miningMax = 1 + skillinfo.mine.level
@@ -48,10 +50,10 @@ module.exports = class SkillsCommand extends Command {
 						+ Math.floor(maxpoints / 65);
 
 					const xp = level => {
-						const max = Math.round(Math.sqrt(Math.sqrt(level) * 0.25)
-							* (10 + Math.floor(Math.random() * 5)) / 2);
-						const min = Math.round(Math.sqrt(Math.sqrt(level) * 0.25)
-							* (5 + Math.floor(Math.random() * 5)) / 2);
+						const max = Math
+							.round(Math.sqrt((Math.sqrt(level) * 0.25) * 15 / 2));
+						const min = Math
+							.round(Math.sqrt((Math.sqrt(level) * 0.25) * 5 / 2));
 						return `You would get between **${min} and ${max} skill XP**.`;
 					};
 					const embed = new MessageEmbed()
