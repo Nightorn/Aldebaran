@@ -42,14 +42,11 @@ module.exports = class StatsCommand extends Command {
 					if (data.attributes !== undefined)
 						for (const [key, value] of Object.entries(data.attributes))
 							if (value !== 0) attributes.push(`**${key[0].toUpperCase() + key.slice(1)}** ${format(value)} Points`);
-					const location = locations[data.location.current];
+					const location = data.location ? locations[data.location.current] : "The Abyss";
 					const embed = new MessageEmbed()
 						.setAuthor(data.name, user.avatarURL())
 						.setColor(data.donate ? "GOLD" : 0x00ae86)
-						.setDescription(
-							`${data.location !== undefined
-								? `Currently In **${location || "The Abyss"}**` : ""}`
-						)
+						.setDescription(`Currently In **${location || "The Abyss"}**`)
 						.addField(
 							`Level ${format(data.level)}`,
 							`**Progression** - ${format(data.kills)} **Kills** | ${
