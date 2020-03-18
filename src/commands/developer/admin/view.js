@@ -20,11 +20,11 @@ module.exports = class ViewSubcommand extends Command {
 			const embed = new MessageEmbed()
 				.setAuthor(`${user.tag} | ${user.id}`, user.avatarURL());
 			if (Object.entries(user.settings) !== 0) embed.addField("Settings", `\`\`\`js\n${util.inspect(user.settings, false, null)}\`\`\``);
-			for (const [guildId, data] of bot.guilds)
-				if (data.members.get(user.id) !== undefined) {
+			for (const [guildId, data] of bot.guilds.cache)
+				if (data.members.cache.get(user.id) !== undefined) {
 					let elevation = null;
 					if (data.ownerID === user.id) elevation = "(Owner)";
-					else if (data.members.get(user.id).permissions.has("ADMINISTRATOR"))
+					else if (data.members.cache.get(user.id).permissions.has("ADMINISTRATOR"))
 						elevation = "(Admin)";
 					guilds.push(`\`${guildId}\` **${data.name}** ${elevation !== null ? elevation : ""}`);
 				}
@@ -34,14 +34,15 @@ module.exports = class ViewSubcommand extends Command {
 			const guild = bot.guilds.cache.get(id);
 			if (guild !== undefined) {
 				let admins = "";
-				guild.bots = guild.members.filter(m => m.user.bot === true);
-				guild.humans = guild.members.filter(m => m.user.bot === false);
-				guild.botRate = guild.bots.size * 100 / guild.members.size;
-				guild.admins = guild.members.filter(m => m.permissions.has("ADMINISTRATOR") && !m.user.bot && m.id !== m.guild.ownerID);
-				for (const [, member] of guild.admins) admins += `\`${member.user.id}\` | **\`[${member.user.tag}]\`** <@${member.user.id}>\n`;
+				const members = Array.from(guild.members.cache.values());
+				guild.bots = members.filter(m => m.user.bot === true);
+				guild.humans = members.filter(m => m.user.bot === false);
+				guild.botRate = guild.bots.length * 100 / members.length;
+				guild.admins = members.filter(m => m.permissions.has("ADMINISTRATOR") && !m.user.bot && m.id !== m.guild.ownerID);
+				for (const member of guild.admins) admins += `\`${member.user.id}\` | **\`[${member.user.tag}]\`** <@${member.user.id}>\n`;
 				const embed = new MessageEmbed()
 					.setAuthor(`${guild.name} | ${guild.id}`, guild.iconURL())
-					.setDescription(`**Owner** : <@${guild.owner.id}> **\`[${guild.owner.user.tag}]\`**\n**Member Count** : ${guild.humans.size} Members (+${guild.bots.size} Bots / ${Math.floor(guild.botRate)}%)`);
+					.setDescription(`**Owner** : <@${guild.owner.id}> **\`[${guild.owner.user.tag}]\`**\n**Member Count** : ${guild.humans.length} Members (+${guild.bots.length} Bots / ${Math.floor(guild.botRate)}%)`);
 				if (Object.entries(guild.settings) !== 0) embed.addField("Settings", `\`\`\`js\n${util.inspect(guild.settings, false, null)}\`\`\``);
 				if (admins !== "") embed.addField("Admins", admins);
 				message.channel.send({ embed });
