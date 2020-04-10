@@ -32,8 +32,9 @@ function apiFetch(endpoint, bot) {
  * @param {String} headerText The text on the top line of the page
  * @param {Message} message The user's discord.js Message
  * @param {String} footerText The text on the bottom line of the page
+ * @param {Client} bot The bot
  */
-async function paginate(list, page, headerText, message, footerText) {
+async function paginate(list, page, headerText, message, footerText, bot) {
 	const maxPage = Math.ceil(list.length / 15);
 	if (page < 1) {
 		page = 1;
@@ -46,7 +47,8 @@ async function paginate(list, page, headerText, message, footerText) {
 
 	const msg = await message.channel.send(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
 	if (maxPage > 1) {
-		const reactions = ["⬅", "❌", "➡"];
+		const hasRemovePerms = message.channel.type !== "dm" && message.channel.permissionsFor(bot.user).has("MANAGE_MESSAGES");
+		const reactions = ["⬅", "❌", "➡"].filter(r => hasRemovePerms || r !== "❌");
 		for (const react of reactions) {
 			await msg.react(react);
 		}
@@ -64,7 +66,9 @@ async function paginate(list, page, headerText, message, footerText) {
 				if (emoji === "⬅" && page > 1) page--;
 				else if (emoji === "➡" && page < maxPage) page++;
 
-				if (emoji !== "❌") reaction.users.remove(message.author);
+				if (emoji !== "❌" && hasRemovePerms) {
+					reaction.users.remove(message.author);
+				}
 
 				if (prevPage !== page) {
 					header = `#=====[ ${headerText} (page ${page}/${maxPage}) ]=====#`;
@@ -73,7 +77,7 @@ async function paginate(list, page, headerText, message, footerText) {
 					await msg.edit(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
 				}
 			}
-			if (!collect.size || collect.first().emoji.name === "❌") {
+			if ((!collect.size || collect.first().emoji.name === "❌") && hasRemovePerms) {
 				msg.reactions.removeAll();
 				break;
 			}
@@ -108,6 +112,7 @@ function timeSince(timestamp) {
 	if (!units && minutes || units === 1) {
 		str += `${str ? " and " : ""}${minutes} minute${minutes !== 1 ? "s" : ""}`;
 	}
+	if (!str) str = "now";
 
 	return str;
 }
@@ -118,7 +123,7 @@ async function updateCache(bot) {
 			delete bot.drpgCache[id];
 		}
 	}
-	fs.writeFile("./cache/drpgCache.json", JSON.stringify(bot.drpgCache));
+	fs.writeFile("./cache/drpgCache.json", JSON.stringify(bot.drpgCache), e => e ? console.error(e) : null);
 }
 
 async function getUserData(userID, bot) {
@@ -126,10 +131,15 @@ async function getUserData(userID, bot) {
 	if (userCache && userCache.lastUpdate > Date.now() - 3600000) {
 		return userCache;
 	}
-	return apiFetch(`user/${userID}`, bot).catch(console.error);
+	const userData = await apiFetch(`user/${userID}`, bot).catch(console.error);
+	if (!userData) return null;
+	userData.lastUpdate = Date.now();
+	bot.drpgCache[userData.id] = userData;
+	return userData;
 }
 
-async function getGuild(guildID, bot) {
+async function getGuild(userData, bot) {
+	const guildID = userData.guild;
 	const guildCache = bot.drpgCache[guildID];
 	if (guildCache && guildCache.lastUpdate > Date.now() - 3600000) {
 		return guildCache;
@@ -141,9 +151,7 @@ async function getGuild(guildID, bot) {
 		guildUsers = await apiFetch(`bulk/user/${guildData.members.join(",")}`, bot).catch(console.error);
 		if (!guildUsers) return false;
 	} else {
-		const user = await getUserData(guildData.members[0], bot);
-		if (!user) return false;
-		guildUsers = [user]; // Lonely boi
+		guildUsers = [userData]; // Lonely boi
 	}
 	const now = Date.now();
 	guildUsers.forEach(user => {
@@ -172,6 +180,15 @@ module.exports = class GleadCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	async run(bot, message, args) {
+		if (!message.channel.permissionsFor(bot.user).has("READ_MESSAGE_HISTORY")) {
+			message.channel.send("I need permission to read message history before you can use this feature.");
+			return;
+		}
+		if (!message.channel.permissionsFor(bot.user).has("ADD_REACTIONS")) {
+			message.channel.send("I need permission to add reactions to messages before you can use this feature.");
+			return;
+		}
+
 		// Get guild data, either from the cache or from the API
 		const userData = await getUserData(args.user || message.author.id, bot);
 		if (!userData || !userData.guild) {
@@ -179,7 +196,7 @@ module.exports = class GleadCommand extends Command {
 			return;
 		}
 
-		const guildData = await getGuild(userData.guild, bot);
+		const guildData = await getGuild(userData, bot);
 		if (!guildData) {
 			message.channel.send("It seems we may have been ratelimited, or the API is down. Please try again in 5 minutes.");
 			return;
@@ -288,7 +305,7 @@ module.exports = class GleadCommand extends Command {
 		}
 
 		if (list && list.length > 0) {
-			paginate(desc ? list.reverse() : list, 1, `${guildData.name} Lead ${index}`, message, `[ Combined ${index} = ${sum.toLocaleString()} ]`);
+			paginate(desc ? list.reverse() : list, 1, `${guildData.name} Lead ${index}`, message, `[ Combined ${index} = ${sum.toLocaleString()} ]`, bot);
 		} else {
 			message.channel.send("Unknown leaderboard index.");
 		}
