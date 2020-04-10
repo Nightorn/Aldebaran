@@ -9,8 +9,10 @@ module.exports = class EmojilistCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message) {
-		const emojilist = message.guild.emojis.map(e => e.toString()).join("");
+		const emojilist = message.guild.emojis.cache.map(e => e.toString()).join("");
 		message.delete();
-		message.channel.send(emojilist);
+		if (emojilist.length <= 2000)
+			message.channel.send(emojilist);
+		else message.channel.error("IMPOSSIBLE", "There are too many emojis on this server to show in a single message.");
 	}
 };
