@@ -29,6 +29,7 @@ module.exports = BaseTextChannel => class TextChannel extends BaseTextChannel {
 			API_ERROR: () => "This API has thrown an error.",
 			API_RATELIMIT: () => "We have hit the ratelimit of (the endpoint of) this API.",
 			CUSTOM: res => res,
+			IMPOSSIBLE: () => "You are asking the impossible",
 			INCORRECT_CMD_USAGE: () => "This command has been used incorrectly.",
 			INVALID_USER: () => "The user specified does not exist.",
 			MISSING_ARGS: () => "Some arguments are missing.",
