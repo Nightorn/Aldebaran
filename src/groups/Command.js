@@ -22,7 +22,7 @@ module.exports.Command = class Command {
    * @param {string[]} metadata.perms.aldebaran Aldebaran required permissions
    */
 	constructor(client, metadata) {
-		if (this.constructor === "Command") {
+		if (this.constructor.name === "Command") {
 			throw new TypeError(
 				"Command is an abstract class and therefore cannot be instantiated."
 			);
