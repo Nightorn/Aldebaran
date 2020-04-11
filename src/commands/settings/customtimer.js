@@ -16,7 +16,7 @@ module.exports = class CustomTimerCommand extends Command {
 	run(bot, message, args) {
 		if (args[0] !== undefined) {
 			if (args[0].toLowerCase() === "create") {
-				if (args.length > 3) {
+				if (args.length >= 3) {
 					args.shift();
 					const times = {
 						d: 86400000, h: 3600000, m: 60000, s: 1000
@@ -26,6 +26,7 @@ module.exports = class CustomTimerCommand extends Command {
 					if (channelId !== null) args.splice(args.indexOf("-c"), 1);
 					if (timer !== null) {
 						timer = timer.reduce((time, str) => time + Number(str.match(/(\d+)\s*([dhms])/i)[1]) * times[RegExp.$2], 0);
+						if (timer < 10000) message.channel.error("WRONG_USAGE", "You cannot set a custom timer with an interval lower than 10 seconds.");
 						// eslint-disable-next-line no-new
 						new CustomTimer(bot, {
 							userId: message.author.id,

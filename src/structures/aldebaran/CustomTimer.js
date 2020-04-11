@@ -76,7 +76,7 @@ module.exports = class CustomTimer {
 		const user = await this.client.users.fetch(this.userId);
 		if (this.channelId === null) {
 			user.send(`Here is your reminder${this.content !== null ? ` for **${this.content}**` : ""}!${late ? "\n*This reminder is late due to the bot being down. Sorry for the inconvenience.*" : ""}`).catch(this.delete);
-		} else this.client.channels.get(this.channelId).send(`<@${this.userId}>, here is your reminder${this.content !== null ? ` for **${this.content}**` : ""}!${late ? "\n*This reminder is late due to the bot being down. Sorry for the inconvenience.*" : ""}`).catch(this.delete);
+		} else this.client.channels.cache.get(this.channelId).send(`<@${this.userId}>, here is your reminder${this.content !== null ? ` for **${this.content}**` : ""}!${late ? "\n*This reminder is late due to the bot being down. Sorry for the inconvenience.*" : ""}`).catch(this.delete);
 	}
 
 	async delete() {
