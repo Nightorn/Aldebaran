@@ -44,7 +44,7 @@ module.exports = BaseTextChannel => class TextChannel extends BaseTextChannel {
 			.setTitle(title)
 			.setColor("RED");
 		if (type === "UNEXPECTED_BEHAVIOR")
-			embed.setDescription(`${desc} Please contact the developers or fill a bug report with \`${this.guild.prefix}bugreport\`.`);
+			embed.setDescription(`${desc}\nPlease contact the developers or fill a bug report with \`${this.guild.prefix}bugreport\`.`);
 		else if (type === "INVALID_USER")
 			embed.setDescription("The user ID you have supplied is invalid, or the user you have mentionned does not exist. Make sure your user ID or your mention is correct.");
 		else embed.setDescription(desc);
