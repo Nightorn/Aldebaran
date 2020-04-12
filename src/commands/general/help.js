@@ -11,7 +11,8 @@ module.exports = class HelpCommand extends Command {
 
 	run(bot, message, args) {
 		if (args[0] !== undefined) {
-			const category = categories[args[0].toLowerCase()];
+			const match = categories[args[0].toLowerCase()];
+			const category = typeof match === "string" ? categories[match] : match;
 			if (category !== undefined) {
 				let list = "";
 				const categoryCommands = new Map();
