@@ -29,6 +29,7 @@ module.exports = BaseTextChannel => class TextChannel extends BaseTextChannel {
 			API_ERROR: () => "This API has thrown an error.",
 			API_RATELIMIT: () => "We have hit the ratelimit of (the endpoint of) this API.",
 			CUSTOM: res => res,
+			IMPOSSIBLE: () => "You are asking the impossible",
 			INCORRECT_CMD_USAGE: () => "This command has been used incorrectly.",
 			INVALID_USER: () => "The user specified does not exist.",
 			MISSING_ARGS: () => "Some arguments are missing.",
@@ -43,7 +44,7 @@ module.exports = BaseTextChannel => class TextChannel extends BaseTextChannel {
 			.setTitle(title)
 			.setColor("RED");
 		if (type === "UNEXPECTED_BEHAVIOR")
-			embed.setDescription(`${desc} Please contact the developers or fill a bug report with \`${this.guild.prefix}bugreport\`.`);
+			embed.setDescription(`${desc}\nPlease contact the developers or fill a bug report with \`${this.guild.prefix}bugreport\`.`);
 		else if (type === "INVALID_USER")
 			embed.setDescription("The user ID you have supplied is invalid, or the user you have mentionned does not exist. Make sure your user ID or your mention is correct.");
 		else embed.setDescription(desc);

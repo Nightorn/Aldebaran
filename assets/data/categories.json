@@ -12,9 +12,9 @@
     "drpg": {
         "name": "DiscordRPG",
         "title": "<:drpg:608217182362533898> DiscordRPG <:drpg:608217182362533898>",
-        "description": "Utility commands for DiscordRPG",
-        "aliases": ["discordrpg"]
+        "description": "Utility commands for DiscordRPG"
     },
+    "discordrpg": "drpg",
     "fun": {
         "name": "Fun",
         "title": ":tickets: Fun :performing_arts:",
@@ -27,7 +27,7 @@
     },
     "games": {
         "name": "Games",
-        "title": "::joystick: Games :tv:",
+        "title": ":joystick: Games :tv:",
         "description": "Games through commands!"
     },
     "image": {

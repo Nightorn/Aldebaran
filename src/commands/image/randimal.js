@@ -17,11 +17,11 @@ module.exports = class RandimalCommand extends Command {
 			const parsed = JSON.parse(body);
 			if (err) return message.channel.send("This seems to be a problem");
 			if (parsed.error) return message.channel.send("Someone has requested too many animals recently, the only thing you can do is waiting for your turn!");
-			const [data] = parsed.photos[0];
+			const { src, photographer } = parsed.photos[0];
 			const embed = new Embed(this)
 				.setTitle("**__Virtual Safari__**")
-				.setImage(data.src.large)
-				.setFooter(`Virtual Safari Powered By: ${data.photographer} on Pexels.com`);
+				.setImage(src.large)
+				.setFooter(`Virtual Safari Powered By: ${photographer} on Pexels.com`);
 			return message.channel.send({ embed });
 		});
 	}
