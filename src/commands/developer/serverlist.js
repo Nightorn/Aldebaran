@@ -18,7 +18,7 @@ module.exports = class ServerlistCommand extends Command {
 		const list = [];
 		let chunk = 0;
 		let guildIndex = 0;
-		bot.guilds.forEach(guild => {
+		bot.guilds.cache.forEach(guild => {
 			if (guildIndex === 20) {
 				chunk++;
 				guildIndex = 0;
