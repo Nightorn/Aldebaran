@@ -11,7 +11,7 @@ module.exports = class EvalCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot, message, args) {
+	async run(bot, message, args) {
 		try {
 			const code = args.join(" ");
 			// eslint-disable-next-line no-eval
