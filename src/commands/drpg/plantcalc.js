@@ -20,10 +20,12 @@ module.exports = class PlantcalcCommand extends Command {
 			let item = null;
 			for (const element of Object.values(itemList))
 				if (element.name.toLowerCase() === itemName) item = element;
-			const scope = { luck: points, passed: hours * 3600 };
-			const min = math.eval(item.sapling.loot.amount.min, scope);
-			const max = math.eval(item.sapling.loot.amount.max, scope);
-			message.channel.send(`Estimated ${min} - ${max} when planted for ${hours} hours. `);
+			if (item.sapling) {
+				const scope = { luck: points, passed: hours * 3600 };
+				const min = math.eval(item.sapling.loot.amount.min, scope);
+				const max = math.eval(item.sapling.loot.amount.max, scope);
+				message.channel.send(`Estimated ${min} - ${max} when planted for ${hours} hours. `);
+			} else message.channel.error("WRONG_USAGE", "You need to provide the name of a valid sapling.");
 		} else message.channel.send("You must provide reaping points, hours set and item name. Example (&plantcalc 1 24 olive)");
 	}
 };

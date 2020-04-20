@@ -90,6 +90,6 @@ module.exports = class UserCommand extends Command {
 			if (allPermissions.length > 0)
 				embed.addField("Permissions", allPermissions.join(", "));
 			message.channel.send({ embed });
-		}).catch(err => { throw err; });
+		}).catch(() => { message.channel.error("INVALID_USER"); });
 	}
 };

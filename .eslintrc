@@ -36,6 +36,7 @@
         "semi": ["error", "always"],
         "quotes": ["warn", "double"],
         "object-curly-spacing": ["error", "always"],
+        "object-curly-newline": "off",
         "comma-dangle": ["error", "never"],
         "no-tabs": ["error", { "allowIndentationTabs": true }],
         "linebreak-style": "off",

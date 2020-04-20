@@ -29,8 +29,8 @@ module.exports = class CurConvCommand extends Command {
 	}
 
 	convCurToAnotherCur(fromCurrency, toCurrency, value) {
-		this.fromCurrency = fromCurrency;
-		this.toCurrency = toCurrency;
+		this.fromCurrency = fromCurrency.toUpperCase();
+		this.toCurrency = toCurrency.toUpperCase();
 		this.value = parseInt(value, 10);
 		try {
 			request(
@@ -56,11 +56,10 @@ module.exports = class CurConvCommand extends Command {
 			);
 			this.message.channel.error("API_ERROR", `Fixer responded with an error. Try again later. Error: ${data.error.type}`);
 			return false;
-		} else if (data.success) {
-			if (!data.rates[this.fromCurrency] || !data.rates[this.toCurrency]) {
-				this.message.channel.error("WRONG_USAGE", `The specified currency, ${this.fromCurrency}, does not exist.`);
-				return false;
-			}
+		} else if (!data.rates[this.fromCurrency] || !data.rates[this.toCurrency]) {
+			if (!data.rates[this.fromCurrency]) this.message.channel.error("WRONG_USAGE", `The specified currency, ${this.fromCurrency}, does not exist.`);
+			else if (!data.rates[this.toCurrency]) this.message.channel.error("WRONG_USAGE", `The specified currency, ${this.toCurrency}, does not exist.`);
+			return false;
 		}
 		return true;
 	}
@@ -88,13 +87,10 @@ module.exports = class CurConvCommand extends Command {
 
 			const str = `**${this.value.toFixed(2)} ${this.fromCurrency}** is equal to **${valueInTarget.toFixed(2)} ${this.toCurrency}** as of ${getDate(data.timestamp * 1000)}, with a **${rate.toFixed(2)} rate**.`;
 
-			this.message.channel.send(
-				new Embed(this)
-					.setTitle(
-						`Conversion from ${this.fromCurrency} to ${this.toCurrency}`
-					)
-					.setDescription(str)
-			);
+			const embed = new Embed(this)
+				.setTitle(`Conversion from ${this.fromCurrency} to ${this.toCurrency}`)
+				.setDescription(str);
+			this.message.channel.send({ embed });
 		}
 	}
 
