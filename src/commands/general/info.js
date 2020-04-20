@@ -9,22 +9,25 @@ module.exports = class InfoCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot, message) {
+	async run(bot, message) {
 		let adminMentions = "";
 		for (const [id, member] of Object.entries(bot.config.aldebaranTeam)) {
 			if (member.acknowledgements.includes("DEVELOPER")) { adminMentions += `<@${id}>, ${member.text}\n`; }
 		}
+		const guilds = Number.formatNumber((await bot.shard.fetchClientValues("guilds.cache.size")).reduce((acc, cur) => acc + cur));
+		const users = Number.formatNumber((await bot.shard.fetchClientValues("users.cache.size")).reduce((acc, cur) => acc + cur));
+		const channels = Number.formatNumber((await bot.shard.fetchClientValues("channels.cache.size")).reduce((acc, cur) => acc + cur));
 		const embed = new MessageEmbed()
 			.setAuthor(`${bot.user.username} v${bot.version}`, bot.user.avatarURL(), "https://aldebaran.nightorn.com/")
 			.addField("Developers of Aldebaran", adminMentions)
 			.addField(
 				"Statistics",
-				`Playing with **${Number.formatNumber(bot.guilds.cache.size)} servers**\nWatching **${Number.formatNumber(bot.channels.cache.size)} channels**\nListening to **${Number.formatNumber(bot.users.cache.size)} users**`,
+				`Playing with **${guilds} servers**\nWatching **${channels} channels**\nListening to **${users} users**`,
 				true
 			)
 			.addField(
 				"Powered by",
-				`VPS Host **DigitalOcean**\nEnvironment **Node.js** ${process.version}\nAPI Library **discord.js** v${version}`,
+				`VPS Host **Contabo**\nEnvironment **Node.js** ${process.version}\nAPI Library **discord.js** v${version}`,
 				true
 			)
 			.addField(

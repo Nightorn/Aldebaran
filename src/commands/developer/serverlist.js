@@ -10,7 +10,7 @@ module.exports = class ServerlistCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot, message, args) {
+	async run(bot, message, args) {
 		let chunkIndex = 0;
 		if (args[0] !== undefined)
 			if (!Number.isNaN(parseInt(args[0], 10)))
@@ -18,15 +18,16 @@ module.exports = class ServerlistCommand extends Command {
 		const list = [];
 		let chunk = 0;
 		let guildIndex = 0;
-		bot.guilds.forEach(guild => {
-			if (guildIndex === 20) {
-				chunk++;
-				guildIndex = 0;
-			}
-			if (list[chunk] === undefined) list[chunk] = "";
-			list[chunk] += `\`${guild.id}\` **${guild.name}** - **${guild.memberCount}** members\n`;
-			guildIndex++;
-		});
+		(await bot.shard.fetchClientValues("guilds.cache"))
+			.reduce((acc, cur) => [...acc, ...cur], []).forEach(guild => {
+				if (guildIndex === 20) {
+					chunk++;
+					guildIndex = 0;
+				}
+				if (list[chunk] === undefined) list[chunk] = "";
+				list[chunk] += `\`${guild.id}\` **${guild.name}** - **${guild.memberCount}** members\n`;
+				guildIndex++;
+			});
 		const embed = new MessageEmbed()
 			.setAuthor("Aldebaran  |  Server List", bot.user.avatarURL())
 			.setTitle(`Page ${chunkIndex + 1}`)

@@ -2,12 +2,6 @@ module.exports = class SocialProfile {
 	constructor(user) {
 		this.user = user;
 		this.client = this.user.client;
-		this.existsInDB = false;
-		if (this.client.databaseData.profiles.get(this.user.id) !== undefined) {
-			const dbData = this.client.databaseData.profiles.get(this.user.id);
-			for (const [key, value] of Object.entries(dbData)) this[key] = value;
-			this.existsInDB = true;
-		}
 	}
 
 	async create() {
@@ -29,5 +23,21 @@ module.exports = class SocialProfile {
 				new Map([[property, value]])
 			).then(resolve).catch(reject);
 		});
+	}
+
+	async fetch() {
+		const data = await this.client.database.socialprofile
+			.selectOneById(this.user.id);
+		this.existsInDB = data !== undefined;
+		this.ready = true;
+		if (data !== undefined) {
+			for (const [key, value] of Object.entries(data))
+				if (key !== "userId") this[key] = value;
+		}
+		return data;
+	}
+
+	unready() {
+		this.client.shard.broadcastEval(`const user = this.users.cache.get(${this.id}); if (user) !== undefined) { if (user.profile !== undefined) user.profile.ready = false }`);
 	}
 };

@@ -25,42 +25,14 @@ module.exports = class AldebaranClient extends Client {
 		this.customTimers = new Map();
 		this.customTimerTriggers = new Map();
 		this.database = new DatabaseProvider(this);
-		this.databaseData = {
-			users: new Map(),
-			profiles: new Map(),
-			guilds: new Map()
-		};
-		Promise.all([
-			this.database.users.selectAll(),
-			this.database.guilds.selectAll(),
-			this.database.socialprofile.selectAll(),
-			this.database.timers.selectAll()
-		]).then(([users, guilds, profiles, timers]) => {
-			for (const data of users) {
-				const id = data.userId;
-				delete data.userId;
-				this.databaseData.users.set(id, data);
-			}
-			for (const data of guilds) {
-				const id = data.guildid;
-				delete data.guildid;
-				this.databaseData.guilds.set(id, data);
-			}
-			for (const data of profiles) {
-				const id = data.userId;
-				delete data.userId;
-				this.databaseData.profiles.set(id, data);
-			}
-			for (const element of timers) {
-				this.preCustomTimers.push(element);
-			}
+		this.databaseData = { profiles: new Map() };
+		this.database.timers.selectAll().then(timers => {
+			timers.forEach(this.preCustomTimers.push);
 			console.log(`\x1b[36m# Fetched all necessary data from database, took ${Date.now() - this.started}ms.\x1b[0m`);
 			this.login(this.debugMode ? this.config.tokendev : this.config.token)
 				.then(() => {
 					console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
 				});
-		}).catch(err => {
-			throw err;
 		});
 		this.CDBA = new CDBAHandler();
 		this.commandGroups = {};
@@ -107,5 +79,9 @@ module.exports = class AldebaranClient extends Client {
 				this.on(eventName, (...args) => eventFunction.run(this, ...args));
 			});
 		});
+	}
+
+	get shardID() {
+		return this.guilds.cache.first().shardID;
 	}
 };
