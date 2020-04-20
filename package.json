@@ -35,6 +35,7 @@
   "scripts": {
     "start": "node bot.js",
     "dev": "node bot.js dev !",
+    "shard": "node app",
     "sharddev": "node app dev !",
     "sos": "node bot.js sos",
     "configure": "node bin/configure.js"
