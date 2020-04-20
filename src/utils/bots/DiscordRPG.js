@@ -76,25 +76,27 @@ const petWarning = (user, hp, message) => {
 
 const percentageCheck = (name, msg, player, pet) => {
 	const user = checkPlayer(msg, name);
-	const { healthMonitor, individualHealthMonitor } = user.settings;
-	const percentage = !Number.isNaN(parseInt(healthMonitor, 10))
-		? parseInt(healthMonitor, 10)
-		: 100;
-	if (healthMonitor === undefined || healthMonitor === "off") return false;
-	if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
-		if (individualHealthMonitor === "character") {
-			if (player <= percentage) {
-				if (player <= 11) return playerWarning(user, player, msg);
+	if (user !== null) {
+		const { healthMonitor, individualHealthMonitor } = user.settings;
+		const percentage = !Number.isNaN(parseInt(healthMonitor, 10))
+			? parseInt(healthMonitor, 10)
+			: 100;
+		if (healthMonitor === undefined || healthMonitor === "off") return false;
+		if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
+			if (individualHealthMonitor === "character") {
+				if (player <= percentage) {
+					if (player <= 11) return playerWarning(user, player, msg);
+					return general(user, player, pet, msg);
+				}
+			} else if (pet <= percentage) {
+				if (pet <= 11) return petWarning(user, pet, msg);
 				return general(user, player, pet, msg);
 			}
-		} else if (pet <= percentage) {
-			if (pet <= 11) return petWarning(user, pet, msg);
+		} else if (player <= percentage || pet <= percentage) {
+			if (player <= 11) return playerWarning(user, player, msg);
+			if (pet <= 11 && pet !== 0) return petWarning(user, pet, msg);
 			return general(user, player, pet, msg);
 		}
-	} else if (player <= percentage || pet <= percentage) {
-		if (player <= 11) return playerWarning(user, player, msg);
-		if (pet <= 11 && pet !== 0) return petWarning(user, pet, msg);
-		return general(user, player, pet, msg);
 	}
 };
 
@@ -112,7 +114,8 @@ module.exports = (client, message) => {
 	if (message.embeds.length === 0) {
 		if (message.content.includes("'s Adventure") || message.content.includes("Party Adventure")) {
 			if (message.content.indexOf(") | +") !== -1) {
-				player.name = message.content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/)[1];
+				player.name = message.content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
+				if (player.name !== null) player.name = player.name[1];
 				// eslint-disable-next-line no-useless-escape
 				const hpMatches = message.content.match(/(Dead|[\d\.]+% HP)/g);
 				const deadPet = hpMatches[1] === "Dead";
