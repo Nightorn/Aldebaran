@@ -12,31 +12,13 @@ module.exports = class DatabasePool {
 			|| !client.config.mysql.password || !client.config.mysql.database
 		) throw new TypeError("The database configuration is invalid");
 		this.client = client;
-		this.pool = mysql.createPool(client.config.mysql);
+		this.pool = mysql.createPool({
+			...client.config.mysql,
+			connectTimeout: 60000,
+			acquireTimeout: 60000,
+			timeout: 60000
+		});
 		this.users = {
-			settings: {
-				select: async (id, property) => {
-					const check = await this.checkId(id);
-					if (check instanceof RangeError) return check;
-					return (await this.query(
-						`SELECT * FROM users_settings WHERE userId='${id}' AND property='${property}'`
-					))[0];
-				},
-				set: async (id, property, value) => {
-					const check = await this.checkId(id);
-					if (check instanceof RangeError) return check;
-					return this.query(
-						`INSERT INTO users_settings (userId, property, value) VALUES ('${id}', '${property}', '${value}')`
-					);
-				},
-				update: async (id, property, value) => {
-					const check = await this.checkId(id);
-					if (check instanceof RangeError) return check;
-					return this.query(
-						`UPDATE users_settings SET value='${value}' WHERE userId='${id}' AND property='${property}'`
-					);
-				}
-			},
 			/**
 			 * Returns the data of the user specified from the database
 			 * @param {string} id Snowflake ID of the Discord User
@@ -265,22 +247,12 @@ module.exports = class DatabasePool {
 	 */
 	query(query) {
 		return new Promise((resolve, reject) => {
-			this.pool.getConnection((err, connection) => {
-				if (err) {
-					if (err.code === "ER_ACCESS_DENIED_ERROR" || err.code === "ER_DBACCESS_DENIED_ERROR") {
-						console.error(err);
-						process.exit(1);
-					}
-					reject(err);
+			this.pool.query(query, (error, result) => {
+				console.log(`# DB Query - ${query}`);
+				if (error) {
+					reject(error);
 				} else {
-					connection.query(query, (error, result) => {
-						connection.release();
-						if (error) {
-							reject(error);
-						} else {
-							resolve(result);
-						}
-					});
+					resolve(result);
 				}
 			});
 		});
@@ -305,7 +277,7 @@ module.exports = class DatabasePool {
 	async checkSelectOneById(id, columns) {
 		const check = await this.checkId(id);
 		if (check instanceof RangeError) return check;
-		if (!(columns instanceof Array))
+		if (columns !== undefined && !(columns instanceof Array))
 			return new RangeError("The columns property is not an Array object.");
 		return true;
 	}
