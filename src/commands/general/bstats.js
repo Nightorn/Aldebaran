@@ -43,6 +43,7 @@ module.exports = class BStats extends Command {
 				Number.formatNumber(bot.stats.servers.total),
 				true
 			)
+			.addField("Shard ID", bot.shardID, true)
 			.setColor(this.color);
 		message.channel.send({ embed });
 	}

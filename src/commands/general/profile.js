@@ -13,8 +13,8 @@ module.exports = class ProfileCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		bot.users.fetch(args.user || message.author.id).then(user => {
-			const { profile } = user;
+		bot.users.fetch(args.user || message.author.id).then(async user => {
+			const profile = await user.getProfile();
 			if (profile.existsInDB) {
 				let userDetails = "";
 				if (profile.name) userDetails += `**Name**: ${profile.name}\n`;

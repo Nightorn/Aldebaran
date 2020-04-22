@@ -8,6 +8,8 @@ const DRPGPadventure = require("../utils/timer/DiscordRPG/padv.js");
 
 exports.run = async (bot, message) => {
 	if (!message.guild) return;
+	if (!message.guild.ready) await message.guild.fetch();
+	if (!message.author.ready) await message.author.fetch();
 	if (message.author.banned) return;
 	if (message.guild.settings.aldebaran === "off") {
 		setTimeout(() => {
