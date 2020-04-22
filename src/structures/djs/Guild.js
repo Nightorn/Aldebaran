@@ -58,7 +58,7 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 			if (data.settings.includes("\\") && !data.settings.includes("\\\\") && !data.settings.includes("\\\"")) {
 				// Escape the escape symbol if it's not escaped. Should only run for like 1 guild maybe.
 				data.settings = JSON.parse(data.settings.replace(/\\/g, "\\\\"));
-			}
+			} else data.settings = JSON.parse(data.settings);
 			data.commands = JSON.parse(data.commands);
 			for (const [key, value] of Object.entries(data))
 				if (key !== "guildid") this[key] = value;
