@@ -10,7 +10,7 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 	constructor(client, data) {
 		super(client, data);
 		this.commands = {};
-		this.prefix = this.client.config.prefix;
+		this.prefix = process.env.PREFIX;
 		this.settings = {};
 	}
 
@@ -63,8 +63,8 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 			for (const [key, value] of Object.entries(data))
 				if (key !== "guildid") this[key] = value;
 			this.prefix = this.client.debugMode
-				? this.client.config.prefix
-				: this.settings.aldebaranPrefix || this.client.config.prefix;
+				? process.env.PREFIX
+				: this.settings.aldebaranPrefix || process.env.PREFIX;
 			this.polluxBoxPing = new Collection();
 		}
 		return data;

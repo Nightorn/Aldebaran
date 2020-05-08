@@ -22,7 +22,7 @@ module.exports = class OsumapCommand extends Command {
 	}
 
 	async run(bot, message, args) {
-		const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
+		const client = new Nodesu.Client(process.env.API_OSU);
 		if (args.map === undefined) {
 			return message.channel.send(
 				"You need to send a link of the beatmap or its ID. Check `&?osu` for more informations."

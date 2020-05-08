@@ -16,7 +16,7 @@ module.exports = class OsuProfileCommand extends Command {
 	}
 
 	run(bot, message, args) {
-		const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
+		const client = new Nodesu.Client(process.env.API_OSU);
 		const mode = args.mode || message.author.settings.osuMode || "osu";
 		if (Nodesu.Mode[mode] !== undefined) {
 			client.user.get(args.user || message.author.settings.osuUsername,

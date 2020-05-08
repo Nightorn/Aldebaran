@@ -5,7 +5,6 @@ const CommandHandler = require("../../handlers/CommandHandler");
 const DatabaseProvider = require("../../handlers/DatabaseProvider");
 const confModels = require("../../utils/checks/configurationModels");
 const aldebaranTeam = require("../../../config/aldebaranTeam.json");
-const config = require("../../../config/config.json");
 const presences = require("../../../config/presence.json");
 const packageFile = require("../../../package.json");
 
@@ -18,9 +17,7 @@ module.exports = class AldebaranClient extends Client {
 			messageSweepInterval: 60
 		});
 		this.started = Date.now();
-		this.config = config;
-		this.config.presence = presences;
-		this.config.aldebaranTeam = aldebaranTeam;
+		this.config = { presence: presences, aldebaranTeam };
 		this.preCustomTimers = [];
 		this.customTimers = new Map();
 		this.customTimerTriggers = new Map();
@@ -29,10 +26,9 @@ module.exports = class AldebaranClient extends Client {
 		this.database.timers.selectAll().then(timers => {
 			timers.forEach(this.preCustomTimers.push);
 			console.log(`\x1b[36m# Fetched all necessary data from database, took ${Date.now() - this.started}ms.\x1b[0m`);
-			this.login(this.debugMode ? this.config.tokendev : this.config.token)
-				.then(() => {
-					console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
-				});
+			this.login(process.env.TOKEN).then(() => {
+				console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
+			});
 		});
 		this.CDBA = new CDBAHandler();
 		this.commandGroups = {};
@@ -55,7 +51,7 @@ module.exports = class AldebaranClient extends Client {
 		};
 		this.version = packageFile.version;
 		if (process.argv[3] !== undefined && this.debugMode) {
-			this.config.prefix = process.argv[3];
+			process.env.PREFIX = process.argv[3];
 		}
 		for (const [command] of this.commands.commands)
 			this.stats.commands.all[command] = {};

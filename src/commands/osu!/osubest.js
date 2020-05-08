@@ -15,7 +15,7 @@ module.exports = class OsubestCommand extends Command {
 	}
 
 	run(bot, message, args) {
-		const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
+		const client = new Nodesu.Client(process.env.API_OSU);
 		const ranks = {
 			SH: "S+",
 			X: "SS",

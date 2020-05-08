@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Structures } = require("discord.js");
 const { registerFont } = require("canvas");
 

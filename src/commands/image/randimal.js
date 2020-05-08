@@ -12,7 +12,7 @@ module.exports = class RandimalCommand extends Command {
 		const randomnumber = Math.floor((Math.random() * 5749) + 1);
 		request({
 			uri: `https://api.pexels.com/v1/search?query=animal+query&per_page=1&page=${randomnumber}`,
-			headers: { Authorization: bot.config.pexels_apikey }
+			headers: { Authorization: process.env.API_PEXELS }
 		}, (err, response, body) => {
 			const parsed = JSON.parse(body);
 			if (err) return message.channel.send("This seems to be a problem");
@@ -27,7 +27,7 @@ module.exports = class RandimalCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.pexels_apikey !== undefined
-			&& this.client.config.pexels_apikey !== null;
+		return process.env.API_PEXELS !== undefined
+			&& process.env.API_PEXELS !== null;
 	}
 };

@@ -3,3 +3,4 @@ cache/
 *.code-workspace
 .vscode
 config/config.json
+.env

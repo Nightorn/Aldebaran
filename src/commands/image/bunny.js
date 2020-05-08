@@ -8,7 +8,7 @@ module.exports = class BunnyCommand extends Command {
 
 	run(bot, message) {
 		const bunnynumber = Math.floor((Math.random() * 28) + 1);
-		request({ uri: `https://api.pexels.com/v1/search?query=bunny+query&per_page=1&page=${bunnynumber}`, headers: { Authorization: bot.config.pexels_apikey } }, (err, response, body) => {
+		request({ uri: `https://api.pexels.com/v1/search?query=bunny+query&per_page=1&page=${bunnynumber}`, headers: { Authorization: process.env.API_PEXELS } }, (err, response, body) => {
 			const parsed = JSON.parse(body);
 			if (err) return message.channel.send("This seems to be a bunny problem");
 			if (parsed.error) return message.channel.send("Someone has requested too many bunnies recently, the only thing you can do is waiting for your turn!");
@@ -22,7 +22,7 @@ module.exports = class BunnyCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.pexels_apikey !== undefined
-			&& this.client.config.pexels_apikey !== null;
+		return process.env.API_PEXELS !== undefined
+			&& process.env.API_PEXELS !== null;
 	}
 };

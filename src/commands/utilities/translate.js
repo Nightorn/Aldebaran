@@ -33,7 +33,7 @@ module.exports = class TranslateCommand extends Command {
 		}
 		return request(
 			`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${
-				bot.config.apikeys.yandex_translate
+				process.env.API_YANDEX
 			}&lang=${
 				!initialLang ? resultLang : `${initialLang}-${resultLang}`
 			}&text=${encodeURI(content)}`,
@@ -72,7 +72,7 @@ module.exports = class TranslateCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.apikeys.yandex_translate !== undefined
-			&& this.client.config.apikeys.yandex_translate !== null;
+		return process.env.API_YANDEX !== undefined
+			&& process.env.API_YANDEX !== null;
 	}
 };
