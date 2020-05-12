@@ -36,7 +36,7 @@ exports.run = async (bot, message) => {
 	}
 
 	if (message.author.bot) return;
-	const prefix = process.argv[2] === "dev" ? process.argv[3] || bot.config.prefix : message.guild.prefix;
+	const prefix = process.argv[2] === "dev" ? process.argv[3] || process.env.PREFIX : message.guild.prefix;
 	if (message.content.indexOf(prefix) !== 0) return;
 	if (message.content.slice(prefix.length)[0] === " ") return;
 

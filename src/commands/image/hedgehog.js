@@ -10,7 +10,7 @@ module.exports = class HedgehogCommand extends Command {
 		const hedgenumber = Math.floor((Math.random() * 31) + 1);
 		request({
 			uri: `https://api.pexels.com/v1/search?query=hedgehog+query&per_page=1&page=${hedgenumber}`,
-			headers: { Authorization: bot.config.pexels_apikey }
+			headers: { Authorization: process.env.API_PEXELS }
 		}, (err, response, body) => {
 			const parsed = JSON.parse(body);
 			if (err) return message.channel.send("There seems to be a prickly problem");
@@ -25,7 +25,7 @@ module.exports = class HedgehogCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.pexels_apikey !== undefined
-			&& this.client.config.pexels_apikey !== null;
+		return process.env.API_PEXELS !== undefined
+			&& process.env.API_PEXELS !== null;
 	}
 };

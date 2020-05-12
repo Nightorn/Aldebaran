@@ -30,13 +30,17 @@ There are several ways to contribute to Aldebaran, the easiest one is to find bu
 **Read LICENSE (AGPL-3.0) before doing anything on the project.**
 
 If you know JavaScript and more particulary Node.js using the "discord.js" library, you can contribute to Aldebaran with actual code by submitting pull requests on GitHub. **For big features, it is recommended to ask the main developers, more specifically the maintainers.** The most important is to explain your changes, your code will be checked by one member of the Aldebaran team anyways. The more your code and pull requests are documented, the more chances you will have for your changes to get implemented into Aldebaran.
-### Contribute as a developer (Pt. 2: Environment)
-**Node.js 10.0.0 or newer is required in order to run this project.**
+### Contribute as a developer (Pt. 2.1: Default Environment)
+**In order to run this project, you need Node.js 12+ and a MySQL database.**
 ```
 $ git clone https://github.com/Nightorn/Aldebaran.git
-$ npm run configure
-$ npm start
+$ npm install
+$ node app
 ```
-If all your informations are correct, your instance of Aldebaran should be online!
+If all your informations are correct (`.env` file, take example on the `.env.example` file if needed), your instance of Aldebaran should be online!
+### Run Aldebaran with Docker (Pt. 2.2: Docker Environment)
+**In order to run this project, you need [Docker](https://www.docker.com).**
+
+Download the `docker-compose.yml` file from the [Aldebaran GitHub repository](https://github.com/Nightorn/Aldebaran), fill the `.env` file by taking example on the `.env.example` file and type `docker-compose up -d` in a command-line interface; Aldebaran should be up and running!
 ### Contribute as a developer (Pt. 3: Getting help)
 If you need help for working on Aldebaran, just go to the main server and go to the channels that have been created for that. You should get help easily by the Aldebaran team or by other external developers of Aldebaran. Remember that no question is stupid, as long as you are sure your problem isn't about pure JavaScript, you should not be worried as we are already very happy you want to contribute to the project!

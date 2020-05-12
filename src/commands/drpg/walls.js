@@ -73,7 +73,7 @@ module.exports = class WallsCommand extends Command {
 			const user = await bot.users.fetch(args.user || message.author.id);
 			request({
 				uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
-				headers: { Authorization: bot.config.drpg_apikey }
+				headers: { Authorization: process.env.API_DISCORDRPG }
 			}, (err, res, body) => {
 				if (err) throw err;
 				let data;

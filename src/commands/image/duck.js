@@ -10,7 +10,7 @@ module.exports = class DuckCommand extends Command {
 		const ducknumber = Math.floor((Math.random() * 162) + 1);
 		request({
 			uri: `https://api.pexels.com/v1/search?query=duck+query&per_page=1&page=${ducknumber}`,
-			headers: { Authorization: bot.config.pexels_apikey }
+			headers: { Authorization: process.env.API_PEXELS }
 		}, (err, response, body) => {
 			const parsed = JSON.parse(body);
 			if (err) return message.channel.send("The seems to be a ducking problem");
@@ -25,7 +25,7 @@ module.exports = class DuckCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.pexels_apikey !== undefined
-			&& this.client.config.pexels_apikey !== null;
+		return process.env.API_PEXELS !== undefined
+			&& process.env.API_PEXELS !== null;
 	}
 };

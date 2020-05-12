@@ -15,8 +15,7 @@ module.exports.Command = class OsuCategory extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.apikeys["osu!"] !== undefined
-			&& this.client.config.apikeys["osu!"] !== null;
+		return process.env.API_OSU !== undefined && process.env.API_OSU !== null;
 	}
 };
 

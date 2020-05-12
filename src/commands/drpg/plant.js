@@ -20,7 +20,7 @@ module.exports = class PlantCommand extends Command {
 		const plantId = args.plant || null;
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${userid}`,
-			headers: { Authorization: bot.config.drpg_apikey }
+			headers: { Authorization: process.env.API_DISCORDRPG }
 		}, async (err, response, body) => {
 			if (err) throw err;
 			if (response.statusCode === 404) {
@@ -97,7 +97,7 @@ module.exports = class PlantCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.drpg_apikey !== undefined
-			&& this.client.config.drpg_apikey !== null;
+		return process.env.API_DISCORDRPG !== undefined
+			&& process.env.API_DISCORDRPG !== null;
 	}
 };

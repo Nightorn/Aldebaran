@@ -11,7 +11,7 @@ function apiFetch(endpoint, bot) {
 	return new Promise((resolve, reject) => {
 		request({
 			uri: `http://api.discorddungeons.me/v3/${endpoint}`,
-			headers: { Authorization: bot.config.drpg_apikey }
+			headers: { Authorization: process.env.API_DISCORDRPG }
 		}, (err, response, body) => {
 			if (err) {
 				reject(err);
@@ -312,7 +312,7 @@ module.exports = class GleadCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.drpg_apikey !== undefined
-			&& this.client.config.drpg_apikey !== null;
+		return process.env.API_DISCORDRPG !== undefined
+			&& process.env.API_DISCORDRPG !== null;
 	}
 };

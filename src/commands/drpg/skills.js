@@ -16,7 +16,7 @@ module.exports = class SkillsCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
 		bot.users.fetch(args.user || message.author.id).then(user => {
-			request({ uri: `http://api.discorddungeons.me/v3/user/${user.id}`, headers: { Authorization: bot.config.drpg_apikey } }, (err, response, body) => {
+			request({ uri: `http://api.discorddungeons.me/v3/user/${user.id}`, headers: { Authorization: process.env.API_DISCORDRPG } }, (err, response, body) => {
 				if (err) throw err;
 				if (response.statusCode === 404) {
 					message.reply(
@@ -79,7 +79,7 @@ module.exports = class SkillsCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.drpg_apikey !== undefined
-			&& this.client.config.drpg_apikey !== null;
+		return process.env.API_DISCORDRPG !== undefined
+			&& process.env.API_DISCORDRPG !== null;
 	}
 };

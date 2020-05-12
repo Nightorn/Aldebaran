@@ -11,7 +11,7 @@ module.exports = class PepeCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message) {
 		const Client = tenor.client({
-			Key: bot.config.apikeys.tenor,
+			Key: process.env.API_TENOR,
 			Filter: "off",
 			Locale: "en_US",
 			MediaFilter: "minimal",
@@ -28,7 +28,7 @@ module.exports = class PepeCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.apikeys.tenor !== undefined
-			&& this.client.config.apikeys.tenor !== null;
+		return process.env.API_TENOR !== undefined
+			&& process.env.API_TENOR !== null;
 	}
 };

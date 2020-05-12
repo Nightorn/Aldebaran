@@ -20,7 +20,7 @@ module.exports = class OsubestCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
 		console.log(args.user || message.author.settings.osuUsername);
-		const client = new Nodesu.Client(bot.config.apikeys["osu!"]);
+		const client = new Nodesu.Client(process.env.API_OSU);
 		const ranks = {
 			SH: "S+",
 			X: "SS",

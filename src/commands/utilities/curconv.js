@@ -1,6 +1,5 @@
 const request = require("request");
 const { Command, Embed } = require("../../groups/UtilitiesCommand");
-const config = require("../../../config/config.json");
 
 const fixerURL = "http://data.fixer.io/api";
 
@@ -34,7 +33,7 @@ module.exports = class CurConvCommand extends Command {
 		this.value = parseInt(value, 10);
 		try {
 			request(
-				`${fixerURL}/latest?access_key=${config.apikeys.fixer}`,
+				`${fixerURL}/latest?access_key=${process.env.API_FIXER}`,
 				this.requestCallback.bind(this)
 			);
 		} catch (err) {
@@ -95,7 +94,7 @@ module.exports = class CurConvCommand extends Command {
 	}
 
 	registerCheck() {
-		return this.client.config.apikeys.fixer !== undefined
-			&& this.client.config.apikeys.fixer !== null;
+		return process.env.API_FIXER !== undefined
+			&& process.env.API_FIXER !== null;
 	}
 };
