@@ -39,7 +39,7 @@ module.exports = app => (request, response) => {
 					}
 				});
 			}).catch(() => {
-				const state = Buffer.from(`${request.protocol}://${request.get("host")}${request.originalUrl}`).toString("base64");
+				const state = Buffer.from(`https://${request.get("host")}/api/oauth/authorize?client_id=${p.client_id}&scope=${p.scope}&redirect_uri=${p.redirect_uri}&response_type=${p.response_type}`).toString("base64");
 				response.redirect(`https://discord.com/oauth2/authorize?client_id=${process.env.DISCORD_CLIENT_ID}&redirect_uri=${process.env.API_URL}/discord/callback&scope=identify&state=${state}&response_type=code`);
 			});
 		} else {
