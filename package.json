@@ -4,9 +4,14 @@
   "description": "Utility",
   "main": "bot.js",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "canvas": "^2.6.1",
+    "cookie-parser": "^1.4.5",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^15.0.0",
     "mathjs": "^5.10.3",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
@@ -14,12 +19,15 @@
     "nekos.life": "^1.1.5",
     "node-fetch": "^2.6.0",
     "nodesu": "^0.6.7",
+    "oauth2-server": "^3.1.0",
     "ojsama": "^1.2.5",
     "os": "^0.1.1",
     "prettier": "^1.19.1",
+    "pug": "^3.0.0",
     "regenerator-runtime": "^0.13.5",
     "request": "^2.88.2",
     "tenorjs": "^1.0.7",
+    "uid-safe": "^2.1.5",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
@@ -34,6 +42,7 @@
     "readline-sync": "^1.4.10"
   },
   "scripts": {
+    "api": "node app --api",
     "start": "node bot.js",
     "dev": "node bot.js dev !",
     "shard": "node app",
