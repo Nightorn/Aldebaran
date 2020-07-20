@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     ports:
-      - "3306:3306"
+      - "44490:3306"
   
   phpmyadmin:
     depends_on:

@@ -10,7 +10,7 @@ module.exports = app => (req, res) => {
 				client_secret: process.env.DISCORD_CLIENT_SECRET,
 				grant_type: "authorization_code",
 				code: req.query.code,
-				redirect_uri: `http://${process.env.API_URL}/discord/callback`,
+				redirect_uri: `${process.env.API_URL}/discord/callback`,
 				scope: "identify"
 			}
 		}, (_err, _response, body) => {
