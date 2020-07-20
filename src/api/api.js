@@ -64,5 +64,5 @@ module.exports = dsm => {
 	}));
 
 	app.listen(44400);
-	console.log("Running a GraphQL API server at http://localhost:44400/graphql");
+	console.log(`Running a GraphQL API server at http://${process.env.API_URL}/graphql`);
 };

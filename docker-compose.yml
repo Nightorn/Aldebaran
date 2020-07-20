@@ -34,8 +34,8 @@ services:
     environment:
       - WAIT_HOSTS=db:3306
       - WAIT_SLEEP_INTERVAL=5
-    expose: 
-      - "44400"
+    ports: 
+      - "44400:44400"
 
 volumes:
   db-data:

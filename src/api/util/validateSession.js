@@ -16,7 +16,7 @@ const isSessionValid = (db, session) => new Promise(async (resolve, reject) => {
 					client_secret: process.env.DISCORD_CLIENT_SECRET,
 					grant_type: "refresh_token",
 					refresh_token: data[0].refresh_token,
-					redirect_uri: "http://localhost:44400/discord/callback",
+					redirect_uri: `http://${process.env.API_URL}/discord/callback`,
 					scope: "identify"
 				}
 			}, async (_err, _res, body) => {
