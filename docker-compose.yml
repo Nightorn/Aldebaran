@@ -8,18 +8,20 @@ services:
     restart: always
     env_file:
       - .env
+    ports:
+      - "3306:3306"
   
   phpmyadmin:
     depends_on:
       - db
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.0.2
     restart: always
     env_file:
       - .env
     environment:
       PMA_HOST: db
     ports:
-      - "44400:80"
+      - "44491:80"
     
   aldebaran:
     depends_on:
@@ -32,6 +34,8 @@ services:
     environment:
       - WAIT_HOSTS=db:3306
       - WAIT_SLEEP_INTERVAL=5
+    expose: 
+      - "44400"
 
 volumes:
   db-data:
