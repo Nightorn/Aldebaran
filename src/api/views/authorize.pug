@@ -39,7 +39,7 @@ html
                         span(class="point")  • 
                         span have access to your Discord account
             span(id="buttons")
-                a(href="/oauth/authorize?success=true&response_type=code&client_id=" + app.id + "&scope=" + scope + "&redirect_uri=" + redirect_uri + "&state=" + state + "&session=" + session)
+                a(href="/api/oauth/authorize?success=true&response_type=code&client_id=" + app.id + "&scope=" + scope + "&redirect_uri=" + redirect_uri + "&state=" + state + "&session=" + session)
                     span(id="authorize") Authorize
                 a(href=redirect_uri + "?error=access_denied")
                     span(id="refuse") Refuse
