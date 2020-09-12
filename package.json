@@ -17,7 +17,7 @@
     "moment-timezone": "^0.5.28",
     "mysql": "^2.18.1",
     "nekos.life": "^1.1.5",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "nodesu": "^0.6.7",
     "oauth2-server": "^3.1.0",
     "ojsama": "^1.2.5",
