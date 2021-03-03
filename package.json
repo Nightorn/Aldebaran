@@ -23,7 +23,7 @@
     "ojsama": "^1.2.5",
     "os": "^0.1.1",
     "prettier": "^1.19.1",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "regenerator-runtime": "^0.13.5",
     "request": "^2.88.2",
     "tenorjs": "^1.0.7",
