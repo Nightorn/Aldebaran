@@ -27,8 +27,12 @@ module.exports = message => {
 			: 0;
 		// eslint-disable-next-line no-param-reassign
 		message.author.timers.adventure = setTimeout(() => {
+			const ping = message.author.settings.timerPing === "adventure"
+				|| message.author.settings.timerPing === "on"
+				? `<@${message.author.id}>`
+				: `${message.author.username},`;
 			message.channel
-				.send(`<@${message.author.id}> adventure time! :crossed_swords:`)
+				.send(`${ping} adventure time! :crossed_swords:`)
 				.then(msg => {
 					if (message.guild.settings.autoDelete === "on") msg.delete({ timeout: 10000 });
 				});

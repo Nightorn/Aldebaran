@@ -56,9 +56,13 @@ module.exports = async message => {
 									timerset.delete({ timeout: 5000 });
 									// eslint-disable-next-line no-param-reassign
 									message.author.timers.sides = setTimeout(() => {
+										const ping = message.author.settings.timerPing === "on"
+											|| message.author.settings.timerPing === "sides"
+											? `<@${message.author.id}>`
+											: `${message.author.username},`;
 										message.channel
 											.send(
-												`<@${message.author.id}> sides time! ${randomemoji}`
+												`${ping} sides time! ${randomemoji}`
 											)
 											.then(msg => {
 												if (message.guild.settings.autoDelete === "on") msg.delete({ timeout: 180000 });
