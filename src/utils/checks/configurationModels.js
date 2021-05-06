@@ -50,6 +50,17 @@ module.exports = {
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
+		timerPing: {
+			support: value => (
+				value === "on"
+				|| value === "adventure"
+				|| value === "sides"
+				|| value === "off"
+			),
+			help: "Timer Pings - [on | adventure | sides | off]",
+			showOnlyIfBotIsInGuild: "170915625722576896",
+			category: "DiscordRPG"
+		},
 		timezone: {
 			support: timezoneSupport,
 			help:

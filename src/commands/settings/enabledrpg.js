@@ -4,10 +4,11 @@ const { Command } = require("../../groups/SettingsCommand");
 const descriptions = {
 	healthMonitor: "DiscordRPG Health Monitor",
 	adventureTimer: "DiscordRPG Adventure Timer",
-	sidesTimer: "DiscordRPG Sides Timer"
+	sidesTimer: "DiscordRPG Sides Timer",
+	timerPing: "DiscordRPG Timer Pings"
 };
 const guildParameters = ["healthMonitor", "adventureTimer", "sidesTimer"];
-const userParameters = ["healthMonitor", "adventureTimer", "sidesTimer"];
+const userParameters = ["healthMonitor", "adventureTimer", "sidesTimer", "timerPing"];
 
 module.exports = class EnableDRPGCommand extends Command {
 	constructor(client) {
