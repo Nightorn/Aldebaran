@@ -19,19 +19,19 @@ module.exports = class OsubestCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	run(bot, message, args) {
-		console.log(args.user || message.author.settings.osuUsername);
+		console.log(args.user || message.author.settings.osuusername);
 		const client = new Nodesu.Client(process.env.API_OSU);
 		const ranks = {
 			SH: "S+",
 			X: "SS",
 			XH: "SS+"
 		};
-		const mode = args.mode || message.author.settings.osuMode || "osu";
+		const mode = args.mode || message.author.settings.osumode || "osu";
 		if (Nodesu.Mode[mode] !== undefined) {
-			client.user.getRecent(args.user || message.author.settings.osuUsername,
+			client.user.getRecent(args.user || message.author.settings.osuusername,
 				Nodesu.Mode[mode], 1)
 				.then(async data => {
-					console.log(args.user || message.author.settings.osuUsername);
+					console.log(args.user || message.author.settings.osuusername);
 					console.log(mode);
 					console.log(data);
 					const user = await client.user

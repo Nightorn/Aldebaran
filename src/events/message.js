@@ -29,8 +29,8 @@ exports.run = async (bot, message) => {
 			const filter = msg => msg.author.id === "170915625722576896";
 			message.channel.awaitMessages(filter, { max: 1, time: 2000 })
 				.then(() => {
-					if (message.guild.settings.discordrpgPrefix === undefined)
-						message.guild.settings.discordrpgPrefix = drpgMatch[0];
+					if (message.guild.settings.discordrpgprefix === undefined)
+						message.guild.settings.discordrpgprefix = drpgMatch[0];
 				});
 		}
 	}

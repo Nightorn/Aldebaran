@@ -17,9 +17,9 @@ module.exports = class OsuProfileCommand extends Command {
 
 	run(bot, message, args) {
 		const client = new Nodesu.Client(process.env.API_OSU);
-		const mode = args.mode || message.author.settings.osuMode || "osu";
+		const mode = args.mode || message.author.settings.osumode || "osu";
 		if (Nodesu.Mode[mode] !== undefined) {
-			client.user.get(args.user || message.author.settings.osuUsername,
+			client.user.get(args.user || message.author.settings.osuusername,
 				Nodesu.Mode[mode]).then(data => {
 				const f = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 				const i = x => parseInt(x, 10);

@@ -21,7 +21,7 @@ module.exports = class OsubestCommand extends Command {
 			X: "SS",
 			XH: "SS+"
 		};
-		let mode = message.author.settings.osuMode || "osu";
+		let mode = message.author.settings.osumode || "osu";
 		for (const i in args) {
 			if (args[i].indexOf("--") === 0) {
 				mode = args[i].replace("--", "");
@@ -29,7 +29,7 @@ module.exports = class OsubestCommand extends Command {
 			}
 		}
 		if (Nodesu.Mode[mode] !== undefined) {
-			client.user.getBest(args[0] || message.author.settings.osuUsername,
+			client.user.getBest(args[0] || message.author.settings.osuusername,
 				Nodesu.Mode[mode], 5)
 				.then(async data => {
 					const user = await client.user
