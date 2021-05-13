@@ -1,11 +1,12 @@
 const SocialProfile = require("../aldebaran/SocialProfile");
-const permissions = require("../../../assets/data/aldebaranPermissions.json");
+const AldebaranPermissions = require("../aldebaran/AldebaranPermissions");
 
 module.exports = BaseUser => class User extends BaseUser {
 	constructor(client, data) {
 		super(client, data);
 		this.generalCooldown = 0;
 		this.settings = {};
+		this.permissions = new AldebaranPermissions(0);
 		this.timers = {
 			adventure: null,
 			padventure: null,
@@ -52,9 +53,10 @@ module.exports = BaseUser => class User extends BaseUser {
 		this.existsInDB = data !== undefined;
 		this.ready = true;
 		if (data !== undefined) {
+			this.permissions = new AldebaranPermissions(data.permissions || 0);
 			data.settings = JSON.parse(data.settings);
 			for (const [key, value] of Object.entries(data))
-				if (key !== "userId") this[key] = value;
+				if (key !== "userId" && key !== "permissions") this[key] = value;
 		}
 		return data;
 	}
@@ -66,8 +68,41 @@ module.exports = BaseUser => class User extends BaseUser {
 	}
 
 	hasPermission(permission) {
-		if (this.permissions & permissions.ADMINISTRATOR) return true;
-		return this.permissions & permissions[permission];
+		if (process.env.BOT_ADMIN === this.id) return true;
+		return this.permissions.has(AldebaranPermissions.FLAGS.ADMINISTRATOR)
+			|| this.permissions.has(AldebaranPermissions.FLAGS[permission]);
+	}
+
+	/**
+	 * Removes permissions from a user
+	 * @param {string[]} permissions Array of permission flags to remove
+	 */
+	async removePermissions(permissions) {
+		permissions.forEach(permission => {
+			if (Object.keys(AldebaranPermissions.FLAGS).includes(permission))
+				this.permissions.remove(AldebaranPermissions.FLAGS[permission]);
+		});
+		this.unready();
+		return this.client.database.users.updateOneById(
+			this.id,
+			new Map([["permissions", AldebaranPermissions.resolve(this.permissions.bitfield)]])
+		);
+	}
+
+	/**
+	 * Adds permissions to a user
+	 * @param {string[]} permissions Array of permission flags to add
+	 */
+	async addPermissions(permissions) {
+		permissions.forEach(permission => {
+			if (Object.keys(AldebaranPermissions.FLAGS).includes(permission))
+				this.permissions.add(AldebaranPermissions.FLAGS[permission]);
+		});
+		this.unready();
+		return this.client.database.users.updateOneById(
+			this.id,
+			new Map([["permissions", AldebaranPermissions.resolve(this.permissions.bitfield)]])
+		);
 	}
 
 	unready() {
