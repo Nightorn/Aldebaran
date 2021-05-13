@@ -72,8 +72,6 @@ module.exports.Command = class Command {
 		if (this.perms.aldebaran !== undefined && check)
 			check = this.perms.aldebaran
 				.every(perm => message.author.hasPermission(perm));
-		if (message.author.id === process.env.BOT_ADMIN)
-			check = true;
 		return check;
 	}
 

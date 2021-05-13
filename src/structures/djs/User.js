@@ -68,6 +68,7 @@ module.exports = BaseUser => class User extends BaseUser {
 	}
 
 	hasPermission(permission) {
+		if (process.env.BOT_ADMIN === this.id) return true;
 		return this.permissions.has(AldebaranPermissions.FLAGS.ADMINISTRATOR)
 			|| this.permissions.has(AldebaranPermissions.FLAGS[permission]);
 	}
