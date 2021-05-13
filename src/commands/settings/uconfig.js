@@ -11,7 +11,7 @@ module.exports = class UconfigCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot, message, args) {
+	async run(bot, message, args) {
 		const parametersAvailable = bot.models.settings.user;
 		if (args.length === 0) {
 			const { prefix } = message.guild;
@@ -28,9 +28,13 @@ module.exports = class UconfigCommand extends Command {
 		} else if (args.includes("list")) {
 			const list = {};
 			for (const [key, data] of Object.entries(parametersAvailable)) {
-				if (message.guild.members.cache.get(data.showOnlyIfBotIsInGuild)
-					|| data.showOnlyIfBotIsInGuild === undefined) {
-					if (list[data.category] === undefined) list[data.category] = {};
+				if (list[data.category] === undefined) list[data.category] = {};
+				if (data.showOnlyIfBotIsInGuild !== undefined) {
+					// eslint-disable-next-line no-await-in-loop
+					if (await message.guild.members.fetch(data.showOnlyIfBotIsInGuild)) {
+						list[data.category][key] = data;
+					}
+				} else {
 					list[data.category][key] = data;
 				}
 			}
