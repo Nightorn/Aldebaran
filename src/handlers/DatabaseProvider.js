@@ -1,4 +1,3 @@
-const { Guild } = require("discord.js");
 const GenericDatabaseProvider = require("./GenericDatabaseProvider");
 
 module.exports = class DatabaseProvider extends GenericDatabaseProvider {
@@ -15,7 +14,7 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 			 * @param {string[]} columns Columns to retrieve in the returned data
 			 */
 			selectOneById: async (id, columns) => {
-				const check = await this.checkSelectOneById(id, columns);
+				const check = await this.constructor.checkSelectOneById(id, columns);
 				if (check instanceof RangeError) return check;
 				return (await this.query(
 					`SELECT ${
@@ -42,22 +41,14 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 			 * Deletes the data of the user specified on the database
 			 * @param {string} id Snowflake ID of the Discord User
 			 */
-			deleteOneById: async id => {
-				const check = await this.checkId(id);
-				if (check instanceof RangeError) return check;
-				return this.query(`DELETE FROM users WHERE userId='${id}'`);
-			},
+			deleteOneById: async id => this.query(`DELETE FROM users WHERE userId='${id}'`),
 			/**
 			 * Inserts a user in the database
 			 * @param {string} id Snowflake ID of the Discord User
 			 */
-			createOneById: async id => {
-				const check = await this.checkId(id);
-				if (check instanceof RangeError) return check;
-				return this.query(
-					`INSERT INTO users (userId, settings) VALUES ('${id}', '{}')`
-				);
-			}
+			createOneById: async id => this.query(
+				`INSERT INTO users (userId, settings) VALUES ('${id}', '{}')`
+			)
 		};
 		this.guilds = {
 			/**
@@ -66,7 +57,7 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 			 * @param {string[]} columns Columns to retrieve in the returned data
 			 */
 			selectOneById: async (id, columns) => {
-				const check = await this.checkSelectOneById(id, columns);
+				const check = await this.constructor.checkSelectOneById(id, columns);
 				if (check instanceof RangeError) return check;
 				return (await this.query(
 					`SELECT ${
@@ -93,22 +84,14 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 			 * Deletes the data of the guild specified on the database
 			 * @param {string} id Snowflake ID of the Discord Guild
 			 */
-			deleteOneById: async id => {
-				const check = await this.checkId(id);
-				if (check instanceof RangeError) return check;
-				return this.query(`DELETE FROM guilds WHERE guildid='${id}'`);
-			},
+			deleteOneById: async id => this.query(`DELETE FROM guilds WHERE guildid='${id}'`),
 			/**
 			 * Inserts a guild in the database
 			 * @param {string} id Snowflake ID of the Discord Guild
 			 */
-			createOneById: async id => {
-				const check = await this.checkId(id);
-				if (check instanceof RangeError) return check;
-				return this.query(
-					`INSERT INTO guilds (guildid, settings, commands) VALUES ('${id}', '{}', '{}')`
-				);
-			}
+			createOneById: async id => this.query(
+				`INSERT INTO guilds (guildid, settings, commands) VALUES ('${id}', '{}', '{}')`
+			)
 		};
 		this.socialprofile = {
 			/**
@@ -117,7 +100,7 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 			 * @param {string[]} columns Columns to retrieve in the returned data
 			 */
 			selectOneById: async (id, columns) => {
-				const check = await this.checkSelectOneById(id, columns);
+				const check = await this.constructor.checkSelectOneById(id, columns);
 				if (check instanceof RangeError) return check;
 				return (await this.query(
 					`SELECT ${
@@ -144,22 +127,14 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 			 * Deletes the data of the profile specified on the database
 			 * @param {string} id Snowflake ID of the Discord User
 			 */
-			deleteOneById: async id => {
-				const check = await this.checkId(id);
-				if (check instanceof RangeError) return check;
-				return this.query(`DELETE FROM socialprofile WHERE userId='${id}'`);
-			},
+			deleteOneById: async id => this.query(`DELETE FROM socialprofile WHERE userId='${id}'`),
 			/**
 			 * Inserts a profile in the database
 			 * @param {string} id Snowflake ID of the Discord User
 			 */
-			createOneById: async id => {
-				const check = await this.checkId(id);
-				if (check instanceof RangeError) return check;
-				return this.query(
-					`INSERT INTO socialprofile (userId) VALUES ('${id}')`
-				);
-			}
+			createOneById: async id => this.query(
+				`INSERT INTO socialprofile (userId) VALUES ('${id}')`
+			)
 		};
 		this.timers = {
 			selectAll: async () => this.query("SELECT * FROM timers")
@@ -212,13 +187,9 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 			 * @param {string[]} tags Tags of the Image
 			 * @param {boolean} nsfw NSFW Content
 			 */
-			create: async (id, link, linkname, tags, nsfw) => {
-				const check = await this.checkId(id);
-				if (check instanceof RangeError) return check;
-				return this.query(
-					`INSERT INTO photogallery (userId, links, linkname, tags, nsfw) VALUES ('${id}', '${link}', '${linkname}', '${tags}', ${nsfw})`
-				);
-			}
+			create: async (id, link, linkname, tags, nsfw) => this.query(
+				`INSERT INTO photogallery (userId, links, linkname, tags, nsfw) VALUES ('${id}', '${link}', '${linkname}', '${tags}', ${nsfw})`
+			)
 		};
 		this.commands = {
 			create: async (command, args, message) => this.query(
@@ -231,33 +202,13 @@ module.exports = class DatabaseProvider extends GenericDatabaseProvider {
 		};
 	}
 
-	async checkId(id) {
-		try {
-			await this.client.users.fetch(id);
-			return true;
-		} catch (errU) {
-			try {
-				const guild = await this.client.guilds.resolve(id);
-				if (guild instanceof Guild)
-					return true;
-				return false;
-			} catch (errG) {
-				return new RangeError("The ID specified is not a string.");
-			}
-		}
-	}
-
-	async checkSelectOneById(id, columns) {
-		const check = await this.checkId(id);
-		if (check instanceof RangeError) return check;
+	static checkSelectOneById(id, columns) {
 		if (columns !== undefined && !(columns instanceof Array))
 			return new RangeError("The columns property is not an Array object.");
 		return true;
 	}
 
-	async checkUpdateOneById(id, changes) {
-		const check = await this.checkId(id);
-		if (check instanceof RangeError) return check;
+	static checkUpdateOneById(id, changes) {
 		if (!(changes instanceof Map))
 			return new RangeError("The changes property is not a Map object.");
 		if (changes.size === 0)

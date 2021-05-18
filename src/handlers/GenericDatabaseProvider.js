@@ -21,7 +21,7 @@ module.exports = class GenericDatabaseProvider {
 
 	async checkIntegrity() {
 		if ((await this.query("SHOW TABLES LIKE \"users\"", true)).length === 0)
-			await this.query("CREATE TABLE `users` (`userId` varchar(20) CHARACTER SET utf8 NOT NULL, `settings` text CHARACTER SET utf8 NOT NULL, `permissions` mediumint(9) DEFAULT NULL, `timeout` bigint(20) DEFAULT NULL, UNIQUE KEY `userId` (`userId`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;", true);
+			await this.query("CREATE TABLE `users` (`userId` varchar(20) CHARACTER SET utf8 NOT NULL, `settings` text CHARACTER SET utf8 NOT NULL, `permissions` mediumint(9) DEFAULT 0, `timeout` bigint(20) DEFAULT NULL, UNIQUE KEY `userId` (`userId`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;", true);
 		if ((await this.query("SHOW TABLES LIKE \"guilds\"", true)).length === 0)
 			await this.query("CREATE TABLE `guilds` (`guildid` tinytext CHARACTER SET utf8, `settings` text CHARACTER SET utf8, `commands` text COLLATE utf8mb4_bin NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;", true);
 		if ((await this.query("SHOW TABLES LIKE \"socialprofile\"", true)).length === 0)

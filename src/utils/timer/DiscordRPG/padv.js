@@ -21,8 +21,12 @@ module.exports = message => {
 		if (message.guild.settings.autodelete === "on")
 			message.delete({ timeout: 1000 });
 		message.author.timers.padventure = setTimeout(() => {
+			const ping = message.author.settings.timerPing === "adventure"
+                		|| message.author.settings.timerPing === "on"
+                		? `<@${message.author.id}>`
+                		: `${message.author.username},`;
 			message.channel
-				.send(`<@${message.author.id}> party adventure time! :crossed_swords:`)
+				.send(`${ping} party adventure time! :crossed_swords:`)
 				.then(msg => {
 					if (message.guild.settings.autodelete === "on") msg.delete({ timeout: 10000 });
 				});
