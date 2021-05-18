@@ -61,7 +61,7 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 			} else data.settings = JSON.parse(data.settings);
 			data.commands = JSON.parse(data.commands);
 			if (data !== undefined) {
-				for (const [key, value] of Object.entries(JSON.parse(data.settings))) {
+				for (const [key, value] of Object.entries(data.settings)) {
 					this.settings[key.toLowerCase()] = value;
 				}
 				for (const [key, value] of Object.entries(data))
