@@ -30,10 +30,10 @@ module.exports = class UconfigCommand extends Command {
 			for (const [key, data] of Object.entries(parametersAvailable)) {
 				if (list[data.category] === undefined) list[data.category] = {};
 				if (data.showOnlyIfBotIsInGuild !== undefined) {
-					// eslint-disable-next-line no-await-in-loop
-					if (await message.guild.members.fetch(data.showOnlyIfBotIsInGuild)) {
-						list[data.category][key] = data;
-					}
+					try {
+						// eslint-disable-next-line no-await-in-loop
+						await message.guild.members.fetch(data.showOnlyIfBotIsInGuild);
+					} catch {} // eslint-disable-line no-empty
 				} else {
 					list[data.category][key] = data;
 				}
