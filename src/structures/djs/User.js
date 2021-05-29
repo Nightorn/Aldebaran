@@ -53,6 +53,11 @@ module.exports = BaseUser => class User extends BaseUser {
 		this.existsInDB = data !== undefined;
 		this.ready = true;
 		if (data !== undefined) {
+			for (const [key, value] of Object.entries(JSON.parse(data.settings))) {
+				this.settings[key.toLowerCase()] = value;
+			}
+			for (const [key, value] of Object.entries(data))
+				if (!["userId", "settings"].includes(key)) this[key] = value;
 			this.permissions = new AldebaranPermissions(data.permissions || 0);
 			data.settings = JSON.parse(data.settings);
 			for (const [key, value] of Object.entries(data))

@@ -2,13 +2,13 @@ const timezoneSupport = require("./timezoneSupport");
 
 module.exports = {
 	common: {
-		adventureTimer: {
+		adventuretimer: {
 			support: value => value === "on" || value === "off" || value === "random",
 			help: "Adventure Timer (\"random\" for 3s +-) - [on | off | random]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
-		healthMonitor: {
+		healthmonitor: {
 			support: value => (
 				value === "on"
           || value === "off"
@@ -18,7 +18,7 @@ module.exports = {
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
-		polluxBoxPing: {
+		polluxboxping: {
 			support: value => value === "on" || value === "off",
 			help: "Box Ping - [on | off]",
 			postUpdateCommon: (value, user, guild) => {
@@ -30,14 +30,14 @@ module.exports = {
 		}
 	},
 	user: {
-		individualHealthMonitor: {
+		individualhealthmonitor: {
 			support: value => ["off", "character", "pet"].indexOf(value) !== -1,
 			help:
         "Lets you choose whether you want to display the health of your character or your pet with the health monitor - [off | character | pet]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
-		sidesTimer: {
+		sidestimer: {
 			support: value => (
 				value === "on"
           || value === "off"
@@ -50,7 +50,7 @@ module.exports = {
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
-		timerPing: {
+		timerping: {
 			support: value => (
 				value === "on"
 				|| value === "adventure"
@@ -67,7 +67,7 @@ module.exports = {
         "Sets your timezone - [GMT, UTC, or [tz database timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]",
 			category: "Aldebaran"
 		},
-		dateFormat: {
+		dateformat: {
 			support: value => (
 				value.indexOf("DD") !== -1
           && value.indexOf("MM") !== -1
@@ -77,31 +77,31 @@ module.exports = {
         "Time Format - Use DD (day of month), MM (month number) and YYYY (year)",
 			category: "Aldebaran"
 		},
-		osuUsername: {
+		osuusername: {
 			support: () => true,
 			help: "osu! default username (for osu! commmands)",
 			category: "osu!"
 		},
-		osuMode: {
+		osumode: {
 			support: () => true,
 			help: "osu! default mode (for osu! commmands) [osu | mania | taiko | ctb]",
 			category: "osu!"
 		}
 	},
 	guild: {
-		autoDelete: {
+		autodelete: {
 			support: value => value === "on" || value === "off",
 			help: "Auto Delete Sides & Adv Commands - [on | off]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
-		sidesTimer: {
+		sidestimer: {
 			support: value => value === "on" || value === "off",
 			help: "Sides Timer - [on | off]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
-		aldebaranPrefix: {
+		aldebaranprefix: {
 			support: () => true,
 			help: "Aldebaran's Prefix - [& | Guild Customized]",
 			postUpdate: (value, guild) => { guild.prefix = value; },
@@ -111,7 +111,7 @@ module.exports = {
 			support: value => value === "on" || value === "off",
 			showOnlyIfBotIsInGuild: "2"
 		},
-		discordrpgPrefix: {
+		discordrpgprefix: {
 			support: () => true,
 			help: "Prefix",
 			showOnlyIfBotIsInGuild: "170915625722576896",

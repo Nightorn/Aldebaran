@@ -101,7 +101,7 @@ const percentageCheck = (name, msg, player, pet) => {
 };
 
 module.exports = (client, message) => {
-	if (message.guild.settings.healthMonitor === "off") return;
+	if (message.guild.settings.healthmonitor === "off") return;
 	const player = {
 		name: null,
 		currentHP: 0,
@@ -189,7 +189,7 @@ module.exports = (client, message) => {
     && player.name !== undefined
     && player.healthPercent !== pet.healthPercent
 	) {
-		if (user.settings.healthMonitor === "off") return;
+		if (user.settings.healthmonitor === "off") return;
 
 		percentageCheck(
 			player.name,

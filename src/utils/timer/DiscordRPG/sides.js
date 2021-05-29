@@ -5,15 +5,15 @@ module.exports = async message => {
 	let prefix = null;
 	let sidesPass = false;
 	let primaryAction = null;
-	if (message.author.settings.sidesTimer !== undefined) {
-		if (message.author.settings.sidesTimer === "on") primaryAction = "mine";
-		else primaryAction = message.author.settings.sidesTimer;
+	if (message.author.settings.sidestimer !== undefined) {
+		if (message.author.settings.sidestimer === "on") primaryAction = "mine";
+		else primaryAction = message.author.settings.sidestimer;
 	} else primaryAction = "mine";
 	const content = `${message.content.toLowerCase()} `;
 	for (const element of [
 		"DiscordRPG",
 		"#!",
-		message.guild.settings.discordrpgPrefix
+		message.guild.settings.discordrpgprefix
 	]) {
 		for (const action of ["mine", "forage", "chop", "fish"]) {
 			if (content.indexOf(`${element}${action} `) === 0) prefix = element;
@@ -21,13 +21,13 @@ module.exports = async message => {
 				if (content.indexOf(prefix + action) === 0) sidesPass = true;
 		}
 	}
-	if (message.guild.settings.autoDelete === "on" && sidesPass) message.delete({ timeout: 2000 });
+	if (message.guild.settings.autodelete === "on" && sidesPass) message.delete({ timeout: 2000 });
 	if (content.indexOf(prefix + primaryAction) === 0) {
 		if (message.author.timers.sides !== null) return;
 		if (prefix !== null) {
 			if (
-				supportedST.indexOf(message.author.settings.sidesTimer) !== -1
-        && message.guild.settings.sidesTimer === "on"
+				supportedST.indexOf(message.author.settings.sidestimer) !== -1
+        && message.guild.settings.sidestimer === "on"
 			) {
 				const emoji = ["🥕", "🍋", "🥔", "🐟"];
 				const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
@@ -56,8 +56,8 @@ module.exports = async message => {
 									timerset.delete({ timeout: 5000 });
 									// eslint-disable-next-line no-param-reassign
 									message.author.timers.sides = setTimeout(() => {
-										const ping = message.author.settings.timerPing === "on"
-											|| message.author.settings.timerPing === "sides"
+										const ping = message.author.settings.timerping === "on"
+											|| message.author.settings.timerping === "sides"
 											? `<@${message.author.id}>`
 											: `${message.author.username},`;
 										message.channel
@@ -65,7 +65,7 @@ module.exports = async message => {
 												`${ping} sides time! ${randomemoji}`
 											)
 											.then(msg => {
-												if (message.guild.settings.autoDelete === "on") msg.delete({ timeout: 180000 });
+												if (message.guild.settings.autodelete === "on") msg.delete({ timeout: 180000 });
 											});
 										// eslint-disable-next-line no-param-reassign
 										message.author.timers.sides = null;

@@ -60,11 +60,16 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 				data.settings = JSON.parse(data.settings.replace(/\\/g, "\\\\"));
 			} else data.settings = JSON.parse(data.settings);
 			data.commands = JSON.parse(data.commands);
-			for (const [key, value] of Object.entries(data))
-				if (key !== "guildid") this[key] = value;
+			if (data !== undefined) {
+				for (const [key, value] of Object.entries(data.settings)) {
+					this.settings[key.toLowerCase()] = value;
+				}
+				for (const [key, value] of Object.entries(data))
+					if (!["guildid", "settings"].includes(key)) this[key] = value;
+			}
 			this.prefix = this.client.debugMode
 				? process.env.PREFIX
-				: this.settings.aldebaranPrefix || process.env.PREFIX;
+				: this.settings.aldebaranprefix || process.env.PREFIX;
 			this.polluxBoxPing = new Collection();
 		}
 		return data;

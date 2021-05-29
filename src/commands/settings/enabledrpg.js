@@ -7,8 +7,8 @@ const descriptions = {
 	sidesTimer: "DiscordRPG Sides Timer",
 	timerPing: "DiscordRPG Timer Pings"
 };
-const guildParameters = ["healthMonitor", "adventureTimer", "sidesTimer"];
-const userParameters = ["healthMonitor", "adventureTimer", "sidesTimer", "timerPing"];
+const guildParameters = ["healthmonitor", "adventuretimer", "sidestimer"];
+const userParameters = ["healthmonitor", "adventuretimer", "sidestimer", "timerping"];
 
 module.exports = class EnableDRPGCommand extends Command {
 	constructor(client) {
