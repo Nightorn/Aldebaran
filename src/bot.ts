@@ -1,12 +1,13 @@
-require("dotenv").config();
-const { Structures } = require("discord.js");
-const { registerFont } = require("canvas");
+import { Structures } from "discord.js";
+import { registerFont } from "canvas";
 
-const AldebaranClient = require("./src/structures/djs/Client");
-const User = require("./src/structures/djs/User");
-const Guild = require("./src/structures/djs/Guild");
-const Message = require("./src/structures/djs/Message");
-const Channel = require("./src/structures/djs/TextChannel");
+import AldebaranClient from "./structures/djs/Client";
+import User from "./structures/djs/User";
+import Guild from "./structures/djs/Guild";
+import Message from "./structures/djs/Message";
+import Channel from "./structures/djs/TextChannel";
+
+require("dotenv").config();
 
 // With the contribution of holroy
 Number.formatNumber = n => {
@@ -35,8 +36,8 @@ registerFont("./assets/fonts/Exo2-Regular.ttf", {
 });
 
 Structures.extend("User", BaseUser => User(BaseUser));
-Structures.extend("Guild", BaseGuild => Guild(BaseGuild));
-Structures.extend("Message", BaseMessage => Message(BaseMessage));
+Structures.extend("Guild", () => Guild);
+Structures.extend("Message", () => Message);
 Structures.extend("TextChannel", BaseTextChannel => Channel(BaseTextChannel));
 
-const bot = new AldebaranClient(); // eslint-disable-line no-unused-vars
+const bot = new AldebaranClient(); // eslint-disable-line @typescript-eslint/no-unused-vars

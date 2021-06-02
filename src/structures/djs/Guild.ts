@@ -1,23 +1,28 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
-const { Collection } = require("discord.js");
 
-function sanitize(data) {
-	return data.replace(/[\\"]/g, "\\$&");
+import { Guild as DJSGuild, Collection as C } from "discord.js";
+import Settings from "../../interfaces/Settings";
+import AldebaranClient from "./Client";
+import User from "./User";
+
+function sanitize(data: string | number) {
+	return data.toString().replace(/[\\"]/g, "\\$&");
 }
 
-module.exports = BaseGuild => class Guild extends BaseGuild {
-	constructor(client, data) {
-		super(client, data);
-		this.commands = {};
-		this.prefix = process.env.PREFIX;
-		this.settings = {};
-	}
+export default class Guild extends DJSGuild {
+	client!: AldebaranClient;
+	commands: Settings = {};
+	existsInDB: boolean = false;
+	prefix: string = process.env.PREFIX || "&";
+	ready: boolean = false;
+	settings: Settings = {};
+	polluxBoxPing: C<number, typeof User> = new C<number, typeof User>();
 
-	async changeCommandSetting(property, value) {
+	async changeCommandSetting(property: string, value: string) {
 		this.commands[property] = value;
-		if (value === true) delete this.commands[property];
-		if (!this.client.commands.exists(property) && value === false)
+		if (value) delete this.commands[property];
+		if (!this.client.commands.exists(property) && !value)
 			delete this.commands[property];
 		return this.client.database.guilds.updateOneById(
 			this.id,
@@ -25,10 +30,10 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 		);
 	}
 
-	async changeSetting(property, value) {
+	async changeSetting(property: string, value: string) {
 		await this.create();
 		this.settings[property] = value;
-		const toSave = Object.assign({}, this.settings);
+		const toSave = { ...this.settings };
 		for (const setting in toSave) {
 			toSave[setting] = sanitize(toSave[setting]);
 		}
@@ -62,15 +67,14 @@ module.exports = BaseGuild => class Guild extends BaseGuild {
 			data.commands = JSON.parse(data.commands);
 			if (data !== undefined) {
 				for (const [key, value] of Object.entries(data.settings)) {
-					this.settings[key.toLowerCase()] = value;
+					this.settings[key.toLowerCase()] = value as number | string;
 				}
-				for (const [key, value] of Object.entries(data))
-					if (!["guildid", "settings"].includes(key)) this[key] = value;
+				this.commands = data.commands;
 			}
-			this.prefix = this.client.debugMode
+			this.prefix = this.client.debugMode && process.env.PREFIX
 				? process.env.PREFIX
-				: this.settings.aldebaranprefix || process.env.PREFIX;
-			this.polluxBoxPing = new Collection();
+				: this.settings.aldebaranprefix as string || "&";
+			this.polluxBoxPing = new C();
 		}
 		return data;
 	}

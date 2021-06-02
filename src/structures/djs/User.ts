@@ -1,18 +1,17 @@
-const SocialProfile = require("../aldebaran/SocialProfile");
-const AldebaranPermissions = require("../aldebaran/AldebaranPermissions");
+import { User as DJSUser } from "discord.js";
+import SocialProfile from "../aldebaran/SocialProfile";
+import AldebaranPermissions from "../aldebaran/AldebaranPermissions";
+import Settings from "../../interfaces/Settings";
 
-module.exports = BaseUser => class User extends BaseUser {
-	constructor(client, data) {
-		super(client, data);
-		this.generalCooldown = 0;
-		this.settings = {};
-		this.permissions = new AldebaranPermissions(0);
-		this.timers = {
-			adventure: null,
-			padventure: null,
-			sides: null
-		};
-	}
+export default (BaseUser: typeof DJSUser) => class User extends BaseUser {
+	generalCooldown: number = 0;
+	settings: Settings = {};
+	permissions: AldebaranPermissions = new AldebaranPermissions(0);
+	timers: {} = { adventure: null, padventure: null, sides: null };
+	timeout: number = 0;
+	existsInDB: boolean = false;
+	ready: boolean = false;
+	profile: any;
 
 	get banned() {
 		return this.timeout > Date.now();
@@ -26,7 +25,7 @@ module.exports = BaseUser => class User extends BaseUser {
 		return timers;
 	}
 
-	async changeSetting(property, value) {
+	async changeSetting(property: string, value: string) {
 		await this.create();
 		this.settings[property] = value;
 		this.unready();
@@ -52,16 +51,13 @@ module.exports = BaseUser => class User extends BaseUser {
 		const data = await this.client.database.users.selectOneById(this.id);
 		this.existsInDB = data !== undefined;
 		this.ready = true;
-		if (data !== undefined) {
-			for (const [key, value] of Object.entries(JSON.parse(data.settings))) {
-				this.settings[key.toLowerCase()] = value;
-			}
-			for (const [key, value] of Object.entries(data))
-				if (!["userId", "settings"].includes(key)) this[key] = value;
-			this.permissions = new AldebaranPermissions(data.permissions || 0);
+		if (data) {
 			data.settings = JSON.parse(data.settings);
-			for (const [key, value] of Object.entries(data))
-				if (key !== "userId" && key !== "permissions") this[key] = value;
+			for (const [key, value] of Object.entries(data.settings)) {
+				this.settings[key.toLowerCase()] = value as string | number;
+			}
+			this.timeout = data.timeout || 0;
+			this.permissions = new AldebaranPermissions(data.permissions || 0);
 		}
 		return data;
 	}
@@ -72,7 +68,7 @@ module.exports = BaseUser => class User extends BaseUser {
 		return this.profile;
 	}
 
-	hasPermission(permission) {
+	hasPermission(permission: string) {
 		if (process.env.BOT_ADMIN === this.id) return true;
 		return this.permissions.has(AldebaranPermissions.FLAGS.ADMINISTRATOR)
 			|| this.permissions.has(AldebaranPermissions.FLAGS[permission]);
@@ -80,9 +76,8 @@ module.exports = BaseUser => class User extends BaseUser {
 
 	/**
 	 * Removes permissions from a user
-	 * @param {string[]} permissions Array of permission flags to remove
 	 */
-	async removePermissions(permissions) {
+	async removePermissions(permissions: string[]) {
 		permissions.forEach(permission => {
 			if (Object.keys(AldebaranPermissions.FLAGS).includes(permission))
 				this.permissions.remove(AldebaranPermissions.FLAGS[permission]);
@@ -96,9 +91,8 @@ module.exports = BaseUser => class User extends BaseUser {
 
 	/**
 	 * Adds permissions to a user
-	 * @param {string[]} permissions Array of permission flags to add
 	 */
-	async addPermissions(permissions) {
+	async addPermissions(permissions: string[]) {
 		permissions.forEach(permission => {
 			if (Object.keys(AldebaranPermissions.FLAGS).includes(permission))
 				this.permissions.add(AldebaranPermissions.FLAGS[permission]);

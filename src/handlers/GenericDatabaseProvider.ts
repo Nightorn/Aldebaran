@@ -1,6 +1,10 @@
-const mysql = require("mysql");
+import mysql, { Pool } from "mysql";
 
-module.exports = class GenericDatabaseProvider {
+export default class GenericDatabaseProvider {
+	pool: Pool;
+
+	integrityCheck: Boolean;
+
 	/**
 	 * Returns a MySQL pool connection to the Aldebaran's database
 	 */
@@ -8,6 +12,7 @@ module.exports = class GenericDatabaseProvider {
 		if (!process.env.MYSQL_HOST || !process.env.MYSQL_USER
 			|| !process.env.MYSQL_PASSWORD || !process.env.MYSQL_DATABASE
 		) throw new TypeError("The database configuration is invalid");
+		this.integrityCheck = false;
 		this.pool = mysql.createPool({
 			host: process.env.MYSQL_HOST,
 			user: process.env.MYSQL_USER,
@@ -43,10 +48,8 @@ module.exports = class GenericDatabaseProvider {
 
 	/**
 	 * Performs a query to the database and returns the parsed MySQL result
-	 * @param {string} query The query to make to the database
-     * @returns {Promise<[]>}
 	 */
-	query(query, ignoreIntegrity = false) {
+	query(query: string, ignoreIntegrity = false): Promise<any[]> {
 		return new Promise(async (resolve, reject) => {
 			if (!this.integrityCheck && !ignoreIntegrity) await this.checkIntegrity();
 			this.pool.query(query, (error, result) => {
@@ -59,4 +62,4 @@ module.exports = class GenericDatabaseProvider {
 			});
 		});
 	}
-};
+}

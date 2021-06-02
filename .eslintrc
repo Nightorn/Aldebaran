@@ -1,30 +1,50 @@
 {
+    "root": true,
     "extends": [
-        "airbnb",
-        "plugin:jsx-a11y/recommended"
+        "airbnb-typescript"
     ],
     "plugins": [
-        "jsx-a11y"
+        "jsx-a11y",
+        "@typescript-eslint"
     ],
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2017
+        "ecmaVersion": 2017,
+        "project": "./tsconfig.json"
     },
-
     "env": {
         "es6": true
     },
     "rules": {
-        "no-constant-condition": ["error", { "checkLoops": false }],
-        "guard-for-in": "off",
-        "no-restricted-syntax": "off",
-        "no-bitwise": "off",
-        "no-console": "off",
-        "no-param-reassign": "off",
-        "no-extend-native": "off",
-        "no-plusplus": "off",
-        "import/no-webpack-loader-syntax": "off",
+        "@typescript-eslint/indent": ["warn", "tab"],
+        "@typescript-eslint/comma-dangle": ["error", "never"],
+        "@typescript-eslint/curly": "off",
+        "@typescript-eslint/guard-for-in": "off",
+        "@typescript-eslint/import/no-webpack-loader-syntax": "off",
+        "@typescript-eslint/linebreak-style": "off",
+        "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+        "@typescript-eslint/no-bitwise": "off",
+        "@typescript-eslint/no-confusing-arrow": "off",
+        "@typescript-eslint/no-console": "off",
+        "@typescript-eslint/no-extend-native": "off",
+        "@typescript-eslint/no-extra-semi": "off",
+        "@typescript-eslint/no-mixed-operators": "off",
+        "@typescript-eslint/no-param-reassign": "off",
+        "@typescript-eslint/no-plusplus": "off",
+        "@typescript-eslint/no-restricted-syntax": "off",
+        "@typescript-eslint/nonblock-statement-body-position": "off",
+        "@typescript-eslint/object-curly-spacing": ["error", "always"],
+        "@typescript-eslint/object-curly-newline": "off",
+        "@typescript-eslint/quotes": ["warn", "double"],
+        "@typescript-eslint/semi": ["error", "always"],
         "indent": ["warn", "tab"],
+        "arrow-parens": ["warn", "as-needed"],
+        "comma-dangle": ["error", "never"],
+        "curly": "off",
+        "guard-for-in": "off",
+        "import/no-webpack-loader-syntax": "off",
+        "linebreak-style": "off",
+        "max-classes-per-file": "off",
         "max-len": ["warn", {
             "code": 80,
             "tabWidth": 2,
@@ -33,18 +53,22 @@
             "ignoreTemplateLiterals": true,
             "ignoreRegExpLiterals": true
         }],
-        "semi": ["error", "always"],
-        "quotes": ["warn", "double"],
+        "no-async-promise-executor": "off",
+        "no-bitwise": "off",
+        "no-confusing-arrow": "off",
+        "no-console": "off",
+        "no-constant-condition": ["error", { "checkLoops": false }],
+        "no-extend-native": "off",
+        "no-mixed-operators": "off",
+        "no-param-reassign": "off",
+        "no-plusplus": "off",
+        "no-restricted-syntax": "off",
+        "no-tabs": ["error", { "allowIndentationTabs": true }],
+        "nonblock-statement-body-position": "off",
         "object-curly-spacing": ["error", "always"],
         "object-curly-newline": "off",
-        "comma-dangle": ["error", "never"],
-        "no-tabs": ["error", { "allowIndentationTabs": true }],
-        "linebreak-style": "off",
-        "arrow-parens": ["warn", "as-needed"],
-        "curly": "off",
-        "nonblock-statement-body-position": "off",
-        "no-confusing-arrow": "off",
-        "no-mixed-operators": "off",
-        "prefer-destructuring": ["error", { "array": false }]
+        "prefer-destructuring": ["error", { "array": false }],
+        "quotes": ["warn", "double"],
+        "semi": ["error", "always"]
     }
 }

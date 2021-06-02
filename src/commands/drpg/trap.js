@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const request = require("request");
 const math = require("mathjs");
-const locations = require("./../../../assets/data/drpg/locations.json");
+const locations = require("../../../assets/data/drpg/locations.json");
 const itemList = require("../../../assets/data/drpg/itemList.json");
 const { Command } = require("../../groups/DRPGCommand");
 

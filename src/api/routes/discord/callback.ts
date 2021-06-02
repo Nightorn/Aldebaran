@@ -1,7 +1,8 @@
-const request = require("request");
-const uid = require("uid-safe");
+import { Request, Response } from "express";
+import request from "request";
+import uid from "uid-safe";
 
-module.exports = app => (req, res) => {
+export default (app: any) => (req: Request, res: Response) => {
 	if (req.query.code && req.query.state) {
 		request.post({
 			url: "https://discord.com/api/oauth2/token",
@@ -23,7 +24,8 @@ module.exports = app => (req, res) => {
 				const id = uid.sync(24);
 				res.cookie("connect.sid", id, { maxAge: data.expires_in, httpOnly: true });
 				await app.db.query(`INSERT INTO glow_sessions (user, session, access_token, refresh_token, expires) VALUES ("${sdata.id}", "${id}", "${data.access_token}", "${data.refresh_token}", ${Date.now() + data.expires_in})`);
-				res.redirect(Buffer.from(req.query.state, "base64").toString());
+				const state: any = req.query.state;
+				res.redirect(Buffer.from(state, "base64").toString());
 			});
 		});
 	} else {

@@ -1,10 +1,16 @@
-const { Collection } = require("discord.js");
+import { Message as DJSMessage, Collection, TextChannel as TC, DMChannel as DC, NewsChannel as NC } from "discord.js";
+import AldebaranClient from "./Client";
+import Guild from "./Guild";
 
-module.exports = BaseMessage => class Message extends BaseMessage {
-	constructor(client, data, channel) {
+export default class Message extends DJSMessage {
+	guild!: Guild;
+	prefix: string = "&";
+	valid: boolean = false;
+
+	constructor(client: AldebaranClient, data: any, channel: TC | DC | NC) {
 		super(client, data, channel);
-		if (this.channel.guild) {
-			this.prefix = this.content.slice(0, this.guild.prefix.length);
+		if (typeof channel === typeof TC) {
+			this.prefix = this.content.slice(0, this.guild!.prefix.length);
 			this.valid = this.content.indexOf(this.prefix) === 0;
 		}
 	}

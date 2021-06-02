@@ -1,40 +1,44 @@
-const { Client } = require("discord.js");
-const fs = require("fs");
-const CDBAHandler = require("../../handlers/CDBAHandler");
-const CommandHandler = require("../../handlers/CommandHandler");
-const DatabaseProvider = require("../../handlers/DatabaseProvider");
-const confModels = require("../../utils/checks/configurationModels");
-const aldebaranTeam = require("../../../config/aldebaranTeam.json");
-const presences = require("../../../config/presence.json");
-const packageFile = require("../../../package.json");
+import { Client } from "discord.js";
+import fs from "fs";
+import CDBAHandler from "../../handlers/CDBAHandler";
+import CommandHandler from "../../handlers/CommandHandler";
+import DatabaseProvider from "../../handlers/DatabaseProvider";
+import confModels from "../../utils/checks/configurationModels";
+import aldebaranTeam from "../../../config/aldebaranTeam.json";
+import presences from "../../../config/presence.json";
+import packageFile from "../../../package.json";
+import CustomTimer from "../aldebaran/CustomTimer";
 
-module.exports = class AldebaranClient extends Client {
+export default class AldebaranClient extends Client {
+	started: number = Date.now();
+	config: object = { presence: presences, aldebaranTeam };
+	preCustomTimers: any[] = [];
+	customTimers: Map<any, any> = new Map<number, CustomTimer>();
+	customTimerTriggers: Map<any, any> = new Map();
+	database: DatabaseProvider = new DatabaseProvider(this);
+	databaseData: object = { profiles: new Map() };
+	CDBA: CDBAHandler = new CDBAHandler();
+	commandGroups: object = {};
+	commands: CommandHandler = new CommandHandler(this);
+	debugMode: boolean = process.argv[2] === "dev";
+	models: any = { settings: confModels };
+	stats: any;
+	version: string = packageFile.version;
+	drpgCache: object;
+
 	constructor() {
 		super({
-			disabledEvents: ["TYPING_START"],
 			messageCacheMaxSize: 10,
 			messageCacheLifetime: 1800,
 			messageSweepInterval: 60
 		});
-		this.started = Date.now();
-		this.config = { presence: presences, aldebaranTeam };
-		this.preCustomTimers = [];
-		this.customTimers = new Map();
-		this.customTimerTriggers = new Map();
-		this.database = new DatabaseProvider(this);
-		this.databaseData = { profiles: new Map() };
-		this.database.timers.selectAll().then(timers => {
+		this.database.timers.selectAll().then((timers: any) => {
 			timers.forEach(this.preCustomTimers.push);
 			console.log(`\x1b[36m# Fetched all necessary data from database, took ${Date.now() - this.started}ms.\x1b[0m`);
 			this.login(process.env.TOKEN).then(() => {
 				console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
 			});
 		});
-		this.CDBA = new CDBAHandler();
-		this.commandGroups = {};
-		this.commands = new CommandHandler(this);
-		this.debugMode = process.argv[2] === "dev";
-		this.models = { settings: confModels };
 		this.stats = {
 			commands: {
 				total: 0,
@@ -49,7 +53,6 @@ module.exports = class AldebaranClient extends Client {
 				all: {}
 			}
 		};
-		this.version = packageFile.version;
 		if (process.argv[3] !== undefined && this.debugMode) {
 			process.env.PREFIX = process.argv[3];
 		}
@@ -67,7 +70,7 @@ module.exports = class AldebaranClient extends Client {
 		}
 
 		fs.readdir("./src/events/", (err, files) => {
-			if (err) throw console.error(err);
+			if (err) throw err;
 			files.forEach(file => {
 				// eslint-disable-next-line import/no-dynamic-require, global-require
 				const eventFunction = require(`../../events/${file}`);
@@ -78,6 +81,6 @@ module.exports = class AldebaranClient extends Client {
 	}
 
 	get shardID() {
-		return this.guilds.cache.first().shardID;
+		return this.guilds.cache.first()!.shardID;
 	}
 };
