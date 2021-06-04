@@ -27,15 +27,15 @@ const checkPlayer = (message, username) => {
 };
 
 const general = (user, playerHP, petHP, message) => {
-	const { healthMonitor, individualHealthMonitor } = user.settings;
+	const { healthmonitor, individualhealthmonitor } = user.settings;
 	if (user === null) return;
-	if (healthMonitor !== undefined && healthMonitor !== "off") {
+	if (healthmonitor !== undefined && healthmonitor !== "off") {
 		const embed = new MessageEmbed()
 			.setAuthor(user.username, user.avatarURL())
 			.setColor(embedColor(playerHP));
-		if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
+		if (["character", "pet"].indexOf(individualhealthmonitor) !== -1) {
 			embed.addField(
-				...(individualHealthMonitor === "character"
+				...(individualhealthmonitor === "character"
 					? ["__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`]
 					: ["__Pet Health__", petHP === 0 ? "**DEAD**" : `${emojiColor(petHP)} **${petHP}**%`]),
 				true
@@ -77,13 +77,13 @@ const petWarning = (user, hp, message) => {
 const percentageCheck = (name, msg, player, pet) => {
 	const user = checkPlayer(msg, name);
 	if (user !== null) {
-		const { healthMonitor, individualHealthMonitor } = user.settings;
-		const percentage = !Number.isNaN(parseInt(healthMonitor, 10))
-			? parseInt(healthMonitor, 10)
+		const { healthmonitor, individualhealthmonitor } = user.settings;
+		const percentage = !Number.isNaN(parseInt(healthmonitor, 10))
+			? parseInt(healthmonitor, 10)
 			: 100;
-		if (healthMonitor === undefined || healthMonitor === "off") return false;
-		if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
-			if (individualHealthMonitor === "character") {
+		if (healthmonitor === undefined || healthmonitor === "off") return false;
+		if (["character", "pet"].indexOf(individualhealthmonitor) !== -1) {
+			if (individualhealthmonitor === "character") {
 				if (player <= percentage) {
 					if (player <= 11) return playerWarning(user, player, msg);
 					return general(user, player, pet, msg);
