@@ -33,6 +33,7 @@ module.exports = class UconfigCommand extends Command {
 					try {
 						// eslint-disable-next-line no-await-in-loop
 						await message.guild.members.fetch(data.showOnlyIfBotIsInGuild);
+						list[data.category][key] = data;
 					} catch {} // eslint-disable-line no-empty
 				} else {
 					list[data.category][key] = data;
@@ -45,6 +46,7 @@ module.exports = class UconfigCommand extends Command {
 					"**__IMPORTANT: If setting is disabled in &gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties."
 				)
 				.setColor("BLUE");
+			console.log(list);
 			for (const [category, parameters] of Object.entries(list)) {
 				let entries = "";
 				for (const [key, data] of Object.entries(parameters)) {
@@ -54,7 +56,7 @@ module.exports = class UconfigCommand extends Command {
 					) entries += ":warning: ";
 					entries += `**${key}** - ${data.help}\n`;
 				}
-				embed.addField(category, entries);
+				if (entries) embed.addField(category, entries);
 			}
 			message.channel.send({ embed });
 		} else if (args.includes("view")) {

@@ -31,6 +31,7 @@ module.exports = class GconfigCommand extends Command {
 					try {
 						// eslint-disable-next-line no-await-in-loop
 						await message.guild.members.fetch(data.showOnlyIfBotIsInGuild);
+						list[data.category][key] = data;
 					} catch {} // eslint-disable-line no-empty
 				} else {
 					list[data.category][key] = data;
@@ -45,7 +46,7 @@ module.exports = class GconfigCommand extends Command {
 				for (const [key, data] of Object.entries(parameters)) {
 					entries += `**${key}** - ${data.help}\n`;
 				}
-				embed.addField(category, entries);
+				if (entries) embed.addField(category, entries);
 			}
 			message.channel.send({ embed });
 		} else if (args.includes("view")) {
