@@ -20,7 +20,7 @@ module.exports = message => {
 	if (prefix !== null) {
 		if (message.guild.settings.autodelete === "on") {
 			message.channel.addAdventure(message.author);
-			message.delete({ timeout: 1000 });
+			message.delete({ timeout: 1000 }).catch(() => {});
 		}
 		const delay = message.author.settings.adventuretimer === "random"
 			? Math.random() * 3000
@@ -34,7 +34,8 @@ module.exports = message => {
 			message.channel
 				.send(`${ping} adventure time! :crossed_swords:`)
 				.then(msg => {
-					if (message.guild.settings.autodelete === "on") msg.delete({ timeout: 10000 });
+					if (message.guild.settings.autodelete === "on")
+						msg.delete({ timeout: 10000 }).catch(() => {});
 				});
 			// eslint-disable-next-line no-param-reassign
 			message.author.timers.adventure = null;
