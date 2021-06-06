@@ -59,7 +59,8 @@ const playerWarning = (user, hp, message) => {
 		.setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
 		.setImage(senddeath)
 		.setFooter("Pay attention to your health or you are going to die!");
-	message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
+	message.channel.send(embed)
+		.then(msg => msg.delete({ timeout: 60000 }).catch(() => {}));
 };
 
 const petWarning = (user, hp, message) => {
@@ -71,7 +72,8 @@ const petWarning = (user, hp, message) => {
 		)
 		.setImage(senddeath)
 		.setFooter("Your pet is getting very weak, take care of it quickly!");
-	message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
+	message.channel.send(embed)
+		.then(msg => msg.delete({ timeout: 60000 }).catch(() => {}));
 };
 
 const percentageCheck = (name, msg, player, pet) => {

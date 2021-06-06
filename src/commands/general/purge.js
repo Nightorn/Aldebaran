@@ -13,7 +13,7 @@ module.exports = class PurgeCommand extends Command {
 		const messageCount = (args[0] > 1) ? Math.floor(parseInt(args[0], 10)) : 1;
 		message.channel.bulkDelete(messageCount).then(() => {
 			message.channel.send(`:ok_hand: Purged ${messageCount} messages`).then(msg => {
-				msg.delete({ timeout: 10000, reason: `${message.author.tag} | Purged ${messageCount} messages` });
+				msg.delete({ timeout: 10000, reason: `${message.author.tag} | Purged ${messageCount} messages` }).catch(() => {});
 			});
 		}).catch(() => {
 			message.reply("an error occured and the command could not run properly.");

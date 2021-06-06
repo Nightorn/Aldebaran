@@ -19,16 +19,17 @@ module.exports = message => {
 	}
 	if (prefix !== null) {
 		if (message.guild.settings.autodelete === "on")
-			message.delete({ timeout: 1000 });
+			message.delete({ timeout: 1000 }).catch(() => {});
 		message.author.timers.padventure = setTimeout(() => {
 			const ping = message.author.settings.timerPing === "adventure"
-                		|| message.author.settings.timerPing === "on"
-                		? `<@${message.author.id}>`
-                		: `${message.author.username},`;
+                || message.author.settings.timerPing === "on"
+				? `<@${message.author.id}>`
+				: `${message.author.username},`;
 			message.channel
 				.send(`${ping} party adventure time! :crossed_swords:`)
 				.then(msg => {
-					if (message.guild.settings.autodelete === "on") msg.delete({ timeout: 10000 });
+					if (message.guild.settings.autodelete === "on")
+						msg.delete({ timeout: 10000 }).catch(() => {});
 				});
 			// eslint-disable-next-line no-param-reassign
 			message.author.timers.padventure = null;

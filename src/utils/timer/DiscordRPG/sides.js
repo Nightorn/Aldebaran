@@ -21,7 +21,8 @@ module.exports = async message => {
 				if (content.indexOf(prefix + action) === 0) sidesPass = true;
 		}
 	}
-	if (message.guild.settings.autodelete === "on" && sidesPass) message.delete({ timeout: 2000 });
+	if (message.guild.settings.autodelete === "on" && sidesPass)
+		message.delete({ timeout: 2000 }).catch(() => {});
 	if (content.indexOf(prefix + primaryAction) === 0) {
 		if (message.author.timers.sides !== null) return;
 		if (prefix !== null) {
@@ -43,7 +44,7 @@ module.exports = async message => {
 							{ time: 5000, max: 1 }
 						)
 						.then(reactions => {
-							mesg.delete({ timeout: 5000 });
+							mesg.delete({ timeout: 5000 }).catch(() => {});
 							if (reactions.get("🚫") === undefined) {
 								const embed = new MessageEmbed()
 									.setDescription("Your sides timer has been set!")
@@ -53,7 +54,7 @@ module.exports = async message => {
 									)
 									.setColor(0x00ae86);
 								message.channel.send({ embed }).then(timerset => {
-									timerset.delete({ timeout: 5000 });
+									timerset.delete({ timeout: 5000 }).catch(() => {});
 									// eslint-disable-next-line no-param-reassign
 									message.author.timers.sides = setTimeout(() => {
 										const ping = message.author.settings.timerping === "on"
@@ -65,7 +66,8 @@ module.exports = async message => {
 												`${ping} sides time! ${randomemoji}`
 											)
 											.then(msg => {
-												if (message.guild.settings.autodelete === "on") msg.delete({ timeout: 180000 });
+												if (message.guild.settings.autodelete === "on")
+													msg.delete({ timeout: 180000 }).catch(() => {});
 											});
 										// eslint-disable-next-line no-param-reassign
 										message.author.timers.sides = null;
@@ -77,7 +79,7 @@ module.exports = async message => {
 									.setAuthor(`${message.author.username}`)
 									.setColor("RED");
 								message.channel.send({ embed: embed1 }).then(timernotset => {
-									timernotset.delete({ timeout: 5000 });
+									timernotset.delete({ timeout: 5000 }).catch(() => {});
 								});
 							}
 						});
