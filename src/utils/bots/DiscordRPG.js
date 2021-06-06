@@ -162,20 +162,22 @@ module.exports = (client, message) => {
 		}
 	} else if (
 		message.embeds[0].author !== undefined
-    && message.embeds[0].author !== null
+		&& message.embeds[0].author !== null
 	) {
 		const adventureEmbed = message.embeds[0];
 		if (message.embeds[0].author.name.includes("Adventure")) {
 			const petData = adventureEmbed.fields[
 				adventureEmbed.fields[1].name === "Critical Hit!" ? 2 : 1
 			].value.split("\n")[2];
-			player.name = adventureEmbed.fields[0].name;
-			[pet.currentHP, pet.maxHP] = petData.split(" ")[1].split("/");
-			const healthLine = adventureEmbed.fields[0].value.match(/Has ([\d,]+)\/([\d,]+) HP left/);
-			player.currentHP = Number(healthLine[1].replace(/,/g, ""));
-			player.maxHP = Number(healthLine[2].replace(/,/g, ""));
-			pet.currentHP = parseInt(pet.currentHP.replace(",", ""), 10);
-			pet.maxHP = parseInt(pet.maxHP.replace(",", ""), 10);
+			if (petData) {
+				player.name = adventureEmbed.fields[0].name;
+				[pet.currentHP, pet.maxHP] = petData.split(" ")[1].split("/");
+				const healthLine = adventureEmbed.fields[0].value.match(/Has ([\d,]+)\/([\d,]+) HP left/);
+				player.currentHP = Number(healthLine[1].replace(/,/g, ""));
+				player.maxHP = Number(healthLine[2].replace(/,/g, ""));
+				pet.currentHP = parseInt(pet.currentHP.replace(",", ""), 10);
+				pet.maxHP = parseInt(pet.maxHP.replace(",", ""), 10);
+			}
 		}
 	}
 

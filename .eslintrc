@@ -42,6 +42,7 @@
         "comma-dangle": ["error", "never"],
         "curly": "off",
         "guard-for-in": "off",
+        "import/no-cycle": "off",
         "import/no-webpack-loader-syntax": "off",
         "linebreak-style": "off",
         "max-classes-per-file": "off",

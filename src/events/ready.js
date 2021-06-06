@@ -1,11 +1,4 @@
-const CustomTimer = require("../structures/aldebaran/CustomTimer");
-
 exports.run = client => {
-	for (const element of client.preCustomTimers) {
-		const timer = new CustomTimer(client, element);
-		client.customTimers.set(timer.id, timer);
-	}
-
 	console.log(
 		`\x1b[36m# ${client.user.username} has started!${
 			client.debugMode ? " The developer mode has been enabled." : ""

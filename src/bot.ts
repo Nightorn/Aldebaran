@@ -5,7 +5,7 @@ import AldebaranClient from "./structures/djs/Client";
 import User from "./structures/djs/User";
 import Guild from "./structures/djs/Guild";
 import Message from "./structures/djs/Message";
-import Channel from "./structures/djs/TextChannel";
+import TextChannel from "./structures/djs/TextChannel";
 
 require("dotenv").config();
 
@@ -35,9 +35,9 @@ registerFont("./assets/fonts/Exo2-Regular.ttf", {
 	family: "Exo 2"
 });
 
-Structures.extend("User", BaseUser => User(BaseUser));
+Structures.extend("User", () => User);
 Structures.extend("Guild", () => Guild);
 Structures.extend("Message", () => Message);
-Structures.extend("TextChannel", BaseTextChannel => Channel(BaseTextChannel));
+Structures.extend("TextChannel", () => TextChannel);
 
 const bot = new AldebaranClient(); // eslint-disable-line @typescript-eslint/no-unused-vars

@@ -1,8 +1,12 @@
-const User = require("./user/User");
+import { Request } from "express";
+import User from "./user/User";
+
 const fetchProfile = require("../utils/fetchDBValue").socialprofile;
 
-module.exports = class SocialProfile {
-	constructor(id) {
+export default class SocialProfile {
+	ID: string;
+
+	constructor(id: string) {
 		this.ID = id;
 	}
 
@@ -11,8 +15,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async aboutMe(_, request) {
-		return fetchProfile(request.app.db, this.ID, "aboutMe");
+	async aboutMe(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "aboutMe");
 	}
 
 	/**
@@ -20,8 +24,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async age(_, request) {
-		return fetchProfile(request.app.db, this.ID, "age");
+	async age(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "age");
 	}
 
 	/**
@@ -29,8 +33,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async birthday(_, request) {
-		return fetchProfile(request.app.db, this.ID, "birthday");
+	async birthday(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "birthday");
 	}
 
 	/**
@@ -38,8 +42,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async color(_, request) {
-		return fetchProfile(request.app.db, this.ID, "profileColor");
+	async color(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "profileColor");
 	}
 
 	/**
@@ -47,8 +51,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async country(_, request) {
-		return fetchProfile(request.app.db, this.ID, "country");
+	async country(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "country");
 	}
 
 	/**
@@ -56,8 +60,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<bool>}
 	 */
-	async dmFriendly(_, request) {
-		return fetchProfile(request.app.db, this.ID, "dmFriendly") === "on";
+	async dmFriendly(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "dmFriendly") === "on";
 	}
 
 	/**
@@ -65,8 +69,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async flavorText(_, request) {
-		return fetchProfile(request.app.db, this.ID, "flavorText");
+	async flavorText(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "flavorText");
 	}
 
 	/**
@@ -74,8 +78,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async gender(_, request) {
-		return fetchProfile(request.app.db, this.ID, "gender");
+	async gender(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "gender");
 	}
 
 	/**
@@ -83,8 +87,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async favoriteGames(_, request) {
-		return fetchProfile(request.app.db, this.ID, "favoriteGames");
+	async favoriteGames(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "favoriteGames");
 	}
 
 	/**
@@ -92,8 +96,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async favoriteMusic(_, request) {
-		return fetchProfile(request.app.db, this.ID, "favoriteMusic");
+	async favoriteMusic(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "favoriteMusic");
 	}
 
 	/**
@@ -101,8 +105,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async hobbies(_, request) {
-		return fetchProfile(request.app.db, this.ID, "hobbies");
+	async hobbies(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "hobbies");
 	}
 
 	/**
@@ -118,8 +122,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async name(_, request) {
-		return fetchProfile(request.app.db, this.ID, "name");
+	async name(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "name");
 	}
 
 	/**
@@ -127,8 +131,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async profilePicture(_, request) {
-		return fetchProfile(request.app.db, this.ID, "profilePictureLink");
+	async profilePicture(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "profilePictureLink");
 	}
 
 	/**
@@ -136,8 +140,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async socialLinks(_, request) {
-		return fetchProfile(request.app.db, this.ID, "socialLinks");
+	async socialLinks(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "socialLinks");
 	}
 
 	/**
@@ -145,8 +149,8 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async timezone(_, request) {
-		return fetchProfile(request.app.db, this.ID, "timezone");
+	async timezone(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "timezone");
 	}
 
 	/**
@@ -161,7 +165,7 @@ module.exports = class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async zodiacSign(_, request) {
-		return fetchProfile(request.app.db, this.ID, "zodiacName");
+	async zodiacSign(_: any, request: Request) {
+		return fetchProfile((request.app as any).db, this.ID, "zodiacName");
 	}
 };

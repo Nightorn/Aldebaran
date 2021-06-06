@@ -1,5 +1,14 @@
-module.exports = class SocialProfile {
-	constructor(user) {
+import AldebaranClient from "../djs/Client";
+import User from "../djs/User";
+
+export default class SocialProfile {
+	user: User;
+	client: AldebaranClient;
+	existsInDB: boolean = false;
+	profile: any;
+	ready: boolean = false;
+
+	constructor(user: User) {
 		this.user = user;
 		this.client = this.user.client;
 	}
@@ -14,8 +23,8 @@ module.exports = class SocialProfile {
 		return this.client.database.socialprofile.deleteOneById(this.user.id);
 	}
 
-	async changeProperty(property, value) {
-		this[property] = value;
+	async changeProperty(property: string, value: string) {
+		this.profile[property] = value;
 		return new Promise(async (resolve, reject) => {
 			if (!this.existsInDB) await this.create();
 			this.client.database.socialprofile.updateOneById(
@@ -32,12 +41,12 @@ module.exports = class SocialProfile {
 		this.ready = true;
 		if (data !== undefined) {
 			for (const [key, value] of Object.entries(data))
-				if (key !== "userId") this[key] = value;
+				if (key !== "userId") this.profile[key] = value;
 		}
 		return data;
 	}
 
 	unready() {
-		this.client.shard.broadcastEval(`const user = this.users.cache.get(${this.id}); if (user) !== undefined) { if (user.profile !== undefined) user.profile.ready = false }`);
+		(this.client.shard)!.broadcastEval(`const user = this.users.cache.get(${this.user.id}); if (user) !== undefined) { if (user.profile !== undefined) user.profile.ready = false }`);
 	}
 };

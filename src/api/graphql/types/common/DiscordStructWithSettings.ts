@@ -1,6 +1,10 @@
-module.exports = class DiscordStructWithSettings {
-	constructor(id) {
-		if (this.constructor.name === "DiscordStructWithSettings") return;
+import { Request } from "express";
+import GenericDatabaseProvider from "../../../../handlers/GenericDatabaseProvider";
+
+export default abstract class DiscordStructWithSettings {
+	ID: string;
+
+	constructor(id: string) {
 		const check = id.match(/\d{17,19}/);
 		if (check === null)
 			throw new TypeError("The specified ID does not match the format of a ID.");
@@ -22,8 +26,10 @@ module.exports = class DiscordStructWithSettings {
 	 * @param {*} request Request object
 	 * @returns {string[]}
 	 */
-	async settings({ keys }, request) {
-		const u = await this.querySettings(request.app.db);
-		return u !== null ? keys.reduce((acc, cur) => [...acc, u[cur]], []) : [];
+	async settings({ keys }: { keys: string[] }, request: Request) {
+		const u = await this.querySettings((request.app as any).db);
+		return u !== null ? keys.reduce((acc: string[], cur: any) => [...acc, u[cur]], []) : [];
 	}
+
+	abstract querySettings(db: GenericDatabaseProvider): Promise<string[]>;
 };

@@ -33,8 +33,6 @@ export default class GenericDatabaseProvider {
 			await this.query("CREATE TABLE `socialprofile` (`userId` tinytext CHARACTER SET utf8, `name` text CHARACTER SET utf8, `country` text CHARACTER SET utf8, `timezone` varchar(45) CHARACTER SET utf8 DEFAULT NULL, `birthday` varchar(45) CHARACTER SET utf8 DEFAULT NULL, `aboutMe` longtext CHARACTER SET utf8, `flavorText` text CHARACTER SET utf8, `hobbies` longtext CHARACTER SET utf8, `age` tinytext CHARACTER SET utf8, `gender` tinytext CHARACTER SET utf8, `dmFriendly` tinytext CHARACTER SET utf8, `profilePictureLink` text CHARACTER SET utf8, `favoriteGames` longtext CHARACTER SET utf8, `profileColor` varchar(45) CHARACTER SET utf8 DEFAULT NULL, `favoriteMusic` longtext CHARACTER SET utf8, `socialLinks` longtext CHARACTER SET utf8, `zodiacName` varchar(45) CHARACTER SET utf8 DEFAULT NULL, `fortunePoints` int(11) DEFAULT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;", true);
 		if ((await this.query("SHOW TABLES LIKE \"photogallery\"", true)).length === 0)
 			await this.query("CREATE TABLE `photogallery` (`userid` tinytext CHARACTER SET utf8 NOT NULL, `links` longtext CHARACTER SET utf8 NOT NULL, `linkname` longtext CHARACTER SET utf8 NOT NULL, `tags` varchar(45) CHARACTER SET utf8 NOT NULL, `nsfw` tinytext CHARACTER SET utf8) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;", true);
-		if ((await this.query("SHOW TABLES LIKE \"timers\"", true)).length === 0)
-			await this.query("CREATE TABLE `timers` (`id` int(11) NOT NULL AUTO_INCREMENT, `userId` tinytext COLLATE utf8mb4_bin NOT NULL, `content` text COLLATE utf8mb4_bin, `channelId` tinytext COLLATE utf8mb4_bin, `trigger` text COLLATE utf8mb4_bin, `timer` bigint(20) NOT NULL, `occurences` tinyint(4) NOT NULL, `remind` bigint(11) DEFAULT NULL, `active` tinyint(1) NOT NULL DEFAULT '1', PRIMARY KEY (`id`)) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;", true);
 		if ((await this.query("SHOW TABLES LIKE \"api_clients\"", true)).length === 0)
 			await this.query("CREATE TABLE `api_clients` (`client_id` varchar(50) NOT NULL, `name` tinytext NOT NULL, `avatar` text, `client_secret` tinytext NOT NULL, `redirect_uris` text NOT NULL, UNIQUE KEY `client_id` (`client_id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1", true);
 		if ((await this.query("SHOW TABLES LIKE \"api_authcodes\"", true)).length === 0)
@@ -49,7 +47,7 @@ export default class GenericDatabaseProvider {
 	/**
 	 * Performs a query to the database and returns the parsed MySQL result
 	 */
-	query(query: string, ignoreIntegrity = false): Promise<any[]> {
+	query(query: string, ignoreIntegrity = false): any {
 		return new Promise(async (resolve, reject) => {
 			if (!this.integrityCheck && !ignoreIntegrity) await this.checkIntegrity();
 			this.pool.query(query, (error, result) => {

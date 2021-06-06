@@ -1,18 +1,23 @@
-const fs = require("fs");
+import fs from "fs";
+import AldebaranClient from "../structures/djs/Client";
+import { Command } from "../groups/Command";
+import Message from "../structures/djs/Message";
 
-module.exports = class CommandHandler {
-	constructor(client) {
+export default class CommandHandler {
+	client: AldebaranClient;
+	commands: Map<string, Command> = new Map();
+
+	constructor(client: AldebaranClient) {
 		this.client = client;
-		this.commands = new Map();
 		this.registerAllCommands();
 	}
 
-	execute(command, message) {
-		const override = this.checkOverrides(message.guild.commands, command);
+	execute(commandName: string, message: Message) {
+		const override = this.checkOverrides(message.guild.commands, commandName);
 		if (override === false) return;
-		command = override;
-		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
-		command = this.get(command);
+		commandName = override;
+		if (!this.exists(commandName)) throw new TypeError("INVALID_COMMAND");
+		const command = this.get(commandName)!;
 		if (message.args.length === 0)
 			if (command.subcommands.size > 0)
 				if (command.metadata.allowIndexCommand)
@@ -26,22 +31,9 @@ module.exports = class CommandHandler {
 				command.execute(message);
 			else throw new TypeError("INVALID_COMMAND");
 		else command.execute(message);
-
-		this.client.stats.commands.total++;
-		this.client.stats.commands.all[command]++;
-		if (this.client.stats.users.all[message.author.id] === undefined) {
-			this.client.stats.users.all[message.author.id] = 0;
-			this.client.stats.users.total++;
-		}
-		this.client.stats.users.all[message.author.id]++;
-		if (this.client.stats.servers.all[message.guild.id] === undefined) {
-			this.client.stats.servers.all[message.guild.id] = 0;
-			this.client.stats.servers.total++;
-		}
-		this.client.stats.servers.all[message.guild.id]++;
 	}
 
-	static createArgs(message) {
+	static createArgs(message: Message) {
 		const args = message.content.split(" ");
 		args.shift();
 		return args;
@@ -54,36 +46,37 @@ module.exports = class CommandHandler {
 		return size;
 	}
 
-	get(command) {
+	get(command: string) {
 		return this.commands.get(command);
 	}
 
-	bypassRun(command, message) {
+	bypassRun(command: string, message: Message) {
 		if (!message.author.hasPermission("ADMINISTRATOR")) { throw new Error("UNALLOWED_ADMIN_BYPASS"); }
 		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
-		const args = [this.client, message, this.constructor.createArgs(message)];
-		return this.commands.get(command).run(...args);
+		return this.commands.get(command)!.run(
+			this.client, message, CommandHandler.createArgs(message)
+		);
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	checkOverrides(commands, command) {
+	checkOverrides(commands: any, command: string) {
 		const cmd = commands[command];
 		if (cmd === undefined) return command;
 		return cmd;
 	}
 
-	exists(command) {
+	exists(command: string) {
 		return this.commands.get(command) !== undefined;
 	}
 
-	getHelp(command, prefix = "&") {
+	getHelp(command: string, prefix = "&") {
 		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
-		return this.commands.get(command).toHelpEmbed(command, prefix);
+		return this.commands.get(command)!.toHelpEmbed(command, prefix);
 	}
 
-	register(Structure, path) {
-		const command = new Structure(this.client);
-		command.name = path.match(/\w+(?=(.js))/g)[0];
+	register(Structure: any, path: string) {
+		const command: Command = new Structure(this.client);
+		command.name = path.match(/\w+(?=(.js))/g)![0];
 		if (command.registerCheck()) {
 			command.checkSubcommands(path);
 			if (!command.metadata.subcommand) {
@@ -97,7 +90,7 @@ module.exports = class CommandHandler {
 
 	registerAllCommands() {
 		const commands = new Map();
-		const exploreFolder = path => {
+		const exploreFolder = (path: string) => {
 			const files = fs.readdirSync(path);
 			for (const file of files) {
 				if (fs.statSync(path + file).isDirectory()) {

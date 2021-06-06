@@ -3,25 +3,21 @@ import fs from "fs";
 import CDBAHandler from "../../handlers/CDBAHandler";
 import CommandHandler from "../../handlers/CommandHandler";
 import DatabaseProvider from "../../handlers/DatabaseProvider";
-import confModels from "../../utils/checks/configurationModels";
+import { SettingsModel } from "../../utils/Constants";
 import aldebaranTeam from "../../../config/aldebaranTeam.json";
 import presences from "../../../config/presence.json";
 import packageFile from "../../../package.json";
-import CustomTimer from "../aldebaran/CustomTimer";
 
 export default class AldebaranClient extends Client {
 	started: number = Date.now();
 	config: object = { presence: presences, aldebaranTeam };
-	preCustomTimers: any[] = [];
-	customTimers: Map<any, any> = new Map<number, CustomTimer>();
-	customTimerTriggers: Map<any, any> = new Map();
 	database: DatabaseProvider = new DatabaseProvider(this);
 	databaseData: object = { profiles: new Map() };
 	CDBA: CDBAHandler = new CDBAHandler();
 	commandGroups: object = {};
 	commands: CommandHandler = new CommandHandler(this);
 	debugMode: boolean = process.argv[2] === "dev";
-	models: any = { settings: confModels };
+	models: any = { settings: SettingsModel };
 	stats: any;
 	version: string = packageFile.version;
 	drpgCache: object;
@@ -31,13 +27,6 @@ export default class AldebaranClient extends Client {
 			messageCacheMaxSize: 10,
 			messageCacheLifetime: 1800,
 			messageSweepInterval: 60
-		});
-		this.database.timers.selectAll().then((timers: any) => {
-			timers.forEach(this.preCustomTimers.push);
-			console.log(`\x1b[36m# Fetched all necessary data from database, took ${Date.now() - this.started}ms.\x1b[0m`);
-			this.login(process.env.TOKEN).then(() => {
-				console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
-			});
 		});
 		this.stats = {
 			commands: {

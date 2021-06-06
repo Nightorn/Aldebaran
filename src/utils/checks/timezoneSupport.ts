@@ -1,6 +1,6 @@
 const timeNames = require("moment-timezone").tz.names();
 
-module.exports = value => {
+export default (value: string) => {
 	if (/((UTC)|(GMT))(\+|-)\d{1,2}/i.test(value)) {
 		return true;
 	} if (timeNames.indexOf(value) !== -1) {

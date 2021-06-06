@@ -1,11 +1,13 @@
-const fetchDBValue = require("../../graphql/utils/fetchDBValue");
+import fetchDBValue from "../../graphql/utils/fetchDBValue";
+import GenericDatabaseProvider from "../../../handlers/GenericDatabaseProvider";
+import { AuthorizationCode, Token } from "oauth2-server";
 
-module.exports = db => ({
+export default (db: GenericDatabaseProvider) => ({
 	/**
 	 * Fetches access token's data from the specified access_token
 	 * @param {string} token The access_token
 	 */
-	getAccessToken: async token => {
+	getAccessToken: async (token: string) => {
 		const data = await fetchDBValue.apiAccessToken(db, token);
 		return data == null ? false : {
 			accessToken: data.access_token,
@@ -19,7 +21,7 @@ module.exports = db => ({
 	 * Fetches authorization code's data from the specified authorization_code
 	 * @param {string} code The authorization_code
 	 */
-	getAuthorizationCode: async code => {
+	getAuthorizationCode: async (code: string) => {
 		const data = await fetchDBValue.apiAuthCode(db, code);
 		return data == null ? false : {
 			code,
@@ -35,7 +37,7 @@ module.exports = db => ({
 	 * @param {string} id The client_id of the client to fetch
 	 * @param {string} secret The client_secret of the client to fetch
 	 */
-	getClient: async (id, secret) => {
+	getClient: async (id: string, secret: string) => {
 		const data = await fetchDBValue.apiClient(db, id, secret);
 		return data === null ? false : {
 			id: data.client_id,
@@ -47,7 +49,7 @@ module.exports = db => ({
 	 * Fetches refresh_token's data from the specified refresh_token
 	 * @param {string} token The refresh_token
 	 */
-	getRefreshToken: async token => {
+	getRefreshToken: async (token: string) => {
 		const data = await fetchDBValue.apiRefreshToken(db, token);
 		return data == null ? false : {
 			refreshToken: data.refresh_token,
@@ -61,18 +63,18 @@ module.exports = db => ({
 	 * Revokes a refresh_token
 	 * @param {string} token The refresh token data
 	 */
-	revokeToken: async token => (await db.query(`DELETE FROM api_tokens WHERE refresh_token="${token.refreshToken}"`)).affectedRows,
+	revokeToken: async (token: Token) => (await db.query(`DELETE FROM api_tokens WHERE refresh_token="${token.refreshToken}"`)).affectedRows,
 	/**
 	 * Revokes an authorization_code
 	 * @param {string} code The authorization code data
 	 */
-	revokeAuthorizationCode: async ({ code }) => (await db.query(`DELETE FROM api_authcodes WHERE code="${code}"`)).affectedRows,
+	revokeAuthorizationCode: async ({ code }: { code: string }) => (await db.query(`DELETE FROM api_authcodes WHERE code="${code}"`)).affectedRows,
 	/**
 	 * Saves an authorization_code to the database
 	 * @param {string} code The authorization code data
 	 */
 	// eslint-disable-next-line arrow-body-style
-	saveAuthorizationCode: async (code, client, user) => {
+	saveAuthorizationCode: async (code: AuthorizationCode, client: any, user: any) => {
 		await db.query(`INSERT INTO api_authcodes (code, expires_at, redirect_uri, scope, client_id, user_id) VALUES ("${code.authorizationCode}", ${code.expiresAt.getTime()}, "${code.redirectUri}", "${code.scope}", "${client.id}", "${user.id}")`);
 		return {
 			authorizationCode: code.authorizationCode,
@@ -87,8 +89,8 @@ module.exports = db => ({
 	 * Saves a token to the database
 	 * @param {string} code The token data
 	 */
-	saveToken: async (token, client, user) => {
-		if (token.refreshToken && token.refreshTokenExpiresAt) await db.query(`INSERT INTO api_tokens (access_token, acctok_expires_at, refresh_token, reftok_expires_at, scope, client_id, user_id) VALUES ("${token.accessToken}", ${token.accessTokenExpiresAt.getTime()}, "${token.refreshToken}", ${token.refreshTokenExpiresAt.getTime()}, "${token.scope}", "${client.id}", "${user.id}")`);
+	saveToken: async (token: Token, client: any, user: any) => {
+		if (token.refreshToken && token.refreshTokenExpiresAt) await db.query(`INSERT INTO api_tokens (access_token, acctok_expires_at, refresh_token, reftok_expires_at, scope, client_id, user_id) VALUES ("${token.accessToken}", ${token.accessTokenExpiresAt!.getTime()}, "${token.refreshToken}", ${token.refreshTokenExpiresAt.getTime()}, "${token.scope}", "${client.id}", "${user.id}")`);
 		else await db.query(`INSERT INTO api_tokens (access_token, acctok_expires_at, scope, client_id, user_id) VALUES ("${token.accessToken}", ${token.accessTokenExpiresAt}, "${token.scope}", "${client.id}", "${user.id}")`);
 		return {
 			accessToken: token.accessToken,
@@ -105,8 +107,8 @@ module.exports = db => ({
 	 * @param {string} token The token data
 	 * @param {string} scope The required scopes
 	 */
-	verifyScope: async (token, scope) => {
-		const tokenScope = token.scope.split(" ");
+	verifyScope: async (token: Token, scope: string) => {
+		const tokenScope = (token.scope as string).split(" ");
 		return scope.split(" ").every(s => tokenScope.includes(s));
 	}
 });

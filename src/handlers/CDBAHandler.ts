@@ -1,10 +1,15 @@
-module.exports = class CDBAHandler {
+import { User } from "discord.js";
+
+export default class CDBAHandler {
+	selected: any;
+	entries: Map<string, any>;
+
 	constructor() {
 		this.selected = null;
 		this.entries = new Map();
 	}
 
-	add(type, entry, user) {
+	add(type: string, entry: string, user: User) {
 		if (this.entries.get(entry) !== undefined) return this.vote(entry, user);
 		this.entries.set(entry, {
 			id: this.createId(),
@@ -16,7 +21,7 @@ module.exports = class CDBAHandler {
 		return false;
 	}
 
-	vote(entry, user) {
+	vote(entry: string, user: User) {
 		const current = this.entries.get(entry);
 		if (current.users.includes(user.id)) { return new Error("User has already voted."); }
 		this.entries.set(entry, {
@@ -55,12 +60,11 @@ module.exports = class CDBAHandler {
 		return max + 1;
 	}
 
-	getEntryById(id) {
-		let value = null;
+	getEntryById(id: string) {
 		for (const [entry, data] of this.entries) {
-			if (data.id === parseInt(id, 10)) value = entry;
+			if (data.id === parseInt(id, 10)) return entry;
 		}
-		return value;
+		return null;
 	}
 
 	toString() {

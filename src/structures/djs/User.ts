@@ -2,12 +2,14 @@ import { User as DJSUser } from "discord.js";
 import SocialProfile from "../aldebaran/SocialProfile";
 import AldebaranPermissions from "../aldebaran/AldebaranPermissions";
 import Settings from "../../interfaces/Settings";
+import AldebaranClient from "./Client";
+import { Permissions, PermissionString } from "../../utils/Constants";
 
-export default (BaseUser: typeof DJSUser) => class User extends BaseUser {
+export default class User extends DJSUser {
+	client!: AldebaranClient;
 	generalCooldown: number = 0;
 	settings: Settings = {};
 	permissions: AldebaranPermissions = new AldebaranPermissions(0);
-	timers: {} = { adventure: null, padventure: null, sides: null };
 	timeout: number = 0;
 	existsInDB: boolean = false;
 	ready: boolean = false;
@@ -15,14 +17,6 @@ export default (BaseUser: typeof DJSUser) => class User extends BaseUser {
 
 	get banned() {
 		return this.timeout > Date.now();
-	}
-
-	get customTimers() {
-		const timers = new Map();
-		for (const [id, timer] of this.client.customTimers)
-			if (timer.userId === this.id)
-				timers.set(id, timer);
-		return timers;
 	}
 
 	async changeSetting(property: string, value: string) {
@@ -68,19 +62,19 @@ export default (BaseUser: typeof DJSUser) => class User extends BaseUser {
 		return this.profile;
 	}
 
-	hasPermission(permission: string) {
+	hasPermission(permission: PermissionString) {
 		if (process.env.BOT_ADMIN === this.id) return true;
-		return this.permissions.has(AldebaranPermissions.FLAGS.ADMINISTRATOR)
-			|| this.permissions.has(AldebaranPermissions.FLAGS[permission]);
+		return this.permissions.has(Permissions.ADMINISTRATOR)
+			|| this.permissions.has(Permissions[permission]);
 	}
 
 	/**
 	 * Removes permissions from a user
 	 */
-	async removePermissions(permissions: string[]) {
+	async removePermissions(permissions: PermissionString[]) {
 		permissions.forEach(permission => {
-			if (Object.keys(AldebaranPermissions.FLAGS).includes(permission))
-				this.permissions.remove(AldebaranPermissions.FLAGS[permission]);
+			if (Object.keys(Permissions).includes(permission))
+				this.permissions.remove(Permissions[permission]);
 		});
 		this.unready();
 		return this.client.database.users.updateOneById(
@@ -92,10 +86,10 @@ export default (BaseUser: typeof DJSUser) => class User extends BaseUser {
 	/**
 	 * Adds permissions to a user
 	 */
-	async addPermissions(permissions: string[]) {
+	async addPermissions(permissions: PermissionString[]) {
 		permissions.forEach(permission => {
-			if (Object.keys(AldebaranPermissions.FLAGS).includes(permission))
-				this.permissions.add(AldebaranPermissions.FLAGS[permission]);
+			if (Object.keys(Permissions).includes(permission))
+				this.permissions.add(Permissions[permission]);
 		});
 		this.unready();
 		return this.client.database.users.updateOneById(
@@ -105,6 +99,6 @@ export default (BaseUser: typeof DJSUser) => class User extends BaseUser {
 	}
 
 	unready() {
-		this.client.shard.broadcastEval(`if (this.users.cache.get("${this.id}") !== undefined && this.shardID !== ${this.client.shardID}) this.users.cache.get("${this.id}").ready = false`);
+		(this.client.shard)!.broadcastEval(`if (this.users.cache.get("${this.id}") !== undefined && this.shardID !== ${this.client.shardID}) this.users.cache.get("${this.id}").ready = false`);
 	}
 };

@@ -6,7 +6,7 @@ import express, { Request as ExpressRequest, Response as ExpressResponse, NextFu
 import graphqlHTTP from "express-graphql";
 import { readFileSync } from "fs";
 import { buildSchema } from "graphql";
-import OAuth2Server, { Request as OAuthRequest, Response as OAuthResponse } from "oauth2-server";
+import OAuth2Server, { AuthorizationCodeModel, Request as OAuthRequest, Response as OAuthResponse } from "oauth2-server";
 import discordHandler from "./routes/discord/callback";
 import authorizeHandler from "./routes/oauth/authorize";
 import tokenHandler from "./routes/oauth/token";
@@ -22,8 +22,8 @@ export default (dsm?: ShardingManager) => {
 	const schema = buildSchema(readFileSync("./src/api/graphql/schema.graphql", { encoding: "utf-8" }));
 
 	const rootValue = {
-		guild: ({ id }) => new Guild(id),
-		user: ({ id }) => new User(id)
+		guild: ({ id }: { id: string }) => new Guild(id),
+		user: ({ id }: { id: string }) => new User(id)
 	};
 
 	const app: any = express();
@@ -38,7 +38,7 @@ export default (dsm?: ShardingManager) => {
 	app.dsm = dsm || null;
 	app.db = new DatabaseProvider();
 	app.oauth = new OAuth2Server({
-		model: oauthModel(app.db)
+		model: oauthModel(app.db) as any
 	});
 
 	// const id = Number.parseInt((((Date.now() - 1524450577865) >>> 0).toString(2).padStart(42, "0").padEnd(52, "0") + (3 >>> 0).toString(2).padStart(12, "0")), 2);

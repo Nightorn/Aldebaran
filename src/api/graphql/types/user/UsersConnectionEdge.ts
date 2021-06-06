@@ -1,9 +1,13 @@
-module.exports = class UsersConnectionEdge {
+import User from "./User";
+
+export default class UsersConnectionEdge {
+	user: User;
+
 	/**
 	 * A connection edge for users, as specified by the GraphQL specification.
 	 * @param {*} user The Discord member
 	 */
-	constructor(user) {
+	constructor(user: User) {
 		this.user = user;
 	}
 
@@ -11,7 +15,7 @@ module.exports = class UsersConnectionEdge {
 	 * Returns the cursor of the current element in the connection.
 	 */
 	cursor() {
-		return Buffer.from(this.user.joinedTimestamp.toString()).toString("base64");
+		return Buffer.from(this.user.joinedTimestamp!.toString()).toString("base64");
 	}
 
 	/**

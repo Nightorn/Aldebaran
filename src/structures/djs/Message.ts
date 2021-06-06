@@ -1,8 +1,11 @@
-import { Message as DJSMessage, Collection, TextChannel as TC, DMChannel as DC, NewsChannel as NC } from "discord.js";
+import { Message as DJSMessage, TextChannel as TC, DMChannel as DC, NewsChannel as NC } from "discord.js";
 import AldebaranClient from "./Client";
+import { Args } from "../../interfaces/Arg";
 import Guild from "./Guild";
+import User from "./User";
 
 export default class Message extends DJSMessage {
+	author!: User;
 	guild!: Guild;
 	prefix: string = "&";
 	valid: boolean = false;
@@ -15,17 +18,6 @@ export default class Message extends DJSMessage {
 		}
 	}
 
-	get userMentions() {
-		if (this.guild === null) return new Collection();
-		if (this.guild.members === undefined) return new Collection();
-		return new Collection(
-			this.guild.members.entries()
-		).filter(member => {
-			const results = this.content.match(/(<@)([0-9]{16,19})>/g);
-			return results !== null ? results.includes(`<@${member.id}>`) : false;
-		});
-	}
-
 	get args() {
 		const args = this.content
 			.slice(this.prefix.length + this.command.length)
@@ -35,10 +27,10 @@ export default class Message extends DJSMessage {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	getArgs(required) {
-		if (required !== undefined) {
+	getArgs(required?: Args) {
+		if (required) {
 			const split = this.args;
-			const checkType = element => {
+			const checkType = (element: string) => {
 				if (element.match(/\d{17,19}/g)) return "user";
 				if (element.match(/([-]{1,2}[\w]+)/g)) return "flag";
 				if (!Number.isNaN(Number(element))) return "number";
@@ -48,7 +40,7 @@ export default class Message extends DJSMessage {
 			for (let i = 0; i < split.length; i++) {
 				const type = checkType(split[i]);
 				if (type === "user")
-					deconstructed.push({ user: split[i].match(/\d{17,19}/g)[0] });
+					deconstructed.push({ user: split[i].match(/\d{17,19}/g)![0] });
 				else if (type === "number") deconstructed.push({ number: Number(split[i]) });
 				else if (type === "flag") {
 					deconstructed.push({
@@ -59,7 +51,7 @@ export default class Message extends DJSMessage {
 					});
 				} else if (type === "word") deconstructed.push({ word: split[i] });
 			}
-			const args = {};
+			const args: { [key: string]: any } = { };
 			for (const element of deconstructed) {
 				const [[type, value]] = Object.entries(element);
 				let result = null;
@@ -102,7 +94,7 @@ export default class Message extends DJSMessage {
 
 	get command() {
 		return this.content
-			.slice(this.prefix.length + (this.mode !== "NORMAL"))
+			.slice(this.prefix.length + +(this.mode !== "NORMAL"))
 			.split(" ")[0];
 	}
 };

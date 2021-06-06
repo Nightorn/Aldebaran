@@ -1,6 +1,18 @@
 /* eslint-disable no-underscore-dangle */
-module.exports = class PageInfo {
-	constructor(endCur, startCur, totalCount, hasNextPage, hasPreviousPage) {
+export default class PageInfo {
+	_endCursor: string | null;
+	_startCursor: string | null;
+	_totalCount: number | null;
+	_hasNextPage: boolean | null;
+	_hasPreviousPage: boolean | null;
+
+	constructor(
+		endCur?: string,
+		startCur?: string,
+		totalCount?: number,
+		hasNextPage?: boolean,
+		hasPreviousPage?: boolean
+	) {
 		this._endCursor = endCur || null;
 		this._startCursor = startCur || null;
 		this._totalCount = totalCount || null;

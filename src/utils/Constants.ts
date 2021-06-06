@@ -1,27 +1,35 @@
-const timezoneSupport = require("./timezoneSupport");
+import Guild from "../structures/djs/Guild";
+import User from "../structures/djs/User";
+import timezoneSupport from "./checks/timezoneSupport";
 
-module.exports = {
+export type ErrorString = keyof typeof Error;
+export type PermissionString = keyof typeof Permissions;
+export type CommonSetting = keyof typeof SettingsModel.common;
+export type UserSetting = CommonSetting | keyof typeof SettingsModel.user;
+export type GuildSetting = CommonSetting | keyof typeof SettingsModel.guild;
+
+export const SettingsModel = {
 	common: {
 		adventuretimer: {
-			support: value => value === "on" || value === "off" || value === "random",
+			support: (value: string) => value === "on" || value === "off" || value === "random",
 			help: "Adventure Timer (\"random\" for 3s +-) - [on | off | random]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
 		healthmonitor: {
-			support: value => (
+			support: (value: string) => (
 				value === "on"
-          || value === "off"
-          || (parseInt(value, 10) > 0 && parseInt(value, 10) < 100)
+				|| value === "off"
+				|| (parseInt(value, 10) > 0 && parseInt(value, 10) < 100)
 			),
 			help: "Health Monitor - [on | off | healthPercentage]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
 		polluxboxping: {
-			support: value => value === "on" || value === "off",
+			support: (value: string) => value === "on" || value === "off",
 			help: "Box Ping - [on | off]",
-			postUpdateCommon: (value, user, guild) => {
+			postUpdateCommon: (value: string, user: User, guild: Guild) => {
 				if (value === "on") guild.polluxBoxPing.set(user.id, user);
 				else guild.polluxBoxPing.delete(user.id);
 			},
@@ -31,14 +39,14 @@ module.exports = {
 	},
 	user: {
 		individualhealthmonitor: {
-			support: value => ["off", "character", "pet"].indexOf(value) !== -1,
+			support: (value: string) => ["off", "character", "pet"].indexOf(value) !== -1,
 			help:
         "Lets you choose whether you want to display the health of your character or your pet with the health monitor - [off | character | pet]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
 		sidestimer: {
-			support: value => (
+			support: (value: string) => (
 				value === "on"
           || value === "off"
           || value === "mine"
@@ -51,7 +59,7 @@ module.exports = {
 			category: "DiscordRPG"
 		},
 		timerping: {
-			support: value => (
+			support: (value: string) => (
 				value === "on"
 				|| value === "adventure"
 				|| value === "sides"
@@ -68,7 +76,7 @@ module.exports = {
 			category: "Aldebaran"
 		},
 		dateformat: {
-			support: value => (
+			support: (value: string) => (
 				value.indexOf("DD") !== -1
           && value.indexOf("MM") !== -1
           && value.indexOf("YYYY") !== -1
@@ -90,13 +98,13 @@ module.exports = {
 	},
 	guild: {
 		autodelete: {
-			support: value => value === "on" || value === "off",
+			support: (value: string) => value === "on" || value === "off",
 			help: "Auto Delete Sides & Adv Commands - [on | off]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
 		},
 		sidestimer: {
-			support: value => value === "on" || value === "off",
+			support: (value: string) => value === "on" || value === "off",
 			help: "Sides Timer - [on | off]",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
@@ -104,11 +112,11 @@ module.exports = {
 		aldebaranprefix: {
 			support: () => true,
 			help: "Aldebaran's Prefix - [& | Guild Customized]",
-			postUpdate: (value, guild) => { guild.prefix = value; },
+			postUpdate: (value: string, guild: Guild) => { guild.prefix = value; },
 			category: "Aldebaran"
 		},
 		aldebaran: {
-			support: value => value === "on" || value === "off",
+			support: (value: string) => value === "on" || value === "off",
 			showOnlyIfBotIsInGuild: "2"
 		},
 		discordrpgprefix: {
@@ -116,13 +124,35 @@ module.exports = {
 			help: "Prefix",
 			showOnlyIfBotIsInGuild: "170915625722576896",
 			category: "DiscordRPG"
-		} /* ,
-    language: {
-      support: value => {
-        return value === "en" || value === "fr";
-      },
-      help: "Language",
-      category: "Aldebaran"
-    } */
+		}
 	}
+};
+
+export const Error = {
+	API_ERROR: () => "This API has thrown an error.",
+	API_RATELIMIT: () => "We have hit the ratelimit of (the endpoint of) this API.",
+	CUSTOM: (res: string) => res,
+	IMPOSSIBLE: () => "You are asking the impossible",
+	INCORRECT_CMD_USAGE: () => "This command has been used incorrectly.",
+	INVALID_USER: () => "The user specified does not exist.",
+	MISSING_ARGS: () => "Some arguments are missing.",
+	NOT_FOUND: (res: string) => `The requested ${res || "resource"} has not been found.`,
+	UNALLOWED_OPERATION: () => "You are not allowed to do this.",
+	UNALLOWED_COMMAND: () => "You are not allowed to use this command.",
+	UNEXPECTED_BEHAVIOR: () => "Something went wrong.",
+	WRONG_USAGE: () => "You are doing something wrong."
+};
+
+export const Permissions = {
+	ADMINISTRATOR: 2,
+	EVALUATE_CODE: 4,
+	EXECUTE_DB_QUERIES: 8,
+	MANAGE_PERMISSIONS: 16,
+	BAN_USERS: 32,
+	MUTE_USERS: 64,
+	EDIT_USERS: 128,
+	RESTART_BOT: 256,
+	VIEW_SERVERLIST: 512,
+	MODERATE_ACTIVITIES: 1024,
+	DEVELOPER: 2048
 };

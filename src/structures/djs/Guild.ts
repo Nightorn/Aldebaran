@@ -17,7 +17,7 @@ export default class Guild extends DJSGuild {
 	prefix: string = process.env.PREFIX || "&";
 	ready: boolean = false;
 	settings: Settings = {};
-	polluxBoxPing: C<number, typeof User> = new C<number, typeof User>();
+	polluxBoxPing: C<string, User> = new C<string, User>();
 
 	async changeCommandSetting(property: string, value: string) {
 		this.commands[property] = value;

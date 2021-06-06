@@ -1,32 +1,29 @@
-const { Client, MessageEmbed } = require("discord.js");
-const fs = require("fs");
+import { Client, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
+import fs from "fs";
+import AldebaranClient from "../structures/djs/Client";
+import CommandMetadata from "../interfaces/CommandMetadata";
+import { PermissionString as AldebaranPermission } from "../utils/Constants"
+import Message from "../structures/djs/Message";
 
-module.exports.Command = class Command {
+export abstract class Command {
+	perms: { discord: DJSPermission[]; aldebaran: AldebaranPermission[]; };
+	aliases: string[];
+	category: string;
+	cooldown: { amount: number; fixed?: number, group?: string; resetInterval: number; };
+	color: string;
+	client: AldebaranClient;
+	example: string;
+	hidden: boolean;
+	metadata: CommandMetadata;
+	subcommands: Map<any, any>;
+	usage: string;
+	name: any;
+	args: any;
+
 	/**
-   * Command abstract class, extend it to build a command
-   * @param {*} client Client
-   * @param {object} metadata Command Metadata
-   * @param {string} metadata.name Name
-   * @param {string} metadata.description Description
-   * @param {string} metadata.help Help
-   * @param {string} metadata.usage Usage
-   * @param {string} metadata.example Example
-   * @param {string[]} metadata.aliases Aliases
-   * @param {object} metadata.args Command Arguments
-   * @param {object} metadata.cooldown Cooldown Metadata
-   * @param {string} metadata.cooldown.group Group
-   * @param {number} metadata.cooldown.amount Amount
-   * @param {number} metadata.cooldown.resetInterval Reset Interval
-   * @param {object} metadata.perms Required Permissions
-   * @param {string[]} metadata.perms.discord Discord required permissions
-   * @param {string[]} metadata.perms.aldebaran Aldebaran required permissions
-   */
-	constructor(client, metadata) {
-		if (this.constructor.name === "Command") {
-			throw new TypeError(
-				"Command is an abstract class and therefore cannot be instantiated."
-			);
-		}
+   	* Command abstract class, extend it to build a command
+   	*/
+	constructor(client: AldebaranClient, metadata: CommandMetadata) {
 		if (!(client instanceof Client)) { throw new TypeError("The specified Client is invalid"); }
 		if (metadata === undefined) throw new TypeError("The metadata are invalid");
 		if (metadata.description === undefined) { throw new TypeError("The metadata are invalid"); }
@@ -61,29 +58,27 @@ module.exports.Command = class Command {
 	}
 
 	/**
-   * Checks if the context of execution is valid
-   * @param {*} message Message
-   */
-	permsCheck(message) {
+   	* Checks if the context of execution is valid
+   	*/
+	permsCheck(message: Message) {
 		let check = true;
 		if (this.perms.discord !== undefined)
 			check = this.perms.discord
-				.every(perm => message.member.permissionsIn(message.channel).has(perm));
+				.every(perm => message.member!.permissionsIn(message.channel).has(perm));
 		if (this.perms.aldebaran !== undefined && check)
 			check = this.perms.aldebaran
 				.every(perm => message.author.hasPermission(perm));
 		return check;
 	}
 
-	check(message) {
+	check(message: Message) {
 		return this.permsCheck(message);
 	}
 
 	/**
    * Executes the command
-   * @param {} msg Message object
    */
-	execute(message) {
+	execute(message: Message) {
 		const args = message.content.split(" ");
 		args.shift();
 		if (this.check(message)) {
@@ -93,7 +88,9 @@ module.exports.Command = class Command {
 		throw new Error("INVALID_PERMISSIONS");
 	}
 
-	checkSubcommands(path) {
+	abstract run(client: AldebaranClient, message: Message, args: any): void;
+
+	checkSubcommands(path: string) {
 		path = `${path.replace(".js", "")}/`;
 		if (fs.existsSync(path)) {
 			fs.readdir(path, (err, files) => {
@@ -102,7 +99,7 @@ module.exports.Command = class Command {
 						// eslint-disable-next-line import/no-dynamic-require, global-require
 						const Structure = require(`../../${path}${file}`);
 						const command = new Structure(this.client);
-						command.name = file.match(/\w+(?=(.js))/g)[0];
+						command.name = file.match(/\w+(?=(.js))/g)![0];
 						this.subcommands.set(command.name, command);
 					} catch (error) {
 						console.log(`\x1b[31m${path}${file} is seen as a subcommand but is invalid.\x1b[0m`);
@@ -117,11 +114,11 @@ module.exports.Command = class Command {
 		return true;
 	}
 
-	toHelpEmbed(command, prefix = "&") {
+	toHelpEmbed(command: string, prefix = "&") {
 		const embed = new MessageEmbed()
 			.setAuthor(
 				`Aldebaran  |  Command Help  |  ${this.name}`,
-				this.client.user.avatarURL()
+				this.client.user!.avatarURL()!
 			)
 			.setTitle(this.metadata.description)
 			.addField("Category", this.category, true)
@@ -170,8 +167,8 @@ module.exports.Command = class Command {
 	}
 };
 
-module.exports.Embed = class NSFWEmbed extends MessageEmbed {
-	constructor(command) {
+export const Embed = class NSFWEmbed extends MessageEmbed {
+	constructor(command: Command) {
 		super();
 		this.setColor(command.color);
 	}

@@ -1,16 +1,21 @@
-module.exports = class GuildsConnectionEdge {
+import { Request } from "express";
+import Guild from "./Guild";
+
+export default class GuildsConnectionEdge {
+	guild: Guild;
+
 	/**
 	 * A connection edge for users, as specified by the GraphQL specification.
 	 * @param {*} guild The Discord guild
 	 */
-	constructor(guild) {
+	constructor(guild: Guild) {
 		this.guild = guild;
 	}
 
 	/**
 	 * Returns the cursor of the current element in the connection.
 	 */
-	async cursor(_, request) {
+	async cursor(_: any, request: Request) {
 		const timestamp = await this.guild.createdTimestamp(_, request);
 		return Buffer.from(timestamp.toString()).toString("base64");
 	}
