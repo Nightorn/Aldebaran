@@ -54,8 +54,8 @@ module.exports = class TrapCommand extends Command {
 						const pronoun = message.author.id === userid ? "You" : "They";
 						let items = "";
 						itemList[trap.id].trap.loot.forEach(item => {
-							const min = math.eval(item.amount.min, scope);
-							const max = math.eval(item.amount.max, scope);
+							const min = math.evaluate(item.amount.min, scope);
+							const max = math.evaluate(item.amount.max, scope);
 							const itemName = itemList[item.id].name;
 							if (elapsedTime > item.mintime) {
 								if (min === max)
