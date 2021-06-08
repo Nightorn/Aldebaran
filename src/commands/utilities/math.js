@@ -19,7 +19,7 @@ module.exports = class MathCommand extends Command {
 			try {
 				result = args.join(" ") === "10 + 9" || args.join(" ") === "10+9"
 					? 21
-					: mathjs.eval(args.join(" ").replace(/,/g, ""));
+					: mathjs.evaluate(args.join(" ").replace(/,/g, ""));
 			} catch (err) {
 				result = "The specified math expression is invalid.";
 			}

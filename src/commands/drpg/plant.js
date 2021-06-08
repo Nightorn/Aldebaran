@@ -50,10 +50,10 @@ module.exports = class PlantCommand extends Command {
 						const scope = { luck, passed, skillLevel };
 						const scopeMax = { luck: luckMax, passed, skillLevel };
 						const loots = item.sapling.loot.amount;
-						const normalMin = math.eval(loots.min, scope);
-						const normalMax = math.eval(loots.max, scope);
-						const highestMin = math.eval(loots.min, scopeMax);
-						const highestMax = math.eval(loots.max, scopeMax);
+						const normalMin = math.evaluate(loots.min, scope);
+						const normalMax = math.evaluate(loots.max, scope);
+						const highestMin = math.evaluate(loots.min, scopeMax);
+						const highestMax = math.evaluate(loots.max, scopeMax);
 						const rewardName = items[item.sapling.loot.id[0]].name;
 						const normalRewards = normalMin === normalMax
 							? `**${normalMin} ${rewardName}**`
