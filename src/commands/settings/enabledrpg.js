@@ -2,10 +2,10 @@ const { MessageEmbed } = require("discord.js");
 const { Command } = require("../../groups/SettingsCommand");
 
 const descriptions = {
-	healthMonitor: "DiscordRPG Health Monitor",
-	adventureTimer: "DiscordRPG Adventure Timer",
-	sidesTimer: "DiscordRPG Sides Timer",
-	timerPing: "DiscordRPG Timer Pings"
+	healthmonitor: "DiscordRPG Health Monitor",
+	adventuretimer: "DiscordRPG Adventure Timer",
+	sidestimer: "DiscordRPG Sides Timer",
+	timerping: "DiscordRPG Timer Pings"
 };
 const guildParameters = ["healthmonitor", "adventuretimer", "sidestimer"];
 const userParameters = ["healthmonitor", "adventuretimer", "sidestimer", "timerping"];
