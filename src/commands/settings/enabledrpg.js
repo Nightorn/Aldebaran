@@ -1,14 +1,28 @@
 const { MessageEmbed } = require("discord.js");
 const { Command } = require("../../groups/SettingsCommand");
 
-const descriptions = {
-	healthmonitor: "DiscordRPG Health Monitor",
-	adventuretimer: "DiscordRPG Adventure Timer",
-	sidestimer: "DiscordRPG Sides Timer",
-	timerping: "DiscordRPG Timer Pings"
-};
-const guildParameters = ["healthmonitor", "adventuretimer", "sidestimer"];
-const userParameters = ["healthmonitor", "adventuretimer", "sidestimer", "timerping"];
+const guildParameters = [
+	{
+		name: "healthmonitor",
+		description: "DiscordRPG Health Monitor"
+	},
+	{
+		name: "adventuretimer",
+		description: "DiscordRPG Adventure Timer"
+	},
+	{
+		name: "sidestimer",
+		description: "DiscordRPG Sides Timer"
+	}
+];
+
+const userParameters = [
+	...guildParameters,
+	{
+		name: "timerping",
+		description: "DiscordRPG Timer Pings"
+	}
+];
 
 module.exports = class EnableDRPGCommand extends Command {
 	constructor(client) {
@@ -27,7 +41,7 @@ module.exports = class EnableDRPGCommand extends Command {
 			.setTitle(`Configuring ${type}'s settings`)
 			.setDescription(`**This will enable the following ${
 				type} settings:**\n${
-				parameters.reduce((p, c) => `${p}${`${descriptions[c]} - \`${c}\``}\n`, "")
+				parameters.reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "")
 			}**Do you want to proceed?** Click :white_check_mark: to continue. You can always configure the settings in \`${prefix}${type[0]}config\`.`)
 			.setColor("BLUE");
 	}
@@ -42,7 +56,7 @@ module.exports = class EnableDRPGCommand extends Command {
 			await msg.react(checkMark);
 			msg.awaitReactions(filter, { time: 30000, max: 1, errors: ["time"] }).then(() => {
 				userParameters.forEach(parameter => {
-					message.author.changeSetting(parameter, "on");
+					message.author.changeSetting(parameter.name, "on");
 				});
 				resolve();
 			}).catch(() => {
@@ -62,7 +76,7 @@ module.exports = class EnableDRPGCommand extends Command {
 			await msg.react(checkMark);
 			msg.awaitReactions(filter, { time: 30000, max: 1, errors: ["time"] }).then(() => {
 				guildParameters.forEach(parameter => {
-					message.guild.changeSetting(parameter, "on");
+					message.guild.changeSetting(parameter.name, "on");
 				});
 				resolve();
 			}).catch(() => {
@@ -103,9 +117,9 @@ module.exports = class EnableDRPGCommand extends Command {
 			.has("ADMINISTRATOR");
 
 		const guildEnabled = guildParameters
-			.every(parameter => message.guild.settings[parameter] === "on");
+			.every(parameter => message.guild.settings[parameter.name] === "on");
 		const userEnabled = userParameters
-			.every(parameter => message.author.settings[parameter] === "on");
+			.every(parameter => message.author.settings[parameter.name] === "on");
 
 		if (isAdmin && !guildEnabled && !userEnabled) {
 			await this.setGuildSettings(message);
