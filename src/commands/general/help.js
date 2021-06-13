@@ -38,7 +38,7 @@ module.exports = class HelpCommand extends Command {
 				.setAuthor("Aldebaran's Help Pages", bot.user.avatarURL());
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {
-				if (data.name !== "Developer")
+				if (data.name !== "Developer" && typeof data !== "string")
 					categoriesList += `**${data.title}** - ${data.description}\n`;
 			}
 			embed.setDescription(
