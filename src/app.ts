@@ -1,7 +1,8 @@
 import { Shard, ShardingManager } from "discord.js";
-import api from "./api/api";
+import dotenv from "dotenv";
+import api from "./api/api.js";
 
-require("dotenv").config();
+dotenv.config({ path: "../../.env" });
 
 if (process.argv.includes("--api")) {
 	api();

@@ -1,8 +1,10 @@
-const { MessageEmbed } = require("discord.js");
-const questlist = require("../../../assets/data/drpgquestinfo.json");
-const { Command } = require("../../groups/DRPGCommand");
+import fs from "fs";
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/DRPGCommand.js";
 
-module.exports = class QuestCommand extends Command {
+const questlist = JSON.parse(fs.readFileSync("../../assets/data/drpgquestinfo.json"));
+
+export default class QuestCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the DiscordRPG quests list and detailled informations about each quest",

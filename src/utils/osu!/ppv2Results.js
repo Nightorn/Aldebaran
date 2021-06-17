@@ -1,8 +1,8 @@
-const ojsama = require("ojsama");
-const fs = require("fs");
-const retrieveBeatmapFile = require("./retrieveBeatmapFile");
+import ojsama from "ojsama";
+import fs from "fs";
+import retrieveBeatmapFile from "./retrieveBeatmapFile.js";
 
-module.exports = (beatmapId, mods, combo, acc,
+export default (beatmapId, mods, combo, acc,
 	nmiss, n300, n100, n50) => new Promise(
 	resolve => {
 		retrieveBeatmapFile(beatmapId).then(() => {

@@ -1,6 +1,6 @@
-const { Command, Embed } = require("../../../groups/Command");
+import { Command, Embed } from "../../../groups/Command.js";
 
-module.exports = class DisableCommandsSubcommand extends Command {
+export default class DisableCommandsSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Disables a command for your server",

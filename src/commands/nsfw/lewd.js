@@ -1,7 +1,9 @@
-const lewds = require("../../../assets/data/imageurls.json");
-const { Command, Embed } = require("../../groups/NSFWCommand");
+import fs from "fs";
+import { Command, Embed } from "../../groups/NSFWCommand.js";
 
-module.exports = class LewdCommand extends Command {
+const lewds = JSON.parse(fs.readFileSync("../../assets/data/imageurls.json"));
+
+export default class LewdCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Performs a lewd action on the specified user",

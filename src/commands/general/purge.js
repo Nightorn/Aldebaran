@@ -1,6 +1,6 @@
-const { Command } = require("../../groups/Command");
+import { Command } from "../../groups/Command.js";
 
-module.exports = class PurgeCommand extends Command {
+export default class PurgeCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Purges messages in channel",

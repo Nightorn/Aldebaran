@@ -1,7 +1,7 @@
-const request = require("request");
-const { Command, Embed } = require("../../groups/ImageCommand");
+import request from "request";
+import { Command, Embed } from "../../groups/ImageCommand.js";
 
-module.exports = class RandimalCommand extends Command {
+export default class RandimalCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows a random animal picture or GIF"

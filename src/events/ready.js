@@ -1,4 +1,4 @@
-exports.run = client => {
+export const run = client => { // eslint-disable-line import/prefer-default-export
 	console.log(
 		`\x1b[36m# ${client.user.username} has started!${
 			client.debugMode ? " The developer mode has been enabled." : ""

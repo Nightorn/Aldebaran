@@ -1,8 +1,8 @@
-const { MessageEmbed } = require("discord.js");
-const mathjs = require("mathjs");
-const { Command, Embed } = require("../../groups/UtilitiesCommand");
+import { MessageEmbed } from "discord.js";
+import mathjs from "mathjs";
+import { Command, Embed } from "../../groups/UtilitiesCommand.js";
 
-module.exports = class MathCommand extends Command {
+export default class MathCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Evaluates a math expression",

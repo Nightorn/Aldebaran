@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class PresenceCommand extends Command {
+export default class PresenceCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Access the community-driven bot's activity feature"

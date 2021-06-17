@@ -1,7 +1,7 @@
-const Client = require("nekos.life");
-const { Command, Embed } = require("../../groups/FunCommand");
+import Client from "nekos.life";
+import { Command, Embed } from "../../groups/FunCommand.js";
 
-module.exports = class EightballCommand extends Command {
+export default class EightballCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Ask the magic 8ball a question, you will be given the right answer",

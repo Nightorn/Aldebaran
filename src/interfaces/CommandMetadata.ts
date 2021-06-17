@@ -1,6 +1,6 @@
 import { PermissionString as DJSPermission } from "discord.js";
-import { PermissionString as AldebaranPermission } from "../utils/Constants";
-import { Args } from "./Arg";
+import { PermissionString as AldebaranPermission } from "../utils/Constants.js";
+import { Args } from "./Arg.js";
 
 export default interface CommandMetadata {
 	aliases: string[],

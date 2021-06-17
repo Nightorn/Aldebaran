@@ -1,9 +1,11 @@
-const { MessageEmbed } = require("discord.js");
-const request = require("request");
-const bases = require("../../../assets/data/bases.json");
-const { Command } = require("../../groups/DRPGCommand");
+import fs from "fs";
+import { MessageEmbed } from "discord.js";
+import request from "request";
+import { Command } from "../../groups/DRPGCommand.js";
 
-module.exports = class WallsCommand extends Command {
+const bases = JSON.parse(fs.readFileSync("../../assets/data/bases.json"));
+
+export default class WallsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays user's wall informations",

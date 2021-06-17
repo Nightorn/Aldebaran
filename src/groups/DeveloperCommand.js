@@ -1,6 +1,6 @@
-const { Command } = require("./Command");
+import { Command as C } from "./Command.js";
 
-module.exports.Command = class DeveloperCategory extends Command {
+export const Command = class DeveloperCategory extends C {
 	constructor(client, metadata) {
 		super(client, {
 			perms: metadata.perms === undefined

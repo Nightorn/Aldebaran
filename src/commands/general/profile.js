@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class ProfileCommand extends Command {
+export default class ProfileCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows your Aldebaran's profile",

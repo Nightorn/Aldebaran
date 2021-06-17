@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class AvatarCommand extends Command {
+export default class AvatarCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the avatar of the specified user",

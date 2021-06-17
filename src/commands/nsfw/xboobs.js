@@ -1,7 +1,9 @@
-const origin = require("../../groups/NSFWCommand");
-const { Command, Embed } = require("../../groups/multi/NekoslifeSubcategory")(origin);
+import { Command as C, Embed as E } from "../../groups/NSFWCommand.js";
+import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 
-module.exports = class XBoobsCommand extends Command {
+const { Command, Embed } = subCategory(C, E);
+
+export default class XBoobsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays a hentai picture or GIF showing boobs"

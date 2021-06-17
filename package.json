@@ -1,8 +1,8 @@
 {
   "name": "aldebaran",
-  "version": "2.1.0",
+  "version": "3.0.0-dev",
   "description": "Utility",
-  "main": "bot.js",
+  "main": "src/bot.ts",
   "dependencies": {
     "@types/uid-safe": "^2.1.2",
     "body-parser": "^1.19.0",
@@ -28,6 +28,7 @@
     "regenerator-runtime": "^0.13.7",
     "request": "^2.88.2",
     "tenorjs": "^1.0.8",
+    "ts-node": "^10.0.0",
     "uid-safe": "^2.1.5",
     "xml2js": "^0.4.23"
   },
@@ -54,22 +55,23 @@
     "typescript": "^4.3.2"
   },
   "scripts": {
-    "api": "node app --api",
-    "start": "node bot.js",
-    "dev": "node bot.js dev !",
-    "shard": "node app",
-    "sharddev": "node app dev !",
-    "sos": "node bot.js sos",
+    "api": "cd dist/src && node app --api",
+    "start": "cd dist/src && node bot",
+    "dev": "cd dist/src && node bot dev !",
+    "shard": "cd dist/src && node app",
+    "sharddev": "cd dist/src && node --experimental-specifier-resolution=node app dev !",
+    "sos": "node bot sos",
     "configure": "node bin/configure.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://git.nightorn.com/Nightorn/Aldebaran.git"
   },
-  "author": "Nightmare1234",
+  "author": "Aldebaran contributors",
   "license": "ISC",
   "bugs": {
     "url": "https://git.nightorn.com/Nightorn/Aldebaran/issues"
   },
-  "homepage": "https://git.nightorn.com/Nightorn/Aldebaran#readme"
+  "homepage": "https://git.nightorn.com/Nightorn/Aldebaran#readme",
+  "type": "module"
 }

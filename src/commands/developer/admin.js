@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/DeveloperCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/DeveloperCommand.js";
 
-module.exports = class AdminCommand extends Command {
+export default class AdminCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Admin Portal Command",

@@ -1,6 +1,6 @@
-import Guild from "../structures/djs/Guild";
-import User from "../structures/djs/User";
-import timezoneSupport from "./checks/timezoneSupport";
+import Guild from "../structures/djs/Guild.js";
+import User from "../structures/djs/User.js";
+import { timezoneSupport } from "./Methods.js";
 
 export type ErrorString = keyof typeof Error;
 export type PermissionString = keyof typeof Permissions;

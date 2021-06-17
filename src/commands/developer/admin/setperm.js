@@ -1,8 +1,8 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../../groups/DeveloperCommand");
-const AldebaranPermissions = require("../../../structures/aldebaran/AldebaranPermissions");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../../groups/DeveloperCommand.js";
+import AldebaranPermissions from "../../../structures/aldebaran/AldebaranPermissions.js";
 
-module.exports = class SetpermSubcommand extends Command {
+export default class SetpermSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Set Aldebaran permissions of the specific user",

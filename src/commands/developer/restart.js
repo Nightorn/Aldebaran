@@ -1,8 +1,8 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/DeveloperCommand");
-const AldebaranClient = require("../../structures/djs/Client");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/DeveloperCommand.js";
+import AldebaranClient from "../../structures/djs/Client.js";
 
-module.exports = class RestartCommand extends Command {
+export default class RestartCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Restarts Aldebaran",

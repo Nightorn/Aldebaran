@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/DeveloperCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/DeveloperCommand.js";
 
-module.exports = class ServerlistCommand extends Command {
+export default class ServerlistCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Lists the servers Aldebaran is in",

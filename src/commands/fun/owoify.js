@@ -1,6 +1,6 @@
-const { Command, Embed } = require("../../groups/FunCommand");
+import { Command, Embed } from "../../groups/FunCommand.js";
 
-module.exports = class OwoifyCommand extends Command {
+export default class OwoifyCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Sends an owoified text",

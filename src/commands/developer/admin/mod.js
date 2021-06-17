@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../../groups/DeveloperCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../../groups/DeveloperCommand.js";
 
-module.exports = class ModSubcommand extends Command {
+export default class ModSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Changes the settings of the specified user or guild",

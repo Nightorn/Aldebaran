@@ -95,15 +95,14 @@ export abstract class Command {
 		if (fs.existsSync(path)) {
 			fs.readdir(path, (err, files) => {
 				files.forEach(file => {
-					try {
-						// eslint-disable-next-line import/no-dynamic-require, global-require
-						const Structure = require(`../../${path}${file}`);
-						const command = new Structure(this.client);
+					import(`../${path}${file}`).then(imported => {
+						const command = new imported.default(this.client);
 						command.name = file.match(/\w+(?=(.js))/g)![0];
 						this.subcommands.set(command.name, command);
-					} catch (error) {
+					}).catch(err => {
 						console.log(`\x1b[31m${path}${file} is seen as a subcommand but is invalid.\x1b[0m`);
-					}
+						console.error(err);
+					});
 				});
 			});
 		}

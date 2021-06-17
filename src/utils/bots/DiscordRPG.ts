@@ -1,50 +1,58 @@
 /* eslint consistent-return: off */
 /* eslint no-else-return: off */
-const { MessageEmbed } = require("discord.js");
-const { deathimage } = require("../../../assets/data/imageurls.json");
+import fs from "fs";
+import { MessageEmbed } from "discord.js";
+import AldebaranClient from "../../structures/djs/Client.js";
+import Message from "../../structures/djs/Message.js";
+import User from "../../structures/djs/User";
 
+const { deathimage } = JSON.parse(fs.readFileSync("../../assets/data/imageurls.json").toString());
 const senddeath = deathimage[Math.floor(Math.random() * deathimage.length)];
 
-const embedColor = playerPercentage => {
+const embedColor = (playerPercentage: number) => {
 	if (playerPercentage <= 20) return "RED";
+	if (playerPercentage <= 40) return "ORANGE";
+	if (playerPercentage <= 60) return "YELLOW";
+	return "GREEN";
 };
 
-const emojiColor = percentage => {
+const emojiColor = (percentage: number) => {
 	if (percentage <= 20) return "<:red:610021415919288320>";
 	if (percentage <= 40) return "<:orange:610021415973814291>";
 	if (percentage <= 60) return "<:yellow:610021415487537163>";
 	return "<:green:610021415755972628>";
 };
 
-const checkPlayer = (message, username) => {
+const checkPlayer = (message: Message, username: string) => {
 	const matchedMessage = message.channel.messages.cache.find(
 		msg => msg.author.username === username
 	);
 	const matchedAdventure = message.channel.drpgRecentADVs.get(username);
-	if (matchedMessage !== undefined) return matchedMessage.author;
-	if (matchedAdventure !== undefined) return matchedAdventure.user;
+	if (matchedMessage !== undefined) return matchedMessage.author as User;
+	if (matchedAdventure !== undefined) return matchedAdventure.user as User;
 	return null;
 };
 
-const general = (user, playerHP, petHP, message) => {
+const general = (
+	user: User, playerHP: number, petHP: string | number, message: Message
+) => {
 	const { healthMonitor, individualHealthMonitor } = user.settings;
 	if (user === null) return;
 	if (healthMonitor !== undefined && healthMonitor !== "off") {
 		const embed = new MessageEmbed()
-			.setAuthor(user.username, user.avatarURL())
-			.setColor(embedColor(playerHP));
-		if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
-			embed.addField(
-				...(individualHealthMonitor === "character"
-					? ["__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`]
-					: ["__Pet Health__", petHP === 0 ? "**DEAD**" : `${emojiColor(petHP)} **${petHP}**%`]),
-				true
-			);
+			.setAuthor(user.username, user.pfp())
+			.setColor(embedColor(playerHP as number));
+		if (["character", "pet"].indexOf(individualHealthMonitor!) !== -1) {
+			if (individualHealthMonitor === "character") {
+				embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
+			} else {
+				embed.addField("__Pet Health__", petHP === 0 ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}**%`, true);
+			}
 		} else {
 			embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
 			embed.addField(
 				"__Pet Health__",
-				petHP === "Dead" ? "**DEAD**" : `${emojiColor(petHP)} **${petHP}%**`,
+				petHP === "Dead" ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}%**`,
 				true
 			);
 		}
@@ -52,7 +60,7 @@ const general = (user, playerHP, petHP, message) => {
 	}
 };
 
-const playerWarning = (user, hp, message) => {
+const playerWarning = (user: User, hp: number, message: Message) => {
 	const embed = new MessageEmbed()
 		.setTitle(`__${user.username} Health Warning!!! - ${hp}%__`)
 		.setColor(0xff0000)
@@ -62,7 +70,7 @@ const playerWarning = (user, hp, message) => {
 	message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
 };
 
-const petWarning = (user, hp, message) => {
+const petWarning = (user: User, hp: number, message: Message) => {
 	const embed = new MessageEmbed()
 		.setTitle(`${user.username} PET Health Warning!!! - ${hp}%__`)
 		.setColor(0xff0000)
@@ -74,15 +82,13 @@ const petWarning = (user, hp, message) => {
 	message.channel.send(embed).then(msg => msg.delete({ timeout: 60000 }));
 };
 
-const percentageCheck = (name, msg, player, pet) => {
+const percentageCheck = (name: string, msg: Message, player: any, pet: any) => {
 	const user = checkPlayer(msg, name);
 	if (user !== null) {
 		const { healthMonitor, individualHealthMonitor } = user.settings;
-		const percentage = !Number.isNaN(parseInt(healthMonitor, 10))
-			? parseInt(healthMonitor, 10)
-			: 100;
+		const percentage = typeof healthMonitor === "number" ? healthMonitor : 100;
 		if (healthMonitor === undefined || healthMonitor === "off") return false;
-		if (["character", "pet"].indexOf(individualHealthMonitor) !== -1) {
+		if (["character", "pet"].indexOf(individualHealthMonitor!) !== -1) {
 			if (individualHealthMonitor === "character") {
 				if (player <= percentage) {
 					if (player <= 11) return playerWarning(user, player, msg);
@@ -100,14 +106,14 @@ const percentageCheck = (name, msg, player, pet) => {
 	}
 };
 
-module.exports = (client, message) => {
+export default (_client: AldebaranClient, message: Message) => {
 	if (message.guild.settings.healthmonitor === "off") return;
-	const player = {
+	const player: any = {
 		name: null,
 		currentHP: 0,
 		maxHP: 0
 	};
-	const pet = {
+	const pet: any = {
 		currentHP: 0,
 		maxHP: 0
 	};
@@ -117,7 +123,7 @@ module.exports = (client, message) => {
 				player.name = message.content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
 				if (player.name !== null) player.name = player.name[1];
 				// eslint-disable-next-line no-useless-escape
-				const hpMatches = message.content.match(/(Dead|[\d\.]+% HP)/g);
+				const hpMatches = message.content.match(/(Dead|[\d\.]+% HP)/g)!;
 				const deadPet = hpMatches[1] === "Dead";
 				// eslint-disable-next-line no-param-reassign
 				message.content = message.content.replace(/%/g, "");
@@ -131,19 +137,23 @@ module.exports = (client, message) => {
 				const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
 				const healthMessage = message.content.match(healthMessagePattern);
 				if (healthMessage) {
-					const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
+					const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/)!;
 					player.currentHP = Number(nums[1].replace(/,/g, ""));
 					player.maxHP = Number(nums[2].replace(/,/g, ""));
-					player.name = message.content.match(/\+ (.*) has [\d,]+\/[\d,]+ HP left\./)[1];
+					player.name = message.content.match(/\+ (.*) has [\d,]+\/[\d,]+ HP left\./)![1];
 				}
 				const messageArray = message.content.split("\n");
 				let dealtLine = null;
 				let tookLine = null;
 				for (const i in messageArray) {
-					if (messageArray[i].indexOf(" dealt ") !== -1) { dealtLine = parseInt(i, 10); }
-					if (messageArray[i].indexOf(" took ") !== -1) { tookLine = parseInt(i, 10); }
+					if (messageArray[i].indexOf(" dealt ") !== -1) {
+						dealtLine = parseInt(i, 10);
+					}
+					if (messageArray[i].indexOf(" took ") !== -1) {
+						tookLine = parseInt(i, 10);
+					}
 				}
-				if (tookLine === dealtLine + 1) {
+				if (tookLine === dealtLine! + 1) {
 					const petInfosLine = messageArray[tookLine + 1].split(" ");
 					pet.currentHP = parseInt(
 						petInfosLine[petInfosLine.indexOf("has") + 1]
@@ -165,14 +175,14 @@ module.exports = (client, message) => {
 		&& message.embeds[0].author !== null
 	) {
 		const adventureEmbed = message.embeds[0];
-		if (message.embeds[0].author.name.includes("Adventure")) {
+		if (message.embeds[0].author.name!.includes("Adventure")) {
 			const petData = adventureEmbed.fields[
 				adventureEmbed.fields[1].name === "Critical Hit!" ? 2 : 1
 			].value.split("\n")[2];
 			if (petData) {
 				player.name = adventureEmbed.fields[0].name;
 				[pet.currentHP, pet.maxHP] = petData.split(" ")[1].split("/");
-				const healthLine = adventureEmbed.fields[0].value.match(/Has ([\d,]+)\/([\d,]+) HP left/);
+				const healthLine = adventureEmbed.fields[0].value.match(/Has ([\d,]+)\/([\d,]+) HP left/)!;
 				player.currentHP = Number(healthLine[1].replace(/,/g, ""));
 				player.maxHP = Number(healthLine[2].replace(/,/g, ""));
 				pet.currentHP = parseInt(pet.currentHP.replace(",", ""), 10);

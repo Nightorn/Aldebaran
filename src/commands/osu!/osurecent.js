@@ -1,9 +1,9 @@
-const Nodesu = require("nodesu");
-const ojsama = require("ojsama");
-const ppv2Results = require("../../utils/osu!/ppv2Results");
-const { Command, Embed } = require("../../groups/OsuCommand");
+import Nodesu from "nodesu";
+import ojsama from "ojsama";
+import ppv2Results from "../../utils/osu!/ppv2Results.js";
+import { Command, Embed } from "../../groups/OsuCommand.js";
 
-module.exports = class OsubestCommand extends Command {
+export default class OsubestCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the most recent play of the specified user",

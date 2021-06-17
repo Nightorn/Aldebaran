@@ -1,10 +1,10 @@
-const Nodesu = require("nodesu");
-const ojsama = require("ojsama");
-const retrieveBeatmapFile = require("../../utils/osu!/retrieveBeatmapFile");
-const ppv2Results = require("../../utils/osu!/ppv2Results");
-const { Command, Embed } = require("../../groups/OsuCommand");
+import Nodesu from "nodesu";
+import ojsama from "ojsama";
+import retrieveBeatmapFile from "../../utils/osu!/retrieveBeatmapFile.js";
+import ppv2Results from "../../utils/osu!/ppv2Results.js";
+import { Command, Embed } from "../../groups/OsuCommand.js";
 
-module.exports = class OsumapCommand extends Command {
+export default class OsumapCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows the informations of the specified map",

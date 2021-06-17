@@ -1,5 +1,20 @@
-module.exports.run = bitfield => {
-	const { mods } = module.exports;
+export const mods = {
+	PF: 16384,
+	SO: 4096,
+	FL: 1024,
+	NC: 512,
+	HT: 256,
+	RX: 128,
+	DT: 64,
+	SD: 32,
+	HR: 16,
+	HD: 8,
+	EZ: 2,
+	NF: 1,
+	None: 0
+};
+
+export const run = bitfield => {
 	let actualBitfield = bitfield;
 	const foundMods = [];
 
@@ -15,20 +30,4 @@ module.exports.run = bitfield => {
 	if (foundMods !== [] && foundMods.includes("None"))
 		foundMods.pop();
 	return foundMods;
-};
-
-module.exports.mods = {
-	PF: 16384,
-	SO: 4096,
-	FL: 1024,
-	NC: 512,
-	HT: 256,
-	RX: 128,
-	DT: 64,
-	SD: 32,
-	HR: 16,
-	HD: 8,
-	EZ: 2,
-	NF: 1,
-	None: 0
 };

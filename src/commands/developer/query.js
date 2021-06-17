@@ -1,8 +1,8 @@
-const { MessageAttachment } = require("discord.js");
-const util = require("util");
-const { Command } = require("../../groups/DeveloperCommand");
+import { MessageAttachment } from "discord.js";
+import util from "util";
+import { Command } from "../../groups/DeveloperCommand.js";
 
-module.exports = class QueryCommand extends Command {
+export default class QueryCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Queries the database",

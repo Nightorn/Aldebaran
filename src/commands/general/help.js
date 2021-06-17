@@ -1,8 +1,10 @@
-const { MessageEmbed } = require("discord.js");
-const categories = require("../../../assets/data/categories.json");
-const { Command } = require("../../groups/Command");
+import fs from "fs";
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class HelpCommand extends Command {
+const categories = JSON.parse(fs.readFileSync("../../assets/data/categories.json"));
+
+export default class HelpCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays detailled help about Aldebaran's commands"

@@ -1,12 +1,13 @@
 import { Client } from "discord.js";
 import fs from "fs";
-import CDBAHandler from "../../handlers/CDBAHandler";
-import CommandHandler from "../../handlers/CommandHandler";
-import DatabaseProvider from "../../handlers/DatabaseProvider";
-import { SettingsModel } from "../../utils/Constants";
-import aldebaranTeam from "../../../config/aldebaranTeam.json";
-import presences from "../../../config/presence.json";
-import packageFile from "../../../package.json";
+import CDBAHandler from "../../handlers/CDBAHandler.js";
+import CommandHandler from "../../handlers/CommandHandler.js";
+import DatabaseProvider from "../../handlers/DatabaseProvider.js";
+import { SettingsModel } from "../../utils/Constants.js";
+
+const aldebaranTeam = JSON.parse(fs.readFileSync("../../config/aldebaranTeam.json").toString());
+const presences = JSON.parse(fs.readFileSync("../../config/presence.json").toString());
+const packageFile = JSON.parse(fs.readFileSync("../../package.json").toString());
 
 export default class AldebaranClient extends Client {
 	started: number = Date.now();
@@ -20,7 +21,7 @@ export default class AldebaranClient extends Client {
 	models: any = { settings: SettingsModel };
 	stats: any;
 	version: string = packageFile.version;
-	drpgCache: object;
+	drpgCache: object = {};
 
 	constructor() {
 		super({
@@ -51,21 +52,24 @@ export default class AldebaranClient extends Client {
 			this.models.settings.user[key] = value;
 			this.models.settings.guild[key] = value;
 		}
-		if (!fs.existsSync("./cache/")) fs.mkdirSync("./cache/");
-		this.drpgCache = {};
-		if (fs.existsSync("./cache/drpgCache.json")) {
-			// eslint-disable-next-line global-require, import/no-unresolved
-			this.drpgCache = require("../../../cache/drpgCache.json");
+
+		if (!fs.existsSync("../../cache/")) fs.mkdirSync("../cache/");
+		if (fs.existsSync("../../cache/drpgCache.json")) {
+			this.drpgCache = JSON.parse(fs.readFileSync("../../cache/drpgCache.json").toString());
 		}
 
-		fs.readdir("./src/events/", (err, files) => {
+		fs.readdir("./events/", (err, files) => {
 			if (err) throw err;
 			files.forEach(file => {
-				// eslint-disable-next-line import/no-dynamic-require, global-require
-				const eventFunction = require(`../../events/${file}`);
-				const eventName = file.split(".")[0];
-				this.on(eventName, (...args) => eventFunction.run(this, ...args));
+				import(`../../events/${file}`).then(eventFunction => {
+					const eventName = file.split(".")[0];
+					this.on(eventName, (...args) => eventFunction.run(this, ...args));
+				});
 			});
+		});
+
+		this.login(process.env.TOKEN).then(() => {
+			console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
 		});
 	}
 

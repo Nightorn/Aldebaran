@@ -1,6 +1,6 @@
-const { Command, Embed } = require("../../../groups/Command");
+import { Command, Embed } from "../../../groups/Command.js";
 
-module.exports = class EnableCommandsSubcommand extends Command {
+export default class EnableCommandsSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Enables back a command for your server",

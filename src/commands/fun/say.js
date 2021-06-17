@@ -1,6 +1,6 @@
-const { Command, Embed } = require("../../groups/FunCommand");
+import { Command, Embed } from "../../groups/FunCommand.js";
 
-module.exports = class SayCommand extends Command {
+export default class SayCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Make the bot say something",

@@ -1,9 +1,11 @@
-const { MessageEmbed } = require("discord.js");
-const request = require("request");
-const { Command } = require("../../groups/DRPGCommand");
-const itemList = require("../../../assets/data/drpg/itemList.json");
+import fs from "fs";
+import { MessageEmbed } from "discord.js";
+import request from "request";
+import { Command } from "../../groups/DRPGCommand.js";
 
-module.exports = class SkillsCommand extends Command {
+const itemList = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json"));
+
+export default class SkillsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays users' skills informations",

@@ -1,7 +1,7 @@
-const request = require("request");
-const { Command, Embed } = require("../../groups/UtilitiesCommand");
+import request from "request";
+import { Command, Embed } from "../../groups/UtilitiesCommand.js";
 
-module.exports = class TranslateCommand extends Command {
+export default class TranslateCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Translates the specified word or the sentence into the specified language",

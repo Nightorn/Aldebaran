@@ -1,4 +1,7 @@
-module.exports = message => {
+import { escape } from "../../Methods.js";
+import Message from "../../../structures/djs/Message.js";
+
+export default (message: Message) => {
 	if (
 		message.author.timers.padventure !== null
 		|| message.guild.settings.adventuretimer === "off"
@@ -15,16 +18,18 @@ module.exports = message => {
 		message.guild.settings.discordrpgprefix
 	]) {
 		if (element !== undefined)
-			if (content.match(`^${RegExp.escape(element)}padv(\\b|enture\\b)`)) prefix = element;
+			if (content.match(`^${escape(element.toString())}padv(\\b|enture\\b)`)) {
+				prefix = element;
+			}
 	}
 	if (prefix !== null) {
 		if (message.guild.settings.autodelete === "on")
 			message.delete({ timeout: 1000 });
 		message.author.timers.padventure = setTimeout(() => {
 			const ping = message.author.settings.timerPing === "adventure"
-                		|| message.author.settings.timerPing === "on"
-                		? `<@${message.author.id}>`
-                		: `${message.author.username},`;
+				|| message.author.settings.timerPing === "on"
+				? `<@${message.author.id}>`
+				: `${message.author.username},`;
 			message.channel
 				.send(`${ping} party adventure time! :crossed_swords:`)
 				.then(msg => {

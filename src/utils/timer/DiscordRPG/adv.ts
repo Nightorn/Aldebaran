@@ -1,4 +1,7 @@
-module.exports = message => {
+import { escape } from "../../Methods.js";
+import Message from "../../../structures/djs/Message.js";
+
+export default (message: Message) => {
 	if (
 		message.author.timers.adventure !== null
 		|| message.guild.settings.adventuretimer === "off"
@@ -15,7 +18,9 @@ module.exports = message => {
 		message.guild.settings.discordrpgprefix
 	]) {
 		if (element !== undefined)
-			if (content.match(`^${RegExp.escape(element)}adv(\\b|enture\\b)`)) prefix = element;
+			if (content.match(`^${escape(element.toString())}adv(\\b|enture\\b)`)) {
+				prefix = element;
+			}
 	}
 	if (prefix !== null) {
 		if (message.guild.settings.autodelete === "on") {

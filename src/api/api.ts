@@ -19,7 +19,7 @@ import User from "./graphql/types/user/User";
  * Initializes the Aldebaran API
  */
 export default (dsm?: ShardingManager) => {
-	const schema = buildSchema(readFileSync("./src/api/graphql/schema.graphql", { encoding: "utf-8" }));
+	const schema = buildSchema(readFileSync("./api/graphql/schema.graphql", { encoding: "utf-8" }));
 
 	const rootValue = {
 		guild: ({ id }: { id: string }) => new Guild(id),
@@ -28,9 +28,9 @@ export default (dsm?: ShardingManager) => {
 
 	const app: any = express();
 	app.set("view engine", "pug");
-	app.set("views", `${__dirname}/views`);
+	app.set("views", `./views`);
 
-	app.use(express.static(`${__dirname}/public`));
+	app.use(express.static(`./public`));
 	app.use(cookieParser());
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: false }));

@@ -1,13 +1,13 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-await-in-loop */
-const fs = require("fs");
-const { Message } = require("discord.js"); // eslint-disable-line no-unused-vars
-const request = require("request");
-const locationdb = require("../../../assets/data/drpg/locations.json");
-const { Command } = require("../../groups/DRPGCommand");
-const items = Object.values(require("../../../assets/data/drpg/itemList.json"));
+import fs from "fs";
+import request from "request";
+import { Command } from "../../groups/DRPGCommand.js";
 
-function apiFetch(endpoint, bot) {
+const items = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json"));
+const locationdb = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json"));
+
+function apiFetch(endpoint) {
 	return new Promise((resolve, reject) => {
 		request({
 			uri: `http://api.discorddungeons.me/v3/${endpoint}`,
@@ -165,7 +165,7 @@ async function getGuild(userData, bot) {
 	return guildData;
 }
 
-module.exports = class GleadCommand extends Command {
+export default class GleadCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays a DiscordRPG user's guild leaderboard",
@@ -231,77 +231,77 @@ module.exports = class GleadCommand extends Command {
 		let itemIndex;
 		let sum = 0;
 		switch (index) {
-		case "level":
-		case "gold":
-		case "xp":
-		case "lux":
-		case "deaths":
-		case "kills":
-		case "points":
-		case "questPoints":
-			guildUsers.sort((a, b) => (b[index] || 0) - (a[index] || 0));
-			sum = guildUsers.reduce((p, c) => (c[index] || 0) + (p || 0), 0);
-			list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${(user[index] || 0).toLocaleString()} >`);
-			break;
-		case "mine":
-		case "chop":
-		case "fish":
-		case "forage":
-			guildUsers.sort((a, b) => b.skills[index].xp - a.skills[index].xp);
-			sum = guildUsers.reduce((p, c) => c.skills[index].level + p, 0);
-			list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.skills[index].level.toLocaleString()} >`);
-			break;
-		case "crits":
-		case "defense":
-		case "goldBoost":
-		case "lumberBoost":
-		case "mineBoost":
-		case "reaping":
-		case "salvaging":
-		case "scavenge":
-		case "strength":
-		case "taming":
-		case "xpBoost":
-			guildUsers.sort((a, b) => b.attributes[index] - a.atttributes[index]);
-			sum = guildUsers.reduce((p, c) => c.attributes[index] + p, 0);
-			list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.attributes[index].toLocaleString()} >`);
-			break;
+			case "level":
+			case "gold":
+			case "xp":
+			case "lux":
+			case "deaths":
+			case "kills":
+			case "points":
+			case "questPoints":
+				guildUsers.sort((a, b) => (b[index] || 0) - (a[index] || 0));
+				sum = guildUsers.reduce((p, c) => (c[index] || 0) + (p || 0), 0);
+				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${(user[index] || 0).toLocaleString()} >`);
+				break;
+			case "mine":
+			case "chop":
+			case "fish":
+			case "forage":
+				guildUsers.sort((a, b) => b.skills[index].xp - a.skills[index].xp);
+				sum = guildUsers.reduce((p, c) => c.skills[index].level + p, 0);
+				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.skills[index].level.toLocaleString()} >`);
+				break;
+			case "crits":
+			case "defense":
+			case "goldBoost":
+			case "lumberBoost":
+			case "mineBoost":
+			case "reaping":
+			case "salvaging":
+			case "scavenge":
+			case "strength":
+			case "taming":
+			case "xpBoost":
+				guildUsers.sort((a, b) => b.attributes[index] - a.atttributes[index]);
+				sum = guildUsers.reduce((p, c) => c.attributes[index] + p, 0);
+				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.attributes[index].toLocaleString()} >`);
+				break;
 
-		case "lastseen":
-			guildUsers.sort((a, b) => (b[index] || 0) - (a[index] || 0));
-			sum = timeSince(Math.floor(guildUsers
-				.reduce((p, c) => (c[index] || 0) + (p || 0), 0) / guildUsers.length));
-			list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${timeSince(user[index] || 0)} >`);
-			break;
+			case "lastseen":
+				guildUsers.sort((a, b) => (b[index] || 0) - (a[index] || 0));
+				sum = timeSince(Math.floor(guildUsers
+					.reduce((p, c) => (c[index] || 0) + (p || 0), 0) / guildUsers.length));
+				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${timeSince(user[index] || 0)} >`);
+				break;
 
-		case "location":
-			const locations = {};
-			guildUsers.forEach(user => {
-				let loc = "1";
-				if (user.location && user.location.current) {
-					loc = user.location.current;
-				}
-				locations[loc] = locations[loc] + 1 || 1;
-			});
-			const locArray = Object.entries(locations);
-			locArray.sort((a, b) => b[1] - a[1]);
-			sum = guildUsers.length;
-			list = locArray.map(loc => `${locationdb[loc[0]]}${showid ? ` (${loc[0]})` : ""} - ${loc[1]}`);
-			break;
+			case "location":
+				const locations = {};
+				guildUsers.forEach(user => {
+					let loc = "1";
+					if (user.location && user.location.current) {
+						loc = user.location.current;
+					}
+					locations[loc] = locations[loc] + 1 || 1;
+				});
+				const locArray = Object.entries(locations);
+				locArray.sort((a, b) => b[1] - a[1]);
+				sum = guildUsers.length;
+				list = locArray.map(loc => `${locationdb[loc[0]]}${showid ? ` (${loc[0]})` : ""} - ${loc[1]}`);
+				break;
 
-		default:
-			itemIndex = items
-				.filter(item => index.toLowerCase() === item.name.toLowerCase());
-			if (itemIndex.length === 1) {
-				filteredUsers = guildUsers.filter(user => user.inv
+			default:
+				itemIndex = items
+					.filter(item => index.toLowerCase() === item.name.toLowerCase());
+				if (itemIndex.length === 1) {
+					filteredUsers = guildUsers.filter(user => user.inv
 					&& user.inv[itemIndex[0].id]
 					&& user.inv[itemIndex[0].id] > 0);
-				filteredUsers
-					.sort((a, b) => b.inv[itemIndex[0].id] - a.inv[itemIndex[0].id]);
-				sum = filteredUsers.reduce((p, c) => c.inv[itemIndex[0].id] + p, 0);
-				list = filteredUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id].toLocaleString()} >`);
-			}
-			break;
+					filteredUsers
+						.sort((a, b) => b.inv[itemIndex[0].id] - a.inv[itemIndex[0].id]);
+					sum = filteredUsers.reduce((p, c) => c.inv[itemIndex[0].id] + p, 0);
+					list = filteredUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id].toLocaleString()} >`);
+				}
+				break;
 		}
 
 		if (list && list.length > 0) {
@@ -311,7 +311,7 @@ module.exports = class GleadCommand extends Command {
 		}
 	}
 
-	registerCheck() {
+	registerCheck() { // eslint-disable-line class-methods-use-this
 		return process.env.API_DISCORDRPG !== undefined
 			&& process.env.API_DISCORDRPG !== null;
 	}

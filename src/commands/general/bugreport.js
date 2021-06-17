@@ -1,8 +1,8 @@
 // Command Developed with the help of Akashic Bearer#2305
-const { MessageEmbed, WebhookClient } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed, WebhookClient } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class CommandBugreport extends Command {
+export default class CommandBugreport extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Sends a bug report",

@@ -1,4 +1,4 @@
-import fetchDBValue from "../../graphql/utils/fetchDBValue";
+import { apiAccessToken, apiAuthCode, apiClient, apiRefreshToken } from "../../graphql/utils/fetchDBValue";
 import GenericDatabaseProvider from "../../../handlers/GenericDatabaseProvider";
 import { AuthorizationCode, Token } from "oauth2-server";
 
@@ -8,7 +8,7 @@ export default (db: GenericDatabaseProvider) => ({
 	 * @param {string} token The access_token
 	 */
 	getAccessToken: async (token: string) => {
-		const data = await fetchDBValue.apiAccessToken(db, token);
+		const data = await apiAccessToken(db, token);
 		return data == null ? false : {
 			accessToken: data.access_token,
 			accessTokenExpiresAt: new Date(data.acctok_expires_at),
@@ -22,7 +22,7 @@ export default (db: GenericDatabaseProvider) => ({
 	 * @param {string} code The authorization_code
 	 */
 	getAuthorizationCode: async (code: string) => {
-		const data = await fetchDBValue.apiAuthCode(db, code);
+		const data = await apiAuthCode(db, code);
 		return data == null ? false : {
 			code,
 			expiresAt: new Date(data.expires_at),
@@ -38,7 +38,7 @@ export default (db: GenericDatabaseProvider) => ({
 	 * @param {string} secret The client_secret of the client to fetch
 	 */
 	getClient: async (id: string, secret: string) => {
-		const data = await fetchDBValue.apiClient(db, id, secret);
+		const data = await apiClient(db, id, secret);
 		return data === null ? false : {
 			id: data.client_id,
 			redirectUris: data.redirect_uris.split(","),
@@ -50,7 +50,7 @@ export default (db: GenericDatabaseProvider) => ({
 	 * @param {string} token The refresh_token
 	 */
 	getRefreshToken: async (token: string) => {
-		const data = await fetchDBValue.apiRefreshToken(db, token);
+		const data = await apiRefreshToken(db, token);
 		return data == null ? false : {
 			refreshToken: data.refresh_token,
 			refreshTokenExpiresAt: new Date(data.reftok_expires_at),

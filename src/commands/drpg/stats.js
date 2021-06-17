@@ -1,14 +1,14 @@
-const { MessageEmbed } = require("discord.js");
-const request = require("request");
-const fs = require("fs");
-const {
-	createCanvas, Image, registerFont, loadImage
-} = require("canvas");
-const locations = require("../../../assets/data/drpg/locations.json");
-const { Command } = require("../../groups/DRPGCommand");
-const lightOrDark = require("../../utils/utils/lightOrDark");
+import { MessageEmbed } from "discord.js";
+import request from "request";
+import fs from "fs";
+import canvas from "canvas";
+import { Command } from "../../groups/DRPGCommand.js";
+import { lightOrDark } from "../../utils/Methods.js";
 
-module.exports = class StatsCommand extends Command {
+const { createCanvas, Image, registerFont, loadImage } = canvas;
+const locations = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json"));
+
+export default class StatsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays a DiscordRPG user's character and pet infos",

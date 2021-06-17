@@ -1,12 +1,15 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
-const Pollux = require("../utils/bots/Pollux");
-const DiscordRPG = require("../utils/bots/DiscordRPG");
-const DRPGAdventure = require("../utils/timer/DiscordRPG/adv.js");
-const DRPGSides = require("../utils/timer/DiscordRPG/sides.js");
-const DRPGPadventure = require("../utils/timer/DiscordRPG/padv.js");
+import Pollux from "../utils/bots/Pollux.js";
+import DiscordRPG from "../utils/bots/DiscordRPG.js";
+import DRPGAdventure from "../utils/timer/DiscordRPG/adv.js";
+import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
+import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
+import AldebaranClient from "../structures/djs/Client.js";
+import Message from "../structures/djs/Message.js";
 
-exports.run = async (bot, message) => {
+// eslint-disable-next-line import/prefer-default-export
+export const run = async (bot: AldebaranClient, message: Message) => {
 	if (!message.guild) return;
 	if (!message.guild.ready) await message.guild.fetch();
 	if (!message.author.ready) await message.author.fetch();
@@ -26,7 +29,7 @@ exports.run = async (bot, message) => {
 		DRPGPadventure(message);
 		const drpgMatch = message.content.toLowerCase().match(/.+(?=stats|adv)/);
 		if (drpgMatch !== null) {
-			const filter = msg => msg.author.id === "170915625722576896";
+			const filter = (msg: Message) => msg.author.id === "170915625722576896";
 			message.channel.awaitMessages(filter, { max: 1, time: 2000 })
 				.then(() => {
 					if (message.guild.settings.discordrpgprefix === undefined)
@@ -36,12 +39,12 @@ exports.run = async (bot, message) => {
 	}
 
 	if (message.author.bot) return;
-	const prefix = process.argv[2] === "dev" ? process.argv[3] || process.env.PREFIX : message.guild.prefix;
+	const prefix = process.argv[2] === "dev" ? process.argv[3] || process.env.PREFIX! : message.guild.prefix;
 	if (message.content.indexOf(prefix) !== 0) return;
 	if (message.content.slice(prefix.length)[0] === " ") return;
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/g);
-	const command = args.shift().toLowerCase();
+	const command = args.shift()!.toLowerCase();
 
 	try {
 		const sliced = command.slice(1);
@@ -60,7 +63,7 @@ exports.run = async (bot, message) => {
 						.setDescription(
 							"By using `#`, you are trying to bypass Discord permissions requirements and other checks, which is only allowed for Aldebaran Administrators."
 						)
-						.setFooter(message.author.username, message.author.avatarURL())
+						.setFooter(message.author.username, message.author.pfp())
 						.setColor("RED");
 					message.channel.send({ embed });
 				} else {
@@ -69,12 +72,15 @@ exports.run = async (bot, message) => {
 			}
 		} else if (command.indexOf("-") === 0) {
 			try {
-				bot.commands.get(sliced).image(bot, message, args);
+				const cmd: any = bot.commands.get(sliced);
+				if (cmd && cmd.image) {
+					cmd.image(bot, message, args);
+				}
 			} catch (err) {
 				const embed = new MessageEmbed()
 					.setTitle("The requested resource has not been found.")
 					.setDescription("By using `-`, you are trying to view the image version of this command, however, the image version of this command is not available. Try again without `-`.")
-					.setFooter(message.author.username, message.author.avatarURL())
+					.setFooter(message.author.username, message.author.pfp())
 					.setColor("RED");
 				message.channel.send({ embed });
 			}
@@ -91,7 +97,7 @@ exports.run = async (bot, message) => {
 			const embed = new MessageEmbed()
 				.setTitle("You are not allowed to use this.")
 				.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${command}\` for more informations about the requirements to use this command.`)
-				.setFooter(message.author.username, message.author.avatarURL())
+				.setFooter(message.author.username, message.author.pfp())
 				.setColor("RED");
 			message.channel.send({ embed });
 		} else if (err.message === "NOT_NSFW_CHANNEL") {
@@ -100,7 +106,7 @@ exports.run = async (bot, message) => {
 				.setDescription(
 					"As this command shows NSFW content, you need to use this command in a NSFW channel."
 				)
-				.setFooter(message.author.username, message.author.avatarURL())
+				.setFooter(message.author.username, message.author.pfp())
 				.setColor("RED");
 			message.channel.send({ embed });
 		} else if (err.message !== "INVALID_COMMAND") {

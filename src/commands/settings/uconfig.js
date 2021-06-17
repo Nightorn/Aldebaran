@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/SettingsCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/SettingsCommand.js";
 
-module.exports = class UconfigCommand extends Command {
+export default class UconfigCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Manages your Aldebaran personal settings",

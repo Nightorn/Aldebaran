@@ -1,7 +1,9 @@
-const origin = require("../../groups/ImageCommand");
-const { Command, Embed } = require("../../groups/multi/NekoslifeSubcategory")(origin);
+import { Command as C, Embed as E } from "../../groups/ImageCommand.js";
+import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 
-module.exports = class NekoCommand extends Command {
+const { Command, Embed } = subCategory(C, E);
+
+export default class NekoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays a random neko picture or a GIF"

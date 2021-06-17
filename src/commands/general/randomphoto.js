@@ -1,6 +1,6 @@
-const { Command } = require("../../groups/Command");
+import { Command } from "../../groups/Command.js";
 
-module.exports = class RandomphotoCommand extends Command {
+export default class RandomphotoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays a random image from the gallery"

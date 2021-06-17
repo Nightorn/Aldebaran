@@ -1,10 +1,12 @@
-const request = require("request");
-const math = require("mathjs");
-const items = require("../../../assets/data/drpg/itemList.json");
-const locations = require("../../../assets/data/drpg/locations.json");
-const { Command, Embed } = require("../../groups/DRPGCommand");
+import fs from "fs";
+import request from "request";
+import math from "mathjs";
+import { Command, Embed } from "../../groups/DRPGCommand.js";
 
-module.exports = class PlantCommand extends Command {
+const items = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json"));
+const locations = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json"));
+
+export default class PlantCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays users plant informations and estimated loots",

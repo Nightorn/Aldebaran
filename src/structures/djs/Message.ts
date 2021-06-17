@@ -1,11 +1,13 @@
 import { Message as DJSMessage, TextChannel as TC, DMChannel as DC, NewsChannel as NC } from "discord.js";
-import AldebaranClient from "./Client";
-import { Args } from "../../interfaces/Arg";
-import Guild from "./Guild";
-import User from "./User";
+import AldebaranClient from "./Client.js";
+import { Args } from "../../interfaces/Arg.js";
+import Guild from "./Guild.js";
+import User from "./User.js";
+import TextChannel from "./TextChannel.js";
 
 export default class Message extends DJSMessage {
 	author!: User;
+	channel!: TextChannel;
 	guild!: Guild;
 	prefix: string = "&";
 	valid: boolean = false;

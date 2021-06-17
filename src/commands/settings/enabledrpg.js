@@ -1,5 +1,5 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/SettingsCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/SettingsCommand.js";
 
 const descriptions = {
 	healthMonitor: "DiscordRPG Health Monitor",
@@ -10,7 +10,7 @@ const descriptions = {
 const guildParameters = ["healthmonitor", "adventuretimer", "sidestimer"];
 const userParameters = ["healthmonitor", "adventuretimer", "sidestimer", "timerping"];
 
-module.exports = class EnableDRPGCommand extends Command {
+export default class EnableDRPGCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description:

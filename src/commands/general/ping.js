@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class PingCommand extends Command {
+export default class PingCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the bot's current ping to Discord",

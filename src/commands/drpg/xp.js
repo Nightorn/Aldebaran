@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/DRPGCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/DRPGCommand.js";
 
-module.exports = class XpCommand extends Command {
+export default class XpCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays estimated XP per kill at a certain level",

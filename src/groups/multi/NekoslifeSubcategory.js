@@ -1,13 +1,13 @@
-const Client = require("nekos.life");
+import Client from "nekos.life";
 
-module.exports = Origin => ({
-	Command: class NekoSubcategory extends Origin.Command {
+export default (Command, Embed) => ({
+	Command: class NekoSubcategory extends Command {
 		constructor(...args) {
 			super(...args);
 			this.nekoslife = new Client();
 		}
 	},
-	Embed: class NewEmbed extends Origin.Embed {
+	Embed: class NewEmbed extends Embed {
 		constructor(command, description) {
 			super(command);
 			this.setDescription(description);

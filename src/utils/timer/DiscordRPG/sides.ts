@@ -1,6 +1,7 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
+import Message from "../../../structures/djs/Message";
 
-module.exports = async message => {
+export default async (message: Message) => {
 	const supportedST = ["on", "mine", "forage", "chop", "fish"];
 	let prefix = null;
 	let sidesPass = false;
@@ -26,13 +27,13 @@ module.exports = async message => {
 		if (message.author.timers.sides !== null) return;
 		if (prefix !== null) {
 			if (
-				supportedST.indexOf(message.author.settings.sidestimer) !== -1
+				supportedST.indexOf(message.author.settings.sidestimer!) !== -1
         && message.guild.settings.sidestimer === "on"
 			) {
 				const emoji = ["🥕", "🍋", "🥔", "🐟"];
 				const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
 				const timerEmbed = new MessageEmbed()
-					.setAuthor(message.author.username, message.author.avatarURL())
+					.setAuthor(message.author.username, message.author.pfp())
 					.setColor(0x00ae86)
 					.setDescription("React with 🚫 to cancel timer.");
 				message.channel.send({ embed: timerEmbed }).then(mesg => {
@@ -47,10 +48,7 @@ module.exports = async message => {
 							if (reactions.get("🚫") === undefined) {
 								const embed = new MessageEmbed()
 									.setDescription("Your sides timer has been set!")
-									.setAuthor(
-										message.author.username,
-										message.author.avatarURL()
-									)
+									.setAuthor(message.author.pfp())
 									.setColor(0x00ae86);
 								message.channel.send({ embed }).then(timerset => {
 									timerset.delete({ timeout: 5000 });

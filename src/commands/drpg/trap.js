@@ -1,11 +1,13 @@
-const { MessageEmbed } = require("discord.js");
-const request = require("request");
-const math = require("mathjs");
-const locations = require("../../../assets/data/drpg/locations.json");
-const itemList = require("../../../assets/data/drpg/itemList.json");
-const { Command } = require("../../groups/DRPGCommand");
+import fs from "fs";
+import { MessageEmbed } from "discord.js";
+import request from "request";
+import math from "mathjs";
+import { Command } from "../../groups/DRPGCommand.js";
 
-module.exports = class TrapCommand extends Command {
+const itemList = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json"));
+const locations = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json"));
+
+export default class TrapCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays users' trap informations and estimated loots",

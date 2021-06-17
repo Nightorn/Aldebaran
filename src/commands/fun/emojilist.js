@@ -1,6 +1,6 @@
-const { Command } = require("../../groups/FunCommand");
+import { Command } from "../../groups/FunCommand.js";
 
-module.exports = class EmojilistCommand extends Command {
+export default class EmojilistCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays all emojis for a the server"

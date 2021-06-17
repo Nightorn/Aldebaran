@@ -1,6 +1,6 @@
-const request = require("request");
+import request from "request";
 
-module.exports = (bot, message) => {
+export default (bot, message) => {
 	const command = message.content.slice(message.guild.prefix.length).split(" ")[0];
 	return new Promise((resolve, reject) => {
 		request({ uri: `https://api.nightorn.com/api/v1/images/random/${command}` }, (err, response, body) => {

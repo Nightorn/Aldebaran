@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/DRPGCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/DRPGCommand.js";
 
-module.exports = class GoldCommand extends Command {
+export default class GoldCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the estimated gold per kill at a certain level",

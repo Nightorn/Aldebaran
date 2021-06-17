@@ -1,7 +1,7 @@
-const tenor = require("tenorjs");
-const { Command, Embed } = require("../../groups/ImageCommand");
+import tenor from "tenorjs";
+import { Command, Embed } from "../../groups/ImageCommand.js";
 
-module.exports = class PepeCommand extends Command {
+export default class PepeCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows a random GIF of pepe"

@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/GamesCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/GamesCommand.js";
 
-module.exports = class RpsCommand extends Command {
+export default class RpsCommand extends Command {
 	constructor(client) {
 		super(client, { description: "Rock. Paper. Scissors!" });
 	}

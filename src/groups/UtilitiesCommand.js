@@ -1,6 +1,6 @@
-const { Command, Embed } = require("./Command");
+import { Command as C, Embed as E } from "./Command.js";
 
-module.exports.Command = class UtilitiesCategory extends Command {
+export const Command = class UtilitiesCategory extends C {
 	constructor(client, metadata) {
 		super(client, metadata);
 		this.category = "Utilities";
@@ -8,4 +8,4 @@ module.exports.Command = class UtilitiesCategory extends Command {
 	}
 };
 
-module.exports.Embed = Embed;
+export const Embed = E;

@@ -1,6 +1,6 @@
-const { Command, Embed } = require("../../groups/FunCommand");
+import { Command, Embed } from "../../groups/FunCommand.js";
 
-module.exports = class YearcompletionCommand extends Command {
+export default class YearcompletionCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows the week, month, year and decade completions."

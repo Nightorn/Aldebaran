@@ -1,8 +1,8 @@
-const { MessageEmbed } = require("discord.js");
-const os = require("os");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import os from "os";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class BStats extends Command {
+export default class BStats extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the bot usage statistics since the last start"
@@ -19,7 +19,7 @@ module.exports = class BStats extends Command {
 		const embed = new MessageEmbed()
 			.setAuthor("Aldebaran  |  Bot Statistics", bot.user.avatarURL())
 			.setDescription(
-				"Multiple informations about Aldebaran are shown on this page, mainly the used ressources and the global usage statistics."
+				"Multiple informations about Aldebaran are shown on this page, mainly the used resources and the global usage statistics."
 			)
 			.addField(`Memory Usage (${memPRC}%)`, `**${mem} MB** / ${Number.formatNumber(memTTL)} MB`, true)
 			.addField(

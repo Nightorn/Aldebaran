@@ -1,7 +1,7 @@
-const { Command } = require("../../groups/ActionCommand");
-const executeAction = require("../../utils/action/executeAction");
+import { Command } from "../../groups/ActionCommand.js";
+import executeAction from "../../utils/action/executeAction.js";
 
-module.exports = class TackleCommand extends Command {
+export default class TackleCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Tackle someone!",

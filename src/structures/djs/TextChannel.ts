@@ -1,7 +1,7 @@
 import { MessageEmbed, TextChannel as DJSTextChannel } from "discord.js";
-import { ErrorString, Error as MError } from "../../utils/Constants";
-import Guild from "./Guild";
-import User from "./User";
+import { ErrorString, Error as MError } from "../../utils/Constants.js";
+import Guild from "./Guild.js";
+import User from "./User.js";
 
 export default class TextChannel extends DJSTextChannel {
 	drpgRecentADVs: Map<string, { user: User, date: number }>;

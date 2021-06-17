@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class InviteCommand extends Command {
+export default class InviteCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the bot and server invites"

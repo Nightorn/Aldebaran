@@ -1,7 +1,7 @@
-const { Command } = require("../../groups/ActionCommand");
-const executeAction = require("../../utils/action/executeAction");
+import { Command } from "../../groups/ActionCommand.js";
+import executeAction from "../../utils/action/executeAction.js";
 
-module.exports = class RubCommand extends Command {
+export default class RubCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Softly rub someone!",

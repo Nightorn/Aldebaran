@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class UploadphotoCommand extends Command {
+export default class UploadphotoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Uploads a photo to the gallery",

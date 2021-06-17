@@ -58,10 +58,10 @@ export default class GuildsConnection {
 			}
 			const check = `let result = null; const user = this.users.cache.get("${this.user}"); if (user) { const guilds = this.guilds.cache.filter(g => g.members.cache.has(user.id)); result = [guilds.sort((a, b) => a.createdTimestamp - b.createdTimestamp)${indexing}${numberFilter}, guilds${indexing}.size] }; result;`;
 			fetchDSMValue((request.app as any).dsm, check, indexing ? 6 : 2)
-				.then((data: any) => {
+				.then(async (data: any) => {
 					const guilds = data[0] as DJSGuild[];
 					this.totalCount = data[1];
-					const Guild = require("./Guild"); // eslint-disable-line global-require
+					const Guild = (await import("./Guild")).default;
 					this.endCursor = Buffer.from(guilds[guilds.length - 1].id).toString("base64");
 					this.startCursor = Buffer.from(guilds[0].id).toString("base64");
 					const e = (g: string) => new GuildsConnectionEdge(new Guild(g));

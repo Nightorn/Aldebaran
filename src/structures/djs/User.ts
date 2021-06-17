@@ -1,9 +1,9 @@
-import { User as DJSUser } from "discord.js";
-import SocialProfile from "../aldebaran/SocialProfile";
-import AldebaranPermissions from "../aldebaran/AldebaranPermissions";
-import Settings from "../../interfaces/Settings";
-import AldebaranClient from "./Client";
-import { Permissions, PermissionString } from "../../utils/Constants";
+import { ImageURLOptions, User as DJSUser } from "discord.js";
+import SocialProfile from "../aldebaran/SocialProfile.js";
+import AldebaranPermissions from "../aldebaran/AldebaranPermissions.js";
+import Settings from "../../interfaces/Settings.js";
+import AldebaranClient from "./Client.js";
+import { Permissions, PermissionString } from "../../utils/Constants.js";
 
 export default class User extends DJSUser {
 	client!: AldebaranClient;
@@ -14,6 +14,7 @@ export default class User extends DJSUser {
 	existsInDB: boolean = false;
 	ready: boolean = false;
 	profile: any;
+	timers: any = { adventure: null, padventure: null, sides: null };
 
 	get banned() {
 		return this.timeout > Date.now();
@@ -96,6 +97,10 @@ export default class User extends DJSUser {
 			this.id,
 			new Map([["permissions", AldebaranPermissions.resolve(this.permissions.bitfield)]])
 		);
+	}
+
+	pfp(options?: (ImageURLOptions & { dynamic?: boolean; }) | undefined) {
+		return this.avatarURL(options) || this.defaultAvatarURL;
 	}
 
 	unready() {

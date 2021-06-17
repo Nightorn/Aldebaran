@@ -1,6 +1,6 @@
-const { Command, Embed } = require("../../groups/DRPGCommand");
+import { Command, Embed } from "../../groups/DRPGCommand.js";
 
-module.exports = class GoldCommand extends Command {
+export default class GoldCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays the number of upgrades you need for your weapon",

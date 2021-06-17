@@ -1,7 +1,7 @@
-const Nodesu = require("nodesu");
-const { Command, Embed } = require("../../groups/OsuCommand");
+import Nodesu from "nodesu";
+import { Command, Embed } from "../../groups/OsuCommand.js";
 
-module.exports = class OsuProfileCommand extends Command {
+export default class OsuProfileCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows the osu! stats of the user specified",

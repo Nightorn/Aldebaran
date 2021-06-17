@@ -1,8 +1,10 @@
-const getImage = require("./getImage");
-const text = require("../../../assets/data/actiontext.json");
-const { Embed } = require("../../groups/ActionCommand");
+import fs from "fs";
+import getImage from "./getImage.js";
+import { Embed } from "../../groups/ActionCommand.js";
 
-module.exports = (bot, message, args) => {
+const text = JSON.parse(fs.readFileSync("../../assets/data/actiontext.json"));
+
+export default (bot, message, args) => {
 	const user = args.user || message.author.id;
 	bot.users.fetch(user).then(() => {
 		const [command] = message.content.slice(message.guild.prefix.length).split(" ");

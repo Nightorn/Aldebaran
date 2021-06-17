@@ -1,7 +1,7 @@
-const Client = require("nekos.life");
-const { Command } = require("../../groups/FunCommand");
+import Client from "nekos.life";
+import { Command } from "../../groups/FunCommand.js";
 
-module.exports = class KaomojiCommand extends Command {
+export default class KaomojiCommand extends Command {
 	constructor(client) {
 		super(client, { description: "Displays a random kaomoji" });
 	}

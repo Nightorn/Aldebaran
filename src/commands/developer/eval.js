@@ -1,8 +1,8 @@
-const util = require("util");
-const { MessageAttachment } = require("discord.js");
-const { Command } = require("../../groups/DeveloperCommand");
+import util from "util";
+import { MessageAttachment } from "discord.js";
+import { Command } from "../../groups/DeveloperCommand.js";
 
-module.exports = class EvalCommand extends Command {
+export default class EvalCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Evaluates JavaScript code",

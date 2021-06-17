@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/SettingsCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/SettingsCommand.js";
 
-module.exports = class CommandSetprofile extends Command {
+export default class CommandSetprofile extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Changes your profile informations",

@@ -1,8 +1,8 @@
-const request = require("request");
-const parser = require("xml2js");
-const { Command, Embed } = require("../../groups/ImageCommand");
+import request from "request";
+import parser from "xml2js";
+import { Command, Embed } from "../../groups/ImageCommand.js";
 
-module.exports = class CatCommand extends Command {
+export default class CatCommand extends Command {
 	constructor(client) {
 		super(client, { description: "Meowwwwwwwwwww" });
 	}

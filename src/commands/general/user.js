@@ -1,8 +1,8 @@
-const { MessageEmbed } = require("discord.js");
-const getDateWithTimezone = require("../../utils/utils/getDateWithTimezone");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { getDateWithTimezone } from "../../utils/Methods.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class UserCommand extends Command {
+export default class UserCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows detailled user informations",

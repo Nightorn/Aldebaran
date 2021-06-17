@@ -1,7 +1,6 @@
 import { Request } from "express";
 import User from "./user/User";
-
-const fetchProfile = require("../utils/fetchDBValue").socialprofile;
+import { socialprofile as fetchProfile } from "../utils/fetchDBValue";
 
 export default class SocialProfile {
 	ID: string;
@@ -61,7 +60,7 @@ export default class SocialProfile {
 	 * @returns {Promise<bool>}
 	 */
 	async dmFriendly(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "dmFriendly") === "on";
+		return await fetchProfile((request.app as any).db, this.ID, "dmFriendly") === "on";
 	}
 
 	/**

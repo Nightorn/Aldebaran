@@ -1,7 +1,7 @@
-const moment = require("moment-timezone");
-const { Command, Embed } = require("../../groups/Command");
+import moment from "moment-timezone";
+import { Command, Embed } from "../../groups/Command.js";
 
-module.exports = class TimeCommand extends Command {
+export default class TimeCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Prints a user's time based on their configured timezone",

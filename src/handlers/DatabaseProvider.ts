@@ -1,5 +1,5 @@
-import AldebaranClient from "../structures/djs/Client";
-import GenericDatabaseProvider from "./GenericDatabaseProvider";
+import AldebaranClient from "../structures/djs/Client.js";
+import GenericDatabaseProvider from "./GenericDatabaseProvider.js";
 import Message from "../structures/djs/Message";
 
 export default class DatabaseProvider extends GenericDatabaseProvider {

@@ -1,9 +1,9 @@
-const request = require("request");
-const { Command, Embed } = require("../../groups/UtilitiesCommand");
+import request from "request";
+import { Command, Embed } from "../../groups/UtilitiesCommand.js";
 
 const fixerURL = "http://data.fixer.io/api";
 
-module.exports = class CurConvCommand extends Command {
+export default class CurConvCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description:

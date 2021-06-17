@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class CommandCredits extends Command {
+export default class CommandCredits extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Lists the people who contributed to Aldebaran"

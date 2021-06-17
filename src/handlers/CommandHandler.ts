@@ -1,6 +1,6 @@
 import fs from "fs";
 import AldebaranClient from "../structures/djs/Client";
-import { Command } from "../groups/Command";
+import { Command } from "../groups/Command.js";
 import Message from "../structures/djs/Message";
 
 export default class CommandHandler {
@@ -96,18 +96,16 @@ export default class CommandHandler {
 				if (fs.statSync(path + file).isDirectory()) {
 					exploreFolder(`${path}${file}/`);
 				} else {
-					try {
-						// eslint-disable-next-line import/no-dynamic-require, global-require
-						const command = require(`../../${path + file}`);
-						this.register(command, path + file);
-					} catch (err) {
+					import(`../${path + file}`).then(command => {
+						this.register(command.default, path + file);
+					}).catch(err => {
 						console.error(`\x1b[31m${path + file} is invalid.\x1b[0m`);
 						console.error(err);
-					}
+					});
 				}
 			}
 		};
-		exploreFolder("./src/commands/");
+		exploreFolder("./commands/");
 		return commands;
 	}
 };

@@ -1,7 +1,7 @@
-const { MessageEmbed, version } = require("discord.js");
-const { Command } = require("../../groups/Command");
+import { MessageEmbed, version } from "discord.js";
+import { Command } from "../../groups/Command.js";
 
-module.exports = class InfoCommand extends Command {
+export default class InfoCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays informations about Aldebaran"

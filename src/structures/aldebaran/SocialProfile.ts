@@ -1,5 +1,5 @@
-import AldebaranClient from "../djs/Client";
-import User from "../djs/User";
+import AldebaranClient from "../djs/Client.js";
+import User from "../djs/User.js";
 
 export default class SocialProfile {
 	user: User;

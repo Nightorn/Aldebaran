@@ -1,7 +1,9 @@
-const origin = require("../../groups/ActionCommand");
-const { Command, Embed } = require("../../groups/multi/NekoslifeSubcategory")(origin);
+import { Command as C, Embed as E } from "../../groups/ActionCommand.js";
+import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 
-module.exports = class TickleCommand extends Command {
+const { Command, Embed } = subCategory(C, E);
+
+export default class TickleCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Tickle someone!",

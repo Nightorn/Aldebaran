@@ -1,8 +1,8 @@
-const util = require("util");
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../../groups/DeveloperCommand");
+import util from "util";
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../../groups/DeveloperCommand.js";
 
-module.exports = class ViewSubcommand extends Command {
+export default class ViewSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Shows detailled informations about the specified user or guild",

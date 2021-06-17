@@ -1,6 +1,6 @@
-const { Command, Embed } = require("../../../groups/Command");
+import { Command, Embed } from "../../../groups/Command.js";
 
-module.exports = class AliasCommandsSubcommand extends Command {
+export default class AliasCommandsSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Sets a command alias for your server",

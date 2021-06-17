@@ -1,7 +1,7 @@
-const Client = require("nekos.life");
-const { Command, Embed } = require("../../groups/FunCommand");
+import Client from "nekos.life";
+import { Command, Embed } from "../../groups/FunCommand.js";
 
-module.exports = class FactCommand extends Command {
+export default class FactCommand extends Command {
 	constructor(client) {
 		super(client, { description: "Get a random fact!" });
 	}

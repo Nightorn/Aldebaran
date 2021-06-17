@@ -1,6 +1,6 @@
-const { Command, Embed } = require("./Command");
+import { Command as C, Embed as E } from "./Command.js";
 
-module.exports.Command = class ActionCommand extends Command {
+export const Command = class ActionCommand extends C {
 	constructor(client, metadata) {
 		super(client, {
 			args: { user: { as: "user" } },
@@ -11,4 +11,4 @@ module.exports.Command = class ActionCommand extends Command {
 	}
 };
 
-module.exports.Embed = Embed;
+export const Embed = E;

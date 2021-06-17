@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { Command } = require("../../../groups/DeveloperCommand");
+import { MessageEmbed } from "discord.js";
+import { Command } from "../../../groups/DeveloperCommand.js";
 
-module.exports = class ClearSubcommand extends Command {
+export default class ClearSubcommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Clears the data of the specified user or server",

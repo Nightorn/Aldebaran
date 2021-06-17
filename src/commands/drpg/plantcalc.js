@@ -1,8 +1,10 @@
-const math = require("mathjs");
-const { Command } = require("../../groups/DRPGCommand");
-const itemList = require("../../../assets/data/drpg/itemList.json");
+import fs from "fs";
+import math from "mathjs";
+import { Command } from "../../groups/DRPGCommand.js";
 
-module.exports = class PlantcalcCommand extends Command {
+const itemList = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json"));
+
+export default class PlantcalcCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays estimated plant harvest based on time an level given",

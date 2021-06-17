@@ -2,7 +2,7 @@
 /* eslint-disable global-require */
 
 import { Guild as DJSGuild, Collection as C } from "discord.js";
-import Settings from "../../interfaces/Settings";
+import Settings from "../../interfaces/Settings.js";
 import AldebaranClient from "./Client";
 import User from "./User";
 
@@ -35,7 +35,7 @@ export default class Guild extends DJSGuild {
 		this.settings[property] = value;
 		const toSave = { ...this.settings };
 		for (const setting in toSave) {
-			toSave[setting] = sanitize(toSave[setting]);
+			toSave[setting] = sanitize(toSave[setting]!);
 		}
 		return this.client.database.guilds.updateOneById(
 			this.id,

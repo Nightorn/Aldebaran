@@ -1,7 +1,7 @@
-const request = require("request");
-const { Command, Embed } = require("../../groups/ImageCommand");
+import request from "request";
+import { Command, Embed } from "../../groups/ImageCommand.js";
 
-module.exports = class CuteagCommand extends Command {
+export default class CuteagCommand extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Displays a random cute anime girl picture"

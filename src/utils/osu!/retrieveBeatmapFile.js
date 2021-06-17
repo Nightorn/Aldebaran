@@ -1,7 +1,7 @@
-const fs = require("fs");
-const fetch = require("node-fetch");
+import fs from "fs";
+import fetch from "node-fetch";
 
-module.exports = beatmapId => new Promise((resolve, reject) => {
+export default beatmapId => new Promise((resolve, reject) => {
 	if (!fs.existsSync("./cache/osu!/")) fs.mkdirSync("./cache/osu!/");
 	if (fs.existsSync(`./cache/osu!/${beatmapId}.osu`)) resolve();
 	else {

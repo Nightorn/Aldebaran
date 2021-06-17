@@ -1,7 +1,9 @@
-const { Command, Embed } = require("../../groups/ActionCommand");
-const images = require("../../../assets/data/imageurls.json");
+import fs from "fs";
+import { Command, Embed } from "../../groups/ActionCommand.js";
 
-module.exports = class Mindblown extends Command {
+const images = JSON.parse(fs.readFileSync("../../assets/data/imageurls.json"));
+
+export default class Mindblown extends Command {
 	constructor(client) {
 		super(client, {
 			description: "Show everyone how your mind was blown!",
