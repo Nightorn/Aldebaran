@@ -1,5 +1,6 @@
 import { MessageEmbed, version } from "discord.js";
 import { Command } from "../../groups/Command.js";
+import { formatNumber } from "../../utils/Methods.js";
 
 export default class InfoCommand extends Command {
 	constructor(client) {
@@ -14,9 +15,9 @@ export default class InfoCommand extends Command {
 		for (const [id, member] of Object.entries(bot.config.aldebaranTeam)) {
 			if (member.acknowledgements.includes("DEVELOPER")) { adminMentions += `<@${id}>, ${member.text}\n`; }
 		}
-		const guilds = Number.formatNumber((await bot.shard.fetchClientValues("guilds.cache.size")).reduce((acc, cur) => acc + cur));
-		const users = Number.formatNumber((await bot.shard.fetchClientValues("users.cache.size")).reduce((acc, cur) => acc + cur));
-		const channels = Number.formatNumber((await bot.shard.fetchClientValues("channels.cache.size")).reduce((acc, cur) => acc + cur));
+		const guilds = formatNumber((await bot.shard.fetchClientValues("guilds.cache.size")).reduce((acc, cur) => acc + cur));
+		const users = formatNumber((await bot.shard.fetchClientValues("users.cache.size")).reduce((acc, cur) => acc + cur));
+		const channels = formatNumber((await bot.shard.fetchClientValues("channels.cache.size")).reduce((acc, cur) => acc + cur));
 		const embed = new MessageEmbed()
 			.setAuthor(`${bot.user.username} v${bot.version}`, bot.user.avatarURL(), "https://aldebaran.nightorn.com/")
 			.addField("Developers of Aldebaran", adminMentions)

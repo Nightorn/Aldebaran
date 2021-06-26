@@ -1,4 +1,4 @@
-import { Message as DJSMessage, TextChannel as TC, DMChannel as DC, NewsChannel as NC } from "discord.js";
+import { Message as DJSMessage, TextChannel as TC, DMChannel as DC, NewsChannel as NC, DMChannel } from "discord.js";
 import AldebaranClient from "./Client.js";
 import { Args } from "../../interfaces/Arg.js";
 import Guild from "./Guild.js";

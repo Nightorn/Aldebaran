@@ -1,6 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import mathjs from "mathjs";
 import { Command, Embed } from "../../groups/UtilitiesCommand.js";
+import { formatNumber } from "../../utils/Methods.js";
 
 export default class MathCommand extends Command {
 	constructor(client) {
@@ -25,7 +26,7 @@ export default class MathCommand extends Command {
 			}
 			const embed = new Embed(this)
 				.setTitle("Math Expression Evaluation")
-				.addField("Result", `\`\`\`${Number.formatNumber(result)}\`\`\``);
+				.addField("Result", `\`\`\`${formatNumber(result)}\`\`\``);
 			message.channel.send({ embed });
 		} else {
 			const embed = new MessageEmbed()

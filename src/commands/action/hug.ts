@@ -1,8 +1,10 @@
 import { Command } from "../../groups/ActionCommand.js";
+import AldebaranClient from "../../structures/djs/Client.js";
+import Message from "../../structures/djs/Message.js";
 import executeAction from "../../utils/action/executeAction.js";
 
 export default class HugCommand extends Command {
-	constructor(client) {
+	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Send warm hugs!",
 			example: "320933389513523220"
@@ -10,7 +12,7 @@ export default class HugCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(...args) {
-		executeAction(...args);
+	run(bot: AldebaranClient, message: Message, args: any) {
+		executeAction(bot, message, args);
 	}
 };

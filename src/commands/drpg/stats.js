@@ -3,7 +3,7 @@ import request from "request";
 import fs from "fs";
 import canvas from "canvas";
 import { Command } from "../../groups/DRPGCommand.js";
-import { lightOrDark } from "../../utils/Methods.js";
+import { formatNumber, lightOrDark } from "../../utils/Methods.js";
 
 const { createCanvas, Image, registerFont, loadImage } = canvas;
 const locations = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json"));
@@ -160,7 +160,7 @@ export default class StatsCommand extends Command {
 
 						ctx.fillStyle = bannerFG[1];
 						ctx.font = "28px Exo 2";
-						ctx.fillText(`Level ${Number.formatNumber(data.level)}`, 136, 97);
+						ctx.fillText(`Level ${formatNumber(data.level)}`, 136, 97);
 
 						ctx.fillStyle = "white";
 
@@ -178,13 +178,13 @@ export default class StatsCommand extends Command {
 						ctx.fillStyle = "white";
 
 						ctx.font = "26px Exo 2";
-						ctx.fillText(`    ${Number.formatNumber(data.xp)} XP • ${Number.formatNumber(data.kills)} Kills • ${Number.formatNumber(data.deaths)} Deaths`, 20, 213);
+						ctx.fillText(`    ${formatNumber(data.xp)} XP • ${formatNumber(data.kills)} Kills • ${formatNumber(data.deaths)} Deaths`, 20, 213);
 
 						ctx.font = "36px Exo 2";
 						ctx.fillText("Currencies", 20, 269);
 
 						ctx.font = "26px Exo 2";
-						ctx.fillText(`    ${Number.formatNumber(data.gold)} Gold • ${data.lux ? Number.formatNumber(data.lux) : 0} LUX`, 20, 307);
+						ctx.fillText(`    ${formatNumber(data.gold)} Gold • ${data.lux ? formatNumber(data.lux) : 0} LUX`, 20, 307);
 
 						ctx.font = "36px Exo 2";
 						ctx.fillText("Skills & Attributes", 20, 363);
@@ -199,7 +199,7 @@ export default class StatsCommand extends Command {
 						ctx.drawImage(newImage("assets/emojis/leaves.png"), 392, 379, 24, 24);
 						ctx.drawImage(newImage("assets/emojis/tree.png"), 588, 381, 24, 24);
 
-						ctx.fillText(`Strength: ${Number.formatNumber(data.attributes.strength)} • XP Boost: ${Number.formatNumber(data.attributes.xpBoost)} • Gold Boost: ${Number.formatNumber(data.attributes.goldBoost)}`, 50, 437);
+						ctx.fillText(`Strength: ${formatNumber(data.attributes.strength)} • XP Boost: ${formatNumber(data.attributes.xpBoost)} • Gold Boost: ${formatNumber(data.attributes.goldBoost)}`, 50, 437);
 
 						ctx.font = "36px Exo 2";
 						ctx.fillText("Quests", 20, 493);
@@ -222,8 +222,8 @@ export default class StatsCommand extends Command {
 
 						ctx.font = "26px Exo 2";
 						ctx.fillStyle = "#FFFFFF";
-						ctx.fillText(`${data.pet.type} • Level ${Number.formatNumber(data.pet.level)} (${Number.formatNumber(data.pet.xp)} XP) • XP Rate: ${data.pet.xprate}%`, 50, 661);
-						ctx.fillText(`Your pet is dealing between ${Number.formatNumber(data.pet.damage.min)} and ${Number.formatNumber(data.pet.damage.max)} damage.`, 50, 697);
+						ctx.fillText(`${data.pet.type} • Level ${formatNumber(data.pet.level)} (${formatNumber(data.pet.xp)} XP) • XP Rate: ${data.pet.xprate}%`, 50, 661);
+						ctx.fillText(`Your pet is dealing between ${formatNumber(data.pet.damage.min)} and ${formatNumber(data.pet.damage.max)} damage.`, 50, 697);
 
 						ctx.fillText(`${data.donate ? "Donator, " : ""}Last seen ${Date.getTimeString(Date.now() - data.lastseen, "DD days, HH hours, MM minutes and SS seconds")} ago`, 20, 755);
 

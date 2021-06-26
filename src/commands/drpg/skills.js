@@ -2,6 +2,7 @@ import fs from "fs";
 import { MessageEmbed } from "discord.js";
 import request from "request";
 import { Command } from "../../groups/DRPGCommand.js";
+import { formatNumber } from "../../utils/Methods.js";
 
 const itemList = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json"));
 
@@ -70,10 +71,10 @@ export default class SkillsCommand extends Command {
 					const embed = new MessageEmbed()
 						.setAuthor(`${user.username}  |  Skills`, user.avatarURL())
 						.setColor(0x00AE86)
-						.addField("Mining", `**Level ${skillinfo.mine.level}** (${Number.formatNumber(skillinfo.mine.xp)} XP)\nWith your **current** mining boost skills, you would get **${miningCurrent} ores or essences**.\nWith the **highest** mining boost skills, you would get **${miningMax} ores**, or between **${essenceMax} and ${miningMax} essences**.\n${mineXp(skillinfo.mine.level)}`)
-						.addField("Chopping", `**Level ${skillinfo.chop.level}** (${Number.formatNumber(skillinfo.chop.xp)} XP)\nWith your **current** lumber boost skills, you would get **${lumbercurrent} logs**.\nWith the **highest** lumber boost skills, you would get **${lumbermax} logs**.\n${xp(skillinfo.chop.level)}`)
-						.addField("Foraging", `**Level ${skillinfo.forage.level}** (${Number.formatNumber(skillinfo.forage.xp)} XP)\nWith your **current** scavenging skills, you would get **${forageCurrent} items**.\nWith the **highest** scavenging skills, you would get **${forageMax} items**.\n${xp(skillinfo.forage.level)}`)
-						.addField("Fishing", `**Level ${skillinfo.fish.level}** (${Number.formatNumber(skillinfo.fish.xp)} XP)\n${xp(skillinfo.fish.level)}`);
+						.addField("Mining", `**Level ${skillinfo.mine.level}** (${formatNumber(skillinfo.mine.xp)} XP)\nWith your **current** mining boost skills, you would get **${miningCurrent} ores or essences**.\nWith the **highest** mining boost skills, you would get **${miningMax} ores**, or between **${essenceMax} and ${miningMax} essences**.\n${mineXp(skillinfo.mine.level)}`)
+						.addField("Chopping", `**Level ${skillinfo.chop.level}** (${formatNumber(skillinfo.chop.xp)} XP)\nWith your **current** lumber boost skills, you would get **${lumbercurrent} logs**.\nWith the **highest** lumber boost skills, you would get **${lumbermax} logs**.\n${xp(skillinfo.chop.level)}`)
+						.addField("Foraging", `**Level ${skillinfo.forage.level}** (${formatNumber(skillinfo.forage.xp)} XP)\nWith your **current** scavenging skills, you would get **${forageCurrent} items**.\nWith the **highest** scavenging skills, you would get **${forageMax} items**.\n${xp(skillinfo.forage.level)}`)
+						.addField("Fishing", `**Level ${skillinfo.fish.level}** (${formatNumber(skillinfo.fish.xp)} XP)\n${xp(skillinfo.fish.level)}`);
 					message.channel.send(embed);
 				}
 			});

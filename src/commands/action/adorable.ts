@@ -12,7 +12,7 @@ export default class AdorableCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: string[]) {
+	run(bot: AldebaranClient, message: Message, args: any) {
 		executeAction(bot, message, args);
 	}
 };

@@ -1,9 +1,11 @@
 import util from "util";
 import { MessageAttachment } from "discord.js";
 import { Command } from "../../groups/DeveloperCommand.js";
+import AldebaranClient from "../../structures/djs/Client.js";
+import Message from "../../structures/djs/Message.js";
 
 export default class EvalCommand extends Command {
-	constructor(client) {
+	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Evaluates JavaScript code",
 			perms: { aldebaran: ["EVALUATE_CODE"] }
@@ -11,7 +13,7 @@ export default class EvalCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(bot, message, args) {
+	async run(_: any, message: Message, args: any) {
 		try {
 			const code = args.join(" ");
 			// eslint-disable-next-line no-eval

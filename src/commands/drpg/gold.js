@@ -1,5 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/DRPGCommand.js";
+import { formatNumber } from "../../utils/Methods.js";
 
 export default class GoldCommand extends Command {
 	constructor(client) {
@@ -46,17 +47,17 @@ export default class GoldCommand extends Command {
 				)
 				.addField(
 					"**With a donor ring of Gold (x1.5)**",
-					`${Number.formatNumber(getGold(1.5))} Gold per kill on average`,
+					`${formatNumber(getGold(1.5))} Gold per kill on average`,
 					true
 				)
 				.addField(
 					"**With an enchanted donor ring of Gold (x1.56)**",
-					`${Number.formatNumber(getGold(1.56))} Gold per kill on average`,
+					`${formatNumber(getGold(1.56))} Gold per kill on average`,
 					true
 				)
 				.addField(
 					"**Without a ring of Gold**",
-					`${Number.formatNumber(getGold())} Gold per kill on average`
+					`${formatNumber(getGold())} Gold per kill on average`
 				);
 			message.channel.send({ embed });
 		} else {

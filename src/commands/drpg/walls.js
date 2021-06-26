@@ -2,6 +2,7 @@ import fs from "fs";
 import { MessageEmbed } from "discord.js";
 import request from "request";
 import { Command } from "../../groups/DRPGCommand.js";
+import { formatNumber } from "../../utils/Methods.js";
 
 const bases = JSON.parse(fs.readFileSync("../../assets/data/bases.json"));
 
@@ -114,7 +115,7 @@ export default class WallsCommand extends Command {
 					);
 					embed.addField(
 						`${user.username}'s progress`,
-						`**${Number.formatNumber(wall - wallProgress)} XP** / ${Number.formatNumber(wall)} XP (**${Math.round(
+						`**${formatNumber(wall - wallProgress)} XP** / ${formatNumber(wall)} XP (**${Math.round(
 							100 * ((wall - wallProgress) * 100) / wall
 						) / 100}%**)`
 					);

@@ -1,8 +1,10 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/DeveloperCommand.js";
+import AldebaranClient from "../../structures/djs/Client.js";
+import Message from "../../structures/djs/Message.js";
 
 export default class AdminCommand extends Command {
-	constructor(client) {
+	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Admin Portal Command",
 			allowIndexCommand: true,
@@ -11,9 +13,9 @@ export default class AdminCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot, message) {
+	run(_: AldebaranClient, message: Message) {
 		const embed = new MessageEmbed()
-			.setAuthor(message.author.username, message.author.avatarURL())
+			.setAuthor(message.author.username, message.author.pfp())
 			.setTitle("Warning")
 			.setDescription("The admin action specified is invalid.")
 			.setColor("ORANGE");

@@ -21,7 +21,7 @@ export default class AldebaranClient extends Client {
 	models: any = { settings: SettingsModel };
 	stats: any;
 	version: string = packageFile.version;
-	drpgCache: object = {};
+	drpgCache: any = {};
 
 	constructor() {
 		super({

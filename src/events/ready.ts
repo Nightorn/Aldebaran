@@ -1,6 +1,9 @@
-export const run = client => { // eslint-disable-line import/prefer-default-export
+import { formatNumber } from "../utils/Methods.js";
+import AldebaranClient from "../structures/djs/Client.js";
+
+export const run = (client: AldebaranClient) => { // eslint-disable-line import/prefer-default-export
 	console.log(
-		`\x1b[36m# ${client.user.username} has started!${
+		`\x1b[36m# ${client.user!.username} has started!${
 			client.debugMode ? " The developer mode has been enabled." : ""
 		}\x1b[0m`
 	);
@@ -10,16 +13,16 @@ export const run = client => { // eslint-disable-line import/prefer-default-expo
 		} servers, ${client.commands.size} commands\x1b[0m`
 	);
 
-	const parseText = value => {
+	const parseText = (value: string) => {
 		let text = value;
-		text = text.replace("{NSERVERS}", Number.formatNumber(client.guilds.cache.size));
-		text = text.replace("{NUSERS}", Number.formatNumber(client.users.cache.size));
+		text = text.replace("{NSERVERS}", formatNumber(client.guilds.cache.size));
+		text = text.replace("{NUSERS}", formatNumber(client.users.cache.size));
 		text = text.replace("{VERSION}", client.version);
 		return text;
 	};
 
-	client.user.setActivity("for a few seconds now");
-	const { presence } = client.config;
+	client.user!.setActivity("for a few seconds now");
+	const { presence }: any = client.config;
 	setInterval(() => {
 		client.CDBA.sortEntries();
 		if (client.CDBA.selected !== null) {
@@ -30,6 +33,6 @@ export const run = client => { // eslint-disable-line import/prefer-default-expo
 	}, 3600000);
 	setInterval(() => {
 		const selected = presence[Math.floor(Math.random() * presence.length)];
-		client.user.setActivity(parseText(selected.text), { type: selected.type });
+		client.user!.setActivity(parseText(selected.text), { type: selected.type });
 	}, 30000);
 };

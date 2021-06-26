@@ -59,7 +59,7 @@
     "start": "cd dist/src && node bot",
     "dev": "cd dist/src && node bot dev !",
     "shard": "cd dist/src && node app",
-    "sharddev": "cd dist/src && node --experimental-specifier-resolution=node app dev !",
+    "sharddev": "tsc && cp -r src/ dist/ && rm -rf dist/src/**/*.ts && cd dist/src && node --experimental-specifier-resolution=node app dev !",
     "sos": "node bot sos",
     "configure": "node bin/configure.js"
   },

@@ -1,6 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import os from "os";
 import { Command } from "../../groups/Command.js";
+import { formatNumber } from "../../utils/Methods.js";
 
 export default class BStats extends Command {
 	constructor(client) {
@@ -21,7 +22,7 @@ export default class BStats extends Command {
 			.setDescription(
 				"Multiple informations about Aldebaran are shown on this page, mainly the used resources and the global usage statistics."
 			)
-			.addField(`Memory Usage (${memPRC}%)`, `**${mem} MB** / ${Number.formatNumber(memTTL)} MB`, true)
+			.addField(`Memory Usage (${memPRC}%)`, `**${mem} MB** / ${formatNumber(memTTL)} MB`, true)
 			.addField(
 				"System CPU Load",
 				`**${Math.round(100 * os.loadavg()[0]) / 100}** (${Math.round(100 * os.loadavg()[0] * (100 / 6)) / 100}%)`,
@@ -30,17 +31,17 @@ export default class BStats extends Command {
 			.addField("Uptime", Date.getTimeString(bot.uptime, "DD day(s), HH:MM:SS"), true)
 			.addField(
 				"Commands (Session)",
-				Number.formatNumber(bot.stats.commands.total),
+				formatNumber(bot.stats.commands.total),
 				true
 			)
 			.addField(
 				"Users (Session)",
-				Number.formatNumber(bot.stats.users.total),
+				formatNumber(bot.stats.users.total),
 				true
 			)
 			.addField(
 				"Servers (Session)",
-				Number.formatNumber(bot.stats.servers.total),
+				formatNumber(bot.stats.servers.total),
 				true
 			)
 			.addField("Shard ID", bot.shardID, true)

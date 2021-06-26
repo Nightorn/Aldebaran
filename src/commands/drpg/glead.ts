@@ -1,13 +1,17 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-await-in-loop */
+import { Collection, MessageReaction } from "discord.js";
 import fs from "fs";
 import request from "request";
 import { Command } from "../../groups/DRPGCommand.js";
+import AldebaranClient from "../../structures/djs/Client.js";
+import Message from "../../structures/djs/Message.js";
+import User from "../../structures/djs/User.js";
 
-const items = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json"));
-const locationdb = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json"));
+const items = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json").toString());
+const locationdb = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json").toString());
 
-function apiFetch(endpoint) {
+function apiFetch(endpoint: string) {
 	return new Promise((resolve, reject) => {
 		request({
 			uri: `http://api.discorddungeons.me/v3/${endpoint}`,
@@ -34,7 +38,14 @@ function apiFetch(endpoint) {
  * @param {String} footerText The text on the bottom line of the page
  * @param {Client} bot The bot
  */
-async function paginate(list, page, headerText, message, footerText, bot) {
+async function paginate(
+	list: string[],
+	page: number,
+	headerText: string,
+	message: Message,
+	footerText: string,
+	bot: AldebaranClient
+) {
 	const maxPage = Math.ceil(list.length / 15);
 	if (page < 1) {
 		page = 1;
@@ -47,21 +58,21 @@ async function paginate(list, page, headerText, message, footerText, bot) {
 
 	const msg = await message.channel.send(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
 	if (maxPage > 1) {
-		const hasRemovePerms = message.channel.type !== "dm" && message.channel.permissionsFor(bot.user).has("MANAGE_MESSAGES");
+		const hasRemovePerms = message.channel.permissionsFor(bot.user!)!.has("MANAGE_MESSAGES");
 		const reactions = ["⬅", "❌", "➡"].filter(r => hasRemovePerms || r !== "❌");
 		for (const react of reactions) {
 			await msg.react(react);
 		}
 		while (true) {
 			const collect = await msg.awaitReactions(
-				(reaction, user) => user.id === message.author.id
+				(reaction: MessageReaction, user: User) => user.id === message.author.id
 					&& reactions.includes(reaction.emoji.name),
 				{ time: 60000, max: 1 }
-			).catch(console.error);
+			).catch(console.error) as Collection<string, MessageReaction>;
 
 			if (collect.size) {
-				const reaction = collect.first();
-				const emoji = collect.first().emoji.name;
+				const reaction = collect.first()!;
+				const emoji = reaction.emoji.name;
 				const prevPage = page;
 				if (emoji === "⬅" && page > 1) page--;
 				else if (emoji === "➡" && page < maxPage) page++;
@@ -77,7 +88,7 @@ async function paginate(list, page, headerText, message, footerText, bot) {
 					await msg.edit(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
 				}
 			}
-			if ((!collect.size || collect.first().emoji.name === "❌") && hasRemovePerms) {
+			if ((!collect.size || collect.first()!.emoji.name === "❌") && hasRemovePerms) {
 				msg.reactions.removeAll();
 				break;
 			}
@@ -85,7 +96,7 @@ async function paginate(list, page, headerText, message, footerText, bot) {
 	}
 }
 
-function timeSince(timestamp) {
+function timeSince(timestamp: number) {
 	let ellapsed = Date.now() - timestamp;
 	const years = Math.floor(ellapsed / (365 * 24 * 60 * 60 * 1000));
 	ellapsed -= years * (365 * 24 * 60 * 60 * 1000);
@@ -117,7 +128,7 @@ function timeSince(timestamp) {
 	return str;
 }
 
-async function updateCache(bot) {
+async function updateCache(bot: AldebaranClient) {
 	for (const id in bot.drpgCache) {
 		if (bot.drpgCache[id].lastUpdate < Date.now() - 3600000) {
 			delete bot.drpgCache[id];
@@ -126,35 +137,35 @@ async function updateCache(bot) {
 	fs.writeFile("./cache/drpgCache.json", JSON.stringify(bot.drpgCache), e => e ? console.error(e) : null);
 }
 
-async function getUserData(userID, bot) {
+async function getUserData(userID: number, bot: AldebaranClient) {
 	const userCache = bot.drpgCache[userID];
 	if (userCache && userCache.lastUpdate > Date.now() - 3600000) {
 		return userCache;
 	}
-	const userData = await apiFetch(`user/${userID}`, bot).catch(console.error);
+	const userData = await apiFetch(`user/${userID}`).catch(console.error) as any;
 	if (!userData) return null;
 	userData.lastUpdate = Date.now();
 	bot.drpgCache[userData.id] = userData;
 	return userData;
 }
 
-async function getGuild(userData, bot) {
+async function getGuild(userData: any, bot: AldebaranClient) {
 	const guildID = userData.guild;
 	const guildCache = bot.drpgCache[guildID];
 	if (guildCache && guildCache.lastUpdate > Date.now() - 3600000) {
 		return guildCache;
 	}
-	const guildData = await apiFetch(`guild/${guildID}`, bot).catch(console.error);
+	const guildData = await apiFetch(`guild/${guildID}`).catch(console.error) as any;
 	if (!guildData) return false;
-	let guildUsers;
+	let guildUsers: any;
 	if (guildData.members.length > 1) {
-		guildUsers = await apiFetch(`bulk/user/${guildData.members.join(",")}`, bot).catch(console.error);
+		guildUsers = await apiFetch(`bulk/user/${guildData.members.join(",")}`).catch(console.error);
 		if (!guildUsers) return false;
 	} else {
 		guildUsers = [userData]; // Lonely boi
 	}
 	const now = Date.now();
-	guildUsers.forEach(user => {
+	guildUsers.forEach((user: any) => {
 		bot.drpgCache[user.id] = user;
 		user.lastUpdate = now;
 	});
@@ -166,7 +177,7 @@ async function getGuild(userData, bot) {
 }
 
 export default class GleadCommand extends Command {
-	constructor(client) {
+	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays a DiscordRPG user's guild leaderboard",
 			help: "These are the attributes you can use as the \"attribute\" argument: `level`, `item name`, `gold`, `xp`, `lux`, `deaths`, `kills`, `points`, `questPoints`, `mine`, `chop`, `fish`, `forage`, `crits`, `defense`, `goldBoost`, `lumberBoost`, `mineBoost`, `reaping`, `salvaging`, `scavenge`, `strength`, `taming`, `xpBoost`, `lastseen` and `location`.",
@@ -179,12 +190,13 @@ export default class GleadCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(bot, message, args) {
-		if (!message.channel.permissionsFor(bot.user).has("READ_MESSAGE_HISTORY")) {
+	async run(bot: AldebaranClient, message: Message, args: any) {
+		if (message.channel.type !== "text") return;
+		if (!message.channel.permissionsFor(bot.user!)!.has("READ_MESSAGE_HISTORY")) {
 			message.channel.send("I need permission to read message history before you can use this feature.");
 			return;
 		}
-		if (!message.channel.permissionsFor(bot.user).has("ADD_REACTIONS")) {
+		if (!message.channel.permissionsFor(bot.user!)!.has("ADD_REACTIONS")) {
 			message.channel.send("I need permission to add reactions to messages before you can use this feature.");
 			return;
 		}
@@ -216,7 +228,7 @@ export default class GleadCommand extends Command {
 			desc = true;
 		}
 
-		let index;
+		let index: string;
 		if (args.user) {
 			index = Args.slice(1).join(" ");
 		} else {
@@ -226,10 +238,10 @@ export default class GleadCommand extends Command {
 			index = "level";
 		}
 
-		let list;
-		let filteredUsers;
-		let itemIndex;
-		let sum = 0;
+		let list: any[] = [];
+		let filteredUsers: any[];
+		let itemIndex: any;
+		let sum: number | string = 0;
 		switch (index) {
 			case "level":
 			case "gold":
@@ -239,17 +251,17 @@ export default class GleadCommand extends Command {
 			case "kills":
 			case "points":
 			case "questPoints":
-				guildUsers.sort((a, b) => (b[index] || 0) - (a[index] || 0));
-				sum = guildUsers.reduce((p, c) => (c[index] || 0) + (p || 0), 0);
-				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${(user[index] || 0).toLocaleString()} >`);
+				guildUsers.sort((a: any, b: any) => (b[index] || 0) - (a[index] || 0));
+				sum = guildUsers.reduce((p: any, c: any) => (c[index] || 0) + (p || 0), 0);
+				list = guildUsers.map((user: any) => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${(user[index] || 0).toLocaleString()} >`);
 				break;
 			case "mine":
 			case "chop":
 			case "fish":
 			case "forage":
-				guildUsers.sort((a, b) => b.skills[index].xp - a.skills[index].xp);
-				sum = guildUsers.reduce((p, c) => c.skills[index].level + p, 0);
-				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.skills[index].level.toLocaleString()} >`);
+				guildUsers.sort((a: any, b: any) => b.skills[index].xp - a.skills[index].xp);
+				sum = guildUsers.reduce((p: any, c: any) => c.skills[index].level + p, 0);
+				list = guildUsers.map((user: any) => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.skills[index].level.toLocaleString()} >`);
 				break;
 			case "crits":
 			case "defense":
@@ -262,21 +274,25 @@ export default class GleadCommand extends Command {
 			case "strength":
 			case "taming":
 			case "xpBoost":
-				guildUsers.sort((a, b) => b.attributes[index] - a.atttributes[index]);
-				sum = guildUsers.reduce((p, c) => c.attributes[index] + p, 0);
-				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.attributes[index].toLocaleString()} >`);
+				guildUsers.sort(
+					(a: any, b: any) => b.attributes[index] - a.atttributes[index]
+				);
+				sum = guildUsers
+					.reduce((p: number, c: any) => c.attributes[index] + p, 0);
+				list = guildUsers.map((user: any) => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.attributes[index].toLocaleString()} >`);
 				break;
 
 			case "lastseen":
-				guildUsers.sort((a, b) => (b[index] || 0) - (a[index] || 0));
-				sum = timeSince(Math.floor(guildUsers
-					.reduce((p, c) => (c[index] || 0) + (p || 0), 0) / guildUsers.length));
-				list = guildUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${timeSince(user[index] || 0)} >`);
+				guildUsers.sort((a: any, b: any) => (b[index] || 0) - (a[index] || 0));
+				sum = timeSince(Math.floor(guildUsers.reduce(
+					(p: any, c: any) => (c[index] || 0) + (p || 0), 0
+				) / guildUsers.length));
+				list = guildUsers.map((user: any) => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${timeSince(user[index] || 0)} >`);
 				break;
 
 			case "location":
-				const locations = {};
-				guildUsers.forEach(user => {
+				const locations: { [key: string]: number } = {};
+				guildUsers.forEach((user: any) => {
 					let loc = "1";
 					if (user.location && user.location.current) {
 						loc = user.location.current;
@@ -291,15 +307,15 @@ export default class GleadCommand extends Command {
 
 			default:
 				itemIndex = items
-					.filter(item => index.toLowerCase() === item.name.toLowerCase());
+					.filter((item: any) => index.toLowerCase() === item.name.toLowerCase());
 				if (itemIndex.length === 1) {
-					filteredUsers = guildUsers.filter(user => user.inv
+					filteredUsers = guildUsers.filter((user: any) => user.inv
 					&& user.inv[itemIndex[0].id]
 					&& user.inv[itemIndex[0].id] > 0);
 					filteredUsers
-						.sort((a, b) => b.inv[itemIndex[0].id] - a.inv[itemIndex[0].id]);
-					sum = filteredUsers.reduce((p, c) => c.inv[itemIndex[0].id] + p, 0);
-					list = filteredUsers.map(user => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id].toLocaleString()} >`);
+						.sort((a: any, b: any) => b.inv[itemIndex[0].id] - a.inv[itemIndex[0].id]);
+					sum = filteredUsers.reduce((p: any, c: any) => c.inv[itemIndex[0].id] + p, 0);
+					list = filteredUsers.map((user: any) => `< ${user.name}${showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id].toLocaleString()} >`);
 				}
 				break;
 		}

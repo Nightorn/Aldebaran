@@ -1,5 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/DRPGCommand.js";
+import { formatNumber } from "../../utils/Methods.js";
 
 export default class XpCommand extends Command {
 	constructor(client) {
@@ -43,27 +44,27 @@ export default class XpCommand extends Command {
 				)
 				.addField(
 					"**With a ring of XP (x1.25)**",
-					`${Number.formatNumber(getXP(1.25))} XP per kill on average`,
+					`${formatNumber(getXP(1.25))} XP per kill on average`,
 					true
 				)
 				.addField(
 					"**With an enchanted ring of XP (x1.31)**",
-					`${Number.formatNumber(getXP(1.31))} XP per kill on average`,
+					`${formatNumber(getXP(1.31))} XP per kill on average`,
 					true
 				)
 				.addField(
 					"**With a donor ring of XP (x1.5)**",
-					`${Number.formatNumber(getXP(1.5))} XP per kill on average`,
+					`${formatNumber(getXP(1.5))} XP per kill on average`,
 					true
 				)
 				.addField(
 					"**With an enchanted donor ring of XP (x1.56)**",
-					`${Number.formatNumber(getXP(1.56))} XP per kill on average`,
+					`${formatNumber(getXP(1.56))} XP per kill on average`,
 					true
 				)
 				.addField(
 					"**Without a ring of XP**",
-					`${Number.formatNumber(getXP())} XP per kill on average`
+					`${formatNumber(getXP())} XP per kill on average`
 				);
 			message.channel.send({ embed });
 		} else {
