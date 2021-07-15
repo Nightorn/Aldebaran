@@ -36,7 +36,7 @@ module.exports = class EnableDRPGCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	configuringEmbed(message, type) {
 		const { prefix } = message.guild;
-		const parameters = type ? userParameters : guildParameters;
+		const parameters = type === "user" ? userParameters : guildParameters;
 		return new MessageEmbed()
 			.setTitle(`Configuring ${type}'s settings`)
 			.setDescription(`**This will enable the following ${
