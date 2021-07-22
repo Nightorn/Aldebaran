@@ -1,4 +1,4 @@
-import GDB from "../../../handlers/GenericDatabaseProvider";
+import GDB from "../../../handlers/GenericDatabaseProvider.js";
 
 const q = async (db: GDB, query: string) => db.query(query);
 

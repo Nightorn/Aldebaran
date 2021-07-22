@@ -4,7 +4,7 @@ import fs from "fs";
 import { MessageEmbed } from "discord.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import Message from "../../structures/djs/Message.js";
-import User from "../../structures/djs/User";
+import User from "../../structures/djs/User.js";
 
 const { deathimage } = JSON.parse(fs.readFileSync("../../assets/data/imageurls.json").toString());
 const senddeath = deathimage[Math.floor(Math.random() * deathimage.length)];

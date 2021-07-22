@@ -1,9 +1,9 @@
 import { Request } from "express";
-import DiscordStructWithSettings from "../common/DiscordStructWithSettings";
-import GuildsConnection from "../guild/GuildsConnection";
-import SocialProfile from "../SocialProfile";
-import fetchDSMValue from "../../utils/fetchDSMValue";
-import GenericDatabaseProvider from "../../../../handlers/GenericDatabaseProvider";
+import DiscordStructWithSettings from "../common/DiscordStructWithSettings.js";
+import GuildsConnection from "../guild/GuildsConnection.js";
+import SocialProfile from "../SocialProfile.js";
+import fetchDSMValue from "../../utils/fetchDSMValue.js";
+import GenericDatabaseProvider from "../../../../handlers/GenericDatabaseProvider.js";
 
 export default class User extends DiscordStructWithSettings {
 	joinedTimestamp: number | null;

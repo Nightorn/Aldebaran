@@ -3,8 +3,8 @@
 
 import { Guild as DJSGuild, Collection as C } from "discord.js";
 import Settings from "../../interfaces/Settings.js";
-import AldebaranClient from "./Client";
-import User from "./User";
+import AldebaranClient from "./Client.js";
+import User from "./User.js";
 
 function sanitize(data: string | number) {
 	return data.toString().replace(/[\\"]/g, "\\$&");

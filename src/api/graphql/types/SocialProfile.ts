@@ -1,6 +1,6 @@
 import { Request } from "express";
-import User from "./user/User";
-import { socialprofile as fetchProfile } from "../utils/fetchDBValue";
+import User from "./user/User.js";
+import { socialprofile as fetchProfile } from "../utils/fetchDBValue.js";
 
 export default class SocialProfile {
 	ID: string;

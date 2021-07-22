@@ -1,7 +1,7 @@
 import fs from "fs";
-import AldebaranClient from "../structures/djs/Client";
+import AldebaranClient from "../structures/djs/Client.js";
 import { Command } from "../groups/Command.js";
-import Message from "../structures/djs/Message";
+import Message from "../structures/djs/Message.js";
 
 export default class CommandHandler {
 	client: AldebaranClient;

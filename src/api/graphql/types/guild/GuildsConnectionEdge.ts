@@ -1,5 +1,5 @@
 import { Request } from "express";
-import Guild from "./Guild";
+import Guild from "./Guild.js";
 
 export default class GuildsConnectionEdge {
 	guild: Guild;

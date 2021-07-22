@@ -1,5 +1,5 @@
 import { Request } from "express";
-import GenericDatabaseProvider from "../../../../handlers/GenericDatabaseProvider";
+import GenericDatabaseProvider from "../../../../handlers/GenericDatabaseProvider.js";
 
 export default abstract class DiscordStructWithSettings {
 	ID: string;

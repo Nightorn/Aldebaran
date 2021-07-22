@@ -8,7 +8,7 @@ import Guild from "./structures/djs/Guild.js";
 import Message from "./structures/djs/Message.js";
 import TextChannel from "./structures/djs/TextChannel.js";
 
-dotenv.config();
+dotenv.config({ path: "./.env" });
 
 canvas.registerFont("../../assets/fonts/Exo2-Regular.ttf", {
 	family: "Exo 2"

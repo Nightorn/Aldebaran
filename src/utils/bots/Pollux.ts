@@ -1,6 +1,6 @@
-import AldebaranClient from "../../structures/djs/Client";
-import Message from "../../structures/djs/Message";
-import User from "../../structures/djs/User";
+import AldebaranClient from "../../structures/djs/Client.js";
+import Message from "../../structures/djs/Message.js";
+import User from "../../structures/djs/User.js";
 
 export default (_bot: AldebaranClient, message: Message) => {
 	if (message.guild.settings.polluxboxping === "on") {

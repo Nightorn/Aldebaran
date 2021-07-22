@@ -1,8 +1,8 @@
 import { Request } from "express";
-import DiscordStructWithSettings from "../common/DiscordStructWithSettings";
-import UsersConnection from "../user/UsersConnection";
-import fetchDSMValue from "../../utils/fetchDSMValue";
-import GenericDatabaseProvider from "../../../../handlers/GenericDatabaseProvider";
+import DiscordStructWithSettings from "../common/DiscordStructWithSettings.js";
+import UsersConnection from "../user/UsersConnection.js";
+import fetchDSMValue from "../../utils/fetchDSMValue.js";
+import GenericDatabaseProvider from "../../../../handlers/GenericDatabaseProvider.js";
 
 export default class Guild extends DiscordStructWithSettings {
 	ID: string;

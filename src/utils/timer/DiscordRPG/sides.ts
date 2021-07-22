@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import Message from "../../../structures/djs/Message";
+import Message from "../../../structures/djs/Message.js";
 
 export default async (message: Message) => {
 	const supportedST = ["on", "mine", "forage", "chop", "fish"];

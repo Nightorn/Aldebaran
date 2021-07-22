@@ -28,7 +28,7 @@
     "regenerator-runtime": "^0.13.7",
     "request": "^2.88.2",
     "tenorjs": "^1.0.8",
-    "ts-node": "^10.0.0",
+    "ts-node": "^10.1.0",
     "uid-safe": "^2.1.5",
     "xml2js": "^0.4.23"
   },

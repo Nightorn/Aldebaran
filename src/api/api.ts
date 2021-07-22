@@ -7,19 +7,19 @@ import graphqlHTTP from "express-graphql";
 import { readFileSync } from "fs";
 import { buildSchema } from "graphql";
 import OAuth2Server, { AuthorizationCodeModel, Request as OAuthRequest, Response as OAuthResponse } from "oauth2-server";
-import discordHandler from "./routes/discord/callback";
-import authorizeHandler from "./routes/oauth/authorize";
-import tokenHandler from "./routes/oauth/token";
-import oauthModel from "./middlewares/oauth2/model";
-import DatabaseProvider from "../handlers/GenericDatabaseProvider";
-import Guild from "./graphql/types/guild/Guild";
-import User from "./graphql/types/user/User";
+import discordHandler from "./routes/discord/callback.js";
+import authorizeHandler from "./routes/oauth/authorize.js";
+import tokenHandler from "./routes/oauth/token.js";
+import oauthModel from "./middlewares/oauth2/model.js";
+import DatabaseProvider from "../handlers/GenericDatabaseProvider.js";
+import Guild from "./graphql/types/guild/Guild.js";
+import User from "./graphql/types/user/User.js";
 
 /**
  * Initializes the Aldebaran API
  */
 export default (dsm?: ShardingManager) => {
-	const schema = buildSchema(readFileSync("./api/graphql/schema.graphql", { encoding: "utf-8" }));
+	const schema = buildSchema(readFileSync("./src/api/graphql/schema.graphql", { encoding: "utf-8" }));
 
 	const rootValue = {
 		guild: ({ id }: { id: string }) => new Guild(id),

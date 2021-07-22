@@ -1,8 +1,8 @@
 import { Request as ExpressRequest, Response as ExpressResponse } from "express";
 import { AuthorizationCode, Request as OAuthRequest, Response as OAuthResponse } from "oauth2-server";
 import hrequest from "request";
-import Scope from "../../util/scope";
-import validateSession from "../../util/validateSession";
+import Scope from "../../util/scope.js";
+import validateSession from "../../util/validateSession.js";
 
 export default (app: any) => (ereq: ExpressRequest, eres: ExpressResponse) => {
 	if (ereq.query.success !== "true") {

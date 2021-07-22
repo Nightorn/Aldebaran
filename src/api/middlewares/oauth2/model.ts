@@ -1,5 +1,5 @@
-import { apiAccessToken, apiAuthCode, apiClient, apiRefreshToken } from "../../graphql/utils/fetchDBValue";
-import GenericDatabaseProvider from "../../../handlers/GenericDatabaseProvider";
+import { apiAccessToken, apiAuthCode, apiClient, apiRefreshToken } from "../../graphql/utils/fetchDBValue.js";
+import GenericDatabaseProvider from "../../../handlers/GenericDatabaseProvider.js";
 import { AuthorizationCode, Token } from "oauth2-server";
 
 export default (db: GenericDatabaseProvider) => ({

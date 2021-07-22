@@ -1,5 +1,5 @@
 import request from "request";
-import GenericDatabaseProvider from "../../handlers/GenericDatabaseProvider";
+import GenericDatabaseProvider from "../../handlers/GenericDatabaseProvider.js";
 
 export default (db: GenericDatabaseProvider,
 	session: any): Promise<any> => new Promise(

@@ -1,9 +1,9 @@
 import { Client, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
 import fs from "fs";
-import AldebaranClient from "../structures/djs/Client";
-import CommandMetadata from "../interfaces/CommandMetadata";
+import AldebaranClient from "../structures/djs/Client.js";
+import CommandMetadata from "../interfaces/CommandMetadata.js";
 import { PermissionString as AldebaranPermission } from "../utils/Constants"
-import Message from "../structures/djs/Message";
+import Message from "../structures/djs/Message.js";
 
 export abstract class Command {
 	perms: { discord: DJSPermission[]; aldebaran: AldebaranPermission[]; };

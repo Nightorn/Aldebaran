@@ -1,9 +1,9 @@
 import { GuildMember as DJSMember } from "discord.js";
 import { Request } from "express";
-import fetchDSMValue from "../../utils/fetchDSMValue";
-import PageInfo from "../PageInfo";
-import User from "./User";
-import UsersConnectionEdge from "./UsersConnectionEdge";
+import fetchDSMValue from "../../utils/fetchDSMValue.js";
+import PageInfo from "../PageInfo.js";
+import User from "./User.js";
+import UsersConnectionEdge from "./UsersConnectionEdge.js";
 
 export default class UsersConnection {
 	guild: string;
