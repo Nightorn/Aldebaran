@@ -12,18 +12,18 @@ function sanitize(data: string | number) {
 
 export default class Guild extends DJSGuild {
 	client!: AldebaranClient;
-	commands: Settings = {};
+	commands: { [key: string]: any } = {};
 	existsInDB: boolean = false;
 	prefix: string = process.env.PREFIX || "&";
 	ready: boolean = false;
 	settings: Settings = {};
 	polluxBoxPing: C<string, User> = new C<string, User>();
 
-	async changeCommandSetting(property: string, value: string) {
+	async changeCommandSetting(property: string, value: string | boolean) {
 		this.commands[property] = value;
-		if (value) delete this.commands[property];
-		if (!this.client.commands.exists(property) && !value)
+		if (value || (!this.client.commands.exists(property) && !value)) {
 			delete this.commands[property];
+		}
 		return this.client.database.guilds.updateOneById(
 			this.id,
 			new Map([["commands", JSON.stringify(this.commands)]])

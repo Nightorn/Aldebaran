@@ -1,13 +1,12 @@
-/* eslint consistent-return: off */
-/* eslint no-else-return: off */
 import fs from "fs";
 import { MessageEmbed } from "discord.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import Message from "../../structures/djs/Message.js";
 import User from "../../structures/djs/User.js";
+import { imageUrls } from "../../utils/Constants.js";
 
-const { deathimage } = JSON.parse(fs.readFileSync("../../assets/data/imageurls.json").toString());
-const senddeath = deathimage[Math.floor(Math.random() * deathimage.length)];
+const senddeath = imageUrls
+	.deathimage[Math.floor(Math.random() * imageUrls.deathimage.length)];
 
 const embedColor = (playerPercentage: number) => {
 	if (playerPercentage <= 20) return "RED";

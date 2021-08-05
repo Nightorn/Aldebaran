@@ -1,7 +1,7 @@
 import { formatNumber } from "../utils/Methods.js";
 import AldebaranClient from "../structures/djs/Client.js";
 
-export const run = (client: AldebaranClient) => { // eslint-disable-line import/prefer-default-export
+export default (client: AldebaranClient) => {
 	console.log(
 		`\x1b[36m# ${client.user!.username} has started!${
 			client.debugMode ? " The developer mode has been enabled." : ""
@@ -23,14 +23,6 @@ export const run = (client: AldebaranClient) => { // eslint-disable-line import/
 
 	client.user!.setActivity("for a few seconds now");
 	const { presence }: any = client.config;
-	setInterval(() => {
-		client.CDBA.sortEntries();
-		if (client.CDBA.selected !== null) {
-			presence.pop();
-			presence.push(client.CDBA.selected);
-			client.CDBA.clear();
-		}
-	}, 3600000);
 	setInterval(() => {
 		const selected = presence[Math.floor(Math.random() * presence.length)];
 		client.user!.setActivity(parseText(selected.text), { type: selected.type });

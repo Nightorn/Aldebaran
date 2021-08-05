@@ -1,22 +1,25 @@
 import { Client } from "discord.js";
 import fs from "fs";
-import CDBAHandler from "../../handlers/CDBAHandler.js";
 import CommandHandler from "../../handlers/CommandHandler.js";
+import importCommands from "../../commands/commands.js";
 import DatabaseProvider from "../../handlers/DatabaseProvider.js";
 import { SettingsModel } from "../../utils/Constants.js";
+import message from "../../events/message.js";
+import ready from "../../events/ready.js";
+import Message from "./Message.js";
 
-const aldebaranTeam = JSON.parse(fs.readFileSync("../../config/aldebaranTeam.json").toString());
-const presences = JSON.parse(fs.readFileSync("../../config/presence.json").toString());
-const packageFile = JSON.parse(fs.readFileSync("../../package.json").toString());
+const aldebaranTeam: { [key: string]: { titles: string[], acknowledgements: string[], staffRank: number, text: string } }
+	= JSON.parse(fs.readFileSync("./config/aldebaranTeam.json").toString());
+const presences = JSON.parse(fs.readFileSync("./config/presence.json").toString());
+const packageFile = JSON.parse(fs.readFileSync("./package.json").toString());
 
 export default class AldebaranClient extends Client {
 	started: number = Date.now();
-	config: object = { presence: presences, aldebaranTeam };
+	config: { presence: any, aldebaranTeam: typeof aldebaranTeam } = { presence: presences, aldebaranTeam };
 	database: DatabaseProvider = new DatabaseProvider(this);
 	databaseData: object = { profiles: new Map() };
-	CDBA: CDBAHandler = new CDBAHandler();
-	commandGroups: object = {};
-	commands: CommandHandler = new CommandHandler(this);
+	commandGroups: any = {};
+	commands: CommandHandler = CommandHandler.getInstance(this);
 	debugMode: boolean = process.argv[2] === "dev";
 	models: any = { settings: SettingsModel };
 	stats: any;
@@ -29,6 +32,7 @@ export default class AldebaranClient extends Client {
 			messageCacheLifetime: 1800,
 			messageSweepInterval: 60
 		});
+
 		this.stats = {
 			commands: {
 				total: 0,
@@ -43,6 +47,8 @@ export default class AldebaranClient extends Client {
 				all: {}
 			}
 		};
+
+		importCommands();
 		if (process.argv[3] !== undefined && this.debugMode) {
 			process.env.PREFIX = process.argv[3];
 		}
@@ -53,20 +59,13 @@ export default class AldebaranClient extends Client {
 			this.models.settings.guild[key] = value;
 		}
 
-		if (!fs.existsSync("../../cache/")) fs.mkdirSync("../cache/");
-		if (fs.existsSync("../../cache/drpgCache.json")) {
-			this.drpgCache = JSON.parse(fs.readFileSync("../../cache/drpgCache.json").toString());
+		if (!fs.existsSync("./cache/")) fs.mkdirSync("./cache/");
+		if (fs.existsSync("./cache/drpgCache.json")) {
+			this.drpgCache = JSON.parse(fs.readFileSync("./cache/drpgCache.json").toString());
 		}
 
-		fs.readdir("./events/", (err, files) => {
-			if (err) throw err;
-			files.forEach(file => {
-				import(`../../events/${file}`).then(eventFunction => {
-					const eventName = file.split(".")[0];
-					this.on(eventName, (...args) => eventFunction.run(this, ...args));
-				});
-			});
-		});
+		this.on("message", msg => message(this, msg as Message));
+		this.on("ready", () => ready(this));
 
 		this.login(process.env.TOKEN).then(() => {
 			console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);

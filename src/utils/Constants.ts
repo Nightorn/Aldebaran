@@ -1,6 +1,88 @@
 import Guild from "../structures/djs/Guild.js";
 import User from "../structures/djs/User.js";
-import { timezoneSupport } from "./Methods.js";
+import { importAssets, timezoneSupport } from "./Methods.js";
+
+type Categories = { [key: string]: {
+	name: string,
+	title: string,
+	description: string
+}};
+
+type DRPGFormulaData = {
+	amount: { max: string, min: string },
+	chance: number,
+	minlevel: number,
+	xp: {
+		regular: { max: string, min: string },
+		skill: { max: string, min: string }
+	}
+};
+
+type DRPGLootData = {
+	amount: { max: string; min: string },
+	id: string,
+	mintime: number
+};
+
+export type DRPGItem = {
+	attributes: { [key: string]: number }, // "xpBoost" | "crits"
+	cost: number,
+	def?: number,
+	desc: string,
+	donate?: boolean,
+	fish?: DRPGFormulaData,
+	foragedata?: DRPGFormulaData,
+	id: string,
+	image?: string,
+	itemBoost?: number,
+	level: number,
+	name: string,
+	ore?: DRPGFormulaData,
+	plural: string,
+	potion?: {
+		boost?: { strength: string },
+		effects?: { strength: number },
+		heal?: number,
+		last?: number,
+		temp?: boolean,
+		time?: number
+	},
+	prefix: string,
+	price?: number,
+	ring?: {
+		attribute: string // "strength" | "defense" | "xpBoost",
+		boost: number,
+		stat?: string // "strength" | "defense" | "luck"
+	},
+	sapling?: {	loot: DRPGLootData, minlevel: number },
+	sell: number | string,
+	sellable: boolean,
+	skillLevel?: number,
+	test?: number,
+	toolData?: { catchChance: number },
+	toolType?: string, // "pickaxe" | "axe"
+	tradable: boolean,
+	trap?: { loot: DRPGLootData[], minlevel: number }
+	type: "potion" | "weapon" | "dummy" | "effectpotion" | "chest" | "boots" | "helm" | "ore" | "tool" | "necklace",
+	untradable?: boolean,
+	weapon?: {
+		dmg: { max: number, min: number },
+		type?: string // "dagger"
+	}
+};
+
+type ActionText = { [key: string]: { self: string[], user: string[] } }
+type DRPGXPBases = { [key: string]: number };
+type DRPGItemList = { [key: string]: DRPGItem };
+type DRPGLocationDB = { [key: string]: string };
+type ImageURLs = { [key: string]: string[] };
+
+export const actionText: ActionText = importAssets("./assets/data/actiontext.json");
+export const categories: Categories = importAssets("./assets/data/categories.json");
+export const drpgXpBases: DRPGXPBases = importAssets("./assets/data/drpg/bases.json");
+export const drpgItems: DRPGItemList = importAssets("./assets/data/drpg/itemList.json");
+export const drpgLocationdb: DRPGLocationDB = importAssets("./assets/data/drpg/locations.json");
+export const imageUrls: ImageURLs = importAssets("./assets/data/imageurls.json");
 
 export type ErrorString = keyof typeof Error;
 export type PermissionString = keyof typeof Permissions;
@@ -8,7 +90,21 @@ export type CommonSetting = keyof typeof SettingsModel.common;
 export type UserSetting = CommonSetting | keyof typeof SettingsModel.user;
 export type GuildSetting = CommonSetting | keyof typeof SettingsModel.guild;
 
-export const SettingsModel = {
+type TargetedSettings = { [key: string]: {
+	category: string,
+	help: string,
+	postUpdate?: (value: string, user: User, guild: Guild) => void,
+	showOnlyIfBotIsInGuild?: string,
+	support: (value: string) => boolean,
+}};
+
+type Settings = {
+	common: TargetedSettings,
+	user: TargetedSettings,
+	guild: TargetedSettings
+};
+
+export const SettingsModel: Settings = {
 	common: {
 		adventuretimer: {
 			support: (value: string) => value === "on" || value === "off" || value === "random",
@@ -29,7 +125,7 @@ export const SettingsModel = {
 		polluxboxping: {
 			support: (value: string) => value === "on" || value === "off",
 			help: "Box Ping - [on | off]",
-			postUpdateCommon: (value: string, user: User, guild: Guild) => {
+			postUpdate: (value: string, user: User, guild: Guild) => {
 				if (value === "on") guild.polluxBoxPing.set(user.id, user);
 				else guild.polluxBoxPing.delete(user.id);
 			},
@@ -112,12 +208,8 @@ export const SettingsModel = {
 		aldebaranprefix: {
 			support: () => true,
 			help: "Aldebaran's Prefix - [& | Guild Customized]",
-			postUpdate: (value: string, guild: Guild) => { guild.prefix = value; },
+			postUpdate: (value: string, _: User, guild: Guild) => { guild.prefix = value; },
 			category: "Aldebaran"
-		},
-		aldebaran: {
-			support: (value: string) => value === "on" || value === "off",
-			showOnlyIfBotIsInGuild: "2"
 		},
 		discordrpgprefix: {
 			support: () => true,

@@ -1,15 +1,23 @@
-import fs from "fs";
 import AldebaranClient from "../structures/djs/Client.js";
 import { Command } from "../groups/Command.js";
 import Message from "../structures/djs/Message.js";
 
 export default class CommandHandler {
+	private static instance: CommandHandler;
 	client: AldebaranClient;
 	commands: Map<string, Command> = new Map();
 
-	constructor(client: AldebaranClient) {
+	private constructor(client: AldebaranClient) {
 		this.client = client;
-		this.registerAllCommands();
+	}
+
+	public static getInstance(client?: AldebaranClient): CommandHandler {
+		if (!CommandHandler.instance && client) {
+			CommandHandler.instance = new CommandHandler(client);
+		} else if (!CommandHandler.instance && !client) {
+			throw new TypeError("CommandHandler requires an AldebaranClient as an argument to be instantiated.");
+		}
+		return CommandHandler.instance;
 	}
 
 	execute(commandName: string, message: Message) {
@@ -18,19 +26,27 @@ export default class CommandHandler {
 		commandName = override;
 		if (!this.exists(commandName)) throw new TypeError("INVALID_COMMAND");
 		const command = this.get(commandName)!;
-		if (message.args.length === 0)
-			if (command.subcommands.size > 0)
-				if (command.metadata.allowIndexCommand)
+		if (message.args.length === 0) {
+			if (command.subcommands.size > 0) {
+				if (command.metadata.allowIndexCommand) {
 					command.execute(message);
-				else throw new TypeError("INVALID_COMMAND");
-			else command.execute(message);
-		else if (command.subcommands.size > 0)
-			if (command.subcommands.get(message.args[0]) !== undefined)
-				command.subcommands.get(message.args[0]).execute(message);
-			else if (command.metadata.allowUnknownSubcommands)
+				} else {
+					throw new TypeError("INVALID_COMMAND");
+				}
+			} else {
 				command.execute(message);
-			else throw new TypeError("INVALID_COMMAND");
-		else command.execute(message);
+			}
+		} else if (command.subcommands.size > 0) {
+			if (command.subcommands.get(message.args[0]) !== undefined) {
+				command.subcommands.get(message.args[0]).execute(message);
+			} else if (command.metadata.allowUnknownSubcommands) {
+				command.execute(message);
+			} else {
+				throw new TypeError("INVALID_COMMAND");
+			}
+		} else {
+			command.execute(message);
+		}
 	}
 
 	static createArgs(message: Message) {
@@ -74,38 +90,20 @@ export default class CommandHandler {
 		return this.commands.get(command)!.toHelpEmbed(command, prefix);
 	}
 
-	register(Structure: any, path: string) {
+	register(Structure: any) {
 		const command: Command = new Structure(this.client);
-		command.name = path.match(/\w+(?=(.js))/g)![0];
+		command.name = command.metadata.name
+			|| command.constructor.name.replace("Command", "").toLowerCase();
 		if (command.registerCheck()) {
-			command.checkSubcommands(path);
-			if (!command.metadata.subcommand) {
-				this.commands.set(command.name, command);
-				command.aliases.forEach(alias => {
-					this.commands.set(alias, command);
-				});
-			}
+			// Implement subcommands (command.checkSubcommands(path);)
+			this.commands.set(command.name, command);
+			command.aliases.forEach(alias => {
+				this.commands.set(alias, command);
+			});
 		}
 	}
 
-	registerAllCommands() {
-		const commands = new Map();
-		const exploreFolder = (path: string) => {
-			const files = fs.readdirSync(path);
-			for (const file of files) {
-				if (fs.statSync(path + file).isDirectory()) {
-					exploreFolder(`${path}${file}/`);
-				} else {
-					import(`../${path + file}`).then(command => {
-						this.register(command.default, path + file);
-					}).catch(err => {
-						console.error(`\x1b[31m${path + file} is invalid.\x1b[0m`);
-						console.error(err);
-					});
-				}
-			}
-		};
-		exploreFolder("./commands/");
-		return commands;
+	registerMultiple(...structures: any) {
+		structures.forEach(this.register, this);
 	}
 };

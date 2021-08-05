@@ -9,7 +9,6 @@ export default class ClearSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Clears the data of the specified user or server",
-			subcommand: true,
 			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}

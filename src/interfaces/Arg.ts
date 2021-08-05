@@ -1,11 +1,11 @@
 export interface Arg {
 	as: string,
-	desc: string,
-	flag: {
-		short: string,
-		long: string
+	desc?: string,
+	flag?: {
+		short?: string,
+		long?: string
 	},
-	regex: RegExp
+	regex?: RegExp
 }
 
 export interface Args {

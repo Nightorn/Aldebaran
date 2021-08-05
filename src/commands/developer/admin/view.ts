@@ -10,7 +10,6 @@ export default class ViewSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Shows detailled informations about the specified user or guild",
-			subcommand: true,
 			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}

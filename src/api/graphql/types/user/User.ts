@@ -18,8 +18,8 @@ export default class User extends DiscordStructWithSettings {
 	 * @param {*} request Request object
 	 * @returns {string}
 	 */
-	async avatarURL(_: any, request: Request) {
-		const query = `const user = this.users.cache.get("${this.ID}"); user ? user.avatarURL({ format: 'png', size: 64 }) : null;`;
+	async pfp(_: any, request: Request) {
+		const query = `const user = this.users.cache.get("${this.ID}"); user ? user.pfp({ format: 'png', size: 64 }) : null;`;
 		return fetchDSMValue((request.app as any).dsm, query, 2);
 	}
 

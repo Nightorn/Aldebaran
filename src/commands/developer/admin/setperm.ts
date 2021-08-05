@@ -9,7 +9,6 @@ export default class SetpermSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Set Aldebaran permissions of the specific user",
-			subcommand: true,
 			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}

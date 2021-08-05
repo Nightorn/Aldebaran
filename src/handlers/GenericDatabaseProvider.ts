@@ -1,9 +1,8 @@
-import mysql, { Pool } from "mysql";
+import mysql, { Pool } from "mysql2";
 
 export default class GenericDatabaseProvider {
-	pool: Pool;
-
 	integrityCheck: Boolean;
+	pool: Pool;
 
 	/**
 	 * Returns a MySQL pool connection to the Aldebaran's database
@@ -18,9 +17,7 @@ export default class GenericDatabaseProvider {
 			user: process.env.MYSQL_USER,
 			password: process.env.MYSQL_PASSWORD,
 			database: process.env.MYSQL_DATABASE,
-			connectTimeout: 60000,
-			acquireTimeout: 60000,
-			timeout: 60000
+			connectTimeout: 60000
 		});
 	}
 

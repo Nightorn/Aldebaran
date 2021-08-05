@@ -8,8 +8,7 @@ import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
 import AldebaranClient from "../structures/djs/Client.js";
 import Message from "../structures/djs/Message.js";
 
-// eslint-disable-next-line import/prefer-default-export
-export const run = async (bot: AldebaranClient, message: Message) => {
+export default async (bot: AldebaranClient, message: Message) => {
 	if (!message.guild) return;
 	if (!message.guild.ready) await message.guild.fetch();
 	if (!message.author.ready) await message.author.fetch();
@@ -39,7 +38,7 @@ export const run = async (bot: AldebaranClient, message: Message) => {
 	}
 
 	if (message.author.bot) return;
-	const prefix = process.argv[2] === "dev" ? process.argv[3] || process.env.PREFIX! : message.guild.prefix;
+	const prefix = process.argv[2] === "dev" ? process.argv[4] || process.env.PREFIX! : message.guild.prefix;
 	if (message.content.indexOf(prefix) !== 0) return;
 	if (message.content.slice(prefix.length)[0] === " ") return;
 

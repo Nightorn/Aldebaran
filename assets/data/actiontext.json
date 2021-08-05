@@ -1,35 +1,29 @@
 {
-        "hug": {
-
-            "self": [
-                "{target} could really use a hug.",
-                "{target} is waiting for a warm hug",
-                "Please hug {target} asap!"
-            ],
-
-            "user": [
-                "{sender} is hugging {target} ever so tightly!",
-                "{sender} wraps there arms around {target}",
-                "{sender} is forcefully hugging {target}"
-            ]
-        },
+    "hug": {
+        "self": [
+            "{target} could really use a hug.",
+            "{target} is waiting for a warm hug",
+            "Please hug {target} asap!"
+        ],
+        "user": [
+            "{sender} is hugging {target} ever so tightly!",
+            "{sender} wraps there arms around {target}",
+            "{sender} is forcefully hugging {target}"
+        ]
+    },
     "adorable": {
-
         "self": [
             "Isn't {target} just adroable"
         ],
-
         "user": [
             "{sender} thinks {target} is totally adorable!",
             "{target} is the most adorable according to {sender}."
         ]
     },
-    "bite":{
-
+    "bite": {
         "self": [
             "{target} dares you to bite them!"
         ],
-
         "user": [
             "{sender} clamps down and bites {target}.",
             "Watch out {target}, {sender} is a biter.",
@@ -40,7 +34,6 @@
         "self": [
             "{target} really deserves a bop"
         ],
-
         "user": [
             "Ouch {sender} just bopped {target}.",
             "Bop bop bop,, {target} got bopped by {sender}.",
@@ -48,44 +41,36 @@
         ]
     },
     "cpr": {
-        
         "self": [
             "HELP! {target} needs CPR!"
         ],
-        
         "user": [
             "No worries, {sender} is giving {target} CPR."
         ]
     },
     "cuddle": {
-        
         "self": [
             "{target} really could use cuddles!"
         ],
-        
         "user": [
             "{sender} is cuddling {target}."
         ]
     },
     "escape": {
-        
         "self": [
             "{target} is outta here.",
             "You can't keep {target} hostage anymore."
         ],
-        
         "user": [
             "{sender} has finally escaped {target}.",
             "{sender} is no longer {target}'s hostage."
         ]
     },
     "feed": {
-        
         "self": [
             "{target} thinks your should feed them.",
             "{target} is requesting your food services."
         ],
-        
         "user": [
             "{sender} is feeding {target} Nom Nom's.",
             "Aww {sender} is feeding {target}. How cute!",
@@ -93,11 +78,9 @@
         ]
     },
     "kidnap": {
-        
         "self": [
             "Ohhh no, {target} has been kidnapped."
         ],
-        
         "user": [
             "{sender} grabs {target} while no one was looking.",
             "{sender} runs away with {target}.",
@@ -106,12 +89,10 @@
         ]
     },
     "kiss": {
-        
         "self": [
             "{target} really needs a kiss.",
             "{target} is puckering up for a kiss."
         ],
-        
         "user": [
             "{sender} is kissing {target} so softly.",
             "{sender} is madly kissing {target}.",
@@ -120,12 +101,10 @@
         ]
     },
     "lick": {
-        
         "self": [
             "{target} is trying to lick themselves.",
             "{target} must think they are a cat."
         ],
-        
         "user": [
             "{sender} is licking {target}.",
             "Ewwww, {sender} just licked {target}.",
@@ -133,68 +112,52 @@
         ]
     },
     "mindblown": {
-        
         "self": [
-
+            "{target}'s mind has been blown."
         ],
-        
         "user": [
-
+            "{sender} has blown {target}'s mind!"
         ]
     },
     "nom": {
-        
         "self": [
             "{target} sure is hungry!",
             "Nom nom nom, says {target}.",
             "{target} thinks its nom nom time!"
         ],
-        
         "user": [
             "{sender} invites {target} for nom nom.",
             "{sender} and {target} are ready from nom's."
         ]
     },
     "pat": {
-        
         "self": [
             "You should really pat {target}."
         ],
-        
         "user": [
             "{sender} loves patting {target}.",
             "{target} is getting soft pats from {sender}."
         ]
     },
     "poke": {
-        
-        "self": [
-
-        ],
-        
-        "user": [
-
-        ]
+        "self": [],
+        "user": []
     },
     "rub": {
-        
         "self": [
             "{target} really is wanting a rub.",
             "You should rub {target} please!"
         ],
-        
         "user": [
             "{sender} loves softly rubbing {target}.",
             "Awww {sender} rubs {target} so gently."
         ]
     },
     "slap": {
-        
         "self": [
             "{target} needs to be slapped!",
             "Wake {target} up with a slap!"
         ],
-        
         "user": [
             "{sender} slaps {target} so hard!!",
             "Ouch thats going to leave a mark on {target}!",
@@ -202,13 +165,11 @@
         ]
     },
     "spank": {
-        
         "self": [
             "{target} has been bad and deserves a spank!",
             "{target} says SPANK ME!",
             "HARDER! {target} says."
         ],
-        
         "user": [
             "{sender} thinks {target} deserves a spanking!",
             "{sender} spanks {target}, that might leave a mark!",
@@ -216,24 +177,16 @@
         ]
     },
     "tackle": {
-        
         "self": [
             "{target} thinks you should try and tackle them!"
         ],
-        
         "user": [
             "{target} gets brutally tackled by {sender}.",
             "{sender} tackles {target} out of no where!"
         ]
     },
     "tickle": {
-        
-        "self": [
-
-        ],
-        
-        "user": [
-
-        ]
+        "self": [],
+        "user": []
     }
 }

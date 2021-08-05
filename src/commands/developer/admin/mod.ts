@@ -9,7 +9,6 @@ export default class ModSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Changes the settings of the specified user or guild",
-			subcommand: true,
 			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}

@@ -1,5 +1,4 @@
 import { Client, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
-import fs from "fs";
 import AldebaranClient from "../structures/djs/Client.js";
 import CommandMetadata from "../interfaces/CommandMetadata.js";
 import { PermissionString as AldebaranPermission } from "../utils/Constants"
@@ -9,7 +8,6 @@ export abstract class Command {
 	perms: { discord: DJSPermission[]; aldebaran: AldebaranPermission[]; };
 	aliases: string[];
 	category: string;
-	cooldown: { amount: number; fixed?: number, group?: string; resetInterval: number; };
 	color: string;
 	client: AldebaranClient;
 	example: string;
@@ -26,7 +24,6 @@ export abstract class Command {
 	constructor(client: AldebaranClient, metadata: CommandMetadata) {
 		if (!(client instanceof Client)) { throw new TypeError("The specified Client is invalid"); }
 		if (metadata === undefined) throw new TypeError("The metadata are invalid");
-		if (metadata.description === undefined) { throw new TypeError("The metadata are invalid"); }
 		this.perms = {
 			discord: [],
 			aldebaran: []
@@ -41,13 +38,6 @@ export abstract class Command {
 		}
 		this.aliases = metadata.aliases || [];
 		this.category = "General";
-		this.cooldown = metadata.cooldown || {
-			amount: 1,
-			resetInterval: 0
-		};
-		this.cooldown.fixed = Math.ceil(
-			this.cooldown.resetInterval / this.cooldown.amount / 1000
-		);
 		this.color = "BLUE";
 		this.client = client;
 		this.example = !metadata.example ? "" : `\`${metadata.example}\``;
@@ -76,8 +66,8 @@ export abstract class Command {
 	}
 
 	/**
-   * Executes the command
-   */
+   	* Executes the command
+   	*/
 	execute(message: Message) {
 		const args = message.content.split(" ");
 		args.shift();
@@ -89,24 +79,6 @@ export abstract class Command {
 	}
 
 	abstract run(client: AldebaranClient, message: Message, args: any): void;
-
-	checkSubcommands(path: string) {
-		path = `${path.replace(".js", "")}/`;
-		if (fs.existsSync(path)) {
-			fs.readdir(path, (err, files) => {
-				files.forEach(file => {
-					import(`../${path}${file}`).then(imported => {
-						const command = new imported.default(this.client);
-						command.name = file.match(/\w+(?=(.js))/g)![0];
-						this.subcommands.set(command.name, command);
-					}).catch(err => {
-						console.log(`\x1b[31m${path}${file} is seen as a subcommand but is invalid.\x1b[0m`);
-						console.error(err);
-					});
-				});
-			});
-		}
-	}
 
 	// eslint-disable-next-line class-methods-use-this
 	registerCheck() {
@@ -131,10 +103,6 @@ export abstract class Command {
 			embed.addField("Aliases", this.aliases.join(", "), true);
 		if (this.subcommands.size > 0)
 			embed.addField("Subcommands", Array.from(this.subcommands.keys()).join(", "), true);
-		/* if (this.cooldown.fixed > 0)
-			embed.addField("Cooldown", `${Math.ceil(this.cooldown.fixed)}s`, true);
-		if (this.cooldown.group !== undefined)
-			embed.addField("CCG", this.cooldown.group, true); */
 		if (this.args !== undefined)
 			embed.addField("Arguments", this.args, true);
 		if (this.perms.discord.length > 0)
@@ -158,6 +126,15 @@ export abstract class Command {
 		return embed;
 	}
 
+	registerSubcommands(...subcommands: any) {
+		subcommands.forEach((Structure: any) => {
+			const command = new Structure(this.client);
+			const name = command.constructor.name
+				.replace("Subcommand", "").toLowerCase();
+			this.subcommands.set(name, command);
+		}, this);
+	}
+
 	get shortDesc() {
 		const desc = this.metadata.description;
 		if (desc.length > 60)
@@ -166,7 +143,7 @@ export abstract class Command {
 	}
 };
 
-export const Embed = class NSFWEmbed extends MessageEmbed {
+export const Embed = class Embed extends MessageEmbed {
 	constructor(command: Command) {
 		super();
 		this.setColor(command.color);

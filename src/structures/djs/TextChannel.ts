@@ -30,7 +30,7 @@ export default class TextChannel extends DJSTextChannel {
 		});
 	}
 
-	error(type: ErrorString, desc: string, value?: string) {
+	error(type: ErrorString, desc?: string, value?: string) {
 		const title = MError[type] !== undefined ? MError[type](value!) : "An error has occured.";
 		const embed = new MessageEmbed()
 			.setTitle(title)

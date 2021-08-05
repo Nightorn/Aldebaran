@@ -1,6 +1,7 @@
 import { Guild as DJSGuild } from "discord.js";
 import { Request } from "express";
 import fetchDSMValue from "../../utils/fetchDSMValue.js";
+import Guild from "./Guild.js"
 import GuildsConnectionEdge from "./GuildsConnectionEdge.js";
 import PageInfo from "../PageInfo.js";
 
@@ -61,7 +62,6 @@ export default class GuildsConnection {
 				.then(async (data: any) => {
 					const guilds = data[0] as DJSGuild[];
 					this.totalCount = data[1];
-					const Guild = (await import("./Guild")).default;
 					this.endCursor = Buffer.from(guilds[guilds.length - 1].id).toString("base64");
 					this.startCursor = Buffer.from(guilds[0].id).toString("base64");
 					const e = (g: string) => new GuildsConnectionEdge(new Guild(g));

@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import moment from "moment-timezone";
 
 const timeNames = moment.tz.names();
@@ -5,7 +6,7 @@ const timeNames = moment.tz.names();
 export const escape = (s: string) => s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 
 // With the contribution of holroy
-export const formatNumber = (n: number) => {
+export const formatNumber = (n: number | string) => {
 	const parts = n.toString().split(".");
 	return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 		+ (parts[1] ? `.${parts[1]}` : "");
@@ -46,6 +47,10 @@ export const getTimeString = (timeInMs: number, format: string) => {
 	format = format.replace("MM", minutes < 10 ? `0${minutes.toString()}` : minutes.toString());
 	format = format.replace("SS", seconds < 10 ? `0${seconds.toString()}` : seconds.toString());
 	return format;
+};
+
+export const importAssets = (path: string) => {
+	return JSON.parse(readFileSync(path).toString());
 };
 
 export const lightOrDark = (color: string) => {

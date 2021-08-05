@@ -7,9 +7,7 @@ import { Command } from "../../groups/DRPGCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import Message from "../../structures/djs/Message.js";
 import User from "../../structures/djs/User.js";
-
-const items = JSON.parse(fs.readFileSync("../../assets/data/drpg/itemList.json").toString());
-const locationdb = JSON.parse(fs.readFileSync("../../assets/data/drpg/locations.json").toString());
+import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 
 function apiFetch(endpoint: string) {
 	return new Promise((resolve, reject) => {
@@ -58,7 +56,8 @@ async function paginate(
 
 	const msg = await message.channel.send(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
 	if (maxPage > 1) {
-		const hasRemovePerms = message.channel.permissionsFor(bot.user!)!.has("MANAGE_MESSAGES");
+		const permissions = message.channel.permissionsFor(bot.user!);
+		const hasRemovePerms = permissions ? permissions.has("MANAGE_MESSAGES") : false;
 		const reactions = ["⬅", "❌", "➡"].filter(r => hasRemovePerms || r !== "❌");
 		for (const react of reactions) {
 			await msg.react(react);
@@ -192,13 +191,11 @@ export default class GleadCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(bot: AldebaranClient, message: Message, args: any) {
 		if (message.channel.type !== "text") return;
-		if (!message.channel.permissionsFor(bot.user!)!.has("READ_MESSAGE_HISTORY")) {
-			message.channel.send("I need permission to read message history before you can use this feature.");
-			return;
-		}
-		if (!message.channel.permissionsFor(bot.user!)!.has("ADD_REACTIONS")) {
-			message.channel.send("I need permission to add reactions to messages before you can use this feature.");
-			return;
+		const permissions = message.channel.permissionsFor(bot.user!);
+		if (permissions && !permissions.has("READ_MESSAGE_HISTORY")) {
+			return message.channel.send("I need permission to read message history before you can use this feature.");
+		} else if (permissions && !permissions.has("ADD_REACTIONS")) {
+			return message.channel.send("I need permission to add reactions to messages before you can use this feature.");
 		}
 
 		// Get guild data, either from the cache or from the API
@@ -302,12 +299,12 @@ export default class GleadCommand extends Command {
 				const locArray = Object.entries(locations);
 				locArray.sort((a, b) => b[1] - a[1]);
 				sum = guildUsers.length;
-				list = locArray.map(loc => `${locationdb[loc[0]]}${showid ? ` (${loc[0]})` : ""} - ${loc[1]}`);
+				list = locArray.map(loc => `${drpgLocationdb[loc[0]]}${showid ? ` (${loc[0]})` : ""} - ${loc[1]}`);
 				break;
 
 			default:
-				itemIndex = items
-					.filter((item: any) => index.toLowerCase() === item.name.toLowerCase());
+				itemIndex = Object.values(drpgItems)
+					.filter(item => index.toLowerCase() === item.name.toLowerCase());
 				if (itemIndex.length === 1) {
 					filteredUsers = guildUsers.filter((user: any) => user.inv
 					&& user.inv[itemIndex[0].id]

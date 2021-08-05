@@ -75,7 +75,7 @@ export default class Message extends DJSMessage {
 						} else if (type === "flag" && as === "mode") {
 							result = { arg, value: value.id };
 						} else if (type !== "flag" && as === "expression") {
-							const match = String(value).match(data.regex);
+							const match = String(value).match(data.regex!);
 							if (match) result = { arg, value: match[0] };
 						}
 					}

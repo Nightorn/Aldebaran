@@ -3,11 +3,10 @@ import { Command } from "../../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../../structures/djs/Client.js";
 import Message from "../../../structures/djs/Message.js";
 
-export default class ModSubcommand extends Command {
+export default class TimeoutSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Timeouts the specified user",
-			subcommand: true,
 			perms: { aldebaran: ["BAN_USERS"] }
 		});
 	}
