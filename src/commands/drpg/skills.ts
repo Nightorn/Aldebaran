@@ -3,9 +3,8 @@ import request from "request";
 import { Command } from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
-import User from "../../structures/djs/User.js";
 import { drpgItems } from "../../utils/Constants.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 export default class SkillsCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -18,14 +17,13 @@ export default class SkillsCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: any) {
-		bot.users.fetch(args.user || message.author.id).then(user => {
+	run(ctx: MessageContext) {
+		const args = ctx.args as { user: string };
+		ctx.client.users.fetch(args.user || ctx.message.author.id).then(user => {
 			request({ uri: `http://api.discorddungeons.me/v3/user/${user.id}`, headers: { Authorization: process.env.API_DISCORDRPG } }, (err, response, body) => {
 				if (err) throw err;
 				if (response.statusCode === 404) {
-					message.reply(
-						"it looks like the user you specified has not started his adventure on DiscordRPG yet."
-					);
+					ctx.reply("it looks like the user you specified has not started his adventure on DiscordRPG yet.");
 				} else if (response.statusCode === 200) {
 					const { data } = JSON.parse(body);
 					const maxpoints = data.level * 5;
@@ -70,20 +68,15 @@ export default class SkillsCommand extends Command {
 						return `With your current mining boosts skills, you would get between **${minMin} and ${minMax} skill XP**.\nWith the highest mining boosts skills, you would get between **${maxMin} and ${maxMax} skill XP**.`;
 					};
 					const embed = new MessageEmbed()
-						.setAuthor(`${user.username}  |  Skills`, (user as User).pfp())
+						.setAuthor(`${user.username}  |  Skills`, user.displayAvatarURL())
 						.setColor(0x00AE86)
 						.addField("Mining", `**Level ${skillinfo.mine.level}** (${formatNumber(skillinfo.mine.xp)} XP)\nWith your **current** mining boost skills, you would get **${miningCurrent} ores or essences**.\nWith the **highest** mining boost skills, you would get **${miningMax} ores**, or between **${essenceMax} and ${miningMax} essences**.\n${mineXp(skillinfo.mine.level)}`)
 						.addField("Chopping", `**Level ${skillinfo.chop.level}** (${formatNumber(skillinfo.chop.xp)} XP)\nWith your **current** lumber boost skills, you would get **${lumbercurrent} logs**.\nWith the **highest** lumber boost skills, you would get **${lumbermax} logs**.\n${xp(skillinfo.chop.level)}`)
 						.addField("Foraging", `**Level ${skillinfo.forage.level}** (${formatNumber(skillinfo.forage.xp)} XP)\nWith your **current** scavenging skills, you would get **${forageCurrent} items**.\nWith the **highest** scavenging skills, you would get **${forageMax} items**.\n${xp(skillinfo.forage.level)}`)
 						.addField("Fishing", `**Level ${skillinfo.fish.level}** (${formatNumber(skillinfo.fish.xp)} XP)\n${xp(skillinfo.fish.level)}`);
-					message.channel.send(embed);
+					ctx.reply(embed);
 				}
 			});
-		}).catch(() => { message.channel.error("INVALID_USER"); });
-	}
-
-	registerCheck() {
-		return process.env.API_DISCORDRPG !== undefined
-			&& process.env.API_DISCORDRPG !== null;
+		}).catch(() => { ctx.error("INVALID_USER"); });
 	}
 };

@@ -1,11 +1,11 @@
 import { MessageEmbed } from "discord.js";
 import os from "os";
 import { Command } from "../../groups/Command.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 import { formatNumber, getTimeString } from "../../utils/Methods.js";
 
-export default class BStats extends Command {
+export default class BStatsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays the bot usage statistics since the last start"
@@ -13,14 +13,14 @@ export default class BStats extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message) {
+	run(ctx: MessageContext) {
 		const processMemory = process.memoryUsage().heapTotal;
 		const mem = Math.round((100 * processMemory) / 1048576) / 100;
 		const memTTL = Math.round(100 * (mem + os.freemem() / 1048576)) / 100;
 		const memPRC = Math.round((10 * (mem * 100)) / memTTL) / 10;
 
 		const embed = new MessageEmbed()
-			.setAuthor("Aldebaran  |  Bot Statistics", bot.user!.avatarURL()!)
+			.setAuthor("Aldebaran  |  Bot Statistics", ctx.client.user.avatarURL()!)
 			.setDescription(
 				"Multiple informations about Aldebaran are shown on this page, mainly the used resources and the global usage statistics."
 			)
@@ -30,24 +30,9 @@ export default class BStats extends Command {
 				`**${Math.round(100 * os.loadavg()[0]) / 100}** (${Math.round(100 * os.loadavg()[0] * (100 / 6)) / 100}%)`,
 				true
 			)
-			.addField("Uptime", getTimeString(bot.uptime!, "DD day(s), HH:MM:SS"), true)
-			.addField(
-				"Commands (Session)",
-				formatNumber(bot.stats.commands.total),
-				true
-			)
-			.addField(
-				"Users (Session)",
-				formatNumber(bot.stats.users.total),
-				true
-			)
-			.addField(
-				"Servers (Session)",
-				formatNumber(bot.stats.servers.total),
-				true
-			)
-			.addField("Shard ID", bot.shardID, true)
+			.addField("Uptime", getTimeString(ctx.client.uptime!, "DD day(s), HH:MM:SS"), true)
+			.addField("Shard ID", ctx.client.shardId.toString(), true)
 			.setColor(this.color);
-		message.channel.send({ embed });
+		ctx.reply(embed);
 	}
 };

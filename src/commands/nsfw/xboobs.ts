@@ -1,7 +1,7 @@
 import { Command as C, Embed as E } from "../../groups/NSFWCommand.js";
 import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
-import Message from "../../structures/djs/Message.js";
 import AldebaranClient from "../../structures/djs/Client.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 const { Command, Embed } = subCategory(C, E);
 
@@ -12,9 +12,9 @@ export default class XBoobsCommand extends Command {
 		});
 	}
 
-	async run(_: AldebaranClient, message: Message) {
+	async run(ctx: MessageContext) {
 		const embed = new Embed(this,
-			`${message.author} You want boobs? I give you... BOOBS!`);
-		embed.send(message, this.nekoslife.nsfw.boobs);
+			`${ctx.message.author} You want boobs? I give you... BOOBS!`);
+		embed.send(ctx, ctx.client.nekoslife.nsfw.boobs);
 	}
 };

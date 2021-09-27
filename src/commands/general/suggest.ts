@@ -2,7 +2,7 @@
 import { MessageEmbed, WebhookClient } from "discord.js";
 import { Command } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 export default class SuggestCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -14,17 +14,21 @@ export default class SuggestCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(_: AldebaranClient, message: Message, args: any) {
-		if (args.length === 0) return message.channel.send("You can't send an empty suggestion.");
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
+		if (args.length === 0) return ctx.reply("You can't send an empty suggestion.");
 		const embed = new MessageEmbed()
 			.setDescription(args.join(" "))
-			.setFooter(`User: ${message.author.tag} [ID: ${message.author.id}]\nChannel: #${message.channel.name} [ID: ${message.channel.id}]\nServer: ${message.guild.name} [ID: ${message.guild.id}]`);
-		new WebhookClient("685901108262076565", "Qy3jDeK9uUO3bIqpYgkZ6MrkspZ9m5H8T6r2IjxWITAiEtNlpFUuaJz-snayg8bXUJWy").send({
-			username: message.author.username,
-			avatarURL: message.author.pfp(),
+			.setFooter(`User: ${ctx.message.author.tag} [ID: ${ctx.message.author.id}]`);
+		new WebhookClient({
+			id: "685901108262076565",
+			token: "Qy3jDeK9uUO3bIqpYgkZ6MrkspZ9m5H8T6r2IjxWITAiEtNlpFUuaJz-snayg8bXUJWy"
+		}).send({
+			username: ctx.message.author.username,
+			avatarURL: ctx.message.author.displayAvatarURL(),
 			embeds: [embed]
 		}).then(() => {
-			message.channel.send("Your suggestion has been sent to the main server!");
+			ctx.reply("Your suggestion has been sent to the main server!");
 		});
 		return true;
 	}

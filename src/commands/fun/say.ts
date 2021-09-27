@@ -1,22 +1,26 @@
 import { Command, Embed } from "../../groups/FunCommand.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 
 export default class SayCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Make the bot say something",
 			usage: "Text",
-			example: "i am gay"
+			example: "aldebaran is the best bot"
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: any) {
-		message.delete().catch(() => {});
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
+		ctx.message.delete().catch(() => {});
 		const embed = new Embed(this)
-			.setAuthor(message.author.username, message.author.pfp())
+			.setAuthor(
+				ctx.message.author.username,
+				ctx.message.author.displayAvatarURL()
+			)
 			.setDescription(args.join(" "));
-		message.channel.send({ embed });
+		ctx.reply(embed);
 	}
 };

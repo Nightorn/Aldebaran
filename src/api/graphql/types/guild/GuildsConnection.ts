@@ -1,7 +1,7 @@
-import { Guild as DJSGuild } from "discord.js";
+import { Client, Collection, Guild as DJSGuild } from "discord.js";
 import { Request } from "express";
 import fetchDSMValue from "../../utils/fetchDSMValue.js";
-import Guild from "./Guild.js"
+import Guild from "./Guild.js";
 import GuildsConnectionEdge from "./GuildsConnectionEdge.js";
 import PageInfo from "../PageInfo.js";
 
@@ -42,33 +42,53 @@ export default class GuildsConnection {
 	}
 
 	/**
-	 * Returns the requested users
-	 * @returns {[User]}
+	 * Returns the requested guilds
+	 * @returns {[Guild]}
 	 */
-	edges(_: any, request: Request) {
+	edges(_: object, request: Request) {
 		return new Promise(resolve => {
-			let numberFilter = ".first(10)";
-			let indexing = "";
-			if (this.first)
-				numberFilter = `.first(${this.first})`;
-			else if (this.last)
-				numberFilter = `.last(${this.last})`;
-			if (this.before || this.after) {
-				const timestamp = Buffer.from(this.before || this.after!, "base64").toString("ascii");
-				indexing = `.filter(g => g.createdTimestamp ${this.before ? "<" : ">"} Number("${timestamp}"))`;
-			}
-			const check = `let result = null; const user = this.users.cache.get("${this.user}"); if (user) { const guilds = this.guilds.cache.filter(g => g.members.cache.has(user.id)); result = [guilds.sort((a, b) => a.createdTimestamp - b.createdTimestamp)${indexing}${numberFilter}, guilds${indexing}.size] }; result;`;
-			fetchDSMValue((request.app as any).dsm, check, indexing ? 6 : 2)
-				.then(async (data: any) => {
-					const guilds = data[0] as DJSGuild[];
-					this.totalCount = data[1];
+			const check = async (c: Client<true>) => {
+				let list: Collection<string, DJSGuild> | DJSGuild[] | null = null;
+				const user = await c.users.fetch(this.user);
+				const guilds = c.guilds.cache
+					.filter(g => g.members.cache.has(user.id));
+
+				list = guilds.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
+
+				let timestamp = 0;
+				if (this.before || this.after) {
+					timestamp = Number(Buffer.from(this.before || this.after!, "base64").toString("ascii"));
+					if (this.before) {
+						list = list.filter(g => g.createdTimestamp < timestamp);
+					} else if (this.last) {
+						list = list.filter(g => g.createdTimestamp > timestamp);
+					}
+				}
+
+				if (this.first) {
+					list = list.first(this.first);
+				} else if (this.last) {
+					list = list.last(this.last);
+				} else {
+					list = Array.from(list.values());
+				}
+				return list;
+			};
+
+			fetchDSMValue(request.app.dsm, check).then(async (data?) => {
+				const guilds = await data;
+				if (guilds) {
+					this.totalCount = guilds.length;
 					this.endCursor = Buffer.from(guilds[guilds.length - 1].id).toString("base64");
 					this.startCursor = Buffer.from(guilds[0].id).toString("base64");
 					const e = (g: string) => new GuildsConnectionEdge(new Guild(g));
 					resolve(guilds.reduce(
 						(acc: GuildsConnectionEdge[], cur) => [...acc, e(cur.id)], []
 					));
-				});
+				} else {
+					resolve([]);
+				}
+			});
 		});
 	}
 

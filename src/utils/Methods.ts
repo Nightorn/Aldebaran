@@ -1,5 +1,7 @@
+import { Collection, MessageReaction, User } from "discord.js";
 import { readFileSync } from "fs";
 import moment from "moment-timezone";
+import MessageContext from "../structures/aldebaran/MessageContext";
 
 const timeNames = moment.tz.names();
 
@@ -49,9 +51,8 @@ export const getTimeString = (timeInMs: number, format: string) => {
 	return format;
 };
 
-export const importAssets = (path: string) => {
-	return JSON.parse(readFileSync(path).toString());
-};
+export const importAssets = (path: string) => JSON
+	.parse(readFileSync(path).toString());
 
 export const lightOrDark = (color: string) => {
 	let r;
@@ -76,6 +77,111 @@ export const lightOrDark = (color: string) => {
 	}
 	return false;
 };
+
+/**
+ * Paginates a list for user convenience
+ * @param {Array<String>} list The array of items to be paginated
+ * @param {Number} page The page number to start on
+ * @param {String} headerText The text on the top line of the page
+ * @param {Message} message The user's discord.js Message
+ * @param {String} footerText The text on the bottom line of the page
+ * @param {Client} bot The bot
+ */
+export async function paginate(
+	list: string[],
+	page: number,
+	headerText: string,
+	ctx: MessageContext,
+	footerText: string
+) {
+	const maxPage = Math.ceil(list.length / 15);
+	if (page < 1) {
+		page = 1;
+	} else if (page > maxPage) {
+		page = maxPage;
+	}
+	let header = `#=====[ ${headerText} (page ${page}/${maxPage}) ]=====#`;
+	let body = list.slice(page * 15 - 15, page * 15).join("\n");
+	let footer = `#${"".padEnd(Math.floor(header.length / 2 - footerText.length / 2) - 1, "=")}${footerText}${"".padEnd(Math.ceil(header.length / 2 - footerText.length / 2) - 1, "=")}#`;
+
+	const msg = await ctx.reply(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
+	if (maxPage > 1) {
+		const hasRemovePerms = ctx.message.guild
+			? ctx.channel.permissionsFor(ctx.client.user)!.has("MANAGE_MESSAGES")
+			: true;
+		const reactions = ["⬅", "❌", "➡"].filter(r => hasRemovePerms || r !== "❌");
+		for (const react of reactions) {
+			// eslint-disable-next-line no-await-in-loop
+			await msg.react(react);
+		}
+		while (true) {
+			// eslint-disable-next-line no-await-in-loop
+			const collect = await msg.awaitReactions({
+				filter: (reaction: MessageReaction, user: User) => user.id
+					=== ctx.message.author.id
+					&& reactions.includes(reaction.emoji.name!),
+				time: 60000,
+				max: 1
+			}).catch(console.error) as Collection<string, MessageReaction>;
+
+			if (collect.size) {
+				const reaction = collect.first()!;
+				const emoji = reaction.emoji.name;
+				const prevPage = page;
+				if (emoji === "⬅" && page > 1) page--;
+				else if (emoji === "➡" && page < maxPage) page++;
+
+				if (emoji !== "❌" && hasRemovePerms) {
+					reaction.users.remove(ctx.message.author);
+				}
+
+				if (prevPage !== page) {
+					header = `#=====[ ${headerText} (page ${page}/${maxPage}) ]=====#`;
+					body = list.slice(page * 15 - 15, page * 15).join("\n");
+					footer = `#${"".padEnd(Math.floor(header.length / 2 - footerText.length / 2) - 1, "=")}${footerText}${"".padEnd(Math.ceil(header.length / 2 - footerText.length / 2) - 1, "=")}#`;
+					// eslint-disable-next-line no-await-in-loop
+					await msg.edit(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
+				}
+			}
+			if ((!collect.size || collect.first()!.emoji.name === "❌") && hasRemovePerms) {
+				msg.reactions.removeAll();
+				break;
+			}
+		}
+	}
+}
+
+export function timeSince(timestamp: number) {
+	let ellapsed = Date.now() - timestamp;
+	const years = Math.floor(ellapsed / (365 * 24 * 60 * 60 * 1000));
+	ellapsed -= years * (365 * 24 * 60 * 60 * 1000);
+	const days = Math.floor(ellapsed / (24 * 60 * 60 * 1000));
+	ellapsed -= days * (24 * 60 * 60 * 1000);
+	const hours = Math.floor(ellapsed / (60 * 60 * 1000));
+	ellapsed -= hours * (60 * 60 * 1000);
+	const minutes = Math.floor(ellapsed / (60 * 1000));
+
+	let str = "";
+	let units = 0; // The number of units the time is measured in; max of 2
+	if (years) {
+		str += `${years} year${years > 1 ? "s" : ""}`;
+		units++;
+	}
+	if (!units && days || units) {
+		str += `${str ? " and " : ""}${days} day${days !== 1 ? "s" : ""}`;
+		units++;
+	}
+	if (!units && hours || units === 1) {
+		str += `${str ? " and " : ""}${hours} hour${hours !== 1 ? "s" : ""}`;
+		units++;
+	}
+	if (!units && minutes || units === 1) {
+		str += `${str ? " and " : ""}${minutes} minute${minutes !== 1 ? "s" : ""}`;
+	}
+	if (!str) str = "now";
+
+	return str;
+}
 
 export const timezoneSupport = (value: string) => {
 	if (/((UTC)|(GMT))(\+|-)\d{1,2}/i.test(value)) {

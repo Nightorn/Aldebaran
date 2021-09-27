@@ -1,15 +1,15 @@
 import { Command, Embed } from "../../groups/FunCommand.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 
-export default class YearcompletionCommand extends Command {
+export default class TimecompletionCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Shows the week, month, year and decade completions."
 		});
 	}
 
-	run(bot: AldebaranClient, message: Message) {
+	run(ctx: MessageContext) {
 		const todaysDate = new Date();
 		const d = new Date(todaysDate);
 		const day = d.getUTCDay();
@@ -34,8 +34,8 @@ export default class YearcompletionCommand extends Command {
 			* (100 * (Date.now() - 1577836800000)
 			/ 315619200000)) / 1000;
 		const embed = new Embed(this)
-			.setAuthor("Time Completion", bot.user!.avatarURL()!)
+			.setAuthor("Time Completion", ctx.client.user.avatarURL()!)
 			.setDescription(`We are **${weekCompletion}%** through the week.\nWe are **${monthCompletion}%** through the month.\nWe are **${yearCompletion}%** through the year.\nWe are **${decadeCompletion}%** through the decade.`);
-		message.channel.send({ embed });
+		ctx.reply(embed);
 	}
 };

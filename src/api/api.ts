@@ -1,4 +1,3 @@
-import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 // import crypto from "crypto";
 import { ShardingManager } from "discord.js";
@@ -18,7 +17,7 @@ import User from "./graphql/types/user/User.js";
 /**
  * Initializes the Aldebaran API
  */
-export default (dsm?: ShardingManager) => {
+export default (dsm: ShardingManager) => {
 	const schema = buildSchema(readFileSync("./src/api/graphql/schema.graphql", { encoding: "utf-8" }));
 
 	const rootValue = {
@@ -26,16 +25,16 @@ export default (dsm?: ShardingManager) => {
 		user: ({ id }: { id: string }) => new User(id)
 	};
 
-	const app: any = express();
+	const app = express();
 	app.set("view engine", "pug");
-	app.set("views", `./views`);
+	app.set("views", "./views");
 
-	app.use(express.static(`./public`));
+	app.use(express.static("./public"));
 	app.use(cookieParser());
-	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded({ extended: false }));
+	app.use(express.json());
+	app.use(express.urlencoded({ extended: false }));
 
-	app.dsm = dsm || null;
+	app.dsm = dsm;
 	app.db = new DatabaseProvider();
 	app.oauth = new OAuth2Server({
 		model: oauthModel(app.db) as any

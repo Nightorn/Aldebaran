@@ -1,7 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/DRPGCommand.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 import { formatNumber } from "../../utils/Methods.js";
 
 export default class XpCommand extends Command {
@@ -14,8 +14,9 @@ export default class XpCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: any) {
-		const level = parseInt(args[0], 10);
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
+		const level = Number(args[0]);
 		const enchant = args[1] !== undefined ? parseInt(args[1], 10) : 0;
 		let attributes = 0;
 		if (args[2] !== undefined) {
@@ -39,7 +40,7 @@ export default class XpCommand extends Command {
 
 			const embed = new MessageEmbed()
 				.setTitle(`Average Xp Kill At Lvl. ${level}`)
-				.setAuthor(message.author.username, message.author.pfp())
+				.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 				.setColor(0x00ae86)
 				.setDescription(
 					`**Please note all infomation about XP are estimations, and only works with dynamobs!**\nYou have a +${enchant}% XP Boost on your equipment, and you have ${attributes} points in your XP Boost attribute.`
@@ -68,11 +69,9 @@ export default class XpCommand extends Command {
 					"**Without a ring of XP**",
 					`${formatNumber(getXP())} XP per kill on average`
 				);
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		} else {
-			message.reply(
-				"You need to specify a level and the XP Boost percentage the used equipment has (if you want to take it in account)."
-			);
+			ctx.reply("You need to specify a level and the XP Boost percentage the used equipment has (if you want to take it in account).");
 		}
 	}
 };

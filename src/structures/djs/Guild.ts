@@ -1,81 +1,59 @@
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable global-require */
-
-import { Guild as DJSGuild, Collection as C } from "discord.js";
-import Settings from "../../interfaces/Settings.js";
+import { Guild as DJSGuild, Collection as C, Snowflake } from "discord.js";
 import AldebaranClient from "./Client.js";
 import User from "./User.js";
+import { DBGuild, GuildSetting, GuildSettings } from "../../utils/Constants.js";
 
 function sanitize(data: string | number) {
 	return data.toString().replace(/[\\"]/g, "\\$&");
 }
 
-export default class Guild extends DJSGuild {
+export default class Guild {
 	client!: AldebaranClient;
-	commands: { [key: string]: any } = {};
-	existsInDB: boolean = false;
+	commandOverrides: { [key: string]: string | false } = {};
+	guild: DJSGuild;
+	id: Snowflake;
+	polluxBoxPing: C<string, User> = new C<string, User>();
 	prefix: string = process.env.PREFIX || "&";
 	ready: boolean = false;
-	settings: Settings = {};
-	polluxBoxPing: C<string, User> = new C<string, User>();
+	settings: GuildSettings = {};
 
-	async changeCommandSetting(property: string, value: string | boolean) {
-		this.commands[property] = value;
-		if (value || (!this.client.commands.exists(property) && !value)) {
-			delete this.commands[property];
+	constructor(client: AldebaranClient, guild: DJSGuild, data: DBGuild) {
+		this.client = client;
+		this.commandOverrides = JSON.parse(data.commands);
+		this.guild = guild;
+		this.id = data.guildid;
+		for (const [k, v] of Object.entries(JSON.parse(data.settings))) {
+			this.settings[k.toLowerCase() as GuildSetting] = v as string;
+		}
+		this.prefix = this.client.debugMode && process.env.PREFIX
+			? process.env.PREFIX
+			: this.settings.aldebaranprefix as string || "&";
+	}
+
+	async changeCommandSetting(property: string, override: string | boolean) {
+		if (override || (!this.client.commands.exists(property) && !override)) {
+			delete this.commandOverrides[property];
+		} else {
+			this.commandOverrides[property] = override;
 		}
 		return this.client.database.guilds.updateOneById(
 			this.id,
-			new Map([["commands", JSON.stringify(this.commands)]])
+			new Map([["commands", JSON.stringify(this.commandOverrides)]])
 		);
 	}
 
-	async changeSetting(property: string, value: string) {
-		await this.create();
+	async changeSetting(property: GuildSetting, value: string) {
 		this.settings[property] = value;
+		if (property === "aldebaranprefix") {
+			this.prefix = value;
+		}
 		const toSave = { ...this.settings };
-		for (const setting in toSave) {
-			toSave[setting] = sanitize(toSave[setting]!);
+		for (const [k, v] of Object.entries(toSave)) {
+			toSave[k as keyof typeof toSave] = sanitize(v);
 		}
 		return this.client.database.guilds.updateOneById(
 			this.id,
 			new Map([["settings", JSON.stringify(toSave)]])
 		);
-	}
-
-	async clear() {
-		this.existsInDB = false;
-		this.settings = {};
-		return this.client.database.guilds.deleteOneById(this.id);
-	}
-
-	async create() {
-		if (this.existsInDB) return false;
-		this.existsInDB = true;
-		return this.client.database.guilds.createOneById(this.id);
-	}
-
-	async fetch() {
-		const data = await this.client.database.guilds.selectOneById(this.id);
-		this.existsInDB = data !== undefined;
-		this.ready = true;
-		if (data !== undefined) {
-			if (data.settings.includes("\\") && !data.settings.includes("\\\\") && !data.settings.includes("\\\"")) {
-				// Escape the escape symbol if it's not escaped. Should only run for like 1 guild maybe.
-				data.settings = JSON.parse(data.settings.replace(/\\/g, "\\\\"));
-			} else data.settings = JSON.parse(data.settings);
-			data.commands = JSON.parse(data.commands);
-			if (data !== undefined) {
-				for (const [key, value] of Object.entries(data.settings)) {
-					this.settings[key.toLowerCase()] = value as number | string;
-				}
-				this.commands = data.commands;
-			}
-			this.prefix = this.client.debugMode && process.env.PREFIX
-				? process.env.PREFIX
-				: this.settings.aldebaranprefix as string || "&";
-			this.polluxBoxPing = new C();
-		}
-		return data;
 	}
 };

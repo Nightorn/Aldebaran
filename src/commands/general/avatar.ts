@@ -1,8 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/Command.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
-import User from "../../structures/djs/User.js";
 
 export default class AvatarCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -16,15 +15,16 @@ export default class AvatarCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: any) {
-		bot.users.fetch(args.user || message.author.id).then(user => {
+	run(ctx: MessageContext) {
+		const args = ctx.args as { user?: string };
+		ctx.client.users.fetch(args.user || ctx.message.author.id).then(user => {
 			const embed = new MessageEmbed()
-				.setAuthor(user.username, (user as User).pfp())
+				.setAuthor(user.username, user.displayAvatarURL())
 				.setTitle(`${user.username}'s Avatar`)
-				.setImage((user as User).pfp({ size: 2048 }));
-			message.channel.send({ embed });
+				.setImage(user.displayAvatarURL({ size: 2048 }));
+			ctx.reply(embed);
 		}).catch(() => {
-			message.reply("The ID of the user you specified is invalid. Please retry by mentionning him or by getting their right ID.");
+			ctx.reply("The ID of the user you specified is invalid. Please retry by mentionning him or by getting their right ID.");
 		});
 	}
 };

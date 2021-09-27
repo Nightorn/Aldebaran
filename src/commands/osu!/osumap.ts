@@ -1,10 +1,21 @@
-import Nodesu, { Converts } from "nodesu";
+import { ApprovalStatus, Beatmap, Converts, Mode } from "nodesu";
 import ojsama from "ojsama";
 import retrieveBeatmapFile from "../../utils/osu!/retrieveBeatmapFile.js";
 import ppv2Results from "../../utils/osu!/ppv2Results.js";
 import { Command, Embed } from "../../groups/OsuCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
+
+const supportedMods = ["NF", "EZ", "HT", "SO", "HR", "DT", "NC", "HD", "FL"];
+const d = (x: number | string) => (x.toString().length === 1 ? `0${x}` : x);
+const t = (x: number, l?: number) => x.toFixed(l === null ? 2 : l);
+const r = (x: number) => Math.round(x * 100) / 100;
+const returnDate = (x: Date) => `${d(x.getUTCMonth() + 1)}/${d(
+	x.getUTCDay() + 1
+)}/${x.getUTCFullYear()} ${d(x.getUTCHours())}:${d(x.getUTCMinutes())} UTC`;
+const returnDuration = (x: number) => (x > 60
+	? `${Math.floor(x / 60)}m${d(Math.floor(x % 60))}s`
+	: `${Math.floor(x)}s`);
 
 export default class OsumapCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -23,88 +34,84 @@ export default class OsumapCommand extends Command {
 		});
 	}
 
-	async run(_: AldebaranClient, message: Message, args: any) {
-		const client = new Nodesu.Client(process.env.API_OSU!);
+	async run(ctx: MessageContext) {
+		const args = ctx.args as {
+			map: string,
+			mode?: string,
+			mods?: string,
+			accuracy?: string,
+			combo?: string,
+			nmiss?: string
+		};
+		const client = ctx.client.nodesu!;
 		if (args.map === undefined) {
-			return message.channel.send(
-				"You need to send a link of the beatmap or its ID. Check `&?osu` for more informations."
+			return ctx.reply(
+				"You need to send a link of the beatmap or its ID. Check `&?osumap` for more informations."
 			);
 		}
-		const supportedMods = ["NF", "EZ", "HT", "SO", "HR", "DT", "NC", "HD", "FL"];
-		const { accuracy, nmiss } = args;
-		let { combo } = args;
-		const mode = args.mode as "osu" | "ctb" | "mania" | "taiko" || "osu";
-		const mods = (args.mods as string).replace("+", "").split(/([A-Z]{2})/)
-			.filter(v => v !== "" && supportedMods.includes(v));
+		const nmiss = args.nmiss || 0;
+		const accuracy = args.accuracy ? args.accuracy.replace("%", "") : 98;
+		const comboArg = args.combo;
+		const mode = args.mode as keyof typeof Mode || "osu";
+		const mods = args.mods ? (args.mods as string).replace("+", "")
+			.split(/([A-Z]{2})/)
+			.filter(v => v !== "" && supportedMods.includes(v)) : [];
 		const stringMods = mods.join("");
-		if (Nodesu.Mode[mode] !== undefined) {
-			const data: any = await client.beatmaps.getByBeatmapId(
-				args.map, Nodesu.Mode[mode],
-				1, Converts.include, ojsama.modbits.from_string(stringMods)
-			);
-			if (data.length > 0) {
-				const beatmap = new Nodesu.Beatmap(data[0]);
-				beatmap.countNormal = data[0].count_normal;
-				beatmap.countSlider = data[0].count_slider;
-				beatmap.countSpinner = data[0].count_spinner;
-				const hitobjects = Number(beatmap.countNormal)
-					+ Number(beatmap.countSlider) + Number(beatmap.countSpinner);
+		if (Mode[mode] !== undefined) {
+			const beatmap = new Beatmap((await client.beatmaps.getByBeatmapId(
+				args.map,
+				Mode[mode],
+				1,
+				Converts.include,
+				ojsama.modbits.from_string(stringMods)
+			))[0]);
+			if (beatmap) {
+				const hitobjects = beatmap.countNormal
+					+ beatmap.countSlider
+					+ beatmap.countSpinner;
 				retrieveBeatmapFile(beatmap.id).then(async () => {
 					let approvalStatus = null;
-					for (const [key, value] of Object.entries(Nodesu.ApprovalStatus)) {
+					for (const [key, value] of Object.entries(ApprovalStatus)) {
 						if (value === beatmap.approved)
 							approvalStatus = key[0].toUpperCase() + key.slice(1);
 					}
-					const d = (x: number | string) => (x.toString().length === 1 ? `0${x}` : x);
-					const t = (x: number, l?: number) => x.toFixed(l === null ? 2 : l);
-					const r = (x: number) => Math.round(x * 100) / 100;
-					const returnDate = (x: Date) => `${d(x.getUTCMonth() + 1)}/${d(
-						x.getUTCDay() + 1
-					)}/${x.getUTCFullYear()} ${d(x.getUTCHours())}:${d(
-						x.getUTCMinutes()
-					)} UTC`;
-					const returnDuration = (x: number) => (x > 60
-						? `${Math.floor(x / 60)}m${d(Math.floor(x % 60))}s`
-						: `${Math.floor(x)}s`);
-					combo = combo === null ? beatmap.maxCombo : combo;
-					let results: any = null;
-					let resultsAcc: any = null;
+					const combo = comboArg ? comboArg : beatmap.maxCombo;
+					let results = null;
+					let resultsAcc = null;
 					if (mode === "osu") {
 						results = await ppv2Results(
 							beatmap.id,
 							ojsama.modbits.from_string(stringMods),
 							beatmap.maxCombo,
 							100,
-							0,
-							hitobjects
+							0
 						);
 						resultsAcc = await ppv2Results(
 							beatmap.id,
 							ojsama.modbits.from_string(stringMods),
-							combo,
-							accuracy,
-							nmiss === null ? undefined : nmiss,
-							hitobjects
+							Number(comboArg),
+							Number(accuracy),
+							Number(nmiss)
 						);
 					}
 
 					const embed = new Embed(this)
 						.setAuthor(
 							beatmap.creator,
-							`https://a.ppy.sh/${data[0].creator_id}`,
-							`https://osu.ppy.sh/users/${data[0].creator_id}`
+							`https://a.ppy.sh/${beatmap.mapperId}`,
+							`https://osu.ppy.sh/users/${beatmap.mapperId}`
 						)
 						.setTitle(
 							`__${beatmap.artist} - **${beatmap.title}**__ [${beatmap.version}] (**\`${r(beatmap.difficultyRating)}\`★${mods.length === 0 ? "" : ` +${mods.join("")}`}**)`
 						)
 						.setDescription(
 							`${
-								data[0].approved_date === null
+								beatmap.approvedDate === null
 									? `**${approvalStatus}**  •  Last Updated on ${returnDate(
-										new Date(data[0].last_update)
+										new Date(beatmap.lastUpdate)
 									)}`
 									: `**${approvalStatus}** on ${returnDate(
-										new Date(data[0].approved_date)
+										new Date(beatmap.approvedDate)
 									)}`
 							}\n${
 								mode !== "osu"
@@ -138,9 +145,9 @@ export default class OsumapCommand extends Command {
 					if (mode === "osu") {
 						embed.addField(
 							"Estimated PPs",
-							`**FC 100%** : ${r(results.pp)}pp\n**${
+							`**FC 100%** : ${r(results!.pp)}pp\n**${
 								combo === beatmap.maxCombo ? "FC " : ""
-							}${accuracy}%** : ${r(resultsAcc.pp)}pp`,
+							}${accuracy}%** : ${r(resultsAcc!.pp)}pp`,
 							true
 						);
 					}
@@ -150,7 +157,7 @@ export default class OsumapCommand extends Command {
 							beatmap.countNormal
 						} **Circles** / ${beatmap.countSlider} **Sliders** / ${
 							beatmap.countSpinner
-						} **Spinners**)${["osu", "ctb"].includes(mode) ? `\n**Max Combo** x${data[0].max_combo}` : ""}${["osu", "ctb"].includes(mode) ? ` | **Aim Difficulty** ${t(
+						} **Spinners**)${["osu", "ctb"].includes(mode) ? `\n**Max Combo** x${beatmap.maxCombo}` : ""}${["osu", "ctb"].includes(mode) ? ` | **Aim Difficulty** ${t(
 							Number(beatmap.diffAim)
 						)}` : ""}${mode === "osu"
 							? ` | **Aim Difficulty** ${t(Number(beatmap.diffSpeed))}`
@@ -160,26 +167,22 @@ export default class OsumapCommand extends Command {
 								? Math.round(beatmap.bpm * 1.5)
 								: beatmap.bpm
 						} **BPM** ${
-							mode === "osu" ? `| **CS** ${r(results.cs)} ` : ""
+							mode === "osu" ? `| **CS** ${r(results!.cs)} ` : ""
 						}${mode === "ctb" ? `| **CS** ${r(beatmap.diffSize)} ` : ""}${
 							mode === "mania" ? `| **KA** ${beatmap.diffSize} ` : ""
-						}${mode === "osu" ? `| **AR** ${r(results.ar)} ` : ""}${
+						}${mode === "osu" ? `| **AR** ${r(results!.ar)} ` : ""}${
 							mode === "ctb" ? `| **AR** ${r(beatmap.diffApproach)} ` : ""}| **HP** ${
 							r(results === null ? beatmap.diffDrain : results.hp)
 						} | **${mode === "osu" ? "OD" : "AC"}** ${r(results === null ? beatmap.diffOverall : results.od)}`
 					);
 					if (beatmap.source !== null) { embed.setFooter(`Source: ${beatmap.source}`); }
-					message.channel.send({ embed });
+					ctx.reply(embed);
 				});
 			} else {
-				message.reply(
-					"the map you asked does not exist, or at least in the mode specified."
-				);
+				ctx.reply("the map you asked does not exist, or at least in the mode specified.");
 			}
 		} else {
-			message.reply(
-				"the mode you specified does not exist. Check `&?osu` for more informations."
-			);
+			ctx.reply("the mode you specified does not exist. Check `&?osu` for more informations.");
 		}
 		return true;
 	}

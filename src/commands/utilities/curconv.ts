@@ -1,11 +1,20 @@
 import request, { Response } from "request";
 import { Command, Embed } from "../../groups/UtilitiesCommand.js";
+import { ICommand } from "../../interfaces/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 const fixerURL = "http://data.fixer.io/api";
 
-export default class CurConvCommand extends Command {
+type Currency = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTC" | "BTN" | "BWP" | "BYR" | "BYN" | "BZD" | "CAD" | "CDF" | "CHF" | "CLF" | "CLP" | "CNY" | "COP" | "CRC" | "CUC" | "CUP" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GGP" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "IMP" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KMF" | "KPW" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRO" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "STD" | "SVC" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VND" | "VUV" | "WST" | "XAF" | "XAG" | "XAU" | "XCD" | "XDR" | "XOF" | "XPF" | "YER" | "ZAR" | "ZMK" | "ZMW" | "ZWL";
+type ExpectedResponse = {
+	error: { code: number, type: string },
+	rates: { [key in Currency]?: number }
+	success: object,
+	timestamp: number
+};
+
+export default class CurConvCommand extends Command implements ICommand {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description:
@@ -14,72 +23,96 @@ export default class CurConvCommand extends Command {
 		});
 	}
 
-	run(_: AldebaranClient, message: Message, args: any) {
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
 		if (args.length < 2) {
-			message.channel.error("MISSING_ARGS", "Please use `&?curconv` to see how to use this command!");
+			ctx.error("MISSING_ARGS", "Please use `&?curconv` to see how to use this command!");
 		} else if (args.length >= 2) {
-			const fromCurrency = args[0];
-			const toCurrency = args[1];
+			const fromCurrency = args[0] as Currency;
+			const toCurrency = args[1] as Currency;
 			const value = Number(args[2]);
 			if (fromCurrency && toCurrency && value) {
-				this.convCurToAnotherCur(message, fromCurrency, toCurrency, value);
+				this.convCurToAnotherCur(ctx, fromCurrency, toCurrency, value);
 			} else if (fromCurrency && toCurrency) {
-				this.convCurToAnotherCur(message, fromCurrency, toCurrency, 1);
+				this.convCurToAnotherCur(ctx, fromCurrency, toCurrency, 1);
 			} else {
-				message.channel.error("WRONG_USAGE", "At least one argument is missing or incorrect. Please use `&?curconv` to see how to use this command!");
+				ctx.error("WRONG_USAGE", "At least one argument is missing or incorrect. Please use `&?curconv` to see how to use this command!");
 			}
 		}
 	}
 
-	convCurToAnotherCur(message: Message, fromCurrency: string, toCurrency: string, value: number) {
-		try {
-			request(
-				`${fixerURL}/latest?access_key=${process.env.API_FIXER}`,
-				(err: any, res: Response, body: any) => this.requestCallback(
-					err, res, body, message, fromCurrency, toCurrency, value
+	convCurToAnotherCur(
+		ctx: MessageContext,
+		fromCurrency: Currency,
+		toCurrency: Currency,
+		value: number
+	) {
+		request(
+			`${fixerURL}/latest?access_key=${process.env.API_FIXER}`,
+			(err: Error, res: Response, body: string) => this
+				.requestCallback(
+					err,
+					res,
+					body,
+					ctx,
+					fromCurrency,
+					toCurrency,
+					value
 				)
-			);
-		} catch (err) {
-			throw err;
-		}
+		);
 	}
 
-	doChecks(err: any, data: any, message: Message, fromCurrency: string, toCurrency: string) {
+	// eslint-disable-next-line class-methods-use-this
+	doChecks(
+		err: Error,
+		data: ExpectedResponse,
+		ctx: MessageContext,
+		fromCurrency: Currency,
+		toCurrency: Currency
+	) {
 		if (err) {
 			throw err;
 		} else if (!data.success) {
 			if (data.error.code === 104) {
 				console.log("We're out of Fixer API requests.");
-				message.channel.error("API_RATELIMIT", "Aldebaran has ran out of API requests for Fixer this month. This means you will need to wait another month for &curconv to work. Sorry for the inconvenience!");
+				ctx.error("API_RATELIMIT", "Aldebaran has ran out of API requests for Fixer this month. This means you will need to wait another month for &curconv to work. Sorry for the inconvenience!");
 				return false;
 			}
 			console.log(
 				`Fixer sent an unsuccessful message. The data is logged.\n${data}`
 			);
-			message.channel.error("API_ERROR", `Fixer responded with an error. Try again later. Error: ${data.error.type}`);
+			ctx.error("API_ERROR", `Fixer responded with an error. Try again later. Error: ${data.error.type}`);
 			return false;
 		} else if (!data.rates[fromCurrency] || !data.rates[toCurrency]) {
-			if (!data.rates[fromCurrency]) message.channel.error("WRONG_USAGE", `The specified currency, ${fromCurrency}, does not exist.`);
-			else if (!data.rates[toCurrency]) message.channel.error("WRONG_USAGE", `The specified currency, ${toCurrency}, does not exist.`);
+			if (!data.rates[fromCurrency]) ctx.error("WRONG_USAGE", `The specified currency, ${fromCurrency}, does not exist.`);
+			else if (!data.rates[toCurrency]) ctx.error("WRONG_USAGE", `The specified currency, ${toCurrency}, does not exist.`);
 			return false;
 		}
 		return true;
 	}
 
-	requestCallback(err: any, _: Response, body: any, message: Message, fromCurrency: string, toCurrency: string, value: number) {
-		const data = JSON.parse(body);
+	requestCallback(
+		err: Error,
+		_: Response,
+		body: string,
+		ctx: MessageContext,
+		fromCurrency: Currency,
+		toCurrency: Currency,
+		value: number
+	) {
+		const data: ExpectedResponse = JSON.parse(body);
 
-		if (this.doChecks(err, data, message, fromCurrency, toCurrency)) {
+		if (this.doChecks(err, data, ctx, fromCurrency, toCurrency)) {
 			// EUR is always base. Convert to EUR, then convert to toCurrency.
 			const fromCurrencyRate = data.rates[fromCurrency];
 			const toCurrencyRate = data.rates[toCurrency];
 
 			// How much in the target currency is this amount of EUR worth?
-			const valueInTarget = value / fromCurrencyRate * toCurrencyRate;
+			const valueInTarget = value / fromCurrencyRate! * toCurrencyRate!;
 
 			// Rates to each other
 			// Find value of 1 target currency in the other currency
-			const rate = (1 / fromCurrencyRate) * toCurrencyRate;
+			const rate = (1 / fromCurrencyRate!) * toCurrencyRate!;
 
 			const f = (number: number) => String(number).length === 1 ? `0${number}` : number;
 			const getDate = (time: number) => {
@@ -92,12 +125,7 @@ export default class CurConvCommand extends Command {
 			const embed = new Embed(this)
 				.setTitle(`Conversion from ${fromCurrency} to ${toCurrency}`)
 				.setDescription(str);
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		}
-	}
-
-	registerCheck() {
-		return process.env.API_FIXER !== undefined
-			&& process.env.API_FIXER !== null;
 	}
 };

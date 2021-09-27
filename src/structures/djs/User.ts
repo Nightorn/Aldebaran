@@ -1,27 +1,41 @@
-import { ImageURLOptions, User as DJSUser } from "discord.js";
-import SocialProfile from "../aldebaran/SocialProfile.js";
+import { Client, Snowflake, User as DJSUser } from "discord.js";
 import AldebaranPermissions from "../aldebaran/AldebaranPermissions.js";
-import Settings from "../../interfaces/Settings.js";
 import AldebaranClient from "./Client.js";
-import { Permissions, PermissionString } from "../../utils/Constants.js";
+import { DBUser, Permissions, PermissionString, UserSetting, UserSettings } from "../../utils/Constants.js";
 
-export default class User extends DJSUser {
+export default class User {
 	client!: AldebaranClient;
 	generalCooldown: number = 0;
-	settings: Settings = {};
+	id: Snowflake;
 	permissions: AldebaranPermissions = new AldebaranPermissions(0);
-	timeout: number = 0;
-	existsInDB: boolean = false;
 	ready: boolean = false;
-	profile: any;
-	timers: any = { adventure: null, padventure: null, sides: null };
+	settings: UserSettings = {};
+	timers: {
+		adventure: NodeJS.Timeout | null,
+		padventure: NodeJS.Timeout | null,
+		sides: NodeJS.Timeout | null
+	} = { adventure: null, padventure: null, sides: null };
+	timeout: number = 0;
+	user: DJSUser;
+	username: string;
+
+	constructor(client: AldebaranClient, user: DJSUser, data: DBUser) {
+		this.client = client;
+		this.id = data.userId;
+		this.permissions = new AldebaranPermissions(data.permissions || 0);
+		for (const [k, v] of Object.entries(JSON.parse(data.settings))) {
+			this.settings[k.toLowerCase() as UserSetting] = v as string;
+		}
+		this.timeout = data.timeout || 0;
+		this.user = user;
+		this.username = user.username;
+	}
 
 	get banned() {
 		return this.timeout > Date.now();
 	}
 
-	async changeSetting(property: string, value: string) {
-		await this.create();
+	async changeSetting(property: UserSetting, value: string) {
 		this.settings[property] = value;
 		this.unready();
 		return this.client.database.users.updateOneById(
@@ -30,37 +44,8 @@ export default class User extends DJSUser {
 		);
 	}
 
-	async clear() {
-		this.existsInDB = false;
-		this.settings = {};
-		return this.client.database.users.deleteOneById(this.id);
-	}
-
-	async create() {
-		if (this.existsInDB) return false;
-		this.existsInDB = true;
-		return this.client.database.users.createOneById(this.id);
-	}
-
-	async fetch() {
-		const data = await this.client.database.users.selectOneById(this.id);
-		this.existsInDB = data !== undefined;
-		this.ready = true;
-		if (data) {
-			data.settings = JSON.parse(data.settings);
-			for (const [key, value] of Object.entries(data.settings)) {
-				this.settings[key.toLowerCase()] = value as string | number;
-			}
-			this.timeout = data.timeout || 0;
-			this.permissions = new AldebaranPermissions(data.permissions || 0);
-		}
-		return data;
-	}
-
-	async getProfile() {
-		if (this.profile === undefined) this.profile = new SocialProfile(this);
-		if (!this.profile.ready) await this.profile.fetch();
-		return this.profile;
+	async profile() {
+		return this.client.customProfiles.fetch(this.id);
 	}
 
 	hasPermission(permission: PermissionString) {
@@ -89,8 +74,7 @@ export default class User extends DJSUser {
 	 */
 	async addPermissions(permissions: PermissionString[]) {
 		permissions.forEach(permission => {
-			if (Object.keys(Permissions).includes(permission))
-				this.permissions.add(Permissions[permission]);
+			this.permissions.add(Permissions[permission]);
 		});
 		this.unready();
 		return this.client.database.users.updateOneById(
@@ -99,11 +83,11 @@ export default class User extends DJSUser {
 		);
 	}
 
-	pfp(options?: (ImageURLOptions & { dynamic?: boolean; }) | undefined) {
-		return this.avatarURL(options) || this.defaultAvatarURL;
-	}
-
 	unready() {
-		(this.client.shard)!.broadcastEval(`if (this.users.cache.get("${this.id}") !== undefined && this.shardID !== ${this.client.shardID}) this.users.cache.get("${this.id}").ready = false`);
+		this.client.shard!.broadcastEval((c: Client, { shardId, id }) => {
+			if (c.shard!.ids[0] !== shardId) {
+				(c as AldebaranClient).customUsers.cache.delete(id);
+			}
+		}, { context: { shardId: this.client.shardId, id: this.id } });
 	}
 };

@@ -44,7 +44,7 @@ export default class GenericDatabaseProvider {
 	/**
 	 * Performs a query to the database and returns the parsed MySQL result
 	 */
-	query(query: string, ignoreIntegrity = false): Promise<any | Error> {
+	query(query: string, ignoreIntegrity = false): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			if (!this.integrityCheck && !ignoreIntegrity) await this.checkIntegrity();
 			this.pool.query(query, (error, result) => {

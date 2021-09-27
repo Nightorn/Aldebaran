@@ -2,8 +2,8 @@ import { MessageEmbed } from "discord.js";
 import { evaluate } from "mathjs";
 import { Command, Embed } from "../../groups/UtilitiesCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 import { formatNumber } from "../../utils/Methods.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 export default class MathCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -16,7 +16,8 @@ export default class MathCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(_: AldebaranClient, message: Message, args: any) {
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
 		if (args.length !== 0) {
 			let result: number | string;
 			try {
@@ -29,14 +30,17 @@ export default class MathCommand extends Command {
 			const embed = new Embed(this)
 				.setTitle("Math Expression Evaluation")
 				.addField("Result", `\`\`\`${formatNumber(result)}\`\`\``);
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		} else {
 			const embed = new MessageEmbed()
 				.setAuthor("You are using this command incorrectly.")
 				.setDescription("You need to specify something to calculate in order to make this command work.")
-				.setFooter(message.author.username, message.author.pfp())
+				.setFooter(
+					ctx.message.author.username,
+					ctx.message.author.displayAvatarURL()
+				)
 				.setColor("RED");
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		}
 	}
 };

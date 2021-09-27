@@ -1,7 +1,7 @@
 import { Command as C, Embed as E } from "../../groups/ImageCommand.js";
 import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 const { Command, Embed } = subCategory(C, E);
 
@@ -12,9 +12,9 @@ export default class NekoCommand extends Command {
 		});
 	}
 
-	async run(bot: AldebaranClient, message: Message) {
+	async run(ctx: MessageContext) {
 		const embed = new Embed(this,
-			`${message.author}, here is your innocent neko.`);
-		embed.send(message, this.nekoslife.sfw.neko);
+			`${ctx.message.author}, here is your innocent neko.`);
+		embed.send(ctx, ctx.client.nekoslife.sfw.neko);
 	}
 };

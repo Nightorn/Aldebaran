@@ -1,19 +1,8 @@
 import { MessageEmbed } from "discord.js";
-import Client from "nekos.life";
-import CommandMetadata from "../../interfaces/CommandMetadata";
-import AldebaranClient from "../../structures/djs/Client";
-import Message from "../../structures/djs/Message";
-import { Command } from "../Command";
+import { Command } from "../Command.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
-export default (command: typeof Command, embed: typeof MessageEmbed) => {
-	abstract class NekoSubcategory extends command {
-		nekoslife: Client = new Client();
-
-		constructor(client: AldebaranClient, metadata: CommandMetadata) {
-			super(client, metadata);
-		}
-	}
-
+export default (_: typeof Command, embed: typeof MessageEmbed) => {
 	class Embed extends embed {
 		constructor(command: Command, description: string) {
 			super(command);
@@ -21,13 +10,13 @@ export default (command: typeof Command, embed: typeof MessageEmbed) => {
 			this.setFooter("Powered by nekos.life", "https://avatars2.githubusercontent.com/u/34457007?s=200&v=4");
 		}
 
-		send(message: Message, endpoint: Function) {
-			endpoint().then((data: any) => {
+		send(ctx: MessageContext, endpoint: Function) {
+			endpoint().then((data: { url: string }) => {
 				this.setImage(data.url);
-				message.channel.send({ embed: this });
+				ctx.reply(this);
 			});
 		}
 	}
 
-	return { Command: NekoSubcategory, Embed };
+	return { Command, Embed };
 };

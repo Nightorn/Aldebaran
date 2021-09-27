@@ -14,8 +14,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async aboutMe(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "aboutMe");
+	async aboutMe(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "aboutMe");
 	}
 
 	/**
@@ -23,8 +23,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async age(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "age");
+	async age(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "age");
 	}
 
 	/**
@@ -32,8 +32,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async birthday(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "birthday");
+	async birthday(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "birthday");
 	}
 
 	/**
@@ -41,8 +41,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async color(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "profileColor");
+	async color(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "profileColor");
 	}
 
 	/**
@@ -50,8 +50,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async country(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "country");
+	async country(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "country");
 	}
 
 	/**
@@ -59,8 +59,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<bool>}
 	 */
-	async dmFriendly(_: any, request: Request) {
-		return await fetchProfile((request.app as any).db, this.ID, "dmFriendly") === "on";
+	async dmFriendly(_: object, request: Request) {
+		return await fetchProfile(request.app.db, this.ID, "dmFriendly") === "on";
 	}
 
 	/**
@@ -68,8 +68,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async flavorText(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "flavorText");
+	async flavorText(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "flavorText");
 	}
 
 	/**
@@ -77,8 +77,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async gender(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "gender");
+	async gender(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "gender");
 	}
 
 	/**
@@ -86,8 +86,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async favoriteGames(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "favoriteGames");
+	async favoriteGames(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "favoriteGames");
 	}
 
 	/**
@@ -95,8 +95,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async favoriteMusic(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "favoriteMusic");
+	async favoriteMusic(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "favoriteMusic");
 	}
 
 	/**
@@ -104,8 +104,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async hobbies(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "hobbies");
+	async hobbies(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "hobbies");
 	}
 
 	/**
@@ -121,8 +121,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async name(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "name");
+	async name(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "name");
 	}
 
 	/**
@@ -130,8 +130,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async profilePicture(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "profilePictureLink");
+	async profilePicture(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "profilePictureLink");
 	}
 
 	/**
@@ -139,8 +139,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async socialLinks(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "socialLinks");
+	async socialLinks(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "socialLinks");
 	}
 
 	/**
@@ -148,8 +148,8 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async timezone(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "timezone");
+	async timezone(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "timezone");
 	}
 
 	/**
@@ -164,7 +164,7 @@ export default class SocialProfile {
 	 * @param {*} request Request object
 	 * @returns {Promise<string>}
 	 */
-	async zodiacSign(_: any, request: Request) {
-		return fetchProfile((request.app as any).db, this.ID, "zodiacName");
+	async zodiacSign(_: object, request: Request) {
+		return fetchProfile(request.app.db, this.ID, "zodiacName");
 	}
 };

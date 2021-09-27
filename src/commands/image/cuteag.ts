@@ -1,7 +1,7 @@
 import request from "request";
 import { Command, Embed } from "../../groups/ImageCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 export default class CuteagCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -10,7 +10,7 @@ export default class CuteagCommand extends Command {
 		});
 	}
 
-	run(_: AldebaranClient, message: Message) {
+	run(ctx: MessageContext) {
 		request({ uri: "http://api.cutegirls.moe/json" }, (err, response, body) => {
 			if (err) return;
 			const { data } = JSON.parse(body);
@@ -18,7 +18,7 @@ export default class CuteagCommand extends Command {
 				.setTitle(data.title)
 				.setImage(data.image)
 				.setFooter(`Source: ${data.link}`);
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		});
 	}
 };

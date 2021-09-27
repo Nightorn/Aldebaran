@@ -4,7 +4,6 @@
         "airbnb-typescript"
     ],
     "plugins": [
-        "jsx-a11y",
         "@typescript-eslint"
     ],
     "parser": "@typescript-eslint/parser",
@@ -22,7 +21,7 @@
         "@typescript-eslint/guard-for-in": "off",
         "@typescript-eslint/import/no-webpack-loader-syntax": "off",
         "@typescript-eslint/linebreak-style": "off",
-        "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+        "@typescript-eslint/lines-between-class-members": "off",
         "@typescript-eslint/no-bitwise": "off",
         "@typescript-eslint/no-confusing-arrow": "off",
         "@typescript-eslint/no-console": "off",
@@ -37,18 +36,19 @@
         "@typescript-eslint/object-curly-newline": "off",
         "@typescript-eslint/quotes": ["warn", "double"],
         "@typescript-eslint/semi": ["error", "always"],
-        "arrow-parens": ["warn", "as-needed"],
+        "arrow-parens": ["off"],
         "comma-dangle": ["error", "never"],
         "curly": "off",
         "guard-for-in": "off",
         "import/extensions": "off",
         "import/no-cycle": "off",
+        "import/no-extraneous-dependencies": "off",
         "import/no-webpack-loader-syntax": "off",
         "linebreak-style": "off",
         "max-classes-per-file": "off",
         "max-len": ["warn", {
             "code": 80,
-            "tabWidth": 2,
+            "tabWidth": 1,
             "ignoreStrings": true,
             "ignoreComments": true,
             "ignoreTemplateLiterals": true,
@@ -65,11 +65,12 @@
         "no-plusplus": "off",
         "no-restricted-syntax": "off",
         "no-tabs": ["error", { "allowIndentationTabs": true }],
+        "no-underscore-dangle": "off",
         "nonblock-statement-body-position": "off",
         "object-curly-spacing": ["error", "always"],
         "object-curly-newline": "off",
         "prefer-destructuring": ["error", { "array": false }],
         "quotes": ["warn", "double"],
-        "semi": ["error", "always"]
+        "react/jsx-filename-extension": "off"
     }
 }

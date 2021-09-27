@@ -1,7 +1,7 @@
 import { Command as C, Embed as E } from "../../groups/SocialCommand.js";
 import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 const { Command, Embed } = subCategory(C, E);
 
@@ -14,10 +14,11 @@ export default class PokeCommand extends Command {
 		});
 	}
 
-	async run(bot: AldebaranClient, message: Message, args: any) {
-		bot.users.fetch(args.target).then(target => {
-			const embed = new Embed(this, `${message.author} is poking ${target}`);
-			embed.send(message, this.nekoslife.sfw.poke);
-		}).catch(() => { message.reply("Please mention someone :thinking:"); });
+	async run(ctx: MessageContext) {
+		const args = ctx.args as { target: string };
+		ctx.client.users.fetch(args.target).then(target => {
+			const embed = new Embed(this, `${ctx.message.author} is poking ${target}`);
+			embed.send(ctx, ctx.client.nekoslife.sfw.poke);
+		}).catch(() => { ctx.reply("Please mention someone :thinking:"); });
 	}
 };

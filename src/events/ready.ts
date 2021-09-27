@@ -22,7 +22,7 @@ export default (client: AldebaranClient) => {
 	};
 
 	client.user!.setActivity("for a few seconds now");
-	const { presence }: any = client.config;
+	const { presence } = client.config;
 	setInterval(() => {
 		const selected = presence[Math.floor(Math.random() * presence.length)];
 		client.user!.setActivity(parseText(selected.text), { type: selected.type });

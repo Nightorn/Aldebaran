@@ -1,15 +1,9 @@
 import CommandHandler from "../handlers/CommandHandler.js";
 import AldebaranClient from "../structures/djs/Client.js";
-import Message from "../structures/djs/Message.js";
 import executeSocial from "../utils/executeSocial.js";
 
 // Developer
 import AdminCommand from "./developer/admin.js";
-import DevtodoCommand from "./developer/devtodo.js";
-import EvalCommand from "./developer/eval.js";
-import QueryCommand from "./developer/query.js";
-import RestartCommand from "./developer/restart.js";
-import ServerlistCommand from "./developer/serverlist.js";
 
 // DiscordRPG
 import GleadCommand from "./drpg/glead.js";
@@ -47,11 +41,8 @@ import InfoCommand from "./general/info.js";
 import InviteCommand from "./general/invite.js";
 import PingCommand from "./general/ping.js";
 import ProfileCommand from "./general/profile.js";
-import PurgeCommand from "./general/purge.js";
-import RandomphotoCommand from "./general/randomphoto.js";
 import SuggestCommand from "./general/suggest.js";
 import TimeCommand from "./general/time.js";
-import UploadphotoCommand from "./general/uploadphoto.js";
 import UserCommand from "./general/user.js";
 
 // Image
@@ -97,54 +88,136 @@ import TickleCommand from "./social/tickle.js";
 import CurconvCommand from "./utilities/curconv.js";
 import MathCommand from "./utilities/math.js";
 import TranslateCommand from "./utilities/translate.js";
+import MessageContext from "../structures/aldebaran/MessageContext.js";
 
 export default () => {
-    const commandHandler = CommandHandler.getInstance();
-    
-    const socialCommands = {
-        adorable: "Show how adorable you think someone is!",
-        bite: "Go ahead, bite someone!",
-        cpr: "Perform CPR on someone!",
-        cuddle: "Feeling cuddly? Use this!",
-        escape: "Use for a quick escape.",
-        feed: "Feed your friends! They look hungry...",
-        hug: "Send warm hugs!",
-        kidnap: "Kidnap your friends!",
-        kiss: "Kiss someone!",
-        lick: "Lick your friends!",
-        mindblown: "Show how everyone your mind was blown!",
-        rub: "Softly rub someone!",
-        slap: "Slap that deserving someone!",
-        spank: "Spank someone!",
-        tackle: "Tackle someone!"
-    };
-    for (const [name, description] of Object.entries(socialCommands)) {
-        commandHandler.register(class Command extends SocialCommand {
-            constructor(client: AldebaranClient) {
-                super(client, {
-                    name,
-                    description,
-                    args: { user: { as: "user" } }
-                });
-            }
+	const commandHandler = CommandHandler.getInstance();
 
-            run(bot: AldebaranClient, message: Message, args: any) {
-                executeSocial(bot, message, args);
-            }
-        });
-    }
+	const socialCommands = {
+		adorable: "Show how adorable you think someone is!",
+		bite: "Go ahead, bite someone!",
+		cpr: "Perform CPR on someone!",
+		cuddle: "Feeling cuddly? Use this!",
+		escape: "Use for a quick escape.",
+		feed: "Feed your friends! They look hungry...",
+		hug: "Send warm hugs!",
+		kidnap: "Kidnap your friends!",
+		kiss: "Kiss someone!",
+		lick: "Lick your friends!",
+		mindblown: "Show how everyone your mind was blown!",
+		rub: "Softly rub someone!",
+		slap: "Slap that deserving someone!",
+		spank: "Spank someone!",
+		tackle: "Tackle someone!"
+	};
+	for (const [name, description] of Object.entries(socialCommands)) {
+		commandHandler.register(class Command extends SocialCommand {
+			constructor(client: AldebaranClient) {
+				super(client, {
+					name,
+					description,
+					args: { user: { as: "user" } }
+				});
+			}
 
-    commandHandler.registerMultiple(
-        AdminCommand, DevtodoCommand, EvalCommand, QueryCommand, RestartCommand, ServerlistCommand,
-        GleadCommand, GoldCommand, PlantCommand, PlantcalcCommand, SkillsCommand, StatsCommand, TrapCommand, UpgradecalcCommand, WallsCommand, WeaponCommand, XpCommand,
-        EballCommand, EmojilistCommand, FactCommand, KaomojiCommand, OwoifyCommand, SayCommand, TimecompletionCommand,
-        RpsCommand,
-        AvatarCommand, BstatsCommand, BugreportCommand, CommandsCommand, CreditsCommand, HelpCommand, InfoCommand, InviteCommand, PingCommand, ProfileCommand, PurgeCommand, RandomphotoCommand, SuggestCommand, TimeCommand, UploadphotoCommand, UserCommand,
-        BirbCommand, BunnyCommand, CatCommand, CuteagCommand, DogCommand, DuckCommand, HedgehogCommand, LizardCommand, NekoCommand, PandaCommand, PepeCommand, RandimalCommand,
-        LewdCommand, XboobsCommand, XkittyCommand, XlesbianCommand, XnekoCommand, XrandomCommand,
-        OsuCommand, OsubestCommand, OsumapCommand, OsurecentCommand,
-        EnabledrpgCommand, GconfigCommand, SetprofileCommand, UconfigCommand,
-        PokeCommand, TickleCommand,
-        CurconvCommand, MathCommand, TranslateCommand
-    );
+			// eslint-disable-next-line class-methods-use-this
+			run(ctx: MessageContext) {
+				executeSocial(ctx);
+			}
+		});
+	}
+
+	commandHandler.registerMultiple(
+		AdminCommand,
+		EballCommand,
+		EmojilistCommand,
+		FactCommand,
+		KaomojiCommand,
+		OwoifyCommand,
+		SayCommand,
+		TimecompletionCommand,
+		RpsCommand,
+		AvatarCommand,
+		BstatsCommand,
+		BugreportCommand,
+		CommandsCommand,
+		CreditsCommand,
+		HelpCommand,
+		InfoCommand,
+		InviteCommand,
+		PingCommand,
+		ProfileCommand,
+		SuggestCommand,
+		TimeCommand,
+		UserCommand,
+		BirbCommand,
+		CuteagCommand,
+		DogCommand,
+		LizardCommand,
+		NekoCommand,
+		PandaCommand,
+		LewdCommand,
+		XboobsCommand,
+		XkittyCommand,
+		XlesbianCommand,
+		XnekoCommand,
+		XrandomCommand,
+		EnabledrpgCommand,
+		GconfigCommand,
+		SetprofileCommand,
+		UconfigCommand,
+		PokeCommand,
+		TickleCommand,
+		MathCommand
+	);
+
+	if (process.env.API_DISCORDRPG) {
+		commandHandler.registerMultiple(
+			GleadCommand,
+			GoldCommand,
+			PlantCommand,
+			PlantcalcCommand,
+			SkillsCommand,
+			StatsCommand,
+			TrapCommand,
+			UpgradecalcCommand,
+			WallsCommand,
+			WeaponCommand,
+			XpCommand
+		);
+	}
+
+	if (process.env.API_PEXELS) {
+		commandHandler.registerMultiple(
+			BunnyCommand,
+			DuckCommand,
+			RandimalCommand,
+			HedgehogCommand
+		);
+	}
+
+	if (process.env.API_CATAPI) {
+		commandHandler.register(CatCommand);
+	}
+
+	if (process.env.API_TENOR) {
+		commandHandler.register(PepeCommand);
+	}
+
+	if (commandHandler.client.nodesu) {
+		commandHandler.registerMultiple(
+			OsuCommand,
+			OsubestCommand,
+			OsumapCommand,
+			OsurecentCommand
+		);
+	}
+
+	if (process.env.API_FIXER) {
+		commandHandler.register(CurconvCommand);
+	}
+
+	if (process.env.API_YANDEX) {
+		commandHandler.register(TranslateCommand);
+	}
 };

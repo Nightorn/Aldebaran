@@ -1,9 +1,8 @@
 import { MessageEmbed } from "discord.js";
+import MessageContext from "../../../structures/aldebaran/MessageContext.js";
 import { Command } from "../../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../../structures/djs/Client.js";
-import Guild from "../../../structures/djs/Guild.js";
-import Message from "../../../structures/djs/Message.js";
-import User from "../../../structures/djs/User.js";
+import { SettingsModel, GuildSetting, UserSetting } from "../../../utils/Constants.js";
 
 export default class ModSubcommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -14,60 +13,64 @@ export default class ModSubcommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: any) {
-		if (args[1] !== undefined) {
-			if (args[2] !== undefined) {
-				if (args[3] !== undefined) {
-					bot.users.fetch(args[1]).then(async user => {
-						await (user as User).changeSetting(args[2], args[3]);
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
+		if (args[0]) {
+			if (args[1]
+				&& (Object.keys(SettingsModel.user).includes(args[1])
+				|| Object.keys(SettingsModel.user).includes(args[1]))
+			) {
+				if (args[3]) {
+					ctx.client.customUsers.fetch(args[0]).then(async user => {
+						await user.changeSetting(args[1] as UserSetting, args[2]);
 						const embed = new MessageEmbed()
-							.setAuthor(message.author.username, message.author.pfp())
+							.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 							.setTitle("Changes Done")
 							.setDescription("The changes have successfully been applied. Please note that this command does not check for valid properties/values, make sure the user modded has the correct settings.")
 							.setColor("GREEN");
-						message.channel.send({ embed });
+						ctx.reply(embed);
 					}).catch(async () => {
-						const guild = bot.guilds.cache.get(args[1]) as Guild;
+						const guild = await ctx.client.customGuilds.fetch(args[0]);
 						if (guild !== undefined) {
-							await guild.changeSetting(args[2], args[3]);
+							await guild.changeSetting(args[1] as GuildSetting, args[2]);
 							const embed = new MessageEmbed()
-								.setAuthor(message.author.username, message.author.pfp())
+								.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 								.setTitle("Changes Done")
 								.setDescription("The changes have successfully been applied. Please note that this command does not check for valid properties/values, make sure the guild modded has the correct settings.")
 								.setColor("GREEN");
-							message.channel.send({ embed });
+							ctx.reply(embed);
 						} else {
 							const embed = new MessageEmbed()
-								.setAuthor(message.author.username, message.author.pfp())
+								.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 								.setTitle("Warning")
-								.setDescription(`The ID specified does not correspond to a valid user or a guild where ${bot.user!.username} is.`)
+								.setDescription(`The ID specified does not correspond to a valid user or a guild where ${ctx.client.user!.username} is.`)
 								.setColor("ORANGE");
-							message.channel.send({ embed });
+							ctx.reply(embed);
 						}
 					});
 				} else {
 					const embed = new MessageEmbed()
-						.setAuthor(message.author.username, message.author.pfp())
+						.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 						.setTitle("Warning")
 						.setDescription("You need to specify the value of the settings you want to change.")
 						.setColor("ORANGE");
-					message.channel.send({ embed });
+					ctx.reply(embed);
 				}
 			} else {
 				const embed = new MessageEmbed()
-					.setAuthor(message.author.username, message.author.pfp())
+					.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 					.setTitle("Warning")
 					.setDescription("You need to specify the property of the settings you want to change.")
 					.setColor("ORANGE");
-				message.channel.send({ embed });
+				ctx.reply(embed);
 			}
 		} else {
 			const embed = new MessageEmbed()
-				.setAuthor(message.author.username, message.author.pfp())
+				.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 				.setTitle("Warning")
 				.setDescription("You need to specify the ID of the user or the guild you want to change the settings of.")
 				.setColor("ORANGE");
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		}
 	}
 };

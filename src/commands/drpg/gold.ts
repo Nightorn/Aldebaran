@@ -1,7 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/DRPGCommand.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 import { formatNumber } from "../../utils/Methods.js";
 
 export default class GoldCommand extends Command {
@@ -14,13 +14,9 @@ export default class GoldCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(_: AldebaranClient, message: Message, args: any) {
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
 		const level = parseInt(args[0], 10);
-		if (level === 15679) {
-			return message.reply(
-				"You are trying to access a top-secret information which is not currently available to you for security reasons. This is not an ~~exercize~~ easter egg."
-			);
-		}
 		let attributes = 0;
 		if (args[2] !== undefined) {
 			if (args[2] === "max") attributes = 6969696969696966696969696969;
@@ -42,7 +38,7 @@ export default class GoldCommand extends Command {
 
 			const embed = new MessageEmbed()
 				.setTitle("Average Obtained Gold")
-				.setAuthor(message.author.username, message.author.pfp())
+				.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 				.setColor(0x00ae86)
 				.setDescription(
 					`**Please note all infomation about Gold are estimations!**\nYou have a +${equipment}% Gold Boost on your equipment, and you have ${attributes} points in the Gold Boost attribute.`
@@ -61,11 +57,9 @@ export default class GoldCommand extends Command {
 					"**Without a ring of Gold**",
 					`${formatNumber(getGold())} Gold per kill on average`
 				);
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		} else {
-			message.reply(
-				"You need to specify a level and the Gold Boost percentage the used equipment has (if you want to take it in account)."
-			);
+			ctx.reply("You need to specify a level and the Gold Boost percentage the used equipment has (if you want to take it in account).");
 		}
 		return true;
 	}

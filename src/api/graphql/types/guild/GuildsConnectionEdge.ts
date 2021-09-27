@@ -15,9 +15,9 @@ export default class GuildsConnectionEdge {
 	/**
 	 * Returns the cursor of the current element in the connection.
 	 */
-	async cursor(_: any, request: Request) {
+	async cursor(_: object, request: Request) {
 		const timestamp = await this.guild.createdTimestamp(_, request);
-		return Buffer.from(timestamp.toString()).toString("base64");
+		return Buffer.from(timestamp!.toString()).toString("base64");
 	}
 
 	/**

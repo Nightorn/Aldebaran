@@ -1,10 +1,10 @@
 // Command Developed with the help of Akashic Bearer#2305
 import { MessageEmbed, WebhookClient } from "discord.js";
 import { Command } from "../../groups/Command.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 
-export default class CommandBugreport extends Command {
+export default class BugreportCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Sends a bug report",
@@ -14,17 +14,21 @@ export default class CommandBugreport extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(_: AldebaranClient, message: Message, args: any) {
-		if (args.length === 0) return message.channel.send("You can't send an empty bug report.");
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
+		if (args.length === 0) return ctx.reply("You can't send an empty bug report.");
 		const embed = new MessageEmbed()
 			.setDescription(args.join(" "))
-			.setFooter(`User: ${message.author.tag} [ID: ${message.author.id}]\nChannel: #${message.channel.name} [ID: ${message.channel.id}]\nServer: ${message.guild.name} [ID: ${message.guild.id}]`);
-		new WebhookClient("685907959477436481", "PX_gaoqJxIPVfrFBZVBZ855XvqqIqksNBFEPEXxIemyRWF0XlxYYhUkISkoxv405gB01").send({
-			username: message.author.username,
-			avatarURL: message.author.displayAvatarURL(),
+			.setFooter(`User: ${ctx.message.author.tag} [ID: ${ctx.message.author.id}]`);
+		new WebhookClient({
+			id: "685907959477436481",
+			token: "PX_gaoqJxIPVfrFBZVBZ855XvqqIqksNBFEPEXxIemyRWF0XlxYYhUkISkoxv405gB01"
+		}).send({
+			username: ctx.message.author.username,
+			avatarURL: ctx.message.author.displayAvatarURL(),
 			embeds: [embed]
 		}).then(() => {
-			message.channel.send("Your bug report has been sent to the main server!");
+			ctx.reply("Your bug report has been sent to the main server!");
 		});
 		return true;
 	}

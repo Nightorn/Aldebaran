@@ -1,22 +1,21 @@
-import { Client, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
+import { Client, ColorResolvable, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
 import AldebaranClient from "../structures/djs/Client.js";
-import CommandMetadata from "../interfaces/CommandMetadata.js";
-import { PermissionString as AldebaranPermission } from "../utils/Constants"
-import Message from "../structures/djs/Message.js";
+import { PermissionString as AldebaranPermission } from "../utils/Constants";
+import { CommandMetadata, ICommand } from "../interfaces/Command.js";
+import MessageContext from "../structures/aldebaran/MessageContext.js";
 
-export abstract class Command {
-	perms: { discord: DJSPermission[]; aldebaran: AldebaranPermission[]; };
+export abstract class Command implements ICommand {
 	aliases: string[];
 	category: string;
-	color: string;
+	color: ColorResolvable;
 	client: AldebaranClient;
 	example: string;
 	hidden: boolean;
 	metadata: CommandMetadata;
-	subcommands: Map<any, any>;
+	name: string = "dummy";
+	perms: { discord: DJSPermission[], aldebaran: AldebaranPermission[] };
+	subcommands: Map<string, ICommand>;
 	usage: string;
-	name: any;
-	args: any;
 
 	/**
    	* Command abstract class, extend it to build a command
@@ -47,43 +46,51 @@ export abstract class Command {
 		this.usage = !metadata.usage ? "" : `\`${metadata.usage}\``;
 	}
 
+	guildCheck(ctx: MessageContext) {
+		return this.metadata.requiresGuild ? !!ctx.message.guild : true;
+	}
+
 	/**
    	* Checks if the context of execution is valid
    	*/
-	permsCheck(message: Message) {
+	async permsCheck(ctx: MessageContext) {
 		let check = true;
-		if (this.perms.discord !== undefined)
+		if (this.perms.discord && this.guildCheck(ctx)) {
 			check = this.perms.discord
-				.every(perm => message.member!.permissionsIn(message.channel).has(perm));
-		if (this.perms.aldebaran !== undefined && check)
+				.every(p => ctx.message.member!.permissionsIn(ctx.channel).has(p));
+		}
+		if (this.perms.aldebaran && check) {
+			const user = await ctx.author();
 			check = this.perms.aldebaran
-				.every(perm => message.author.hasPermission(perm));
+				.every(perm => user.hasPermission(perm));
+		}
 		return check;
 	}
 
-	check(message: Message) {
-		return this.permsCheck(message);
+	async check(ctx: MessageContext) {
+		return await this.permsCheck(ctx) && this.guildCheck(ctx);
 	}
 
 	/**
    	* Executes the command
    	*/
-	execute(message: Message) {
-		const args = message.content.split(" ");
-		args.shift();
-		if (this.check(message)) {
-			return this.run(this.client, message,
-				message.getArgs(this.metadata.args));
+	async execute(ctx: MessageContext) {
+		const perms = await this.permsCheck(ctx);
+		const guild = this.guildCheck(ctx);
+		if (perms && guild) {
+			return this.run(ctx);
 		}
-		throw new Error("INVALID_PERMISSIONS");
+		if (perms) {
+			throw new Error("NOT_IN_GUILD");
+		}
+		if (guild) {
+			throw new Error("INVALID_PERMISSIONS");
+		} else {
+			throw new Error("YOU_GOT_IT_ALL_WRONG");
+		}
 	}
 
-	abstract run(client: AldebaranClient, message: Message, args: any): void;
-
-	// eslint-disable-next-line class-methods-use-this
-	registerCheck() {
-		return true;
-	}
+	abstract run(ctx: MessageContext): void;
 
 	toHelpEmbed(command: string, prefix = "&") {
 		const embed = new MessageEmbed()
@@ -103,8 +110,6 @@ export abstract class Command {
 			embed.addField("Aliases", this.aliases.join(", "), true);
 		if (this.subcommands.size > 0)
 			embed.addField("Subcommands", Array.from(this.subcommands.keys()).join(", "), true);
-		if (this.args !== undefined)
-			embed.addField("Arguments", this.args, true);
 		if (this.perms.discord.length > 0)
 			embed.addField("Discord Perms", this.perms.discord.join(", "), true);
 		if (this.perms.aldebaran.length > 0)
@@ -126,7 +131,7 @@ export abstract class Command {
 		return embed;
 	}
 
-	registerSubcommands(...subcommands: any) {
+	registerSubcommands<T extends typeof Command>(...subcommands: T[]) {
 		subcommands.forEach((Structure: any) => {
 			const command = new Structure(this.client);
 			const name = command.constructor.name
@@ -144,7 +149,7 @@ export abstract class Command {
 };
 
 export const Embed = class Embed extends MessageEmbed {
-	constructor(command: Command) {
+	constructor(command: ICommand | Command) {
 		super();
 		this.setColor(command.color);
 	}

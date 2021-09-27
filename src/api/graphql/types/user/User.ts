@@ -1,3 +1,4 @@
+import { Client } from "discord.js";
 import { Request } from "express";
 import DiscordStructWithSettings from "../common/DiscordStructWithSettings.js";
 import GuildsConnection from "../guild/GuildsConnection.js";
@@ -18,9 +19,12 @@ export default class User extends DiscordStructWithSettings {
 	 * @param {*} request Request object
 	 * @returns {string}
 	 */
-	async pfp(_: any, request: Request) {
-		const query = `const user = this.users.cache.get("${this.ID}"); user ? user.pfp({ format: 'png', size: 64 }) : null;`;
-		return fetchDSMValue((request.app as any).dsm, query, 2);
+	async pfp(_: object, request: Request) {
+		const query = async (client: Client) => {
+			const user = await client.users.fetch(this.ID);
+			return user ? user.displayAvatarURL() : null;
+		};
+		return fetchDSMValue(request.app.dsm, query);
 	}
 
 	/**
@@ -47,9 +51,9 @@ export default class User extends DiscordStructWithSettings {
 	 * @param {*} request Request object
 	 * @returns {string}
 	 */
-	async username(_: any, request: Request) {
-		const query = `this.users.cache.get("${this.ID}")`;
-		return fetchDSMValue((request.app as any).dsm, query, 2, "username");
+	async username(_: object, request: Request) {
+		const query = async (c: Client) => (await c.users.fetch(this.ID)).username;
+		return fetchDSMValue(request.app.dsm, query);
 	}
 
 	/**

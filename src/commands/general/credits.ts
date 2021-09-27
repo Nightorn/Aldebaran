@@ -1,9 +1,9 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
-export default class CommandCredits extends Command {
+export default class CreditsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Lists the people who contributed to Aldebaran"
@@ -11,7 +11,7 @@ export default class CommandCredits extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message) {
+	run(ctx: MessageContext) {
 		const embed = new MessageEmbed()
 			.setTitle(
 				"List of the People who contributed, in any way, to the development of Aldebaran"
@@ -26,9 +26,9 @@ export default class CommandCredits extends Command {
 			)
 			.addField(
 				"Other Contributions",
-				"**`[Akashic Bearer#2305]`** Development Help\n**`[PlayTheFallen#8318]`** Development Help\n**`[Gyth8#8778]`** Ex-Support\n**`[Discord Pedestrian#7331]`** Unofficial Support"
+				"**`[Akashic Bearer#2305]`** Development Help\n**`[RagingLink#9469]`** Development Help\n**`[PlayTheFallen#8318]`** Development Help\n**`[Gyth8#8778]`** Ex-Support"
 			)
 			.setColor("PURPLE");
-		message.channel.send({ embed });
+		ctx.reply(embed);
 	}
 };

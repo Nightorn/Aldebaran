@@ -1,4 +1,5 @@
-const scopes: {[index: string]: any} = {
+// eslint-disable-next-line import/prefer-default-export
+export const Scope = {
 	admin: "have complete control over your Aldebaran's data",
 	"read:social": "read your Aldebaran's social profile",
 	"write:social": "modify your Aldebaran's social profile",
@@ -6,5 +7,3 @@ const scopes: {[index: string]: any} = {
 	"write:settings": "change your Aldebaran's settings",
 	"read:guilds": "read the servers both Aldebaran and you are in"
 };
-
-export default scopes

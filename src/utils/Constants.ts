@@ -1,88 +1,52 @@
-import Guild from "../structures/djs/Guild.js";
-import User from "../structures/djs/User.js";
+import { ActivityType, Guild, Snowflake, User } from "discord.js";
 import { importAssets, timezoneSupport } from "./Methods.js";
+import { DRPGXPBases, DRPGItemList, DRPGLocationDB } from "../interfaces/DiscordRPG.js";
+import { Mode } from "nodesu";
+
+type AldebaranTeam = { [key: string]: {
+	titles: string[],
+	acknowledgements: string[],
+	staffRank: number,
+	text: string
+} };
 
 type Categories = { [key: string]: {
 	name: string,
 	title: string,
 	description: string
-}};
+} };
 
-type DRPGFormulaData = {
-	amount: { max: string, min: string },
-	chance: number,
-	minlevel: number,
-	xp: {
-		regular: { max: string, min: string },
-		skill: { max: string, min: string }
-	}
-};
-
-type DRPGLootData = {
-	amount: { max: string; min: string },
-	id: string,
-	mintime: number
-};
-
-export type DRPGItem = {
-	attributes: { [key: string]: number }, // "xpBoost" | "crits"
-	cost: number,
-	def?: number,
-	desc: string,
-	donate?: boolean,
-	fish?: DRPGFormulaData,
-	foragedata?: DRPGFormulaData,
-	id: string,
-	image?: string,
-	itemBoost?: number,
-	level: number,
+type PackageFile = {
 	name: string,
-	ore?: DRPGFormulaData,
-	plural: string,
-	potion?: {
-		boost?: { strength: string },
-		effects?: { strength: number },
-		heal?: number,
-		last?: number,
-		temp?: boolean,
-		time?: number
-	},
-	prefix: string,
-	price?: number,
-	ring?: {
-		attribute: string // "strength" | "defense" | "xpBoost",
-		boost: number,
-		stat?: string // "strength" | "defense" | "luck"
-	},
-	sapling?: {	loot: DRPGLootData, minlevel: number },
-	sell: number | string,
-	sellable: boolean,
-	skillLevel?: number,
-	test?: number,
-	toolData?: { catchChance: number },
-	toolType?: string, // "pickaxe" | "axe"
-	tradable: boolean,
-	trap?: { loot: DRPGLootData[], minlevel: number }
-	type: "potion" | "weapon" | "dummy" | "effectpotion" | "chest" | "boots" | "helm" | "ore" | "tool" | "necklace",
-	untradable?: boolean,
-	weapon?: {
-		dmg: { max: number, min: number },
-		type?: string // "dagger"
-	}
+	version: string,
+	description: string,
+	main: string,
+	dependencies: { [key: string]: string },
+	devDependencies: { [key: string]: string },
+	scripts: { [key: string]: string },
+	repository: { type: string, url: string },
+	author: string,
+	license: string,
+	bugs: { url: string },
+	homepage: string,
+	type: string
 };
 
-type ActionText = { [key: string]: { self: string[], user: string[] } }
-type DRPGXPBases = { [key: string]: number };
-type DRPGItemList = { [key: string]: DRPGItem };
-type DRPGLocationDB = { [key: string]: string };
+type ActionText = { [key: string]: { self: string[], user: string[] } };
 type ImageURLs = { [key: string]: string[] };
+type Presences = { text: string, type: ActivityType }[];
 
 export const actionText: ActionText = importAssets("./assets/data/actiontext.json");
+export const aldebaranTeam: AldebaranTeam = importAssets("./config/aldebaranTeam.json");
 export const categories: Categories = importAssets("./assets/data/categories.json");
 export const drpgXpBases: DRPGXPBases = importAssets("./assets/data/drpg/bases.json");
 export const drpgItems: DRPGItemList = importAssets("./assets/data/drpg/itemList.json");
 export const drpgLocationdb: DRPGLocationDB = importAssets("./assets/data/drpg/locations.json");
 export const imageUrls: ImageURLs = importAssets("./assets/data/imageurls.json");
+export const packageFile: PackageFile = importAssets("./package.json");
+export const presences: Presences = importAssets("./config/presence.json");
+
+export type OsuMode = keyof typeof Mode;
 
 export type ErrorString = keyof typeof Error;
 export type PermissionString = keyof typeof Permissions;
@@ -90,50 +54,46 @@ export type CommonSetting = keyof typeof SettingsModel.common;
 export type UserSetting = CommonSetting | keyof typeof SettingsModel.user;
 export type GuildSetting = CommonSetting | keyof typeof SettingsModel.guild;
 
-type TargetedSettings = { [key: string]: {
+export type UserSettings = { [key in UserSetting]?: string };
+export type GuildSettings = { [key in GuildSetting]?: string };
+
+export type TargetedSettings = {
 	category: string,
 	help: string,
-	postUpdate?: (value: string, user: User, guild: Guild) => void,
+	postUpdate?: (value: string, user: User, guild?: Guild) => void,
 	showOnlyIfBotIsInGuild?: string,
 	support: (value: string) => boolean,
-}};
-
-type Settings = {
-	common: TargetedSettings,
-	user: TargetedSettings,
-	guild: TargetedSettings
 };
 
-export const SettingsModel: Settings = {
-	common: {
-		adventuretimer: {
-			support: (value: string) => value === "on" || value === "off" || value === "random",
-			help: "Adventure Timer (\"random\" for 3s +-) - [on | off | random]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
-		healthmonitor: {
-			support: (value: string) => (
-				value === "on"
-				|| value === "off"
-				|| (parseInt(value, 10) > 0 && parseInt(value, 10) < 100)
-			),
-			help: "Health Monitor - [on | off | healthPercentage]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
-		polluxboxping: {
-			support: (value: string) => value === "on" || value === "off",
-			help: "Box Ping - [on | off]",
-			postUpdate: (value: string, user: User, guild: Guild) => {
-				if (value === "on") guild.polluxBoxPing.set(user.id, user);
-				else guild.polluxBoxPing.delete(user.id);
-			},
-			showOnlyIfBotIsInGuild: "271394014358405121",
-			category: "Pollux"
-		}
+const CommonSettingsModel = {
+	adventuretimer: {
+		support: (value: string) => value === "on" || value === "off" || value === "random",
+		help: "Adventure Timer (\"random\" for 3s +-) - [on | off | random]",
+		showOnlyIfBotIsInGuild: "170915625722576896",
+		category: "DiscordRPG"
 	},
+	healthmonitor: {
+		support: (value: string) => (
+			value === "on"
+			|| value === "off"
+			|| Number(value) > 0 && Number(value) < 100
+		),
+		help: "Health Monitor - [on | off | healthPercentage]",
+		showOnlyIfBotIsInGuild: "170915625722576896",
+		category: "DiscordRPG"
+	}
+};
+
+export type Settings = {
+	common: { [key in CommonSetting]?: TargetedSettings },
+	guild: { [key in GuildSetting]?: TargetedSettings },
+	user: { [key in UserSetting]?: TargetedSettings }
+};
+
+export const SettingsModel = {
+	common: CommonSettingsModel,
 	user: {
+		...CommonSettingsModel,
 		individualhealthmonitor: {
 			support: (value: string) => ["off", "character", "pet"].indexOf(value) !== -1,
 			help:
@@ -193,6 +153,7 @@ export const SettingsModel: Settings = {
 		}
 	},
 	guild: {
+		...CommonSettingsModel,
 		autodelete: {
 			support: (value: string) => value === "on" || value === "off",
 			help: "Auto Delete Sides & Adv Commands - [on | off]",
@@ -208,7 +169,6 @@ export const SettingsModel: Settings = {
 		aldebaranprefix: {
 			support: () => true,
 			help: "Aldebaran's Prefix - [& | Guild Customized]",
-			postUpdate: (value: string, _: User, guild: Guild) => { guild.prefix = value; },
 			category: "Aldebaran"
 		},
 		discordrpgprefix: {
@@ -237,14 +197,38 @@ export const Error = {
 
 export const Permissions = {
 	ADMINISTRATOR: 2,
-	EVALUATE_CODE: 4,
-	EXECUTE_DB_QUERIES: 8,
+	obsolete4: 4,
+	obsolete8: 8,
 	MANAGE_PERMISSIONS: 16,
 	BAN_USERS: 32,
 	MUTE_USERS: 64,
 	EDIT_USERS: 128,
 	RESTART_BOT: 256,
 	VIEW_SERVERLIST: 512,
-	MODERATE_ACTIVITIES: 1024,
+	obsolete1024: 1024,
 	DEVELOPER: 2048
+};
+
+export type SocialProfileProperty = "aboutMe" | "dmFriendly" | "age" | "gender" | "name" | "country" | "timezone" | "birthday" | "profilePictureLink" | "favoriteGames" | "profileColor" | "favoriteMusic" | "socialLinks" | "zodiacName" | "flavorText";
+
+export type DBUser = {
+	userId: Snowflake;
+	settings: string;
+	permissions?: number;
+	timeout?: number;
+};
+
+export type DBGuild = {
+	guildid: Snowflake;
+	settings: string;
+	commands: string;
+};
+
+type BaseDBProfile = {
+	userId: Snowflake;
+	fortunePoints: number;
+};
+
+export type DBProfile = BaseDBProfile & {
+	[key in SocialProfileProperty]?: string
 };

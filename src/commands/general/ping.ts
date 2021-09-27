@@ -1,7 +1,25 @@
-import { MessageEmbed } from "discord.js";
+import { ColorResolvable, MessageEmbed } from "discord.js";
 import { Command } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
+
+const messages = {
+	good: [
+		"This latency looks pretty low!",
+		"Gotta go fast!"
+	],
+	average: [
+		"Not the best latency ever, but it's alright.",
+		"Hey it's laggy! It's still working though?"
+	],
+	bad: [
+		"Oops, looks like we are running slow.",
+		"This number is way too high!"
+	],
+	negative: [
+		"I am speed!"
+	]
+};
 
 export default class PingCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -12,31 +30,14 @@ export default class PingCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(bot: AldebaranClient, message: Message) {
+	async run(ctx: MessageContext) {
 		const embed = new MessageEmbed()
-			.addField("WebSocket Heartbeat", `${Math.floor(bot.ws.ping)} ms`, true)
-			.addField(`${bot.user!.username} Ping`, "Computing...", true)
+			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
+			.addField(`${ctx.client.user.username} Ping`, "Computing...", true)
 			.setColor("BLUE");
-		const newMessage = await message.channel.send({ embed });
-		const ping = newMessage.createdTimestamp - message.createdTimestamp;
-		const messages = {
-			good: [
-				"This latency looks pretty low!",
-				"Gotta go fast!"
-			],
-			average: [
-				"Not the best latency ever, but it's alright.",
-				"Hey it's laggy! It's still working though?"
-			],
-			bad: [
-				"Oops, looks like we are running slow.",
-				"This number is way too high!"
-			],
-			negative: [
-				"I am speed!"
-			]
-		};
-		let color = "BLUE";
+		const newMessage = await ctx.reply(embed);
+		const ping = newMessage.createdTimestamp - ctx.message.createdTimestamp;
+		let color: ColorResolvable = "BLUE";
 		let desc = "Hi.";
 
 		if (ping < 0) {
@@ -58,9 +59,9 @@ export default class PingCommand extends Command {
 		}
 
 		const embedResult = new MessageEmbed()
-			.addField("WebSocket Heartbeat", `${Math.floor(bot.ws.ping)} ms`, true)
-			.addField(`${bot.user!.username} Ping`, `${ping} ms`, true)
+			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
+			.addField(`${ctx.client.user.username} Ping`, `${ping} ms`, true)
 			.setColor(color);
-		newMessage.edit(desc, { embed: embedResult });
+		newMessage.edit({ content: desc, embeds: [embedResult] });
 	}
 };

@@ -1,6 +1,7 @@
+import { AuthorizationCode, Token } from "oauth2-server";
 import { apiAccessToken, apiAuthCode, apiClient, apiRefreshToken } from "../../graphql/utils/fetchDBValue.js";
 import GenericDatabaseProvider from "../../../handlers/GenericDatabaseProvider.js";
-import { AuthorizationCode, Token } from "oauth2-server";
+import OAuth2Client from "../../interfaces/OAuth2Client.js";
 
 export default (db: GenericDatabaseProvider) => ({
 	/**
@@ -74,7 +75,11 @@ export default (db: GenericDatabaseProvider) => ({
 	 * @param {string} code The authorization code data
 	 */
 	// eslint-disable-next-line arrow-body-style
-	saveAuthorizationCode: async (code: AuthorizationCode, client: any, user: any) => {
+	saveAuthorizationCode: async (
+		code: AuthorizationCode,
+		client: OAuth2Client,
+		user: { id: string }
+	) => {
 		await db.query(`INSERT INTO api_authcodes (code, expires_at, redirect_uri, scope, client_id, user_id) VALUES ("${code.authorizationCode}", ${code.expiresAt.getTime()}, "${code.redirectUri}", "${code.scope}", "${client.id}", "${user.id}")`);
 		return {
 			authorizationCode: code.authorizationCode,
@@ -89,7 +94,11 @@ export default (db: GenericDatabaseProvider) => ({
 	 * Saves a token to the database
 	 * @param {string} code The token data
 	 */
-	saveToken: async (token: Token, client: any, user: any) => {
+	saveToken: async (
+		token: Token,
+		client: OAuth2Client,
+		user: { id: string }
+	) => {
 		if (token.refreshToken && token.refreshTokenExpiresAt) await db.query(`INSERT INTO api_tokens (access_token, acctok_expires_at, refresh_token, reftok_expires_at, scope, client_id, user_id) VALUES ("${token.accessToken}", ${token.accessTokenExpiresAt!.getTime()}, "${token.refreshToken}", ${token.refreshTokenExpiresAt.getTime()}, "${token.scope}", "${client.id}", "${user.id}")`);
 		else await db.query(`INSERT INTO api_tokens (access_token, acctok_expires_at, scope, client_id, user_id) VALUES ("${token.accessToken}", ${token.accessTokenExpiresAt}, "${token.scope}", "${client.id}", "${user.id}")`);
 		return {

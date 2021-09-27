@@ -27,9 +27,12 @@ export default abstract class DiscordStructWithSettings {
 	 * @returns {string[]}
 	 */
 	async settings({ keys }: { keys: string[] }, request: Request) {
-		const u = await this.querySettings((request.app as any).db);
-		return u !== null ? keys.reduce((acc: string[], cur: any) => [...acc, u[cur]], []) : [];
+		const u = await this.querySettings(request.app.db);
+		return u ? keys.reduce(
+			(acc: (string | number | undefined)[], cur: string) => [...acc, u[cur]],
+			[]
+		) : [];
 	}
 
-	abstract querySettings(db: GenericDatabaseProvider): Promise<string[]>;
+	abstract querySettings(db: GenericDatabaseProvider): Promise<{ [key: string]: string }>;
 };

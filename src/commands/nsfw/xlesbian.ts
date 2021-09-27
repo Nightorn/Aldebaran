@@ -1,7 +1,7 @@
 import { Command as C, Embed as E } from "../../groups/NSFWCommand.js";
 import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 const { Command, Embed } = subCategory(C, E);
 
@@ -12,9 +12,9 @@ export default class XLesbianCommand extends Command {
 		});
 	}
 
-	async run(_: AldebaranClient, message: Message) {
+	async run(ctx: MessageContext) {
 		const embed = new Embed(this,
-			`${message.author}  LEZ be Honest!`);
-		embed.send(message, this.nekoslife.nsfw.lesbian);
+			`${ctx.message.author}  LEZ be Honest!`);
+		embed.send(ctx, ctx.client.nekoslife.nsfw.lesbian);
 	}
 };

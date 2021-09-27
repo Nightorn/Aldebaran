@@ -3,16 +3,18 @@
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"display": "Node 16",
 	"ts-node": {
-		"files": true
+		"files": true,
+		"transpileOnly": true,
+		"typeCheck": false
 	},
 	"compilerOptions": {
+		"downlevelIteration": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
 		"lib": ["DOM", "ESNext"],
 		"module": "es6",
 		"moduleResolution": "node",
-		"outDir": "dist",
 		"preserveConstEnums": true,
 		"removeComments": true,
 		"resolveJsonModule": true,

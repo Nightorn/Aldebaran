@@ -1,19 +1,23 @@
-import { Request as ExpressRequest, Response as ExpressResponse } from "express";
+import { Application, Request as ExpressRequest, Response as ExpressResponse } from "express";
 import { AuthorizationCode, Request as OAuthRequest, Response as OAuthResponse } from "oauth2-server";
 import hrequest from "request";
-import Scope from "../../util/scope.js";
+import OAuth2Client from "../../interfaces/OAuth2Client.js";
+import { Scope } from "../../util/Constants.js";
 import validateSession from "../../util/validateSession.js";
 
-export default (app: any) => (ereq: ExpressRequest, eres: ExpressResponse) => {
+export default (app: Application) => (
+	ereq: ExpressRequest,
+	eres: ExpressResponse
+) => {
 	if (ereq.query.success !== "true") {
 		const p = ereq.query;
 		if (p.client_id && p.scope && p.redirect_uri && p.response_type) {
 			validateSession(app.db, ereq.cookies["connect.sid"]).then(session => {
-				app.db.query(`SELECT name, avatar FROM api_clients WHERE client_id="${p.client_id}"`).then((client: any) => {
+				app.db.query(`SELECT name, avatar FROM api_clients WHERE client_id="${p.client_id}"`).then((client: OAuth2Client[]) => {
 					if (client.length > 0 && p.scope) {
-						const scope: any = p.scope;
-						const able = scope.split(" ")
-							.reduce((acc: string[], cur: string) => [...acc, Scope[cur]], []);
+						const scope = p.scope as string;
+						const able = (scope.split(" ") as (keyof typeof Scope)[])
+							.reduce((acc: string[], cur) => [...acc, Scope[cur]], []);
 						hrequest({
 							url: "https://discord.com/api/v6/users/@me",
 							headers: { Authorization: `Bearer ${session.access_token}` }
@@ -52,7 +56,7 @@ export default (app: any) => (ereq: ExpressRequest, eres: ExpressResponse) => {
 		const res = new OAuthResponse(eres);
 		return app.oauth.authorize(req, res, {
 			authenticateHandler: {
-				handle: (r: any) => {
+				handle: (r: ExpressRequest) => {
 					const session = r.cookies["connect.sid"];
 					return req.query && session === req.query.session
 						? { session } : false;

@@ -2,7 +2,7 @@ import request from "request";
 import GenericDatabaseProvider from "../../handlers/GenericDatabaseProvider.js";
 
 export default (db: GenericDatabaseProvider,
-	session: any): Promise<any> => new Promise(
+	session: string): Promise<any> => new Promise(
 	async (resolve, reject) => {
 		const data = await db.query(`SELECT user, access_token, refresh_token, expires FROM glow_sessions WHERE session="${session}"`);
 		if (data && data.length > 0) {

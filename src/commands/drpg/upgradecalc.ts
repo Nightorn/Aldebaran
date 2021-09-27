@@ -1,6 +1,6 @@
 import { Command, Embed } from "../../groups/DRPGCommand.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 
 export default class GoldCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -21,14 +21,24 @@ export default class GoldCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: any) {
+	run(ctx: MessageContext) {
+		const args = ctx.args as {
+			charLevel: string,
+			petLevel: string,
+			minPetDamage: string,
+			maxPetDamage: string,
+			minWeaponDamage: string,
+			maxWeaponDamage: string,
+			strMultiplier?: string,
+			shots?: string
+		};
 		const upgrades = Math.ceil(((
-			(((args.charLevel * 50) - 10 + (args.maxPetDamage > args.petLevel * 10
-				? args.maxPetDamage - args.petLevel * 10 : 0
-			)) / (args.shots || 1) - args.minPetDamage)
-			/ (args.strMultiplier || 1) / args.minWeaponDamage) - 1) * 4);
+			(((Number(args.charLevel) * 50) - 10 + (Number(args.maxPetDamage) > Number(args.petLevel) * 10
+				? Number(args.maxPetDamage) - Number(args.petLevel) * 10 : 0
+			)) / (Number(args.shots) || 1) - Number(args.minPetDamage))
+			/ (Number(args.strMultiplier) || 1) / Number(args.minWeaponDamage)) - 1) * 4);
 		const cost = Math.floor(
-			(args.minWeaponDamage + args.maxWeaponDamage)
+			(Number(args.minWeaponDamage) + Number(args.maxWeaponDamage))
 			/ 6.5 * 50 * upgrades * (upgrades + 1)
 			* ((2 * upgrades + 1) / 6) + 500 * upgrades
 		);
@@ -38,6 +48,6 @@ export default class GoldCommand extends Command {
 			.addField("Upgrades Needed", `**${upgrades}** Upgrades`, true)
 			.addField("Required Strength", `**${(upgrades * 15).toLocaleString()}** Points`, true)
 			.addField("Upgrades Cost", `**${cost.toLocaleString()}** Gold`, true);
-		message.channel.send({ embed });
+		ctx.reply(embed);
 	}
 };

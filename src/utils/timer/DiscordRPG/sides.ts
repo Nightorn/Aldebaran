@@ -1,20 +1,23 @@
 import { MessageEmbed } from "discord.js";
-import Message from "../../../structures/djs/Message.js";
+import MessageContext from "../../../structures/aldebaran/MessageContext.js";
 
-export default async (message: Message) => {
+export default async (ctx: MessageContext) => {
+	if (!ctx.message.guild) return;
+	const guild = (await ctx.guild())!;
+	const user = await ctx.author();
 	const supportedST = ["on", "mine", "forage", "chop", "fish"];
 	let prefix = null;
 	let sidesPass = false;
 	let primaryAction = null;
-	if (message.author.settings.sidestimer !== undefined) {
-		if (message.author.settings.sidestimer === "on") primaryAction = "mine";
-		else primaryAction = message.author.settings.sidestimer;
+	if (user.settings.sidestimer !== undefined) {
+		if (user.settings.sidestimer === "on") primaryAction = "mine";
+		else primaryAction = user.settings.sidestimer;
 	} else primaryAction = "mine";
-	const content = `${message.content.toLowerCase()} `;
+	const content = `${ctx.message.content.toLowerCase()} `;
 	for (const element of [
 		"DiscordRPG",
 		"#!",
-		message.guild.settings.discordrpgprefix
+		guild.settings.discordrpgprefix
 	]) {
 		for (const action of ["mine", "forage", "chop", "fish"]) {
 			if (content.indexOf(`${element}${action} `) === 0) prefix = element;
@@ -22,63 +25,64 @@ export default async (message: Message) => {
 				if (content.indexOf(prefix + action) === 0) sidesPass = true;
 		}
 	}
-	if (message.guild.settings.autodelete === "on" && sidesPass) message.delete({ timeout: 2000 });
+	if (guild.settings.autodelete === "on" && sidesPass) {
+		setTimeout(ctx.message.delete, 2000);
+	}
 	if (content.indexOf(prefix + primaryAction) === 0) {
-		if (message.author.timers.sides !== null) return;
+		if (user.timers.sides !== null) return;
 		if (prefix !== null) {
 			if (
-				supportedST.indexOf(message.author.settings.sidestimer!) !== -1
-        && message.guild.settings.sidestimer === "on"
+				supportedST.indexOf(user.settings.sidestimer!) !== -1
+					&& guild.settings.sidestimer === "on"
 			) {
 				const emoji = ["🥕", "🍋", "🥔", "🐟"];
 				const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
 				const timerEmbed = new MessageEmbed()
-					.setAuthor(message.author.username, message.author.pfp())
+					.setAuthor(
+						ctx.message.author.username,
+						ctx.message.author.displayAvatarURL()
+					)
 					.setColor(0x00ae86)
 					.setDescription("React with 🚫 to cancel timer.");
-				message.channel.send({ embed: timerEmbed }).then(mesg => {
+				ctx.reply(timerEmbed).then(mesg => {
 					mesg.react("🚫");
-					mesg
-						.awaitReactions(
-							(reaction, user) => reaction.emoji.name === "🚫" && user.id === message.author.id,
-							{ time: 5000, max: 1 }
-						)
-						.then(reactions => {
-							mesg.delete({ timeout: 5000 });
-							if (reactions.get("🚫") === undefined) {
-								const embed = new MessageEmbed()
-									.setDescription("Your sides timer has been set!")
-									.setAuthor(message.author.pfp())
-									.setColor(0x00ae86);
-								message.channel.send({ embed }).then(timerset => {
-									timerset.delete({ timeout: 5000 });
-									// eslint-disable-next-line no-param-reassign
-									message.author.timers.sides = setTimeout(() => {
-										const ping = message.author.settings.timerping === "on"
-											|| message.author.settings.timerping === "sides"
-											? `<@${message.author.id}>`
-											: `${message.author.username},`;
-										message.channel
-											.send(
-												`${ping} sides time! ${randomemoji}`
-											)
-											.then(msg => {
-												if (message.guild.settings.autodelete === "on") msg.delete({ timeout: 180000 });
-											});
-										// eslint-disable-next-line no-param-reassign
-										message.author.timers.sides = null;
-									}, 299250);
-								});
-							} else {
-								const embed1 = new MessageEmbed()
-									.setDescription("Timer Canceled")
-									.setAuthor(`${message.author.username}`)
-									.setColor("RED");
-								message.channel.send({ embed: embed1 }).then(timernotset => {
-									timernotset.delete({ timeout: 5000 });
-								});
-							}
-						});
+					mesg.awaitReactions({
+						filter: (r, u) => r.emoji.name === "🚫" && u.id === ctx.message.author.id,
+						time: 5000,
+						max: 1
+					}).then(reactions => {
+						setTimeout(mesg.delete, 5000);
+						if (reactions.get("🚫") === undefined) {
+							const embed = new MessageEmbed()
+								.setDescription("Your sides timer has been set!")
+								.setAuthor(ctx.message.author.displayAvatarURL())
+								.setColor(0x00ae86);
+							ctx.reply(embed).then(timerset => {
+								setTimeout(timerset.delete, 5000);
+								// eslint-disable-next-line no-param-reassign
+								user.timers.sides = setTimeout(() => {
+									const ping = user.settings.timerping === "on"
+										|| user.settings.timerping === "sides"
+										? `<@${user.id}>`
+										: `${user.username},`;
+									ctx.reply(`${ping} sides time! ${randomemoji}`).then(msg => {
+										if (guild.settings.autodelete === "on") {
+											setTimeout(msg.delete, 180000);
+										}
+									});
+									user.timers.sides = null;
+								}, 299250);
+							});
+						} else {
+							const embed1 = new MessageEmbed()
+								.setDescription("Timer Canceled")
+								.setAuthor(`${user.username}`)
+								.setColor("RED");
+							ctx.reply(embed1).then(timernotset => {
+								setTimeout(timernotset.delete, 5000);
+							});
+						}
+					});
 				});
 			}
 		}

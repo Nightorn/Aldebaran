@@ -1,21 +1,24 @@
+import MessageContext from "../../../structures/aldebaran/MessageContext.js";
 import { escape } from "../../Methods.js";
-import Message from "../../../structures/djs/Message.js";
 
-export default (message: Message) => {
+export default async (ctx: MessageContext) => {
+	if (!ctx.message.guild) return;
+	const guild = (await ctx.guild())!;
+	const user = await ctx.author();
 	if (
-		message.author.timers.padventure !== null
-		|| message.guild.settings.adventuretimer === "off"
-		|| message.guild.settings.adventuretimer === undefined
-		|| message.author.settings.adventuretimer === "off"
-		|| message.author.settings.adventuretimer === undefined
+		user.timers.padventure !== null
+		|| guild.settings.adventuretimer === "off"
+		|| guild.settings.adventuretimer === undefined
+		|| user.settings.adventuretimer === "off"
+		|| user.settings.adventuretimer === undefined
 	) return;
-	const content = message.content.toLowerCase();
+	const content = ctx.message.content.toLowerCase();
 	let prefix = null;
 	for (const element of [
 		"discordrpg ",
 		"#!",
 		"<@170915625722576896> ",
-		message.guild.settings.discordrpgprefix
+		guild.settings.discordrpgprefix
 	]) {
 		if (element !== undefined)
 			if (content.match(`^${escape(element.toString())}padv(\\b|enture\\b)`)) {
@@ -23,20 +26,19 @@ export default (message: Message) => {
 			}
 	}
 	if (prefix !== null) {
-		if (message.guild.settings.autodelete === "on")
-			message.delete({ timeout: 1000 });
-		message.author.timers.padventure = setTimeout(() => {
-			const ping = message.author.settings.timerPing === "adventure"
-				|| message.author.settings.timerPing === "on"
-				? `<@${message.author.id}>`
-				: `${message.author.username},`;
-			message.channel
-				.send(`${ping} party adventure time! :crossed_swords:`)
-				.then(msg => {
-					if (message.guild.settings.autodelete === "on") msg.delete({ timeout: 10000 });
-				});
-			// eslint-disable-next-line no-param-reassign
-			message.author.timers.padventure = null;
+		if (guild.settings.autodelete === "on")
+			setTimeout(ctx.message.delete, 1000);
+		user.timers.padventure = setTimeout(() => {
+			const ping = user.settings.timerping === "adventure"
+				|| user.settings.timerping === "on"
+				? `<@${ctx.message.author.id}>`
+				: `${ctx.message.author.username},`;
+			ctx.reply(`${ping} party adventure time! :crossed_swords:`).then(msg => {
+				if (guild.settings.autodelete === "on") {
+					setTimeout(msg.delete, 10000);
+				}
+			});
+			user.timers.padventure = null;
 		}, 19900);
 	}
 };

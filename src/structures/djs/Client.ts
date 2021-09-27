@@ -1,62 +1,54 @@
 import { Client } from "discord.js";
 import fs from "fs";
+import NekosClient from "nekos.life";
+import { Client as NodesuClient } from "nodesu";
 import CommandHandler from "../../handlers/CommandHandler.js";
 import importCommands from "../../commands/commands.js";
 import DatabaseProvider from "../../handlers/DatabaseProvider.js";
-import { SettingsModel } from "../../utils/Constants.js";
 import message from "../../events/message.js";
 import ready from "../../events/ready.js";
-import Message from "./Message.js";
+import { aldebaranTeam, packageFile, presences, SettingsModel } from "../../utils/Constants.js";
+import { Guild, User } from "../../commands/drpg/glead.js";
+import CustomGuildManager from "../aldebaran/CustomGuildManager.js";
+import CustomProfileManager from "../aldebaran/CustomProfileManager.js";
+import CustomUserManager from "../aldebaran/CustomUserManager.js";
 
-const aldebaranTeam: { [key: string]: { titles: string[], acknowledgements: string[], staffRank: number, text: string } }
-	= JSON.parse(fs.readFileSync("./config/aldebaranTeam.json").toString());
-const presences = JSON.parse(fs.readFileSync("./config/presence.json").toString());
-const packageFile = JSON.parse(fs.readFileSync("./package.json").toString());
-
-export default class AldebaranClient extends Client {
-	started: number = Date.now();
-	config: { presence: any, aldebaranTeam: typeof aldebaranTeam } = { presence: presences, aldebaranTeam };
-	database: DatabaseProvider = new DatabaseProvider(this);
-	databaseData: object = { profiles: new Map() };
-	commandGroups: any = {};
-	commands: CommandHandler = CommandHandler.getInstance(this);
-	debugMode: boolean = process.argv[2] === "dev";
-	models: any = { settings: SettingsModel };
-	stats: any;
-	version: string = packageFile.version;
-	drpgCache: any = {};
+export default class AldebaranClient extends Client<true> {
+	commands = CommandHandler.getInstance(this);
+	config = { presence: presences, aldebaranTeam };
+	customGuilds = new CustomGuildManager(this);
+	customProfiles = new CustomProfileManager(this);
+	customUsers = new CustomUserManager(this);
+	debugMode = process.argv[2] === "dev";
+	drpgCache: { [key: string]: User | Guild } = {};
+	database = new DatabaseProvider(this);
+	databaseData = { profiles: new Map() };
+	models = { settings: SettingsModel };
+	nekoslife = new NekosClient();
+	nodesu?: NodesuClient;
+	started = Date.now();
+	version = packageFile.version;
 
 	constructor() {
 		super({
-			messageCacheMaxSize: 10,
-			messageCacheLifetime: 1800,
-			messageSweepInterval: 60
+			intents: [
+				"DIRECT_MESSAGES",
+				"DIRECT_MESSAGE_REACTIONS",
+				"GUILD_EMOJIS_AND_STICKERS",
+				"GUILDS",
+				"GUILD_MESSAGES",
+				"GUILD_MESSAGE_REACTIONS",
+				"GUILD_WEBHOOKS"
+			]
 		});
 
-		this.stats = {
-			commands: {
-				total: 0,
-				all: {}
-			},
-			users: {
-				total: 0,
-				all: {}
-			},
-			servers: {
-				total: 0,
-				all: {}
-			}
-		};
+		if (process.env.API_OSU) {
+			this.nodesu = new NodesuClient(process.env.API_OSU);
+		}
 
 		importCommands();
 		if (process.argv[3] !== undefined && this.debugMode) {
 			process.env.PREFIX = process.argv[3];
-		}
-		for (const [command] of this.commands.commands)
-			this.stats.commands.all[command] = {};
-		for (const [key, value] of Object.entries(this.models.settings.common)) {
-			this.models.settings.user[key] = value;
-			this.models.settings.guild[key] = value;
 		}
 
 		if (!fs.existsSync("./cache/")) fs.mkdirSync("./cache/");
@@ -64,7 +56,7 @@ export default class AldebaranClient extends Client {
 			this.drpgCache = JSON.parse(fs.readFileSync("./cache/drpgCache.json").toString());
 		}
 
-		this.on("message", msg => message(this, msg as Message));
+		this.on("messageCreate", msg => message(this, msg));
 		this.on("ready", () => ready(this));
 
 		this.login(process.env.TOKEN).then(() => {
@@ -72,7 +64,7 @@ export default class AldebaranClient extends Client {
 		});
 	}
 
-	get shardID() {
-		return this.guilds.cache.first()!.shardID;
+	get shardId() {
+		return this.guilds.cache.first()!.shardId;
 	}
 };

@@ -1,24 +1,28 @@
-import { MessageEmbed } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import request from "request";
 import { Command } from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 import { drpgXpBases } from "../../utils/Constants.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 export default class WallsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays user's wall informations",
 			usage: "UserMention|UserID",
-			example: "246302641930502145",
-			args: { user: { as: "user" } }
+			example: "246302641930502145"
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(bot: AldebaranClient, message: Message, args: any) {
-		function calcWall(lvl: number | string, base: number | string, prevWall: number | string) {
+	async run(ctx: MessageContext) {
+		const args = ctx.args as string[];
+		function calcWall(
+			lvl: number | string,
+			base: number | string,
+			prevWall: number | string
+		) {
 			const L = Number(lvl);
 			const B = Number(base);
 			const C = prevWall ? Number(prevWall) : 25;
@@ -74,28 +78,26 @@ export default class WallsCommand extends Command {
 		}
 
 		try {
-			const user = await bot.users.fetch(args.user || message.author.id);
+			const user = await ctx.client.users.fetch(args[0] || ctx.message.author.id);
 			request({
 				uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
 				headers: { Authorization: process.env.API_DISCORDRPG }
-			}, (err, res, body) => {
+			}, (err, _, body) => {
 				if (err) throw err;
 				let data;
 				try {
 					data = JSON.parse(body);
 				} catch (e) {
-					message.reply("the DiscordRPG API seems down, please retry later.");
+					ctx.reply("the DiscordRPG API seems down, please retry later.");
 					return;
 				}
 				if (data.status === 404) {
-					message.reply(
-						"It looks like the player you mentioned hasn't started their adventure on DiscordRPG."
-					);
+					ctx.reply("It looks like the player you mentioned hasn't started their adventure on DiscordRPG.");
 					return;
 				}
 				data = data.data;
 
-				const [wall, baseLvl] = userWall(message, data.level);
+				const [wall, baseLvl] = userWall(ctx.message, data.level);
 				const userAtWall = data.level === baseLvl;
 				const xpNeeded = calcXPNeeded(drpgXpBases[baseLvl], baseLvl);
 				const wallProgress = xpNeeded - data.xp;
@@ -130,15 +132,15 @@ export default class WallsCommand extends Command {
 						)} XP total at level ${baseLvl}.`
 					);
 				}
-				message.channel.send({ embed });
+				ctx.reply(embed);
 			});
 		} catch (err) {
-			const [wall, baseLvl] = userWall(message, args[0]);
+			const [wall, baseLvl] = userWall(ctx.message, Number(args[0]));
 			const xpNeeded = calcXPNeeded(drpgXpBases[baseLvl], baseLvl);
 
 			const embed = new MessageEmbed()
 				.setColor(0x00ae86)
-				.setAuthor(message.author.username, message.author.displayAvatarURL())
+				.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
 				.setTitle(`Wall closest to Level ${args[0]}`)
 				.addField(
 					`Base at Level ${baseLvl}`,
@@ -152,7 +154,7 @@ export default class WallsCommand extends Command {
 						"en-US"
 					)} XP total to progress at that level.`
 				);
-			message.channel.send({ embed });
+			ctx.reply(embed);
 		}
 	}
 };

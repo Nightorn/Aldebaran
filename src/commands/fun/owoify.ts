@@ -1,6 +1,6 @@
 import { Command, Embed } from "../../groups/FunCommand.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
 
 export default class OwoifyCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -12,12 +12,11 @@ export default class OwoifyCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(_: AldebaranClient, message: Message, args: any) {
-		let text = args.join(" ");
-		text = text.replace(/r|l/g, "w");
+	run(ctx: MessageContext) {
+		const args = ctx.args as string[];
 		const embed = new Embed(this)
 			.setTitle("owoifier")
-			.setDescription(text);
-		message.channel.send({ embed });
+			.setDescription(args.join(" ").replace(/r|l/g, "w"));
+		ctx.reply(embed);
 	}
 };

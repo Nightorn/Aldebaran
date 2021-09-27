@@ -1,14 +1,11 @@
 import AldebaranClient from "../structures/djs/Client.js";
 import GenericDatabaseProvider from "./GenericDatabaseProvider.js";
-import Message from "../structures/djs/Message.js";
 
 export default class DatabaseProvider extends GenericDatabaseProvider {
 	client: AldebaranClient;
-	commands: any;
-	guilds: any;
-	photogallery: any;
-	socialprofile: any;
-	users: any;
+	guilds: { [key: string]: Function };
+	socialprofile: { [key: string]: Function };
+	users: { [key: string]: Function };
 
 	/**
 	 * Returns a MySQL pool connection to the Aldebaran's database
@@ -140,79 +137,6 @@ export default class DatabaseProvider extends GenericDatabaseProvider {
 			 */
 			createOneById: async (id: string) => this.query(
 				`INSERT INTO socialprofile (userId) VALUES ('${id}')`
-			)
-		};
-		this.photogallery = {
-			/**
-			 * Returns the data of the photo specified from the database
-			 * @param {string} id ID of the photo
-			 * @param {string[]} columns Columns to retrieve in the returned data
-			 */
-			selectOneById: async (id: string, columns?: string[]) => (
-				await this.query(`SELECT ${
-					columns !== undefined ? columns.join(", ") : "*"
-				} FROM photogallery WHERE id='${id}'`)
-			)[0],
-			/**
-			 * Returns a random photo from the database
-			 * @param {boolean} nsfw Return NSFW Content
-			 * @param {string[]} columns Columns to retrieve in the returned data
-			 * @param {number} limit Number of photos to return
-			 */
-			selectRandom: async (
-				nsfw: boolean, columns: string[] = [], limit: number = 1
-			) => this.query(
-				`SELECT ${
-					columns.length > 0 ? columns.join(", ") : "*"
-				} FROM photogallery WHERE nsfw=${
-					nsfw ? 1 : 0
-				} ORDER BY RAND() LIMIT ${limit}`
-			),
-			/**
-			 * Updates the data of the photo specified on the database
-			 * @param {string} id ID of the photo
-			 * @param {Map} changes Changes to make to the photo, the map needs an entry for each column modified, with the column as the key, and the new value as the entry value
-			 */
-			updateById: async (id: string, ch: Map<string, string | number>) => {
-				const updates = DatabaseProvider.convertChangesMapToString(ch);
-				return this.query(
-					`UPDATE photogallery SET ${updates.join(", ")} WHERE id='${id}'`
-				);
-			},
-			/**
-			 * Deletes the data of the photo specified on the database
-			 * @param {string} id ID of the photo
-			 */
-			deleteById: async (id: string) => {
-				this.query(`DELETE FROM photogallery WHERE id='${id}'`);
-			},
-			/**
-			 * Inserts a photo in the database
-			 * @param {string} id Snowflake ID of the Discord Guild
-			 * @param {string} link URL of the Image
-			 * @param {string} linkname Title of the Image
-			 * @param {string[]} tags Tags of the Image
-			 * @param {boolean} nsfw NSFW Content
-			 */
-			create: async (
-				id: string,
-				link: string,
-				linkname: string,
-				tags: string[],
-				nsfw: boolean
-			) => {
-				this.query(`INSERT INTO photogallery (userId, links, linkname, tags, nsfw) VALUES ('${id}', '${link}', '${linkname}', '${tags}', ${nsfw})`);
-			}
-		};
-		this.commands = {
-			create: async (
-				command: string, args: any, message: Message
-			) => this.query(
-				`INSERT INTO commands (command, userId, channelId, guildId, args) VALUES ('${command}', '${
-					message.author.id
-				}', '${message.channel.id}', '${message.guild.id}', '${JSON.stringify(
-					args
-				)}')`
 			)
 		};
 	}

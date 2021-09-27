@@ -1,6 +1,6 @@
 import { Command, Embed } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import Message from "../../structures/djs/Message.js";
+import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
 import alias from "./commands/alias.js";
 import disable from "./commands/disable.js";
@@ -16,18 +16,21 @@ export default class CommandsCommand extends Command {
 			args: {
 				showHidden: { as: "boolean?", flag: { short: "s", long: "show-hidden" }, desc: "Show hidden commands" },
 				hideAliases: { as: "boolean?", flag: { short: "h", long: "hide-aliases" }, desc: "Hide aliases" }
-			}
+			},
+			requiresGuild: true
 		});
 		this.registerSubcommands(alias, disable, enable, guide);
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	run(bot: AldebaranClient, message: Message, args: any) {
+	async run(ctx: MessageContext) {
+		const args = ctx.args as { showHidden: boolean, hideAliases: boolean };
+		const guild = (await ctx.guild())!;
 		const commands: { [key: string]: string[] } = {};
-		for (const [name, data] of bot.commands.commands) {
-			if (data.check(message)) {
+		for (const [name, data] of ctx.client.commands.commands) {
+			if (data.check(ctx)) {
 				if ((!data.hidden || args.showHidden)
-					&& message.guild.commands[name] !== false
+					&& guild.commandOverrides[name] !== false
 				) {
 					if (commands[data.category] === undefined)
 						commands[data.category] = [];
@@ -39,21 +42,23 @@ export default class CommandsCommand extends Command {
 				}
 			}
 		}
-		for (const [name, data] of Object.entries(message.guild.commands)) {
+		for (const [name, data] of Object.entries(guild.commandOverrides)) {
 			if (data !== false) {
-				commands[bot.commands.get(data)!.category].push(`**${name}**`);
-			} else commands[bot.commands.get(name)!.category].push(`~~${name}~~`);
+				commands[ctx.client.commands.get(data)!.category].push(`**${name}**`);
+			} else {
+				commands[ctx.client.commands.get(name)!.category].push(`~~${name}~~`);
+			}
 		}
 
 		const embed = new Embed(this)
 			.setAuthor(
-				`Aldebaran  |  List of ${bot.commands.size} commands`,
-				bot.user!.avatarURL()!
+				`Aldebaran  |  List of ${ctx.client.commands.size} commands`,
+				ctx.client.user.avatarURL()!
 			);
-		embed.setFooter(`${!args.showHidden && !args.hideAliases ? "Use --show-hidden to view all commands and --hide-aliases to hide aliases." : ""} To learn how to use the customized commands, check ${message.guild.prefix}commands guide.`);
+		embed.setFooter(`${!args.showHidden && !args.hideAliases ? "Use --show-hidden to view all commands and --hide-aliases to hide aliases." : ""} To learn how to use the customized commands, check ${guild.prefix}commands guide.`);
 		for (const [category, list] of Object.entries(commands)) {
 			embed.addField(category, list.join(", "), true);
 		}
-		message.channel.send({ embed });
+		ctx.reply(embed);
 	}
 };

@@ -1,11 +1,13 @@
+import { Message } from "discord.js";
 import AldebaranClient from "../structures/djs/Client.js";
 import { Command } from "../groups/Command.js";
-import Message from "../structures/djs/Message.js";
+import MessageContext from "../structures/aldebaran/MessageContext.js";
+import { ICommand } from "../interfaces/Command.js";
 
 export default class CommandHandler {
 	private static instance: CommandHandler;
 	client: AldebaranClient;
-	commands: Map<string, Command> = new Map();
+	commands: Map<string, ICommand> = new Map();
 
 	private constructor(client: AldebaranClient) {
 		this.client = client;
@@ -20,39 +22,42 @@ export default class CommandHandler {
 		return CommandHandler.instance;
 	}
 
-	execute(commandName: string, message: Message) {
-		const override = this.checkOverrides(message.guild.commands, commandName);
-		if (override === false) return;
-		commandName = override;
-		if (!this.exists(commandName)) throw new TypeError("INVALID_COMMAND");
-		const command = this.get(commandName)!;
-		if (message.args.length === 0) {
+	async execute(name: string, message: Message, prefix: string) {
+		if (message.guild) {
+			const guild = await this.client.customGuilds.fetch(message.guild.id);
+			const override = this.checkOverrides(guild.commandOverrides, name);
+			if (!override) return;
+			name = override;
+		}
+		if (!this.exists(name)) throw new TypeError("INVALID_COMMAND");
+		const command = this.get(name)!;
+		const cArgs = command.metadata.args;
+		const ctx = new MessageContext(this.client, message, prefix, cArgs);
+		const args = ctx.getSplitArgs();
+		if (args.length === 0) {
 			if (command.subcommands.size > 0) {
 				if (command.metadata.allowIndexCommand) {
-					command.execute(message);
+					args.shift();
+					return command.execute(ctx);
 				} else {
 					throw new TypeError("INVALID_COMMAND");
 				}
 			} else {
-				command.execute(message);
+				return command.execute(ctx);
 			}
 		} else if (command.subcommands.size > 0) {
-			if (command.subcommands.get(message.args[0]) !== undefined) {
-				command.subcommands.get(message.args[0]).execute(message);
+			const subcommand = args.shift()!;
+			if (command.subcommands.get(subcommand)) {
+				ctx.args = ctx.getArgs(cArgs, 1);
+				return command.subcommands.get(subcommand)!.execute(ctx);
 			} else if (command.metadata.allowUnknownSubcommands) {
-				command.execute(message);
+				return command.execute(ctx);
 			} else {
 				throw new TypeError("INVALID_COMMAND");
 			}
 		} else {
-			command.execute(message);
+			return command.execute(ctx);
 		}
-	}
-
-	static createArgs(message: Message) {
-		const args = message.content.split(" ");
-		args.shift();
-		return args;
 	}
 
 	get size() {
@@ -66,23 +71,29 @@ export default class CommandHandler {
 		return this.commands.get(command);
 	}
 
-	bypassRun(command: string, message: Message) {
-		if (!message.author.hasPermission("ADMINISTRATOR")) { throw new Error("UNALLOWED_ADMIN_BYPASS"); }
-		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
-		return this.commands.get(command)!.run(
-			this.client, message, CommandHandler.createArgs(message)
-		);
+	async bypassRun(name: string, message: Message, prefix: string) {
+		if (!this.exists(name)) throw new TypeError("INVALID_COMMAND");
+		const command = this.commands.get(name)!;
+		const { args } = command.metadata;
+		const ctx = new MessageContext(this.client, message, prefix, args);
+		const user = await this.client.customUsers.fetch(ctx.message.author.id);
+		if (!user.hasPermission("ADMINISTRATOR")) {
+			throw new Error("UNALLOWED_ADMIN_BYPASS");
+		}
+		return command.run(ctx);
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	checkOverrides(commands: any, command: string) {
+	checkOverrides(
+		commands: { [key: string]: string | false },
+		command: string
+	): string | false {
 		const cmd = commands[command];
-		if (cmd === undefined) return command;
-		return cmd;
+		return cmd || command;
 	}
 
 	exists(command: string) {
-		return this.commands.get(command) !== undefined;
+		return !!this.commands.get(command);
 	}
 
 	getHelp(command: string, prefix = "&") {
@@ -90,20 +101,17 @@ export default class CommandHandler {
 		return this.commands.get(command)!.toHelpEmbed(command, prefix);
 	}
 
-	register(Structure: any) {
-		const command: Command = new Structure(this.client);
+	register(Structure: typeof Command) {
+		const command: Command = new (Structure as any)(this.client);
 		command.name = command.metadata.name
-			|| command.constructor.name.replace("Command", "").toLowerCase();
-		if (command.registerCheck()) {
-			// Implement subcommands (command.checkSubcommands(path);)
-			this.commands.set(command.name, command);
-			command.aliases.forEach(alias => {
-				this.commands.set(alias, command);
-			});
-		}
+			|| command.constructor.name.slice(0, -7).toLowerCase();
+		this.commands.set(command.name, command);
+		command.aliases.forEach(alias => {
+			this.commands.set(alias, command);
+		});
 	}
 
-	registerMultiple(...structures: any) {
+	registerMultiple(...structures: (typeof Command)[]) {
 		structures.forEach(this.register, this);
 	}
 };
