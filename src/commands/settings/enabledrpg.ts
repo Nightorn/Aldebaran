@@ -4,14 +4,28 @@ import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import { GuildSetting, UserSetting } from "../../utils/Constants.js";
 
-const descriptions = {
-	healthMonitor: "DiscordRPG Health Monitor",
-	adventureTimer: "DiscordRPG Adventure Timer",
-	sidesTimer: "DiscordRPG Sides Timer",
-	timerPing: "DiscordRPG Timer Pings"
-};
-const guildParameters: GuildSetting[] = ["healthmonitor", "adventuretimer", "sidestimer"];
-const userParameters: UserSetting[] = ["healthmonitor", "adventuretimer", "sidestimer", "timerping"];
+const guildParameters = [
+	{
+		name: "healthmonitor",
+		description: "DiscordRPG Health Monitor"
+	},
+	{
+		name: "adventuretimer",
+		description: "DiscordRPG Adventure Timer"
+	},
+	{
+		name: "sidestimer",
+		description: "DiscordRPG Sides Timer"
+	}
+];
+
+const userParameters = [
+	...guildParameters,
+	{
+		name: "timerping",
+		description: "DiscordRPG Timer Pings"
+	}
+];
 
 export default class EnableDRPGCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -25,12 +39,12 @@ export default class EnableDRPGCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	configuringEmbed(ctx: MessageContext, type: string) {
-		const parameters: string[] = type ? userParameters : guildParameters;
+		const parameters = type === "user" ? userParameters : guildParameters;
 		return new MessageEmbed()
 			.setTitle(`Configuring ${type}'s settings`)
 			.setDescription(`**This will enable the following ${
 				type} settings:**\n${
-				parameters.reduce((p, c) => `${p}${`${descriptions[c as keyof typeof descriptions]} - \`${c}\``}\n`, "")
+				parameters.reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "")
 			}**Do you want to proceed?** Click :white_check_mark: to continue. You can always configure the settings in \`${ctx.prefix}${type[0]}config\`.`)
 			.setColor("BLUE");
 	}
@@ -47,7 +61,7 @@ export default class EnableDRPGCommand extends Command {
 			msg.awaitReactions({ filter, time: 30000, max: 1, errors: ["time"] })
 				.then(() => {
 					userParameters.forEach(parameter => {
-						author.changeSetting(parameter, "on");
+						author.changeSetting(parameter.name as UserSetting, "on");
 					});
 					resolve(true);
 				}).catch(() => {
@@ -68,7 +82,7 @@ export default class EnableDRPGCommand extends Command {
 			await msg.react(checkMark);
 			msg.awaitReactions({ filter, time: 30000, max: 1, errors: ["time"] }).then(() => {
 				guildParameters.forEach(parameter => {
-					guild.changeSetting(parameter, "on");
+					guild.changeSetting(parameter.name as GuildSetting, "on");
 				});
 				resolve(true);
 			}).catch(() => {
@@ -110,9 +124,9 @@ export default class EnableDRPGCommand extends Command {
 			.has("ADMINISTRATOR");
 
 		const guildEnabled = guildParameters
-			.every(parameter => guild.settings[parameter] === "on");
+			.every(parameter => guild.settings[parameter.name as GuildSetting] === "on");
 		const userEnabled = userParameters
-			.every(parameter => author.settings[parameter] === "on");
+			.every(parameter => author.settings[parameter.name as UserSetting] === "on");
 
 		if (isAdmin && !guildEnabled && !userEnabled) {
 			await this.setGuildSettings(ctx);
