@@ -1,3 +1,4 @@
+# The bot and its owner (me) are currently compromised. Please don't invite Aldebaran to your server for the time being.
 # Aldebaran
 
 <p align="center">
