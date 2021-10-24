@@ -1,11 +1,13 @@
-# The bot and its owner (me) are currently compromised. Please don't invite Aldebaran to your server for the time being.
 # Aldebaran
 
 <p align="center">
+    <a href="https://discord.gg/3x6rXAv">
+        <img src="https://discord.com/api/guilds/900096337901649921/widget.png?style=shield" alt="Discord Server">
+    </a>     
     <a href="/issues">
         <img src="https://img.shields.io/github/issues/Nightorn/Aldebaran" alt="Issues">
     </a>
-    <a href="https://www.codacy.com/app/mount2010/Aldebaran?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Nightorn/Aldebaran&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/ea232f66422c49bc934cf1e1e44d28b8"/></a>
+    <a href="https://www.codacy.com/app/nightorn/aldebaran?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Nightorn/Aldebaran&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/ea232f66422c49bc934cf1e1e44d28b8"/></a>
 </p>
 
 Aldebaran is a Discord multi-purposes bot which offers a lot of assistance regarding DiscordRPG, but which also has a lot of commands of all kinds such as action, image and NSFW commands!
@@ -13,7 +15,12 @@ Aldebaran is a Discord multi-purposes bot which offers a lot of assistance regar
 ## Commands
 Aldebaran currently has 81 commands over 11 categories - check them out by adding Aldebaran to your server now!
 
-[Invite Aldebaran](https://discordapp.com/api/oauth2/authorize?client_id=437802197539880970&permissions=126016&scope=bot)
+[Invite Aldebaran](https://discord.com/api/oauth2/authorize?client_id=437802197539880970&permissions=0&scope=bot)
+
+## Main server
+Join the main server to stay updated about the new updates!
+
+[Discord Server](https://discord.gg/8J8ZH9AjsC)
 
 ## Aldebaran Development
 ### Contribute as a normal user
