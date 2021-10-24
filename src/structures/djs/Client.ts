@@ -24,6 +24,7 @@ export default class AldebaranClient extends Client<true> {
 	database = new DatabaseProvider(this);
 	databaseData = { profiles: new Map() };
 	models = { settings: SettingsModel };
+	name = process.env.NAME || "Aldebaran";
 	nekoslife = new NekosClient();
 	nodesu?: NodesuClient;
 	started = Date.now();
@@ -39,7 +40,8 @@ export default class AldebaranClient extends Client<true> {
 				"GUILD_MESSAGES",
 				"GUILD_MESSAGE_REACTIONS",
 				"GUILD_WEBHOOKS"
-			]
+			],
+			partials: ["CHANNEL"]
 		});
 
 		if (process.env.API_OSU) {

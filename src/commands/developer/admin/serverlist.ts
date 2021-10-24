@@ -6,7 +6,7 @@ import AldebaranClient from "../../../structures/djs/Client.js";
 export default class ServerlistSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Lists the servers Aldebaran is in",
+			description: "Lists the servers the bot is in",
 			perms: { aldebaran: ["VIEW_SERVERLIST"] }
 		});
 	}
@@ -32,14 +32,14 @@ export default class ServerlistSubcommand extends Command {
 					if (list[chunk] === undefined) list[chunk] = "";
 					list[chunk] += `\`${guild.id}\` **${guild.name}** - **${guild.memberCount}** members\n`;
 					guildIndex++;
-
-					const embed = new MessageEmbed()
-						.setAuthor("Aldebaran  |  Server List", ctx.client.user.avatarURL()!)
-						.setTitle(`Page ${chunkIndex + 1}`)
-						.setDescription(list[chunkIndex])
-						.setColor(this.color);
-					ctx.reply(embed);
 				});
+				
+			const embed = new MessageEmbed()
+				.setAuthor(`${ctx.client.name}  |  Server List`, ctx.client.user.avatarURL()!)
+				.setTitle(`Page ${chunkIndex + 1}`)
+				.setDescription(list[chunkIndex])
+				.setColor(this.color);
+			ctx.reply(embed);
 		});
 	}
 };

@@ -15,13 +15,12 @@ export type User = DRPGUser & { lastUpdate: number };
 function apiFetch(endpoint: string) {
 	return new Promise((resolve, reject) => {
 		request({
-			uri: `http://api.discorddungeons.me/v3/${endpoint}`,
+			uri: `https://api.discorddungeons.me/v3/${endpoint}`,
 			headers: { Authorization: process.env.API_DISCORDRPG }
 		}, (err, response, body) => {
 			if (err) {
 				reject(err);
 			} else if (response.statusCode !== 200) {
-				// eslint-disable-next-line prefer-promise-reject-errors
 				reject(`Unable to access API. Response code ${response.statusCode}`);
 			} else {
 				resolve(JSON.parse(body).data);

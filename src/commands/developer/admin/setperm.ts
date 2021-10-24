@@ -8,7 +8,7 @@ import AldebaranClient from "../../../structures/djs/Client.js";
 export default class SetpermSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Set Aldebaran permissions of the specific user",
+			description: "Set permissions of the specific user",
 			perms: { aldebaran: ["MANAGE_PERMISSIONS"] }
 		});
 	}
@@ -56,7 +56,7 @@ export default class SetpermSubcommand extends Command {
 					ctx.message.author.displayAvatarURL()
 				)
 				.setTitle("Warning")
-				.setDescription("You need to specify the Aldebaran permissions you want to set (seperated by spaces). (See `assets/data/aldebaranPermissions.json` for valid flags.)")
+				.setDescription(`You need to specify the ${ctx.client.name} permissions you want to set (seperated by spaces). (See \`assets/data/aldebaranPermissions.json\` for valid flags.)`)
 				.setColor("ORANGE");
 			return ctx.reply(embed);
 		}

@@ -127,7 +127,7 @@ export default () => {
 		});
 	}
 
-	commandHandler.registerMultiple(
+	commandHandler.register(
 		AdminCommand,
 		EballCommand,
 		EmojilistCommand,
@@ -139,7 +139,6 @@ export default () => {
 		RpsCommand,
 		AvatarCommand,
 		BstatsCommand,
-		BugreportCommand,
 		CommandsCommand,
 		CreditsCommand,
 		HelpCommand,
@@ -147,7 +146,6 @@ export default () => {
 		InviteCommand,
 		PingCommand,
 		ProfileCommand,
-		SuggestCommand,
 		TimeCommand,
 		UserCommand,
 		BirbCommand,
@@ -171,8 +169,18 @@ export default () => {
 		MathCommand
 	);
 
+	if (process.env.WEBHOOK_SUGGESTIONS_ID &&
+		process.env.WEBHOOK_SUGGESTIONS_TOKEN) {
+		commandHandler.register(SuggestCommand);
+	}
+
+	if (process.env.WEBHOOK_BUGREPORTS_ID &&
+		process.env.WEBHOOK_BUGREPORTS_TOKEN) {
+		commandHandler.register(BugreportCommand);
+	}
+
 	if (process.env.API_DISCORDRPG) {
-		commandHandler.registerMultiple(
+		commandHandler.register(
 			GleadCommand,
 			GoldCommand,
 			PlantCommand,
@@ -188,7 +196,7 @@ export default () => {
 	}
 
 	if (process.env.API_PEXELS) {
-		commandHandler.registerMultiple(
+		commandHandler.register(
 			BunnyCommand,
 			DuckCommand,
 			RandimalCommand,
@@ -205,7 +213,7 @@ export default () => {
 	}
 
 	if (commandHandler.client.nodesu) {
-		commandHandler.registerMultiple(
+		commandHandler.register(
 			OsuCommand,
 			OsubestCommand,
 			OsumapCommand,

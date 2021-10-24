@@ -16,7 +16,7 @@ export default class LewdCommand extends Command {
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
 		const sendlewds = imageUrls
-			.lewds[Math.floor(Math.random() * imageUrls.lewds.length)];
+			.lewd[Math.floor(Math.random() * imageUrls.lewd.length)];
 		ctx.client.users.fetch(args.user).then(target => {
 			const embed = new Embed(this)
 				.setDescription(`${ctx.message.author} is being lewd towards ${target}`)

@@ -2,7 +2,7 @@ import { Command, Embed } from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
-export default class GoldCommand extends Command {
+export default class UpgradecalcCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays the number of upgrades you need for your weapon",
@@ -32,22 +32,35 @@ export default class GoldCommand extends Command {
 			strMultiplier?: string,
 			shots?: string
 		};
-		const upgrades = Math.ceil(((
-			(((Number(args.charLevel) * 50) - 10 + (Number(args.maxPetDamage) > Number(args.petLevel) * 10
-				? Number(args.maxPetDamage) - Number(args.petLevel) * 10 : 0
-			)) / (Number(args.shots) || 1) - Number(args.minPetDamage))
-			/ (Number(args.strMultiplier) || 1) / Number(args.minWeaponDamage)) - 1) * 4);
-		const cost = Math.floor(
-			(Number(args.minWeaponDamage) + Number(args.maxWeaponDamage))
+
+		const charLevel = Number(args.charLevel);
+		const petLevel = Number(args.petLevel);
+		const maxPetDMG = Number(args.maxPetDamage);
+		const minPetDMG = Number(args.minPetDamage);
+		const maxWeaponDMG = Number(args.maxWeaponDamage);
+		const minWeaponDMG = Number(args.minWeaponDamage);
+		const shots = Number(args.shots);
+		const strMultiplier = Number(args.strMultiplier);
+
+		if (!charLevel || !petLevel || !maxPetDMG || !minPetDMG ||
+			!maxWeaponDMG || !minWeaponDMG || !shots || !strMultiplier) {
+			return ctx.error("MISSING_ARGS", "Please check `&?upgradecalc` for more information on how to use this command.");
+		}
+
+		const petDamage = maxPetDMG > petLevel * 10 ? maxPetDMG - petLevel * 10 : 0;
+		const hp = ((charLevel * 50) - 10 + petDamage); // I don't actually know what that is
+		const upgrades = Math.ceil((((hp / (shots || 1) - minPetDMG)
+			/ (strMultiplier || 1) / minWeaponDMG) - 1) * 4);
+		const cost = Math.floor((minWeaponDMG + maxWeaponDMG)
 			/ 6.5 * 50 * upgrades * (upgrades + 1)
-			* ((2 * upgrades + 1) / 6) + 500 * upgrades
-		);
+			* ((2 * upgrades + 1) / 6) + 500 * upgrades);
 		const embed = new Embed(this)
 			.setTitle("Upgrade Cost")
-			.setDescription(`**Character's Weapon Stats** (Lv**${args.charLevel.toLocaleString()}**): Deals between **${args.minWeaponDamage.toLocaleString()}** and **${args.maxWeaponDamage.toLocaleString()}** damage\n**Pet Stats** (Lv**${args.petLevel.toLocaleString()}**): Deals between **${args.minPetDamage.toLocaleString()}** and **${args.maxPetDamage.toLocaleString()}** damage`)
+			.setDescription(`**Character's Weapon Stats** (Lv**${charLevel.toLocaleString()}**): Deals between **${minWeaponDMG.toLocaleString()}** and **${maxWeaponDMG.toLocaleString()}** damage\n**Pet Stats** (Lv**${petLevel.toLocaleString()}**): Deals between **${minPetDMG.toLocaleString()}** and **${maxPetDMG.toLocaleString()}** damage`)
 			.addField("Upgrades Needed", `**${upgrades}** Upgrades`, true)
 			.addField("Required Strength", `**${(upgrades * 15).toLocaleString()}** Points`, true)
-			.addField("Upgrades Cost", `**${cost.toLocaleString()}** Gold`, true);
+			.addField("Upgrades Cost", `**${cost.toLocaleString()}** Gold`, true)
+			.setFooter("Credits to Kalle#5105 for the upgradecalc blargbot tag!");
 		ctx.reply(embed);
 	}
 };

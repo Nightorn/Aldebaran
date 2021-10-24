@@ -32,7 +32,7 @@ export abstract class Command implements ICommand {
 				if (!(metadata.perms.discord instanceof Array)) { throw new TypeError("The Discord permissions metadata are invalid"); } else this.perms.discord = metadata.perms.discord;
 			}
 			if (metadata.perms.aldebaran !== undefined) {
-				if (!(metadata.perms.aldebaran instanceof Array)) { throw new TypeError("The Aldebaran permissions metadata are invalid"); } else this.perms.aldebaran = metadata.perms.aldebaran;
+				if (!(metadata.perms.aldebaran instanceof Array)) { throw new TypeError("The permissions metadata are invalid"); } else this.perms.aldebaran = metadata.perms.aldebaran;
 			}
 		}
 		this.aliases = metadata.aliases || [];
@@ -80,14 +80,13 @@ export abstract class Command implements ICommand {
 		if (perms && guild) {
 			return this.run(ctx);
 		}
-		if (perms) {
+		/* if (perms) {
 			throw new Error("NOT_IN_GUILD");
 		}
 		if (guild) {
 			throw new Error("INVALID_PERMISSIONS");
-		} else {
-			throw new Error("YOU_GOT_IT_ALL_WRONG");
 		}
+		throw new Error("YOU_VE_GOT_IT_ALL_WRONG"); */
 	}
 
 	abstract run(ctx: MessageContext): void;
@@ -95,7 +94,7 @@ export abstract class Command implements ICommand {
 	toHelpEmbed(command: string, prefix = "&") {
 		const embed = new MessageEmbed()
 			.setAuthor(
-				`Aldebaran  |  Command Help  |  ${this.name}`,
+				`${this.client.name}  |  Command Help  |  ${this.name}`,
 				this.client.user!.avatarURL()!
 			)
 			.setTitle(this.metadata.description)
@@ -113,7 +112,7 @@ export abstract class Command implements ICommand {
 		if (this.perms.discord.length > 0)
 			embed.addField("Discord Perms", this.perms.discord.join(", "), true);
 		if (this.perms.aldebaran.length > 0)
-			embed.addField("Aldebaran Perms", this.perms.aldebaran.join(", "), true);
+			embed.addField(`${this.client.name} Perms`, this.perms.aldebaran.join(", "), true);
 		if (this.metadata.args !== undefined) {
 			let args = "";
 			let usage = "";

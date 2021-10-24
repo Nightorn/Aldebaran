@@ -15,9 +15,11 @@ export default async (client: AldebaranClient, message: Message) => {
 		? await client.customGuilds.fetch(message.guild.id)
 		: null;
 
-	const prefix = process.argv[2] === "dev" || !guild
-		? process.argv[4] || process.env.PREFIX!
-		: guild.prefix;
+	const prefix = guild
+		? process.argv[2] === "dev"
+			? process.argv[4] || process.env.PREFIX!
+			: guild.prefix
+		: "";
 
 	const ctx = new MessageContext(client, message, prefix);
 
@@ -53,14 +55,12 @@ export default async (client: AldebaranClient, message: Message) => {
 	if (command.indexOf("?") === 0) {
 		ctx.reply(ctx.client.commands.getHelp(sliced, prefix));
 	} else if (command.indexOf("#") === 0) {
-		try {
-			ctx.client.commands.bypassRun(sliced, message, prefix);
-		} catch (err) {
+		ctx.client.commands.bypassRun(sliced, message, prefix).catch(err => {
 			if (err.message === "INVALID_COMMAND") return;
 			if (err.message === "UNALLOWED_ADMIN_BYPASS") {
 				const embed = new MessageEmbed()
 					.setTitle("You are not allowed to use this.")
-					.setDescription("By using `#`, you are trying to bypass Discord permissions requirements and other checks, which is only allowed for Aldebaran Administrators.")
+					.setDescription(`By using \`#\`, you are trying to bypass Discord permissions requirements and other checks, which is only allowed for ${ctx.client.name} Administrators.`)
 					.setFooter(
 						ctx.message.author.username,
 						ctx.message.author.displayAvatarURL()
@@ -70,7 +70,7 @@ export default async (client: AldebaranClient, message: Message) => {
 			} else {
 				console.error(err);
 			}
-		}
+		});
 	} else if (command.indexOf("-") === 0) {
 		try {
 			const cmd = ctx.client.commands.get(sliced) as IImageCommand;
@@ -87,9 +87,7 @@ export default async (client: AldebaranClient, message: Message) => {
 			ctx.reply(embed);
 		}
 	} else {
-		try {
-			await client.commands.execute(command, message, prefix);
-		} catch (err) {
+		client.commands.execute(command, message, prefix).catch(err => {
 			if (err.message === "INVALID_PERMISSIONS") {
 				const embed = new MessageEmbed()
 					.setTitle("You are not allowed to use this.")
@@ -111,7 +109,7 @@ export default async (client: AldebaranClient, message: Message) => {
 			} else {
 				console.error(err);
 			}
-		}
+		});
 	}
 	console.log(
 		`\x1b[34m- COMMAND: ${command} | USER: ${message.author.tag} (${

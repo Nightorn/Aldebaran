@@ -6,7 +6,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class ProfileCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Shows your Aldebaran's profile",
+			description: "Shows your social profile",
 			usage: "UserMention|UserID",
 			example: "320933389513523220",
 			args: { user: { as: "user" } }

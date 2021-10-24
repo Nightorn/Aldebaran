@@ -4,7 +4,7 @@ import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/aldebaran/MessageContext.js";
 import { SocialProfileProperty } from "../../utils/Constants.js";
 
-export default class CommandSetprofile extends Command {
+export default class SetprofileCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Changes your profile informations",
@@ -38,11 +38,11 @@ export default class CommandSetprofile extends Command {
 		if (args.length <= 0) return ctx.reply(embed);
 
 		const section = args.shift()!.toLowerCase();
-		const profiletarget = sectionMatches[section as keyof typeof sectionMatches]
-			|| section as SocialProfileProperty;
+		const profiletarget = (sectionMatches[section as keyof typeof sectionMatches]
+			|| section) as SocialProfileProperty;
 		const inputdata = args.join(" ");
 
-		profile.changeProperty(profiletarget as SocialProfileProperty, inputdata).then(() => {
+		profile.changeProperty(profiletarget, inputdata).then(() => {
 			ctx.reply(`Your ${profiletarget} has been updated to \`${inputdata}\`.`);
 		}).catch(() => {
 			const error = new MessageEmbed()

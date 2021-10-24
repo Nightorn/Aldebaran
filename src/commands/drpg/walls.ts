@@ -140,7 +140,10 @@ export default class WallsCommand extends Command {
 
 			const embed = new MessageEmbed()
 				.setColor(0x00ae86)
-				.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
+				.setAuthor(
+					ctx.message.author.username, 
+					ctx.message.author.displayAvatarURL()
+				)
 				.setTitle(`Wall closest to Level ${args[0]}`)
 				.addField(
 					`Base at Level ${baseLvl}`,

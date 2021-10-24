@@ -19,7 +19,7 @@ export default class RpsCommand extends Command {
 				} else if (!ctx.message.author.bot) {
 					const introEmbed = new MessageEmbed()
 						.setAuthor("Rock. Paper. Scissors.", ctx.client.user.avatarURL()!)
-						.setDescription("**The person you want to play with has to accept your invitation by clicking the emoji on this message.**\nHere is how this game is going to work with you: once the other have accepted the invitation, **you will both receive a message** in your private messages from Aldebaran. You will have to **type either \"rock\", either \"paper\", either \"scissors\"** within 15 seconds (you can also type the first letter of each if you are too lazy to type the full word). **The results will be sent to the channel where the game has begun.**")
+						.setDescription(`**The person you want to play with has to accept your invitation by clicking the emoji on this message.**\nHere is how this game is going to work with you: once the other have accepted the invitation, **you will both receive a message** in your private messages from ${ctx.client.name}. You will have to **type either \"rock\", either \"paper\", either \"scissors\"** within 15 seconds (you can also type the first letter of each if you are too lazy to type the full word). **The results will be sent to the channel where the game has begun.**`)
 						.setColor(this.color);
 					ctx.reply(introEmbed).then(msg => {
 						msg.react("✅");
@@ -86,7 +86,7 @@ export default class RpsCommand extends Command {
 							});
 					});
 				} else {
-					ctx.reply("You cannot play against a bot that is not Aldebaran.");
+					ctx.reply(`You cannot play against a bot that is not ${ctx.client.name}.`);
 				}
 			} else {
 				ctx.reply("You have to ping a valid user in order to play this game.");

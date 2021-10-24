@@ -5,7 +5,7 @@ import MessageContext from "../structures/aldebaran/MessageContext";
 
 const timeNames = moment.tz.names();
 
-export const escape = (s: string) => s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+// export const escape = (s: string) => s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 
 // With the contribution of holroy
 export const formatNumber = (n: number | string) => {

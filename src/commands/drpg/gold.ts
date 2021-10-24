@@ -38,7 +38,10 @@ export default class GoldCommand extends Command {
 
 			const embed = new MessageEmbed()
 				.setTitle("Average Obtained Gold")
-				.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
+				.setAuthor(
+					ctx.message.author.username,
+					ctx.message.author.displayAvatarURL()
+				)
 				.setColor(0x00ae86)
 				.setDescription(
 					`**Please note all infomation about Gold are estimations!**\nYou have a +${equipment}% Gold Boost on your equipment, and you have ${attributes} points in the Gold Boost attribute.`

@@ -37,7 +37,8 @@ export default (app: Application) => (
 								redirect_uri: p.redirect_uri,
 								state: p.state,
 								session: ereq.cookies["connect.sid"],
-								able
+								able,
+								name: process.env.NAME
 							});
 						});
 					} else {

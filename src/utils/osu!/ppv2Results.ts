@@ -14,7 +14,7 @@ export type Result = {
 export default (
 	beatmapId: number,
 	mods: modbits,
-	combo: number,
+	combo?: number,
 	acc?: number,
 	nmiss?: number,
 	n300?: number,

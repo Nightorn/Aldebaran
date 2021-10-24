@@ -21,8 +21,8 @@ export default class SuggestCommand extends Command {
 			.setDescription(args.join(" "))
 			.setFooter(`User: ${ctx.message.author.tag} [ID: ${ctx.message.author.id}]`);
 		new WebhookClient({
-			id: "685901108262076565",
-			token: "Qy3jDeK9uUO3bIqpYgkZ6MrkspZ9m5H8T6r2IjxWITAiEtNlpFUuaJz-snayg8bXUJWy"
+			id: process.env.WEBHOOK_SUGGESTION_ID!,
+			token: process.env.WEBHOOK_SUGGESTION_TOKEN!
 		}).send({
 			username: ctx.message.author.username,
 			avatarURL: ctx.message.author.displayAvatarURL(),

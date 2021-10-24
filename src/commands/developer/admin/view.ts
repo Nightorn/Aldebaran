@@ -63,7 +63,7 @@ export default class ViewSubcommand extends Command {
 						ctx.message.author.displayAvatarURL()
 					)
 					.setTitle("Warning")
-					.setDescription(`The ID specified does not correspond to a valid user or a guild where ${ctx.client.user.username} is.`)
+					.setDescription(`The ID specified does not correspond to a valid user or a guild where ${ctx.client.name} is.`)
 					.setColor("ORANGE");
 				ctx.reply(embed);
 			}

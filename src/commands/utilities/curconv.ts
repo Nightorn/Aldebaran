@@ -75,7 +75,7 @@ export default class CurConvCommand extends Command implements ICommand {
 		} else if (!data.success) {
 			if (data.error.code === 104) {
 				console.log("We're out of Fixer API requests.");
-				ctx.error("API_RATELIMIT", "Aldebaran has ran out of API requests for Fixer this month. This means you will need to wait another month for &curconv to work. Sorry for the inconvenience!");
+				ctx.error("API_RATELIMIT", `${ctx.client.name} has ran out of API requests for Fixer this month. This means you will need to wait another month for ${ctx.prefix}curconv to work. Sorry for the inconvenience!`);
 				return false;
 			}
 			console.log(

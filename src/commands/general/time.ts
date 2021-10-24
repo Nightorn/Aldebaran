@@ -39,7 +39,7 @@ export default class TimeCommand extends Command {
 			if (time === null) {
 				const embed = new Embed(this)
 					.setTitle(":x: Ooof!")
-					.setDescription(`The timezone setting for ${user.username} seems to be invaild! Tell them to set it again with &uconfig timezone!`)
+					.setDescription(`The timezone setting for ${user.username} seems to be invaild! Tell them to set it again with ${ctx.prefix}uconfig timezone!`)
 					.addField(":information_source:", `${
 						user.username
 					}'s timezone is set to ${timezone}.\nMake sure the timezone is a vaild [tz timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), or in the format: GMT+ or - <number>`);

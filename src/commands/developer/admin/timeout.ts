@@ -30,7 +30,7 @@ export default class TimeoutSubcommand extends Command {
 						const getDate = (date: Date) => `**${f(date.getMonth() + 1)}/${f(date.getDate())}/${f(date.getFullYear())}** at **${f(date.getHours())}:${f(date.getMinutes())}** UTC`;
 						const embed = new MessageEmbed()
 							.setAuthor("You have been banned.")
-							.setDescription(`It seems you have broken the rules by using Aldebaran in a wrong way. Because we do not want people to do bad things but instead want Aldebaran to always operate as well as possible, we have decided to ban you so you do not disturb the other users. You can go in the official server to appeal your ban to the moderator who took action on you. You will be unbanned the ${getDate(new Date(finalDate))}.`)
+							.setDescription(`It seems you have broken the rules by using ${ctx.client.name} in a wrong way. Because we do not want people to do bad things but instead want ${ctx.client.name} to always operate as well as possible, we have decided to ban you so you do not disturb the other users. You can go in the official server to appeal your ban to the moderator who took action on you. You will be unbanned the ${getDate(new Date(finalDate))}.`)
 							.addField("Reason", args.join(" "), true)
 							.addField("Server Invite", "https://discord.gg/3x6rXAv", true)
 							.setColor("RED")

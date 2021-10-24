@@ -7,7 +7,7 @@
     "developer": {
         "name": "Developer",
         "title": ":hammer: Development :tools:",
-        "description": "Commands for Aldebaran developers"
+        "description": "Commands for the bot maintainers"
     },
     "drpg": {
         "name": "DiscordRPG",
@@ -48,7 +48,7 @@
     "settings": {
         "name": "Settings",
         "title": ":wrench: Settings :gear:",
-        "description": "Pimp My Aldebaran"
+        "description": "Pimp My Bot"
     },
     "utilities": {
         "name": "Utilities",

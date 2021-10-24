@@ -1,5 +1,4 @@
 import MessageContext from "../../../structures/aldebaran/MessageContext.js";
-import { escape } from "../../Methods.js";
 
 export default async (ctx: MessageContext) => {
 	if (!ctx.message.guild) return;

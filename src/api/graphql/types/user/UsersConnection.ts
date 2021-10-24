@@ -47,27 +47,35 @@ export default class UsersConnection {
 	 */
 	edges(_: object, request: Request) {
 		return new Promise(resolve => {
-			const check = async (c: Client) => {
+			const check = async (c: Client, {
+				guildId, before, after, first, last
+			}: {
+				guildId: string,
+				before: string | null,
+				after: string | null,
+				first: number | null,
+				last: number | null
+			}) => {
 				let list: Collection<string, DJSMember> | DJSMember[] | null = null;
-				const guild = await c.guilds.fetch(this.guild);
+				const guild = await c.guilds.fetch(guildId);
 				if (guild) {
 					list = guild.members.cache
 						.sort((a, b) => a.joinedTimestamp! - b.joinedTimestamp!);
 
 					let timestamp = 0;
-					if (this.before || this.after) {
-						timestamp = Number(Buffer.from(this.before || this.after!, "base64").toString("ascii"));
-						if (this.before) {
+					if (before || after) {
+						timestamp = Number(Buffer.from(before || after!, "base64").toString("ascii"));
+						if (before) {
 							list = list.filter(m => m.joinedTimestamp! < timestamp);
-						} else if (this.last) {
+						} else if (last) {
 							list = list.filter(m => m.joinedTimestamp! > timestamp);
 						}
 					}
 
-					if (this.first) {
-						list = list.first(this.first);
-					} else if (this.last) {
-						list = list.last(this.last);
+					if (first) {
+						list = list.first(first);
+					} else if (last) {
+						list = list.last(last);
 					} else {
 						list = Array.from(list.values());
 					}
@@ -75,7 +83,13 @@ export default class UsersConnection {
 				return list;
 			};
 
-			fetchDSMValue(request.app.dsm, check).then(async (data?) => {
+			fetchDSMValue(request.app.dsm, check, { context: {
+				guildId: this.guild,
+				before: this.before,
+				after: this.after,
+				first: this.first,
+				last: this.last
+			} }).then(async (data?) => {
 				const users = await data;
 				if (users) {
 					this.totalCount = users.length;

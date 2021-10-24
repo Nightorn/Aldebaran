@@ -22,14 +22,22 @@ export default class PlantcalcCommand extends Command {
 			const hours = parseInt(args.shift()!, 10);
 			const itemName = args.join(" ");
 			let item: DRPGItem | null = null;
-			for (const element of Object.values(drpgItems))
-				if (element.name.toLowerCase() === itemName) item = element;
+
+			for (const element of Object.values(drpgItems)) {
+				if (element.sapling && element.name.toLowerCase().includes(itemName)) {
+					item = element;
+				}
+			}
+
 			if (item && item.sapling) {
 				const scope = { luck: points, passed: hours * 3600 };
 				const min = evaluate(item.sapling.loot.amount.min, scope);
 				const max = evaluate(item.sapling.loot.amount.max, scope);
 				ctx.reply(`Estimated ${min} - ${max} when planted for ${hours} hours. `);
-			} else ctx.error("WRONG_USAGE", "You need to provide the name of a valid sapling.");
-		} else ctx.reply("You must provide reaping points, hours set and item name. Example (&plantcalc 1 24 olive)");
+			} else {
+				ctx.error("WRONG_USAGE", "You need to provide the name of a valid sapling.");
+			}
+
+		} else ctx.reply(`You must provide reaping points, hours set and item name. Example (${ctx.prefix}plantcalc 1 24 olive)`);
 	}
 };

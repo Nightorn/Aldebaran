@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 import { Command } from "../Command.js";
 import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
-export default (_: typeof Command, embed: typeof MessageEmbed) => {
+export default (cmd: typeof Command, embed: typeof MessageEmbed) => {
 	class Embed extends embed {
 		constructor(command: Command, description: string) {
 			super(command);
@@ -18,5 +18,5 @@ export default (_: typeof Command, embed: typeof MessageEmbed) => {
 		}
 	}
 
-	return { Command, Embed };
+	return { Command: cmd, Embed };
 };

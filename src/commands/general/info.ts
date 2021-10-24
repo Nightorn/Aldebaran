@@ -7,7 +7,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class InfoCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays informations about Aldebaran"
+			description: "Displays informations about the bot"
 		});
 	}
 
@@ -32,11 +32,11 @@ export default class InfoCommand extends Command {
 
 		const embed = new MessageEmbed()
 			.setAuthor(
-				`${ctx.client.user.username} v${ctx.client.version}`,
+				`${ctx.client.name} v${ctx.client.version}`,
 				ctx.client.user.avatarURL()!,
-				"https://aldebaran.nightorn.com/"
+				process.env.HOMEPAGE
 			)
-			.addField("Developers of Aldebaran", adminMentions)
+			.addField(`Developers of ${ctx.client.name}`, adminMentions)
 			.addField(
 				"Statistics",
 				`Playing with **${guilds} servers**\nWatching **${channels} channels**\nListening to **${users} users**`,
@@ -49,7 +49,7 @@ export default class InfoCommand extends Command {
 			)
 			.addField(
 				"Affiliation",
-				"Aldebaran uses but is not affiliated with [DiscordRPG](https://discorddungeons.me), [TheCatAPI](https://thecatapi.com), [Dog API](https://dog.ceo/), [nekos.life](https://nekos.life/), [Giphy](https://giphy.com), [osu!](https://osu.ppy.sh), [Some Random Api](https://some-random-api.ml/) and [Pexels](https://www.pexels.com)."
+				`${ctx.client.name} uses but is not affiliated with [DiscordRPG](https://discorddungeons.me), [TheCatAPI](https://thecatapi.com), [Dog API](https://dog.ceo/), [nekos.life](https://nekos.life/), [Giphy](https://giphy.com), [osu!](https://osu.ppy.sh), [Some Random Api](https://some-random-api.ml/) and [Pexels](https://www.pexels.com).`
 			)
 			.setFooter(`The prefix in this guild is "${ctx.prefix}".`)
 			.setThumbnail(ctx.client.user.avatarURL()!)

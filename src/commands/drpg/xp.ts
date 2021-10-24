@@ -40,7 +40,10 @@ export default class XpCommand extends Command {
 
 			const embed = new MessageEmbed()
 				.setTitle(`Average Xp Kill At Lvl. ${level}`)
-				.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
+				.setAuthor(
+					ctx.message.author.username,
+					ctx.message.author.displayAvatarURL()
+				)
 				.setColor(0x00ae86)
 				.setDescription(
 					`**Please note all infomation about XP are estimations, and only works with dynamobs!**\nYou have a +${enchant}% XP Boost on your equipment, and you have ${attributes} points in your XP Boost attribute.`

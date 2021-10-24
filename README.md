@@ -2,9 +2,6 @@
 # Aldebaran
 
 <p align="center">
-    <a href="https://discord.gg/3x6rXAv">
-        <img src="https://discordapp.com/api/guilds/461792163525689345/widget.png?style=shield" alt="Discord Server">
-    </a>     
     <a href="/issues">
         <img src="https://img.shields.io/github/issues/Nightorn/Aldebaran" alt="Issues">
     </a>
@@ -16,13 +13,7 @@ Aldebaran is a Discord multi-purposes bot which offers a lot of assistance regar
 ## Commands
 Aldebaran currently has 81 commands over 11 categories - check them out by adding Aldebaran to your server now!
 
-[![Invite Aldebaran](https://res.nightorn.com/assets/images/invite.png "Invite Aldebaran")](https://discordapp.com/api/oauth2/authorize?client_id=437802197539880970&permissions=126016&scope=bot)
-
-
-## Main server
-Join the main server to stay updated about the new updates!
-
-[![Discord Server](https://res.nightorn.com/assets/images/supportserver.png "Discord Server")](https://discord.gg/3x6rXAv)
+[Invite Aldebaran](https://discordapp.com/api/oauth2/authorize?client_id=437802197539880970&permissions=126016&scope=bot)
 
 ## Aldebaran Development
 ### Contribute as a normal user

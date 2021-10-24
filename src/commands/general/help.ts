@@ -7,7 +7,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class HelpCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays detailled help about Aldebaran's commands"
+			description: "Displays detailled help about the bot's commands"
 		});
 	}
 
@@ -42,14 +42,14 @@ export default class HelpCommand extends Command {
 			}
 		} else {
 			const embed = new MessageEmbed()
-				.setAuthor("Aldebaran's Help Pages", ctx.client.user.avatarURL()!);
+				.setAuthor(`${ctx.client.name}'s Help Pages`, ctx.client.user.avatarURL()!);
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {
 				if (data.name !== "Developer"  && typeof data !== "string")
 					categoriesList += `**${data.title}** - ${data.description}\n`;
 			}
 			embed.setDescription(
-				`Below are the different categories, each of them contains a list of commands which you can see with \`&help <category name>\`. You can get a brief overview of all available commands with \`&commands\`.\n${categoriesList}`
+				`Below are the different categories, each of them contains a list of commands which you can see with \`${ctx.prefix}help <category name>\`. You can get a brief overview of all available commands with \`${ctx.prefix}commands\`.\n${categoriesList}`
 			);
 			embed.addField(
 				"**__Have a command request or suggestion?__**",

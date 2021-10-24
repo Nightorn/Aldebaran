@@ -24,7 +24,7 @@ export default class CustomProfileManager extends CM<Snow, Profile, UserR> {
 		if (profile && options && !options.force) {
 			return profile;
 		}
-		const data = await this.bot.database.users.selectOneById(id);
+		const data = await this.bot.database.socialprofile.selectOneById(id);
 		if (data) {
 			const fetchedProfile = new Profile(this.bot, user, data);
 			if (!(options && options.cache === false)) {

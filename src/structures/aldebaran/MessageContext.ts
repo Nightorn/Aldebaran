@@ -1,5 +1,5 @@
 import { Message as DMessage, MessageEmbed as MEmbed, MessageOptions as MOptions, MessagePayload as MPayload, TextChannel, ThreadChannel } from "discord.js";
-import { ErrorString, Error as MError } from "../../utils/Constants.js";
+import { ErrorString, Errors } from "../../utils/Constants.js";
 import { Args } from "../../interfaces/Arg.js";
 import Client from "../djs/Client.js";
 import Guild from "../djs/Guild.js";
@@ -123,7 +123,7 @@ export default class MessageContext {
 	}
 
 	async error(type: ErrorString, desc?: string, value?: string) {
-		const title = MError[type] !== undefined ? MError[type](value!) : "An error has occured.";
+		const title = Errors[type] !== undefined ? Errors[type](value!) : "An error has occured.";
 		const embed = new MEmbed()
 			.setTitle(title)
 			.setColor("RED");

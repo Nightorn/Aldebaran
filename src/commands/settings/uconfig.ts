@@ -7,7 +7,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class UconfigCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Manages your Aldebaran personal settings",
+			description: "Manages your personal settings",
 			usage: "Parameter Value",
 			example: "adventureTimer on"
 		});
@@ -23,7 +23,7 @@ export default class UconfigCommand extends Command {
 			const embed = new MessageEmbed()
 				.setAuthor("User Settings", ctx.client.user.avatarURL()!)
 				.setDescription(
-					`Welcome to your user settings! This command allows you to customize Aldebaran to your needs. The available properties are listed in \`${ctx.prefix}uconfig list\`, and your current settings are shown in \`${ctx.prefix}uconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}uconfig property value\`, and one example is \`${ctx.prefix}uconfig adventureTimer on\`.`
+					`Welcome to your user settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}uconfig list\`, and your current settings are shown in \`${ctx.prefix}uconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}uconfig property value\`, and one example is \`${ctx.prefix}uconfig adventureTimer on\`.`
 				)
 				.setColor("BLUE")
 				.setFooter(
@@ -51,15 +51,18 @@ export default class UconfigCommand extends Command {
 				)
 				.setTitle("Config Command Help Page")
 				.setDescription(
-					"**__IMPORTANT: If setting is disabled in &gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties."
+					`**__IMPORTANT: If the setting is disabled in ${ctx.prefix}gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties.`
 				)
 				.setColor("BLUE");
+				
+			const guild = (await ctx.guild())!;
+			console.log(list);
 			for (const [category, parameters] of Object.entries(list)) {
 				let entries = "";
+				console.log(parameters);
 				for (const [key, data] of Object.entries(parameters)) {
 					if (ctx.message.guild) {
-						const guild = (await ctx.guild())!; // eslint-disable-line no-await-in-loop
-						if (guild.settings[key as GuildSetting] === undefined
+						if (!guild.settings[key as GuildSetting]
 							&& ctx.client.models.settings.guild[key as GuildSetting]
 						) {
 							entries += ":warning: ";
@@ -67,7 +70,9 @@ export default class UconfigCommand extends Command {
 					}
 					entries += `**${key}** - ${data.help}\n`;
 				}
-				embed.addField(category, entries);
+				if (entries) {
+					embed.addField(category, entries);
+				}
 			}
 			ctx.reply(embed);
 		} else if (args.includes("view")) {
@@ -127,14 +132,14 @@ export default class UconfigCommand extends Command {
 			} else {
 				const embed = new MessageEmbed()
 					.setTitle("Not supported")
-					.setDescription("This value is not vaild. Please check `&uconfig list` for the vaild values for this setting.")
+					.setDescription(`This value is not vaild. Please check \`${ctx.prefix}uconfig list\` for the vaild values for this setting.`)
 					.setColor("RED");
 				ctx.reply(embed);
 			}
 		} else {
 			const embed = new MessageEmbed()
 				.setTitle("Invalid key")
-				.setDescription("This key does not exist. Check `&uconfig list` for the keys accepted.")
+				.setDescription(`This key does not exist. Check \`${ctx.prefix}uconfig list\` for the keys accepted.`)
 				.setColor("RED");
 			ctx.reply(embed);
 		}

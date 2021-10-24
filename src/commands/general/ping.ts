@@ -33,7 +33,7 @@ export default class PingCommand extends Command {
 	async run(ctx: MessageContext) {
 		const embed = new MessageEmbed()
 			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
-			.addField(`${ctx.client.user.username} Ping`, "Computing...", true)
+			.addField(`${ctx.client.name} Ping`, "Computing...", true)
 			.setColor("BLUE");
 		const newMessage = await ctx.reply(embed);
 		const ping = newMessage.createdTimestamp - ctx.message.createdTimestamp;
@@ -60,7 +60,7 @@ export default class PingCommand extends Command {
 
 		const embedResult = new MessageEmbed()
 			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
-			.addField(`${ctx.client.user.username} Ping`, `${ping} ms`, true)
+			.addField(`${ctx.client.name} Ping`, `${ping} ms`, true)
 			.setColor(color);
 		newMessage.edit({ content: desc, embeds: [embedResult] });
 	}

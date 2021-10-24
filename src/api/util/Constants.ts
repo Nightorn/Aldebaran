@@ -1,9 +1,8 @@
-// eslint-disable-next-line import/prefer-default-export
 export const Scope = {
-	admin: "have complete control over your Aldebaran's data",
-	"read:social": "read your Aldebaran's social profile",
-	"write:social": "modify your Aldebaran's social profile",
-	"read:settings": "read your Aldebaran's settings",
-	"write:settings": "change your Aldebaran's settings",
-	"read:guilds": "read the servers both Aldebaran and you are in"
+	admin: "have complete control over your data",
+	"read:social": "read your social profile",
+	"write:social": "edit your social profile",
+	"read:settings": "read your settings",
+	"write:settings": "edit your settings",
+	"read:guilds": "read the servers both the bot and you are in"
 };

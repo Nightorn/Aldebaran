@@ -20,11 +20,11 @@ export default class User extends DiscordStructWithSettings {
 	 * @returns {string}
 	 */
 	async pfp(_: object, request: Request) {
-		const query = async (client: Client) => {
-			const user = await client.users.fetch(this.ID);
+		const query = async (client: Client, { id }: { id: string }) => {
+			const user = await client.users.fetch(id);
 			return user ? user.displayAvatarURL() : null;
 		};
-		return fetchDSMValue(request.app.dsm, query);
+		return fetchDSMValue(request.app.dsm, query, { context: { id: this.ID } });
 	}
 
 	/**
@@ -52,8 +52,9 @@ export default class User extends DiscordStructWithSettings {
 	 * @returns {string}
 	 */
 	async username(_: object, request: Request) {
-		const query = async (c: Client) => (await c.users.fetch(this.ID)).username;
-		return fetchDSMValue(request.app.dsm, query);
+		const query = async (c: Client, { id }: { id: string }) => 
+			(await c.users.fetch(id)).username;
+		return fetchDSMValue(request.app.dsm, query, { context: { id: this.ID } });
 	}
 
 	/**

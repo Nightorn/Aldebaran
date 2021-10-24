@@ -101,17 +101,15 @@ export default class CommandHandler {
 		return this.commands.get(command)!.toHelpEmbed(command, prefix);
 	}
 
-	register(Structure: typeof Command) {
-		const command: Command = new (Structure as any)(this.client);
-		command.name = command.metadata.name
-			|| command.constructor.name.slice(0, -7).toLowerCase();
-		this.commands.set(command.name, command);
-		command.aliases.forEach(alias => {
-			this.commands.set(alias, command);
-		});
-	}
-
-	registerMultiple(...structures: (typeof Command)[]) {
-		structures.forEach(this.register, this);
+	register(...structures: (typeof Command)[]) {
+		structures.forEach(Structure => {
+			const command: Command = new (Structure as any)(this.client);
+			command.name = command.metadata.name
+				|| command.constructor.name.slice(0, -7).toLowerCase();
+			this.commands.set(command.name, command);
+			command.aliases.forEach(alias => {
+				this.commands.set(alias, command);
+			});
+		}, this);
 	}
 };

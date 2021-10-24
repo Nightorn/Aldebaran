@@ -19,8 +19,9 @@ export default class Guild extends DiscordStructWithSettings {
 	 * @returns {Promise<number>}
 	 */
 	async createdTimestamp(_: object, request: Request) {
-		const query = (c: Client) => c.guilds.cache.get(this.ID)!.createdTimestamp;
-		return fetchDSMValue(request.app.dsm, query);
+		const query = (c: Client, { id }: { id: string }) => c
+			.guilds.cache.get(id)!.createdTimestamp;
+		return fetchDSMValue(request.app.dsm, query, { context: { id: this.ID } });
 	}
 
 	/**
@@ -29,11 +30,11 @@ export default class Guild extends DiscordStructWithSettings {
 	 * @returns {string}
 	 */
 	async iconURL(_: object, request: Request) {
-		const query = (c: Client) => {
-			const guild = c.guilds.cache.get(this.ID);
+		const query = (c: Client, { id }: { id: string }) => {
+			const guild = c.guilds.cache.get(id);
 			return guild ? guild.iconURL({ format: "png", size: 64 }) : null;
 		};
-		return fetchDSMValue(request.app.dsm, query);
+		return fetchDSMValue(request.app.dsm, query, { context: { id: this.ID } });
 	}
 
 	/**
@@ -54,8 +55,9 @@ export default class Guild extends DiscordStructWithSettings {
 	 * @returns {Promise<string>}
 	 */
 	async name(_: object, request: Request) {
-		const query = (c: Client) => c.guilds.cache.get(this.ID)?.name;
-		return fetchDSMValue(request.app.dsm, query);
+		const query = (c: Client, { id }: { id: string }) => c
+			.guilds.cache.get(id)?.name;
+		return fetchDSMValue(request.app.dsm, query, { context: { id: this.ID } });
 	}
 
 	/**

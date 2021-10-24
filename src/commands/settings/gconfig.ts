@@ -7,10 +7,10 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class GconfigCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Manages the Aldebaran settings of your server",
+			description: "Manages the settings of your server",
 			usage: "Parameter Value",
 			example: "adventureTimer on",
-			perms: { discord: ["ADMINISTRATOR"] },
+			perms: { discord: ["MANAGE_GUILD"] },
 			requiresGuild: true
 		});
 	}
@@ -25,7 +25,7 @@ export default class GconfigCommand extends Command {
 			const embed = new MessageEmbed()
 				.setAuthor("User Settings", ctx.client.user.avatarURL()!)
 				.setDescription(
-					`Welcome to your server settings! This command allows you to customize Aldebaran to your needs. The available properties are listed in \`${ctx.prefix}gconfig list\`, and your current settings are shown in \`${ctx.prefix}gconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}gconfig property value\`, and one example is \`${ctx.prefix}gconfig adventureTimer on\`.`
+					`Welcome to your server settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}gconfig list\`, and your current settings are shown in \`${ctx.prefix}gconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}gconfig property value\`, and one example is \`${ctx.prefix}gconfig adventureTimer on\`.`
 				)
 				.setColor("BLUE");
 			ctx.reply(embed);
@@ -55,7 +55,9 @@ export default class GconfigCommand extends Command {
 				for (const [key, data] of Object.entries(parameters)) {
 					entries += `**${key}** - ${data.help}\n`;
 				}
-				embed.addField(category, entries);
+				if (entries) {
+					embed.addField(category, entries);
+				}
 			}
 			ctx.reply(embed);
 		} else if (args.includes("view")) {
@@ -116,12 +118,12 @@ export default class GconfigCommand extends Command {
 				});
 			} else {
 				ctx.reply(
-					"**Error** This value is not supported, check `&gconfig list` for more informations."
+					`**Error** This value is not supported, check \`${ctx.prefix}gconfig list\` for more informations.`
 				);
 			}
 		} else {
 			ctx.reply(
-				"**Error** This key does not exist, check `&gconfig list` for more informations."
+				`**Error** This key does not exist, check \`${ctx.prefix}gconfig list\` for more informations.`
 			);
 		}
 		return true;

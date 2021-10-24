@@ -21,13 +21,13 @@ export default class OsumapCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Shows the informations of the specified map",
-			help: "First, you have to send the link of the beatmap you want to see the informations of, or you also use its ID. After that, you can choose the mode to show the informations from, note that the default mode is standard. See more informations below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `&osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps.",
+			help: "First, you have to send the link of the beatmap you want to see the informations of, or you also use its ID. After that, you can choose the mode to show the informations from, note that the default mode is standard. See more informations below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps.",
 			example: "1097541 --taiko +HD 97% 100x 69m",
 			args: {
 				map: { as: "expression", regex: /\d+$/, desc: "Beatmap URL / ID" },
 				mode: { as: "mode?", desc: "Game Mode (--osu, --mania, --ctb, --taiko)" },
 				mods: { as: "expression?", regex: /(\+(\D{2})+)/, desc: "Mods (ex: +HDDT)" },
-				accuracy: { as: "expression?", regex: /(\d{1,2}\.\d{1,2}%)/, desc: "Accuracy (ex: 98.95%)" },
+				accuracy: { as: "expression?", regex: /(\d{1,2}(\.\d{1,2})?%)/, desc: "Accuracy (ex: 98.95%)" },
 				combo: { as: "expression?", regex: /\d+(?=x)/, desc: "Combo (ex: 469x)" },
 				nmiss: { as: "expression?", regex: /\d+(?=m)/, desc: "Miss Amount (ex: 7m)" }
 			}
@@ -75,7 +75,7 @@ export default class OsumapCommand extends Command {
 						if (value === beatmap.approved)
 							approvalStatus = key[0].toUpperCase() + key.slice(1);
 					}
-					const combo = comboArg ? comboArg : beatmap.maxCombo;
+					const combo = comboArg || beatmap.maxCombo;
 					let results = null;
 					let resultsAcc = null;
 					if (mode === "osu") {
@@ -89,7 +89,7 @@ export default class OsumapCommand extends Command {
 						resultsAcc = await ppv2Results(
 							beatmap.id,
 							ojsama.modbits.from_string(stringMods),
-							Number(comboArg),
+							undefined,
 							Number(accuracy),
 							Number(nmiss)
 						);

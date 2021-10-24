@@ -48,7 +48,7 @@ export const presences: Presences = importAssets("./config/presence.json");
 
 export type OsuMode = keyof typeof Mode;
 
-export type ErrorString = keyof typeof Error;
+export type ErrorString = keyof typeof Errors;
 export type PermissionString = keyof typeof Permissions;
 export type CommonSetting = keyof typeof SettingsModel.common;
 export type UserSetting = CommonSetting | keyof typeof SettingsModel.user;
@@ -129,7 +129,7 @@ export const SettingsModel = {
 			support: timezoneSupport,
 			help:
         "Sets your timezone - [GMT, UTC, or [tz database timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]",
-			category: "Aldebaran"
+			category: process.env.NAME
 		},
 		dateformat: {
 			support: (value: string) => (
@@ -139,7 +139,7 @@ export const SettingsModel = {
 			),
 			help:
         "Time Format - Use DD (day of month), MM (month number) and YYYY (year)",
-			category: "Aldebaran"
+			category: process.env.NAME
 		},
 		osuusername: {
 			support: () => true,
@@ -168,8 +168,8 @@ export const SettingsModel = {
 		},
 		aldebaranprefix: {
 			support: () => true,
-			help: "Aldebaran's Prefix - [& | Guild Customized]",
-			category: "Aldebaran"
+			help: `${process.env.NAME}'s Prefix - [& | Guild Customized]`,
+			category: process.env.NAME
 		},
 		discordrpgprefix: {
 			support: () => true,
@@ -180,7 +180,7 @@ export const SettingsModel = {
 	}
 };
 
-export const Error = {
+export const Errors = {
 	API_ERROR: () => "This API has thrown an error.",
 	API_RATELIMIT: () => "We have hit the ratelimit of (the endpoint of) this API.",
 	CUSTOM: (res: string) => res,

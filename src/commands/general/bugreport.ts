@@ -21,8 +21,8 @@ export default class BugreportCommand extends Command {
 			.setDescription(args.join(" "))
 			.setFooter(`User: ${ctx.message.author.tag} [ID: ${ctx.message.author.id}]`);
 		new WebhookClient({
-			id: "685907959477436481",
-			token: "PX_gaoqJxIPVfrFBZVBZ855XvqqIqksNBFEPEXxIemyRWF0XlxYYhUkISkoxv405gB01"
+			id: process.env.WEBHOOK_BUGREPORTS_ID!,
+			token: process.env.WEBHOOK_BUGREPORTS_TOKEN!
 		}).send({
 			username: ctx.message.author.username,
 			avatarURL: ctx.message.author.displayAvatarURL(),

@@ -1,3 +1,4 @@
+import { escape as esc } from "mysql2";
 import AldebaranClient from "../structures/djs/Client.js";
 import GenericDatabaseProvider from "./GenericDatabaseProvider.js";
 
@@ -119,10 +120,7 @@ export default class DatabaseProvider extends GenericDatabaseProvider {
 			 * @param {Map} changes Changes to make to the profile, the map needs an entry for each column modified, with the column as the key, and the new value as the entry value
 			 */
 			updateOneById: async (id: string, ch: Map<string, string | number>) => {
-				const updates = DatabaseProvider.convertChangesMapToString(ch);
-				return this.query(
-					`UPDATE socialprofile SET ${updates.join(", ")} WHERE userId='${id}'`
-				);
+				return this.changesQuery(`UPDATE socialprofile SET ? WHERE userId='${id}'`, ch);
 			},
 			/**
 			 * Deletes the data of the profile specified on the database
@@ -139,6 +137,14 @@ export default class DatabaseProvider extends GenericDatabaseProvider {
 				`INSERT INTO socialprofile (userId) VALUES ('${id}')`
 			)
 		};
+	}
+
+	changesQuery(query: string, changes: Map<string, string | number>) {
+		let updates = [];
+		for (const [k, v] of changes.entries()) {
+			updates.push(`${k} = ${esc(v)}`);
+		}
+		return this.query(query.replace("?", updates.join(", ")));
 	}
 
 	static checkUpdateOneById(changes: Map<string, string | number>) {

@@ -30,7 +30,10 @@ export default class AdminCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const embed = new MessageEmbed()
-			.setAuthor(ctx.message.author.username, ctx.message.author.displayAvatarURL())
+			.setAuthor(
+				ctx.message.author.username,
+				ctx.message.author.displayAvatarURL()
+			)
 			.setTitle("Warning")
 			.setDescription("The admin action specified is invalid.")
 			.setColor("ORANGE");

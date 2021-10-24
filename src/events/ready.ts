@@ -15,9 +15,10 @@ export default (client: AldebaranClient) => {
 
 	const parseText = (value: string) => {
 		let text = value;
-		text = text.replace("{NSERVERS}", formatNumber(client.guilds.cache.size));
-		text = text.replace("{NUSERS}", formatNumber(client.users.cache.size));
-		text = text.replace("{VERSION}", client.version);
+		text = text.replace("{NSERVERS}", formatNumber(client.guilds.cache.size))
+			.replace("{NUSERS}", formatNumber(client.users.cache.size))
+			.replace("{VERSION}", client.version)
+			.replace("{PREFIX}", process.env.PREFIX || "&");
 		return text;
 	};
 
