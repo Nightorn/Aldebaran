@@ -8,3 +8,4 @@ config/config.json
 *.code-workspace
 .env
 .vscode
+package-lock.json

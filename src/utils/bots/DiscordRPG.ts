@@ -14,10 +14,10 @@ const embedColor = (playerPercentage: number) => {
 };
 
 const emojiColor = (percentage: number) => {
-	if (percentage <= 20) return "<:red:610021415919288320>";
-	if (percentage <= 40) return "<:orange:610021415973814291>";
-	if (percentage <= 60) return "<:yellow:610021415487537163>";
-	return "<:green:610021415755972628>";
+	if (percentage <= 20) return "🔴";
+	if (percentage <= 40) return "🟠";
+	if (percentage <= 60) return "🟡";
+	return "🟢";
 };
 
 const checkPlayer = (ctx: MessageContext, username: string) => {
@@ -127,7 +127,7 @@ export default async (ctx: MessageContext) => {
 		) {
 			if (ctx.message.content.indexOf(") | +") !== -1) {
 				const match = ctx.message.content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
-				if (match) player.name = player.name[1];
+				if (match) player.name = match[1];
 				// eslint-disable-next-line no-useless-escape
 				const hpMatches = ctx.message.content.match(/(Dead|[\d\.]+% HP)/g)!;
 				const deadPet = hpMatches[1] === "Dead";

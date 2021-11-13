@@ -1,4 +1,4 @@
-import { Collection, MessageReaction, User } from "discord.js";
+import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
 import moment from "moment-timezone";
 import MessageContext from "../structures/aldebaran/MessageContext";
@@ -79,75 +79,64 @@ export const lightOrDark = (color: string) => {
 };
 
 /**
- * Paginates a list for user convenience
- * @param {Array<String>} list The array of items to be paginated
- * @param {Number} page The page number to start on
- * @param {String} headerText The text on the top line of the page
- * @param {Message} message The user's discord.js Message
- * @param {String} footerText The text on the bottom line of the page
- * @param {Client} bot The bot
+ * Paginates an embed with arrow buttons, editing the title and description properties with the page number and content.
+ * @param {Array<String>} list Array of rows to be displayed
+ * @param {Number} pageSize Number of rows to be displayed per page
+ * @param {String} headerText Title of the embed
+ * @param {Message} message The discord.js Message that triggered the command
+ * @param {MessageEmbed} embed A Discord.js MessageEmbed with extra properties defined
  */
 export async function paginate(
 	list: string[],
-	page: number,
+	pageSize: number,
 	headerText: string,
 	ctx: MessageContext,
-	footerText: string
+	codeblock?: string,
+	embed: MessageEmbed = new MessageEmbed()
 ) {
-	const maxPage = Math.ceil(list.length / 15);
-	if (page < 1) {
-		page = 1;
-	} else if (page > maxPage) {
-		page = maxPage;
+	const emojiButton = (emoji: string) => new MessageButton()
+		.setEmoji(emoji)
+		.setStyle("SECONDARY")
+		.setCustomId(emoji);
+	const [leftButton, xButton, rightButton] = ["⬅️", "❌", "➡️"].map(emojiButton);
+	const buttonRow = new MessageActionRow();
+	const maxPage = Math.ceil(list.length / pageSize);
+	let page = 1;
+
+	function updateEmbed() {
+		embed.title = `${headerText} (page ${page}/${maxPage})`;
+		const description = list
+			.slice((page - 1) * pageSize, page * pageSize)
+			.join("\n")
+			.trim() || "Err";
+		embed.description = codeblock
+			? `\`\`\`${codeblock}\n${description}\n\`\`\``
+			: description;
+		leftButton.setDisabled(page === 1);
+		rightButton.setDisabled(page === maxPage);
+		buttonRow.setComponents([leftButton, xButton, rightButton]);
 	}
-	let header = `#=====[ ${headerText} (page ${page}/${maxPage}) ]=====#`;
-	let body = list.slice(page * 15 - 15, page * 15).join("\n");
-	let footer = `#${"".padEnd(Math.floor(header.length / 2 - footerText.length / 2) - 1, "=")}${footerText}${"".padEnd(Math.ceil(header.length / 2 - footerText.length / 2) - 1, "=")}#`;
+	updateEmbed();
 
-	const msg = await ctx.reply(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
-	if (maxPage > 1) {
-		const hasRemovePerms = ctx.message.guild
-			? ctx.channel.permissionsFor(ctx.client.user)!.has("MANAGE_MESSAGES")
-			: true;
-		const reactions = ["⬅", "❌", "➡"].filter(r => hasRemovePerms || r !== "❌");
-		for (const react of reactions) {
-			// eslint-disable-next-line no-await-in-loop
-			await msg.react(react);
+	const msg = await ctx.message.channel
+		.send({ embeds: [embed], components: maxPage > 1 ? [buttonRow] : [] });
+
+	// Keep collecting interactions as long as there's pages to paginate.
+	while (maxPage > 1) {
+		const interaction = await msg.awaitMessageComponent({
+			filter: i => i.user.id === ctx.message.author.id ? true : !i.deferUpdate(),
+			time: 60000
+		}).catch(() => {});
+
+		if (!interaction || interaction.customId === "❌") {
+			msg.edit({ components: [] });
+			break;
 		}
-		while (true) {
-			// eslint-disable-next-line no-await-in-loop
-			const collect = await msg.awaitReactions({
-				filter: (reaction: MessageReaction, user: User) => user.id
-					=== ctx.message.author.id
-					&& reactions.includes(reaction.emoji.name!),
-				time: 60000,
-				max: 1
-			}).catch(console.error) as Collection<string, MessageReaction>;
 
-			if (collect.size) {
-				const reaction = collect.first()!;
-				const emoji = reaction.emoji.name;
-				const prevPage = page;
-				if (emoji === "⬅" && page > 1) page--;
-				else if (emoji === "➡" && page < maxPage) page++;
-
-				if (emoji !== "❌" && hasRemovePerms) {
-					reaction.users.remove(ctx.message.author);
-				}
-
-				if (prevPage !== page) {
-					header = `#=====[ ${headerText} (page ${page}/${maxPage}) ]=====#`;
-					body = list.slice(page * 15 - 15, page * 15).join("\n");
-					footer = `#${"".padEnd(Math.floor(header.length / 2 - footerText.length / 2) - 1, "=")}${footerText}${"".padEnd(Math.ceil(header.length / 2 - footerText.length / 2) - 1, "=")}#`;
-					// eslint-disable-next-line no-await-in-loop
-					await msg.edit(`\`\`\`md\n${header}\n${body}\n${footer}\`\`\``);
-				}
-			}
-			if ((!collect.size || collect.first()!.emoji.name === "❌") && hasRemovePerms) {
-				msg.reactions.removeAll();
-				break;
-			}
-		}
+		if (interaction.customId === "⬅️") page--;
+		if (interaction.customId === "➡️") page++;
+		updateEmbed();
+		await interaction.update({ embeds: [embed], components: [buttonRow] });
 	}
 }
 

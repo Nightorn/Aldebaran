@@ -56,10 +56,8 @@ export default class UconfigCommand extends Command {
 				.setColor("BLUE");
 				
 			const guild = (await ctx.guild())!;
-			console.log(list);
 			for (const [category, parameters] of Object.entries(list)) {
 				let entries = "";
-				console.log(parameters);
 				for (const [key, data] of Object.entries(parameters)) {
 					if (ctx.message.guild) {
 						if (!guild.settings[key as GuildSetting]

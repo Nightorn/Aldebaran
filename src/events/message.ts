@@ -15,7 +15,7 @@ export default async (client: AldebaranClient, message: Message) => {
 		? await client.customGuilds.fetch(message.guild.id)
 		: null;
 
-	const prefix = guild
+	let prefix = guild
 		? process.argv[2] === "dev"
 			? process.argv[4] || process.env.PREFIX!
 			: guild.prefix
@@ -26,7 +26,8 @@ export default async (client: AldebaranClient, message: Message) => {
 	const user = await ctx.author();
 	if (user.banned) return;
 
-	if (guild && ctx.message.author.id === "170915625722576896") {
+	const drpgIDs = ["170915625722576896", "891614347015626762"];
+	if (guild && drpgIDs.includes(ctx.message.author.id)) {
 		DiscordRPG(ctx);
 	} else if (!user.user.bot) {
 		const drpgMatch = ctx.message.content.toLowerCase().match(/.+(?=stats|adv)/);
@@ -45,8 +46,12 @@ export default async (client: AldebaranClient, message: Message) => {
 	}
 
 	if (user.user.bot) return;
-	if (ctx.message.content.indexOf(prefix) !== 0) return;
-	if (ctx.message.content.slice(prefix.length)[0] === " ") return;
+	if (!message.mentions.users.get(client.user.id)) {
+		if (ctx.message.content.indexOf(prefix) !== 0) return;
+		if (ctx.message.content.slice(prefix.length)[0] === " ") return;
+	} else {
+		prefix = ctx.message.content.trim().substring(0, ctx.message.content.indexOf(">") + 1);
+	}
 
 	const args = ctx.message.content.slice(prefix.length).trim().split(/ +/g);
 	const command = args.shift()!.toLowerCase();

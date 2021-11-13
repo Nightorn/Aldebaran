@@ -3,7 +3,7 @@
 import fs from "fs";
 import request from "request";
 import MessageContext from "../../structures/aldebaran/MessageContext.js";
-import { Command } from "../../groups/DRPGCommand.js";
+import { Command, Embed } from "../../groups/DRPGCommand.js";
 import { DRPGAttribute, DRPGGuild, DRPGItem, DRPGSkill, DRPGUser } from "../../interfaces/DiscordRPG.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
@@ -101,12 +101,6 @@ export default class GleadCommand extends Command {
 			desc?: boolean,
 			attribute?: string
 		};
-		const permissions = ctx.channel.permissionsFor(ctx.client.user);
-		if (permissions && !permissions.has("READ_MESSAGE_HISTORY")) {
-			return ctx.reply("I need permission to read message history before you can use this feature.");
-		} if (permissions && !permissions.has("ADD_REACTIONS")) {
-			return ctx.reply("I need permission to add reactions to messages before you can use this feature.");
-		}
 
 		// Get guild data, either from the cache or from the API
 		const userData = await getUserData(
@@ -140,9 +134,9 @@ export default class GleadCommand extends Command {
 				guildUsers.sort((a, b) => (b[index as keyof User] as number || 0)
 					- (a[index as keyof User] as number || 0));
 				sum = guildUsers.reduce(
-					(p, c) => (c[index as keyof User] as number || 0) + (p || 0), 0
+				    (p, c) => (c[index as keyof User] as number || 0) + (p || 0), 0
 				);
-				list = guildUsers.map(user => `< ${user.name}${args.showid ? ` (${user.id})` : ""} - ${(user[index as keyof User] || 0).toLocaleString()} >`);
+				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${(user[index as keyof User] || 0).toLocaleString()}>`);
 				break;
 			case "mine":
 			case "chop":
@@ -151,9 +145,9 @@ export default class GleadCommand extends Command {
 				guildUsers.sort((a, b) => b.skills[index as DRPGSkill].xp
 					- a.skills[index as DRPGSkill].xp);
 				sum = guildUsers.reduce(
-					(p, c) => c.skills[index as DRPGSkill].level + p, 0
+				    (p, c) => c.skills[index as DRPGSkill].level + p, 0
 				);
-				list = guildUsers.map(user => `< ${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.skills[index as DRPGSkill].level.toLocaleString()} >`);
+				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.skills[index as DRPGSkill].level.toLocaleString()}>`);
 				break;
 			case "crits":
 			case "defense":
@@ -171,16 +165,16 @@ export default class GleadCommand extends Command {
 						- a.attributes[index as DRPGAttribute]
 				);
 				sum = guildUsers
-					.reduce((p, c) => c.attributes[index as DRPGAttribute] + p, 0);
-				list = guildUsers.map(user => `< ${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.attributes[index as DRPGAttribute].toLocaleString()} >`);
+				    .reduce((p, c) => c.attributes[index as DRPGAttribute] + p, 0);
+				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.attributes[index as DRPGAttribute].toLocaleString()}>`);
 				break;
 
 			case "lastseen":
 				guildUsers.sort((a, b) => (b.lastseen || 0) - (a.lastseen || 0));
 				sum = timeSince(Math.floor(guildUsers.reduce(
-					(p, c) => (c.lastseen || 0) + (p || 0), 0
+				    (p, c) => (c.lastseen || 0) + (p || 0), 0
 				) / guildUsers.length));
-				list = guildUsers.map(user => `< ${user.name}${args.showid ? ` (${user.id})` : ""} - ${timeSince(user.lastseen || 0)} >`);
+				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${timeSince(user.lastseen || 0)}>`);
 				break;
 
 			case "location":
@@ -208,15 +202,19 @@ export default class GleadCommand extends Command {
 					filteredUsers
 						.sort((a, b) => b.inv[itemIndex[0].id]! - a.inv[itemIndex[0].id]!);
 					sum = filteredUsers.reduce((p, c) => c.inv[itemIndex[0].id]! + p, 0);
-					list = filteredUsers.map(user => `< ${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id]!.toLocaleString()} >`);
+					list = filteredUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id]!.toLocaleString()}>`);
 				}
 				break;
 		}
 
 		if (list && list.length > 0) {
 			paginate(
-				args.desc ? list.reverse() : list, 1,
-				`${guildData.name} Lead ${index}`, ctx, `[ Combined ${index} = ${sum.toLocaleString()} ]`
+				args.desc ? list.reverse() : list,
+				15,
+				`${guildData.name} Lead ${index}`,
+				ctx,
+				"md",
+				new Embed(this).setFooter(`${index === "lastseen" ? "Average" : "Sum"}: ${sum.toLocaleString()}`)
 			);
 		} else {
 			ctx.reply("Unknown leaderboard index.");

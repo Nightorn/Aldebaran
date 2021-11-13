@@ -28,7 +28,7 @@ export default class AldebaranClient extends Client<true> {
 	nekoslife = new NekosClient();
 	nodesu?: NodesuClient;
 	started = Date.now();
-	version = packageFile.version;
+	version = process.env.VERSION || packageFile.version;
 
 	constructor() {
 		super({

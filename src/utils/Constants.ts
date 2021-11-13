@@ -1,4 +1,4 @@
-import { ActivityType, Guild, Snowflake, User } from "discord.js";
+import { Guild, Snowflake, User } from "discord.js";
 import { importAssets, timezoneSupport } from "./Methods.js";
 import { DRPGXPBases, DRPGItemList, DRPGLocationDB } from "../interfaces/DiscordRPG.js";
 import { Mode } from "nodesu";
@@ -34,7 +34,7 @@ type PackageFile = {
 
 type ActionText = { [key: string]: { self: string[], user: string[] } };
 type ImageURLs = { [key: string]: string[] };
-type Presences = { text: string, type: ActivityType }[];
+type Presences = { text: string, type: "PLAYING" | "STREAMING" | "LISTENING" | "WATCHING" | "COMPETING" }[];
 
 export const actionText: ActionText = importAssets("./assets/data/actiontext.json");
 export const aldebaranTeam: AldebaranTeam = importAssets("./config/aldebaranTeam.json");

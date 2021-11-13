@@ -44,7 +44,7 @@ export default class InfoCommand extends Command {
 			)
 			.addField(
 				"Powered by",
-				`VPS Host **Contabo**\nEnvironment **Node.js** ${process.version}\nAPI Library **discord.js** v${version}`,
+				`Host **Raspberry Pi 4 8GB**\nEnvironment **Node.js** ${process.version}\nAPI Library **discord.js** v${version}`,
 				true
 			)
 			.addField(

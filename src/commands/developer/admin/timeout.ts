@@ -14,7 +14,6 @@ export default class TimeoutSubcommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as string[];
-		console.log(args);
 		if (args.length >= 2) {
 			ctx.client.customUsers.fetch(args.shift()!).then(user => {
 				const times = {

@@ -20,7 +20,7 @@ export default async (ctx: MessageContext) => {
 		guild.settings.discordrpgprefix
 	]) {
 		if (element !== undefined)
-			if (content.match(`^${escape(element.toString())}adv(\\b|enture\\b)`)) {
+			if (content.match(`^${element.toString()}adv(\\b|enture\\b)`)) {
 				prefix = element;
 			}
 	}
