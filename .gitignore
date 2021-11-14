@@ -1,6 +1,11 @@
-node_modules/
+# Folders (cache, TS artefacts, node dependencies)
 cache/
-*.code-workspace
-.vscode
+dist/
+node_modules/
+
+# Files
 config/config.json
+*.code-workspace
 .env
+.vscode
+package-lock.json

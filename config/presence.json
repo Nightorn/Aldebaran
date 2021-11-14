@@ -28,7 +28,7 @@
 		"type": "PLAYING"
 	},
 	{
-		"text": "with some &math",
+		"text": "with some {PREFIX}math",
 		"type": "PLAYING"
 	},
 	{
@@ -36,15 +36,15 @@
 		"type": "WATCHING"
 	},
 	{
-		"text": "Ciborn's Spotify playlist with 264 songs, lasting 20 hours and 41 minutes",
+		"text": "cib's Spotify playlist",
 		"type": "LISTENING"
 	},
 	{
-		"text": "my &plant growing",
+		"text": "my {PREFIX}plant growing",
 		"type": "WATCHING"
 	},
 	{
-		"text": "items falling in my &trap",
+		"text": "items falling in my {PREFIX}trap",
 		"type": "LISTENING"
 	},
 	{
@@ -56,23 +56,23 @@
 		"type": "WATCHING"
 	},
 	{
-		"text": "mount2010 asking for &pat",
+		"text": "mount2010 asking for {PREFIX}pat",
 		"type": "LISTENING"
 	},
 	{
-		"text": "my new &osubest 2pp play",
+		"text": "my new {PREFIX}osubest 2pp play",
 		"type": "WATCHING"
 	},
 	{
-		"text": "my &profile",
+		"text": "my {PREFIX}profile",
 		"type": "WATCHING"
 	},
 	{
-		"text": "&presence entries",
+		"text": "{PREFIX}presence entries",
 		"type": "WATCHING"
 	},
 	{
-		"text": "&neko pictures from nekos.life",
+		"text": "{PREFIX}neko pictures from nekos.life",
 		"type": "WATCHING"
 	}
 ]

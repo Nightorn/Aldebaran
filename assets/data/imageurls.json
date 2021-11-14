@@ -1,8 +1,7 @@
-{   
-    "bites" :[
+{
+    "bite": [
         "https://media1.tenor.com/images/c22a247affcf4cd02c7d17f5a432cd95/tenor.gif?itemid=8259627",
         "https://media.giphy.com/media/fhkRUj3BWmMnu/giphy.gif",
-        "http://data.whicdn.com/images/81002249/large.gif",
         "http://img1.ak.crunchyroll.com/i/spire3/105470d8f6fc8f277f511aada0e564c21488138818_full.gif",
         "http://i0.kym-cdn.com/photos/images/newsfeed/000/783/193/dc2.gif",
         "http://auto.img.v4.skyrock.net/2700/72152700/pics/3105292621_1_15_KOOeG4qg.gif",
@@ -16,31 +15,26 @@
         "http://i0.kym-cdn.com/photos/images/newsfeed/001/212/636/b94.gif",
         "https://vignette.wikia.nocookie.net/powerlisting/images/b/ba/Moka_Bite.gif"
     ],
-    "cuddles" :[
-        "https://media.giphy.com/media/l3V0sbjHsGGEFytr2/giphy.gif",
-        "https://m.popkey.co/320660/RXVj3_s-200x150.gif",
+    "cuddle": [
         "https://data.whicdn.com/images/260198019/original.gif",
         "https://media1.tenor.com/images/d0c2e7382742f1faf8fcb44db268615f/tenor.gif?itemid=5853736",
         "https://i.gifer.com/WDf.gif",
         "https://thumbs.gfycat.com/AccomplishedNeglectedGrouse-max-1mb.gif",
         "https://media1.popsugar-assets.com/files/thumbor/885mfe-7aa54p84Rd8K84fOLxng/fit-in/1200x630/filters:format_auto-!!-:strip_icc-!!-:fill-!white!-/2015/01/29/993/n/1922283/752e3e707ed8223e_tumblr_static_tumblr_mc5eyuflbt1rzu0f2o1_500/i/Course-All-Cuddles.gif"
     ],
-    "kidnaps" :[
+    "kidnap": [
         "http://i0.kym-cdn.com/photos/images/original/001/010/345/e2d.gif",
         "https://media1.tenor.com/images/0cb215fd5530a8e3c127095c987e455f/tenor.gif?itemid=5869143",
         "http://i.imgur.com/DasYFP5.gif",
         "https://data.whicdn.com/images/103595661/original.gif"
     ],
-    "licks" :[
-        "https://m.popkey.co/0565e9/bgq1Y.gif",
-        "https://media.giphy.com/media/12MEJ2ArZc23cY/source.gif",
+    "lick": [
         "http://i0.kym-cdn.com/photos/images/original/000/979/257/de4.gif",
         "https://memestatic.fjcdn.com/gifs/Working+out+those+vocal+cords+trigger+mentionlist+succboissucc+lives_6d419e_6188613.gif",
         "http://i0.kym-cdn.com/photos/images/original/001/005/876/156.gif",
         "https://media1.tenor.com/images/1925e468ff1ac9efc2100a3d092c54ff/tenor.gif?itemid=4718221",
         "https://i.imgur.com/YG4i71E.gif",
         "http://cdn.awwni.me/ml0q.gif",
-        "http://images.pandaapp.com/android/2011/06/20/Kanamemo-7-1-licking.gif",
         "https://media.giphy.com/media/JUrjTvzTbTUME/giphy.gif",
         "http://i.imgur.com/CkjcxG9.gif",
         "https://img.gifmagazine.net/gifmagazine/images/911602/original.gif",
@@ -48,7 +42,7 @@
         "https://media1.tenor.com/images/0ce34500facf2ada86307bb740a03dfd/tenor.gif?itemid=5567738",
         "https://i.pinimg.com/originals/e1/4e/b2/e14eb2707911918614d1e28317330801.gif"
     ],
-    "kisses" :[
+    "kiss": [
         "http://img1.ak.crunchyroll.com/i/spire4/d309fcb80820b7ab8c9edf97e525ed041462061386_full.gif",
         "https://media.giphy.com/media/FqBTvSNjNzeZG/giphy.gif",
         "http://i0.kym-cdn.com/photos/images/newsfeed/001/015/101/c8b.gif",
@@ -58,33 +52,27 @@
         "https://78.media.tumblr.com/75f3b00e727e3a1db3e9721a20d5a7ca/tumblr_mxfjkxtzhC1shho8io1_500.gif",
         "https://24.media.tumblr.com/51df4395955caa4d5d41e68182f82bc0/tumblr_n0ycutO5aU1qcsnnso1_500.gif"
     ],
-    "hugs" :[
+    "hug": [
         "https://38.media.tumblr.com/31abfd7c6ec3b19fb8e1acbd5d4602d5/tumblr_nqmxxq4qZa1rw3w54o1_500.gif",
         "https://media1.tenor.com/images/506aa95bbb0a71351bcaa753eaa2a45c/tenor.gif?itemid=7552075",
         "https://thumbs.gfycat.com/AlienatedUnawareArcherfish-max-1mb.gif",
-        "https://m.popkey.co/32edb3/zE7XE.gif",
         "https://i.imgur.com/BPLqSJC.gif"
-
     ],
-    "adorables" :[
+    "adorable": [
         "https://static.tumblr.com/90de99aacd97195ad18d1b2fe8a865c9/9rg5sxb/FoHo9d118/tumblr_static_tumblr_static_29gqjvtmu4w0w00gc80ks0k0s_640.gif",
         "http://gifimage.net/wp-content/uploads/2017/06/cute-anime-gif-16.gif",
-        "https://media2.giphy.com/media/PBL6X3egofv68/giphy.gif",
-        "http://24.media.tumblr.com/7f092b8249d23a3823e100d8c6a2bc4a/tumblr_n5vnet96Xi1svhbnpo1_500.gif",
-        "https://m.popkey.co/39a910/GzOK1.gif"
+        "http://24.media.tumblr.com/7f092b8249d23a3823e100d8c6a2bc4a/tumblr_n5vnet96Xi1svhbnpo1_500.gif"
     ],
-    "tackles" :[
+    "tackle": [
         "https://media1.tenor.com/images/5c35f9a6052b30442d05a855fc76b5de/tenor.gif?itemid=6004346",
         "https://i.pinimg.com/originals/c4/b2/27/c4b227c08ffbd7327044b63a9e82b8c9.gif",
         "http://gifimage.net/wp-content/uploads/2017/09/anime-tackle-gif-9.gif",
-        "https://media.giphy.com/media/26AHNo23yQAtFLddK/giphy.gif",
         "https://thumbs.gfycat.com/FalseSourFlycatcher-max-1mb.gif",
         "http://31.media.tumblr.com/914d89528a7064ef204d203544fe3b68/tumblr_nu603yY6hA1ucw7ggo1_400.gif",
         "http://p.fod4.com/p/media/5ca830661d/Pw563xPBRAqEtubWTB8o_Dog%20Pink%20Pants.gif",
         "https://media1.giphy.com/media/o2Lwy4g7Dzptu/giphy.gif"
     ],
-    "slaps" :[
-        "https://media.giphy.com/media/jLeyZWgtwgr2U/giphy.gif",
+    "slap": [
         "https://media1.tenor.com/images/1cf84bf514d2abd2810588caf7d9fd08/tenor.gif ",
         "https://media.giphy.com/media/LB1kIoSRFTC2Q/giphy.gif",
         "https://i.imgur.com/4MQkDKm.gif",
@@ -98,28 +86,25 @@
         "https://i.imgur.com/6mOFy3v.gif",
         "https://i.gifer.com/Et1g.gif"
     ],
-    "spanks" : [
+    "spank": [
         "http://gifimage.net/wp-content/uploads/2017/09/anime-spanking-gif-3.gif",
         "http://gifimage.net/wp-content/uploads/2017/09/anime-spanking-gif.gif",
         "https://media1.tenor.com/images/693afd5812160c00a1fa8582de15a83e/tenor.gif",
         "https://orig00.deviantart.net/f7be/f/2017/273/9/2/just_implicit__siesta__louise___znt___spanking__by_barkyhito-dbp18lt.gif",
         "https://i.imgur.com/PBZVXVW.gif",
         "https://memestatic.fjcdn.com/gifs/Spanking+shamelessly+stolen+from+talentlessash_0a26bb_6457411.gif",
-        "https://i1.wp.com/shirokuns.com/wp-content/uploads/2017/08/butt-slapping.gif",
         "https://media1.tenor.com/images/27d084ea80cf3f678bb35e0819455d72/tenor.gif",
         "https://media1.giphy.com/media/6BZaFXBVPBtok/200_d.gif",
         "https://media1.tenor.com/images/d40977fe97c6c94215a9b84f990357f7/tenor.gif"
     ],
-    "cprs" : [
+    "cpr": [
         "https://cdn.discordapp.com/attachments/416047274532143107/451296283701936128/image.gif",
         "https://cdn.discordapp.com/attachments/416047274532143107/451296323761733632/image.gif",
-        "https://cdn.discordapp.com/attachments/416047274532143107/451296334834696192/image.gif" 
+        "https://cdn.discordapp.com/attachments/416047274532143107/451296334834696192/image.gif"
     ],
-    "lewds" :[
-        "https://media.giphy.com/media/ndYAqx8RKKUIE/giphy.gif",
+    "lewd": [
         "https://media.giphy.com/media/eCJHIhAWWDWH6/giphy.gif",
         "https://i.gifer.com/3eG2.gif",
-        "https://media.giphy.com/media/OhhmGR2eCTZO8/giphy.gif",
         "http://nichegamer.com/wp-content/uploads/2015/08/shimoneta-08-20-15-2.gif",
         "http://i1.kym-cdn.com/photos/images/newsfeed/000/992/287/e4b.gif",
         "http://pa1.narvii.com/5740/3d6641babca8a42c395bf0338843147ba9f96395_hq.gif",
@@ -127,34 +112,28 @@
         "https://i.imgur.com/VsJhDOZ.gif",
         "https://68.media.tumblr.com/63fa5a6c01106c21d4f3b9c7bb760a35/tumblr_nyncn4aERu1sbzv20o4_500.gif",
         "https://i.kym-cdn.com/photos/images/original/000/764/841/dfa.gif"
-        
     ],
-    "deathimage" :[
+    "deathimage": [
         "https://i1.wp.com/entertainmentmesh.com/wp-content/uploads/2017/12/OMG-cat-meme-3.jpg",
-        "http://www.relatably.com/m/img/die-memes/cf5c71f5fa435bea346dc0c8efaea1c9b1d5a223c1233fbf68a440c91f2c9ee7.jpg",
         "https://i.imgflip.com/db85q.jpg",
         "https://res.cloudinary.com/teepublic/image/private/s--QmFhX0LH--/t_Preview/b_rgb:262c3a,c_limit,f_jpg,h_630,q_90,w_630/v1483696851/production/designs/1048756_1.jpg",
         "https://media.makeameme.org/created/help-me-im-5926ec.jpg",
         "https://i.imgflip.com/1bhzcf.jpg",
-        "https://memegenerator.net/img/instances/72752900/im-sorry-i-bother-you-with-my-dying.jpg",
-        "https://discourse-cdn-sjc1.com/turtlerock/uploads/default/original/3X/2/f/2fcb85097ef4eacf77dc82be4aaf2ad5fc299470.jpg"
+        "https://memegenerator.net/img/instances/72752900/im-sorry-i-bother-you-with-my-dying.jpg"
     ],
-    "escapes" :[
+    "escape": [
         "https://media.giphy.com/media/DM3Y22oshbMVW/giphy.gif",
         "https://i.gifer.com/9qAt.gif",
         "https://media1.tenor.com/images/87e5052314e954b7357ca9305427a6a6/tenor.gif?itemid=5405742",
         "http://i0.kym-cdn.com/photos/images/original/001/110/888/ae2.gif",
-        "https://thumbs.gfycat.com/ShrillFatherlyEchidna-size_restricted.gif",
-        "http://i3.kym-cdn.com/photos/images/original/001/021/454/9a4.gif"
+        "https://thumbs.gfycat.com/ShrillFatherlyEchidna-size_restricted.gif"
     ],
-    "feeds" :[
+    "feed": [
         "https://pa1.narvii.com/5991/cf782859dc8dd85176a99c90330815bf2262b004_hq.gif"
     ],
-    "rubs" :[
+    "rub": [
         "https://media.giphy.com/media/2QHLYZFJgjsFq/giphy.gif",
-        "http://meowgifs.com/wp-content/uploads/2015/03/chi-belly-rubs.gif",
         "http://static.tumblr.com/fe9258500cb59976eaefaebbd6b25d9b/08mkem1/mexmhadck/tumblr_static_rub.gif",
-        "https://img.fireden.net/a/image/1451/83/1451833232581.gif",
         "https://i1.wp.com/33.media.tumblr.com/b8314d14c1451bf50be3aa61666e5f2b/tumblr_nmz1v9Z8Uk1rbnx7io1_400.gif",
         "https://i.imgur.com/T863yLG.gif",
         "https://i.gifer.com/9O4X.gif",

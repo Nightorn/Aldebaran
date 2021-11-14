@@ -1,6 +1,6 @@
 html
     head
-        title Authorization Request - Aldebaran GLOW
+        title= "Authorization Request - " + name + " GLOW"
         link(rel="stylesheet", href="/css/style.css")
         link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap")
     body
@@ -8,7 +8,7 @@ html
             span(id="bg")
                 span(id="header")
                     img(src="/img/alde.png")
-                    span(id="title") Aldebaran
+                    span(id="title")= name
                     span(id="glow") GLOW
                 span(id="appxuser")
                     span(id="app")
@@ -20,7 +20,7 @@ html
                         img(src=user.avatar, class="center")
                         span(class="concernedname bold")= user.name
             span(id="important")
-                div An application is requesting access to a part of your Aldebaran's data.
+                div An application is requesting access to a part of your data.
                 br
                 span(id="able")
                     div

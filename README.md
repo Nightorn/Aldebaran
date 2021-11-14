@@ -17,7 +17,6 @@ Aldebaran currently has 81 commands over 11 categories - check them out by addin
 
 [Invite Aldebaran](https://discord.com/api/oauth2/authorize?client_id=437802197539880970&permissions=0&scope=bot)
 
-
 ## Main server
 Join the main server to stay updated about the new updates!
 

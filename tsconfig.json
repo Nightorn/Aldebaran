@@ -1,0 +1,28 @@
+{
+	"extends": "@tsconfig/node16/tsconfig.json",
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"display": "Node 16",
+	"ts-node": {
+		"files": true,
+		"transpileOnly": true,
+		"typeCheck": false
+	},
+	"compilerOptions": {
+		"downlevelIteration": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"esModuleInterop": true,
+		"lib": ["ESNext"],
+		"module": "es6",
+		"moduleResolution": "node",
+		"preserveConstEnums": true,
+		"removeComments": true,
+		"resolveJsonModule": true,
+		"rootDir": ".",
+		"skipLibCheck": true,
+		"target": "es2020"
+	},
+	"include": ["src/*"],
+	"exclude": ["node_modules", "**/*.spec.ts"],
+	"files": ["src/global.d.ts"]
+}
