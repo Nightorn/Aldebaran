@@ -51,9 +51,12 @@ export default class InfoCommand extends Command {
 				"Affiliation",
 				`${ctx.client.name} uses but is not affiliated with [DiscordRPG](https://discorddungeons.me), [TheCatAPI](https://thecatapi.com), [Dog API](https://dog.ceo/), [nekos.life](https://nekos.life/), [Giphy](https://giphy.com), [osu!](https://osu.ppy.sh), [Some Random Api](https://some-random-api.ml/) and [Pexels](https://www.pexels.com).`
 			)
-			.setFooter(`The prefix in this guild is "${ctx.prefix}".`)
 			.setThumbnail(ctx.client.user.avatarURL()!)
 			.setColor(ctx.message.guild ? ctx.message.guild.me!.displayColor : "BLUE");
+			if (ctx.message.guild) {
+				const prefix = (await ctx.guild())!.prefix;
+				embed.setFooter(`The prefix in this guild is "${prefix}".`);
+			}
 		ctx.reply(embed);
 	}
 };

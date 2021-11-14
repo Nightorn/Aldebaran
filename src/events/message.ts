@@ -32,7 +32,7 @@ export default async (client: AldebaranClient, message: Message) => {
 	} else if (!user.user.bot) {
 		const drpgMatch = ctx.message.content.toLowerCase().match(/.+(?=stats|adv)/);
 		if (drpgMatch !== null) {
-			const filter = (msg: Message) => msg.author.id === "170915625722576896";
+			const filter = (msg: Message) => drpgIDs.includes(msg.author.id);
 			ctx.message.channel.awaitMessages({ filter, max: 1, time: 2000 })
 				.then(async () => {
 					if (!guild!.settings.discordrpgprefix) {

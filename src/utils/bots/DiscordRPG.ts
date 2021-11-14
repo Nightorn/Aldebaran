@@ -141,12 +141,13 @@ export default async (ctx: MessageContext) => {
 				);
 			}
 			const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
+			const namePattern = /\+ (.*) has [\d,]+\/[\d,]+ HP left\./;
 			const healthMessage = ctx.message.content.match(healthMessagePattern);
-			if (healthMessage) {
+			if (healthMessage && ctx.message.content.match(namePattern)) {
 				const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/)!;
 				player.currentHP = Number(nums[1].replace(/,/g, ""));
 				player.maxHP = Number(nums[2].replace(/,/g, ""));
-				player.name = ctx.message.content.match(/\+ (.*) has [\d,]+\/[\d,]+ HP left\./)![1];
+				player.name = ctx.message.content.match(namePattern)![1];
 			}
 			const messageArray = ctx.message.content.split("\n");
 			let dealtLine = null;
