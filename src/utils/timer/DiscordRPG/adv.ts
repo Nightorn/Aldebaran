@@ -1,13 +1,9 @@
 import MessageContext from "../../../structures/aldebaran/MessageContext.js";
 
 export default async (ctx: MessageContext) => {
-	console.log("hello");
 	if (!ctx.message.guild) return;
-	console.log("hello");
 	const guild = (await ctx.guild())!;
-	console.log("hello");
 	const user = await ctx.author();
-	console.log("hello");
 	if (
 		user.timers.adventure !== null
 		|| guild.settings.adventuretimer === "off"
