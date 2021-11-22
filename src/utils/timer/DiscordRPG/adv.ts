@@ -1,9 +1,13 @@
 import MessageContext from "../../../structures/aldebaran/MessageContext.js";
 
 export default async (ctx: MessageContext) => {
+	console.log("hello");
 	if (!ctx.message.guild) return;
+	console.log("hello");
 	const guild = (await ctx.guild())!;
+	console.log("hello");
 	const user = await ctx.author();
+	console.log("hello");
 	if (
 		user.timers.adventure !== null
 		|| guild.settings.adventuretimer === "off"
@@ -26,7 +30,7 @@ export default async (ctx: MessageContext) => {
 	}
 	if (prefix !== null) {
 		if (guild.settings.autodelete === "on") {
-			setTimeout(ctx.message.delete, 1000);
+			setTimeout(() => ctx.message.delete, 1000);
 		}
 		const delay = user.settings.adventuretimer === "random"
 			? Math.random() * 3000

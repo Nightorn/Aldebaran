@@ -61,7 +61,7 @@ const playerWarning = (user: User, hp: number, ctx: MessageContext) => {
 		.setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
 		.setImage(senddeath)
 		.setFooter("Pay attention to your health or you are going to die!");
-	ctx.reply(embed).then(msg => setTimeout(msg.delete, 60000));
+	ctx.reply(embed).then(msg => setTimeout(() => msg.delete, 60000));
 };
 
 const petWarning = (user: User, hp: number, ctx: MessageContext) => {
@@ -73,7 +73,7 @@ const petWarning = (user: User, hp: number, ctx: MessageContext) => {
 		)
 		.setImage(senddeath)
 		.setFooter("Your pet is getting very weak, take care of it quickly!");
-	ctx.reply(embed).then(msg => setTimeout(msg.delete, 60000));
+	ctx.reply(embed).then(msg => setTimeout(() => msg.delete, 60000));
 };
 
 async function percentageCheck(
