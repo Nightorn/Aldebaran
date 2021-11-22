@@ -26,7 +26,7 @@ export default async (ctx: MessageContext) => {
 	}
 	if (prefix !== null) {
 		if (guild.settings.autodelete === "on")
-			setTimeout(() => ctx.message.delete, 1000);
+			setTimeout(() => ctx.message.delete(), 1000);
 		user.timers.padventure = setTimeout(() => {
 			const ping = user.settings.timerping === "adventure"
 				|| user.settings.timerping === "on"
@@ -34,7 +34,7 @@ export default async (ctx: MessageContext) => {
 				: `${ctx.message.author.username},`;
 			ctx.reply(`${ping} party adventure time! :crossed_swords:`).then(msg => {
 				if (guild.settings.autodelete === "on") {
-					setTimeout(() => msg.delete, 10000);
+					setTimeout(() => msg.delete(), 10000);
 				}
 			});
 			user.timers.padventure = null;

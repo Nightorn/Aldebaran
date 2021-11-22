@@ -26,7 +26,7 @@ export default async (ctx: MessageContext) => {
 		}
 	}
 	if (guild.settings.autodelete === "on" && sidesPass) {
-		setTimeout(() => ctx.message.delete, 2000);
+		setTimeout(() => ctx.message.delete(), 2000);
 	}
 	if (content.indexOf(prefix + primaryAction) === 0) {
 		if (user.timers.sides !== null) return;
@@ -51,14 +51,14 @@ export default async (ctx: MessageContext) => {
 						time: 5000,
 						max: 1
 					}).then(reactions => {
-						setTimeout(() => mesg.delete, 5000);
+						setTimeout(() => mesg.delete(), 5000);
 						if (reactions.get("🚫") === undefined) {
 							const embed = new MessageEmbed()
 								.setDescription("Your sides timer has been set!")
 								.setAuthor(ctx.message.author.displayAvatarURL())
 								.setColor(0x00ae86);
 							ctx.reply(embed).then(timerset => {
-								setTimeout(timerset.delete, 5000);
+								setTimeout(() => timerset.delete(), 5000);
 								// eslint-disable-next-line no-param-reassign
 								user.timers.sides = setTimeout(() => {
 									const ping = user.settings.timerping === "on"
@@ -67,7 +67,7 @@ export default async (ctx: MessageContext) => {
 										: `${user.username},`;
 									ctx.reply(`${ping} sides time! ${randomemoji}`).then(msg => {
 										if (guild.settings.autodelete === "on") {
-											setTimeout(() => msg.delete, 180000);
+											setTimeout(() => msg.delete(), 180000);
 										}
 									});
 									user.timers.sides = null;
@@ -79,7 +79,7 @@ export default async (ctx: MessageContext) => {
 								.setAuthor(`${user.username}`)
 								.setColor("RED");
 							ctx.reply(embed1).then(timernotset => {
-								setTimeout(() => timernotset.delete, 5000);
+								setTimeout(() => timernotset.delete(), 5000);
 							});
 						}
 					});
