@@ -60,6 +60,6 @@ export default (dsm: ShardingManager) => {
 		schema, rootValue, graphiql: true
 	}));
 
-	app.listen(44469);
+	app.listen(process.env.API_PORT || 44469);
 	console.log(`Running a GraphQL API server at ${process.env.API_URL}/graphql`);
 };

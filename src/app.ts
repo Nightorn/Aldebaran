@@ -1,8 +1,8 @@
-import { Shard, ShardingManager } from "discord.js";
 import dotenv from "dotenv";
-import api from "./api/api.js";
-
 dotenv.config({ path: "./.env" });
+
+import { Shard, ShardingManager } from "discord.js";
+import api from "./api/api.js";
 
 const manager = new ShardingManager("./src/bot.ts", {
 	token: process.env.TOKEN,
