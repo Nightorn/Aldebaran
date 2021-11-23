@@ -79,7 +79,7 @@ export default class TrapCommand extends Command {
 						ctx.reply(embed);
 					} else {
 						const embed = new MessageEmbed()
-							.setAuthor("The requested resource has not been found.", ctx.client.emojis.resolve("609752780261031956")!.url)
+							.setAuthor("The requested resource has not been found.")
 							.setDescription(`You have specified a location where there is no trap. Make sure you are checking the right location by using \`${ctx.prefix}trap\`.`)
 							.setColor("RED")
 							.setFooter(target.username, target.displayAvatarURL());
