@@ -15,7 +15,7 @@ export default async (ctx: MessageContext) => {
 	} else primaryAction = "mine";
 	const content = `${ctx.message.content.toLowerCase()} `;
 	for (const element of [
-		"DiscordRPG",
+		"discordrpg ",
 		"#!",
 		guild.settings.discordrpgprefix
 	]) {

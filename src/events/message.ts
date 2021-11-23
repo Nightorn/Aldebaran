@@ -30,8 +30,9 @@ export default async (client: AldebaranClient, message: Message) => {
 	if (guild && drpgIDs.includes(ctx.message.author.id)) {
 		DiscordRPG(ctx);
 	} else if (!user.user.bot) {
-		const drpgMatch = ctx.message.content.toLowerCase().match(/.+(?=stats|adv)/);
-		if (drpgMatch !== null) {
+		const drpgMatch = ctx.message.content.toLowerCase()
+			.match(/.+(?=stats|adv|padv|mine|forage|fish|chop)/);
+		if (drpgMatch) {
 			const filter = (msg: Message) => drpgIDs.includes(msg.author.id);
 			ctx.message.channel.awaitMessages({ filter, max: 1, time: 2000 })
 				.then(async () => {
