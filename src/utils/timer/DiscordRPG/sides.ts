@@ -54,8 +54,7 @@ export default async (ctx: MessageContext) => {
 						setTimeout(() => mesg.delete(), 5000);
 						if (reactions.get("🚫") === undefined) {
 							const embed = new MessageEmbed()
-								.setDescription("Your sides timer has been set!")
-								.setAuthor(ctx.message.author.displayAvatarURL())
+								.setAuthor("Your sides timer has been set!", ctx.message.author.displayAvatarURL())
 								.setColor(0x00ae86);
 							ctx.reply(embed).then(timerset => {
 								setTimeout(() => timerset.delete(), 5000);
