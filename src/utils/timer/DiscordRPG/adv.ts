@@ -26,7 +26,7 @@ export default async (ctx: MessageContext) => {
 	}
 	if (prefix !== null) {
 		if (guild.settings.autodelete === "on") {
-			setTimeout(() => ctx.message.delete(), 1000);
+			setTimeout(() => ctx.message.delete().catch(() => {}), 1000);
 		}
 		const delay = user.settings.adventuretimer === "random"
 			? Math.random() * 3000

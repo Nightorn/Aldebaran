@@ -26,7 +26,7 @@ export default async (ctx: MessageContext) => {
 	}
 	if (prefix !== null) {
 		if (guild.settings.autodelete === "on")
-			setTimeout(() => ctx.message.delete(), 1000);
+			setTimeout(() => ctx.message.delete().catch(() => {}), 1000);
 		user.timers.padventure = setTimeout(() => {
 			const ping = user.settings.timerping === "adventure"
 				|| user.settings.timerping === "on"

@@ -26,7 +26,7 @@ export default async (ctx: MessageContext) => {
 		}
 	}
 	if (guild.settings.autodelete === "on" && sidesPass) {
-		setTimeout(() => ctx.message.delete(), 2000);
+		setTimeout(() => ctx.message.delete().catch(() => {}), 2000);
 	}
 	if (content.indexOf(prefix + primaryAction) === 0) {
 		if (user.timers.sides !== null) return;
