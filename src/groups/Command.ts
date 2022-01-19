@@ -72,21 +72,15 @@ export abstract class Command implements ICommand {
 	}
 
 	/**
-   	* Executes the command
-   	*/
-	async execute(ctx: MessageContext) {
-		const perms = await this.permsCheck(ctx);
+	 * Executes the specified command
+	 */
+	async execute(ctx: MessageContext): Promise<void> {
 		const guild = this.guildCheck(ctx);
-		if (perms && guild) {
-			return this.run(ctx);
-		}
-		/* if (perms) {
-			throw new Error("NOT_IN_GUILD");
-		}
-		if (guild) {
-			throw new Error("INVALID_PERMISSIONS");
-		}
-		throw new Error("YOU_VE_GOT_IT_ALL_WRONG"); */
+		if (!guild) throw new Error("NOT_IN_GUILD");
+		const perms = await this.permsCheck(ctx);
+		if (!perms) throw new Error("MISSING_PERMS");
+		if (!ctx.argsCheck()) throw new Error("INVALID_ARGS");
+		return this.run(ctx);
 	}
 
 	abstract run(ctx: MessageContext): void;
@@ -117,12 +111,11 @@ export abstract class Command implements ICommand {
 			let args = "";
 			let usage = "";
 			for (const [id, data] of Object.entries(this.metadata.args)) {
-				const as = data.as.replace("?", "");
-				const begin = `\`${id}\` (${as}${data.as.includes("?") ? ", optional" : ""})`;
+				const begin = `\`${id}\` (${data.as}${data.optional ? ", optional" : ""})`;
 				const t = data.as.includes("?") ? ["[", "]"] : ["<", ">"];
 				if (data.flag === undefined) args += `${begin}${data.desc ? ` - *${data.desc}*` : ""}\n`;
 				else args += `${begin} - \`-${data.flag.short}\`/\`--${data.flag.long}\`${data.desc ? ` - *${data.desc}*` : ""}\n`;
-				usage += data.flag === undefined ? `${t[0]}${id}${t[1]} ` : `${t[0]}-${data.flag.short}|--${data.flag.long}${as !== "boolean" ? ` ${id}` : ""}${t[1]} `;
+				usage += data.flag === undefined ? `${t[0]}${id}${t[1]} ` : `${t[0]}-${data.flag.short}|--${data.flag.long}${data.as !== "boolean" ? ` ${id}` : ""}${t[1]} `;
 			}
 			embed.addField("Usage", `${prefix}${command} \`${usage.trim()}\``, true);
 			embed.addField("Arguments", args);

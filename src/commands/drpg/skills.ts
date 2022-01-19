@@ -12,7 +12,7 @@ export default class SkillsCommand extends Command {
 			description: "Displays users' skills informations",
 			usage: "UserMention|UserID",
 			example: "246302641930502145",
-			args: { user: { as: "user" } }
+			args: { user: { as: "user", optional: true } }
 		});
 	}
 

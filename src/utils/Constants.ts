@@ -186,6 +186,7 @@ export const Errors = {
 	CUSTOM: (res: string) => res,
 	IMPOSSIBLE: () => "You are asking the impossible",
 	INCORRECT_CMD_USAGE: () => "This command has been used incorrectly.",
+	INVALID_ARGS: () => `You are not supplying the arguments this command needs.`,
 	INVALID_USER: () => "The user specified does not exist.",
 	MISSING_ARGS: () => "Some arguments are missing.",
 	NOT_FOUND: (res: string) => `The requested ${res || "resource"} has not been found.`,

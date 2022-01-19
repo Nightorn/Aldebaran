@@ -14,9 +14,13 @@ export default class TrapCommand extends Command {
 			usage: "User TrapLocationID Max?",
 			example: "240971835330658305 4 --max",
 			args: {
-				user: { as: "user" },
-				trap: { as: "number" },
-				max: { as: "boolean", flag: { short: "m", long: "max" } }
+				user: { as: "user", optional: true },
+				trap: { as: "number", optional: true },
+				max: {
+					as: "boolean",
+					flag: { short: "m", long: "max" },
+					optional: true
+				}
 			}
 		});
 	}

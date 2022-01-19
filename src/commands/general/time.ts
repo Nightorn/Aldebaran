@@ -9,8 +9,13 @@ export default class TimeCommand extends Command {
 			description: "Prints a user's time based on their configured timezone",
 			example: "<@143026985763864576>",
 			args: {
-				user: { as: "user?" },
-				clean: { as: "boolean?", flag: { short: "c", long: "clean" }, desc: "Whether to remove the footer or not" }
+				user: { as: "user", optional: true },
+				clean: {
+					as: "boolean",
+					flag: { short: "c", long: "clean" },
+					desc: "Whether to remove the footer or not",
+					optional: true
+				}
 			}
 		});
 	}

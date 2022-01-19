@@ -25,11 +25,35 @@ export default class OsumapCommand extends Command {
 			example: "1097541 --taiko +HD 97% 100x 69m",
 			args: {
 				map: { as: "expression", regex: /\d+$/, desc: "Beatmap URL / ID" },
-				mode: { as: "mode?", desc: "Game Mode (--osu, --mania, --ctb, --taiko)" },
-				mods: { as: "expression?", regex: /(\+(\D{2})+)/, desc: "Mods (ex: +HDDT)" },
-				accuracy: { as: "expression?", regex: /(\d{1,2}(\.\d{1,2})?%)/, desc: "Accuracy (ex: 98.95%)" },
-				combo: { as: "expression?", regex: /\d+(?=x)/, desc: "Combo (ex: 469x)" },
-				nmiss: { as: "expression?", regex: /\d+(?=m)/, desc: "Miss Amount (ex: 7m)" }
+				mode: {
+					as: "mode",
+					desc: "Game Mode (--osu, --mania, --ctb, --taiko)",
+					optional: true
+				},
+				mods: {
+					as: "expression",
+					regex: /(\+(\D{2})+)/,
+					desc: "Mods (ex: +HDDT)",
+					optional: true
+				},
+				accuracy: {
+					as: "expression",
+					regex: /(\d{1,2}(\.\d{1,2})?%)/,
+					desc: "Accuracy (ex: 98.95%)",
+					optional: true
+				},
+				combo: {
+					as: "expression",
+					regex: /\d+(?=x)/,
+					desc: "Combo (ex: 469x)",
+					optional: true
+				},
+				nmiss: {
+					as: "expression",
+					regex: /\d+(?=m)/,
+					desc: "Miss Amount (ex: 7m)",
+					optional: true
+				}
 			}
 		});
 	}

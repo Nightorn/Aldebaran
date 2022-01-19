@@ -37,7 +37,6 @@ export default class CommandHandler {
 		if (args.length === 0) {
 			if (command.subcommands.size > 0) {
 				if (command.metadata.allowIndexCommand) {
-					args.shift();
 					return command.execute(ctx);
 				} else {
 					throw new TypeError("INVALID_COMMAND");
@@ -48,7 +47,7 @@ export default class CommandHandler {
 		} else if (command.subcommands.size > 0) {
 			const subcommand = args.shift()!;
 			if (command.subcommands.get(subcommand)) {
-				ctx.args = ctx.getArgs(cArgs, 1);
+				ctx.setLevel(2);
 				return command.subcommands.get(subcommand)!.execute(ctx);
 			} else if (command.metadata.allowUnknownSubcommands) {
 				return command.execute(ctx);
@@ -80,7 +79,7 @@ export default class CommandHandler {
 		if (!user.hasPermission("ADMINISTRATOR")) {
 			throw new Error("UNALLOWED_ADMIN_BYPASS");
 		}
-		return command.run(ctx);
+		return command.execute(ctx);
 	}
 
 	// eslint-disable-next-line class-methods-use-this

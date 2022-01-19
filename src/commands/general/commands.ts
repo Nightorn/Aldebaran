@@ -14,8 +14,18 @@ export default class CommandsCommand extends Command {
 			allowIndexCommand: true,
 			allowUnknownSubcommands: true,
 			args: {
-				showHidden: { as: "boolean?", flag: { short: "s", long: "show-hidden" }, desc: "Show hidden commands" },
-				hideAliases: { as: "boolean?", flag: { short: "h", long: "hide-aliases" }, desc: "Hide aliases" }
+				showHidden: {
+					as: "boolean",
+					flag: { short: "s", long: "show-hidden" },
+					desc: "Show hidden commands",
+					optional: true
+				},
+				hideAliases: {
+					as: "boolean",
+					flag: { short: "h", long: "hide-aliases" },
+					desc: "Hide aliases",
+					optional: true
+				}
 			}
 		});
 		this.registerSubcommands(alias, disable, enable, guide);

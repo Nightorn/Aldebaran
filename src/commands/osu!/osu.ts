@@ -25,8 +25,8 @@ export default class OsuCommand extends Command {
 			example: "Ciborn --mania",
 			aliases: ["osuprofile"],
 			args: {
-				user: { as: "word", desc: "Username/UserID" },
-				mode: { as: "mode" }
+				user: { as: "word", desc: "Username/UserID", optional: true },
+				mode: { as: "mode", optional: true }
 			}
 		});
 	}

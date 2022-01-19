@@ -12,7 +12,10 @@ export default class PlantCommand extends Command {
 			description: "Displays users plant informations and estimated loots",
 			usage: "UserMention|UserID",
 			example: "320933389513523220",
-			args: { user: { as: "user" }, plant: { as: "number" } }
+			args: {
+				user: { as: "user", optional: true },
+				plant: { as: "number", optional: true }
+			}
 		});
 	}
 

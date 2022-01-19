@@ -25,8 +25,8 @@ export default class OsurecentCommand extends Command {
 			example: "Ciborn",
 			aliases: ["osurs"],
 			args: {
-				user: { as: "word", desc: "Username/UserID" },
-				mode: { as: "mode" }
+				user: { as: "word", desc: "Username/UserID", optional: true },
+				mode: { as: "mode", optional: true }
 			}
 		});
 	}

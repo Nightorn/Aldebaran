@@ -112,6 +112,8 @@ export default async (client: AldebaranClient, message: Message) => {
 				ctx.reply(embed);
 			} else if (err.message === "INVALID_COMMAND") {
 				console.log(`Someone unsuccessfully tried ${command}.`);
+			} else if (err.message === "INVALID_ARGS") {
+				ctx.error("INVALID_ARGS", `Please check \`${prefix}?${command}\` for more information on how to use this command.`)
 			} else {
 				console.error(err);
 			}

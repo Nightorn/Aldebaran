@@ -10,7 +10,7 @@ export default class UserCommand extends Command {
 			description: "Shows detailled user informations",
 			usage: "UserMention/UserID",
 			example: "437802197539880970",
-			args: { user: { as: "user" } }
+			args: { user: { as: "user", optional: true } }
 		});
 	}
 
