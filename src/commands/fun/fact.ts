@@ -8,7 +8,6 @@ export default class FactCommand extends Command {
 	}
 
 	async run(ctx: MessageContext) {
-		ctx.message.delete().catch(() => {});
 		const data = await ctx.client.nekoslife.sfw.fact();
 		const embed = new Embed(this)
 			.setTitle("The fact is...")
