@@ -7,7 +7,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class UserCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Shows detailled user informations",
+			description: "Shows detailled user information",
 			usage: "UserMention/UserID",
 			example: "437802197539880970",
 			args: { user: { as: "user", optional: true } }

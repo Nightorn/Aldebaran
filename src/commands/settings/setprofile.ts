@@ -7,7 +7,7 @@ import { SocialProfileProperty } from "../../utils/Constants.js";
 export default class SetprofileCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Changes your profile informations",
+			description: "Changes your profile information",
 			usage: "Section Input",
 			example: "aboutme My name is Xxx_FortnitePro_xxX!"
 		});

@@ -9,7 +9,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class WallsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays user's wall informations",
+			description: "Displays user's wall information",
 			usage: "UserMention|UserID",
 			example: "246302641930502145"
 		});

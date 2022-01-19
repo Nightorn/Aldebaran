@@ -90,7 +90,7 @@ export default class OsuCommand extends Command {
 				ctx.reply("the user you specified does not exist, or at least in the mode specified.");
 			});
 		} else {
-			ctx.reply("the mode you specified does not exist. Check `&?osu` for more informations.");
+			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
 };

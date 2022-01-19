@@ -7,7 +7,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class InfoCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays informations about the bot"
+			description: "Displays information about the bot"
 		});
 	}
 

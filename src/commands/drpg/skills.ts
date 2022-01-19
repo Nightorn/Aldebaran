@@ -9,7 +9,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class SkillsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays users' skills informations",
+			description: "Displays users' skills information",
 			usage: "UserMention|UserID",
 			example: "246302641930502145",
 			args: { user: { as: "user", optional: true } }

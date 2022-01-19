@@ -9,7 +9,7 @@ import { DRPGUser } from "../../interfaces/DiscordRPG.js";
 export default class PlantCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays users plant informations and estimated loots",
+			description: "Displays users plant information and estimated loots",
 			usage: "UserMention|UserID",
 			example: "320933389513523220",
 			args: {
@@ -71,7 +71,7 @@ export default class PlantCommand extends Command {
 						const pronoun = ctx.message.author.id === userid ? "You" : "They";
 						const ownership = ctx.message.author.id === userid ? "your" : "their";
 						const embed = new Embed(this)
-							.setAuthor(`${target.username}  |  Plant Informations  |  ${item.name} @ ${drpgLocationdb[plantId]}`, target.displayAvatarURL())
+							.setAuthor(`${target.username}  |  Plant information  |  ${item.name} @ ${drpgLocationdb[plantId]}`, target.displayAvatarURL())
 							.setDescription(`With ${ownership} current reaping skills (${luck === 1 ? 0 : luck} points), ${pronoun} will receive ${normalRewards}. With the highest reaping skills possible for ${ownership} level (${luckMax} points) ${pronoun.toLowerCase()} could have, ${pronoun.toLowerCase()} will receive ${highestRewards}.`)
 							.setFooter(`${pronoun} have set this plant the ${getDate(plant.time)}.`);
 						return ctx.reply(embed);
@@ -86,12 +86,12 @@ export default class PlantCommand extends Command {
 				}
 				if (plantsList !== "") {
 					const embed = new Embed(this)
-						.setAuthor(`${target.username}  |  Sapling Informations`, target.displayAvatarURL())
-						.setDescription(`${ctx.message.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)!.length} plants** set. Please tell us which one you want to view the informations of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
+						.setAuthor(`${target.username}  |  Sapling information`, target.displayAvatarURL())
+						.setDescription(`${ctx.message.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)!.length} plants** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
 					return ctx.reply(embed);
 				}
 				const embed = new Embed(this)
-					.setAuthor(`${target.username}  |  Sapling Informations`, target.displayAvatarURL())
+					.setAuthor(`${target.username}  |  Sapling information`, target.displayAvatarURL())
 					.setDescription(`${ctx.message.author.id === userid ? "You have" : `**${target.username}** has`} no plant set.`);
 				return ctx.reply(embed);
 			}

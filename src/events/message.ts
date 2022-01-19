@@ -97,7 +97,7 @@ export default async (client: AldebaranClient, message: Message) => {
 			if (err.message === "INVALID_PERMISSIONS") {
 				const embed = new MessageEmbed()
 					.setTitle("You are not allowed to use this.")
-					.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${command}\` for more informations about the requirements to use this command.`)
+					.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${command}\` for more information about the requirements to use this command.`)
 					.setFooter(message.author.username, message.author.displayAvatarURL())
 					.setColor("RED");
 				ctx.reply(embed);

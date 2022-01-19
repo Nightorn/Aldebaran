@@ -118,12 +118,12 @@ export default class GconfigCommand extends Command {
 				});
 			} else {
 				ctx.reply(
-					`**Error** This value is not supported, check \`${ctx.prefix}gconfig list\` for more informations.`
+					`**Error** This value is not supported, check \`${ctx.prefix}gconfig list\` for more information.`
 				);
 			}
 		} else {
 			ctx.reply(
-				`**Error** This key does not exist, check \`${ctx.prefix}gconfig list\` for more informations.`
+				`**Error** This key does not exist, check \`${ctx.prefix}gconfig list\` for more information.`
 			);
 		}
 		return true;

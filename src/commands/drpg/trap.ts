@@ -10,7 +10,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class TrapCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays users' trap informations and estimated loots",
+			description: "Displays users' trap information and estimated loots",
 			usage: "User TrapLocationID Max?",
 			example: "240971835330658305 4 --max",
 			args: {
@@ -76,7 +76,7 @@ export default class TrapCommand extends Command {
 							}
 						});
 						const embed = new MessageEmbed()
-							.setAuthor(`${target.username}  |  Trap Informations  |  ${drpgItems[trap.id].name} @ ${drpgLocationdb[trapId]}`, target.displayAvatarURL())
+							.setAuthor(`${target.username}  |  Trap information  |  ${drpgItems[trap.id].name} @ ${drpgLocationdb[trapId]}`, target.displayAvatarURL())
 							.setDescription(`${pronoun} will receive the following items (with ${luck} point(s) in salvaging)\n${items}`)
 							.setFooter(`${pronoun} have set this trap the ${getDate(trap.time)}. You can use "--max" to get results with the max amount of points in salvaging you can have at your current level.`)
 							.setColor("GREEN");
@@ -96,8 +96,8 @@ export default class TrapCommand extends Command {
 							traps += `\`[${location}]\` **${drpgItems[trap.id].name}** @ **${drpgLocationdb[location]}** - ${getDate(trap.time, true)}\n`;
 					}
 					const embed = new MessageEmbed()
-						.setAuthor(`${target.username}  |  Trap Informations`, target.displayAvatarURL())
-						.setDescription(`${ctx.message.author.id === userid ? "You have" : `**${target.username}** has`} **${traps.match(/\n/g)!.length} traps** set. Please tell us which one you want to view the informations of. Use \`${ctx.prefix}trap 4\` for example.\n${traps}`)
+						.setAuthor(`${target.username}  |  Trap information`, target.displayAvatarURL())
+						.setDescription(`${ctx.message.author.id === userid ? "You have" : `**${target.username}** has`} **${traps.match(/\n/g)!.length} traps** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}trap 4\` for example.\n${traps}`)
 						.setColor("GREEN");
 					ctx.reply(embed);
 				}

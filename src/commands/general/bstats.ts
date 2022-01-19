@@ -22,7 +22,7 @@ export default class BStatsCommand extends Command {
 		const embed = new MessageEmbed()
 			.setAuthor(`${ctx.client.name}  |  Bot Statistics`, ctx.client.user.displayAvatarURL())
 			.setDescription(
-				`Multiple informations about ${ctx.client.name} are shown on this page, mainly the used resources and the global usage statistics.`
+				`Data about ${ctx.client.name} are shown on this page, mainly the used resources and the global usage statistics.`
 			)
 			.addField("Memory Usage", `**${mem} MB**`, true)
 			.addField("System CPU Load", `**${load}** (${loadPC}%)`, true)

@@ -92,7 +92,7 @@ export default class OsurecentCommand extends Command {
 				console.error(err);
 			});
 		} else {
-			ctx.reply("the mode you specified does not exist. Check `&?osu` for more informations.");
+			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
 };

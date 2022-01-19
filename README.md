@@ -36,7 +36,7 @@ $ git clone https://github.com/Nightorn/Aldebaran.git
 $ npm install
 $ node app
 ```
-If all your informations are correct (`.env` file, take example on the `.env.example` file if needed), your instance of Aldebaran should be online!
+If your environment file is valid (`.env` file, take example on the `.env.example` file if needed), your instance of Aldebaran should be online!
 ### Run Aldebaran with Docker (Pt. 2.2: Docker Environment)
 **In order to run this project, you need [Docker](https://www.docker.com).**
 

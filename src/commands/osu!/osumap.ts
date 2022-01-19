@@ -20,8 +20,8 @@ const returnDuration = (x: number) => (x > 60
 export default class OsumapCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Shows the informations of the specified map",
-			help: "First, you have to send the link of the beatmap you want to see the informations of, or you also use its ID. After that, you can choose the mode to show the informations from, note that the default mode is standard. See more informations below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps.",
+			description: "Shows the information of the specified map",
+			help: "First, you have to send the link of the beatmap you want to see the information of, or you also use its ID. After that, you can choose the mode to show the information from, note that the default mode is standard. See more information below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps.",
 			example: "1097541 --taiko +HD 97% 100x 69m",
 			args: {
 				map: { as: "expression", regex: /\d+$/, desc: "Beatmap URL / ID" },
@@ -70,7 +70,7 @@ export default class OsumapCommand extends Command {
 		const client = ctx.client.nodesu!;
 		if (args.map === undefined) {
 			return ctx.reply(
-				"You need to send a link of the beatmap or its ID. Check `&?osumap` for more informations."
+				"You need to send a link of the beatmap or its ID. Check `&?osumap` for more information."
 			);
 		}
 		const nmiss = args.nmiss || 0;
@@ -139,7 +139,7 @@ export default class OsumapCommand extends Command {
 									)}`
 							}\n${
 								mode !== "osu"
-									? "*Many informations are unavailable as this is not a standard map.*"
+									? "*Some data are unavailable as this is not a standard map.*"
 									: ""
 							}`
 						)
@@ -206,7 +206,7 @@ export default class OsumapCommand extends Command {
 				ctx.reply("the map you asked does not exist, or at least in the mode specified.");
 			}
 		} else {
-			ctx.reply("the mode you specified does not exist. Check `&?osu` for more informations.");
+			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 		return true;
 	}
