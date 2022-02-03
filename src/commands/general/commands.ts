@@ -2,17 +2,10 @@ import { Command, Embed } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/aldebaran/MessageContext.js";
 
-import alias from "./commands/alias.js";
-import disable from "./commands/disable.js";
-import enable from "./commands/enable.js";
-import guide from "./commands/guide.js";
-
 export default class CommandsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Lists all the available commands",
-			allowIndexCommand: true,
-			allowUnknownSubcommands: true,
 			args: {
 				showHidden: {
 					as: "boolean",
@@ -28,7 +21,6 @@ export default class CommandsCommand extends Command {
 				}
 			}
 		});
-		this.registerSubcommands(alias, disable, enable, guide);
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -48,22 +40,12 @@ export default class CommandsCommand extends Command {
 			}
 		}
 
-		if (guild && guild.commandOverrides) {
-			for (const [name, data] of Object.entries(guild.commandOverrides)) {
-				if (data !== false) {
-					commands[ctx.client.commands.get(data)!.category].push(`**${name}**`);
-				} else {
-					commands[ctx.client.commands.get(name)!.category].push(`~~${name}~~`);
-				}
-			}
-		}
-
 		const embed = new Embed(this)
 			.setAuthor(
 				`${ctx.client.name}  |  List of ${ctx.client.commands.size} commands`,
 				ctx.client.user.avatarURL()!
 			);
-		embed.setFooter(`${!args.showHidden && !args.hideAliases ? "Use --show-hidden to view all commands and --hidealiases to hide aliases." : ""} To learn how to use the customized commands, check ${ctx.prefix}commands guide.`);
+		embed.setFooter(`${!args.showHidden && !args.hideAliases ? "Use --showhidden to view all commands and --hidealiases to hide aliases." : ""} To learn how to use the customized commands, check ${ctx.prefix}commands guide.`);
 		for (const [category, list] of Object.entries(commands)) {
 			embed.addField(category, list.join(", "), true);
 		}

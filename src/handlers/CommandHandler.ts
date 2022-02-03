@@ -25,9 +25,6 @@ export default class CommandHandler {
 	async execute(name: string, message: Message, prefix: string) {
 		if (message.guild) {
 			const guild = await this.client.customGuilds.fetch(message.guild.id);
-			const override = this.checkOverrides(guild.commandOverrides, name);
-			if (!override) return;
-			name = override;
 		}
 		if (!this.exists(name)) throw new TypeError("INVALID_COMMAND");
 		const command = this.get(name)!;
@@ -80,15 +77,6 @@ export default class CommandHandler {
 			throw new Error("UNALLOWED_ADMIN_BYPASS");
 		}
 		return command.execute(ctx);
-	}
-
-	// eslint-disable-next-line class-methods-use-this
-	checkOverrides(
-		commands: { [key: string]: string | false },
-		command: string
-	): string | false {
-		const cmd = commands[command];
-		return cmd || command;
 	}
 
 	exists(command: string) {
