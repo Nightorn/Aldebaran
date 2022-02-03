@@ -112,7 +112,7 @@ export default class MessageContext {
 					if (args[arg] === undefined) {
 						if (data.as === type && data.flag === undefined) {
 							result = { arg, value };
-						} else if (type === "flag" && data.flag !== undefined) {
+						} else if (type === "flag" && data.flag) {
 							if ([data.flag.short, data.flag.long].includes(value.id)) {
 								if (data.as === "boolean") {
 									result = { arg, value: true };
