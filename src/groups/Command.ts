@@ -6,15 +6,15 @@ import MessageContext from "../structures/aldebaran/MessageContext.js";
 
 export abstract class Command implements ICommand {
 	aliases: string[];
-	category: string;
-	color: ColorResolvable;
+	category: string = "General";
+	color: ColorResolvable = "BLUE";
 	client: AldebaranClient;
 	example: string;
-	hidden: boolean;
+	hidden: boolean = false;
 	metadata: CommandMetadata;
 	name: string = "dummy";
 	perms: { discord: DJSPermission[], aldebaran: AldebaranPermission[] };
-	subcommands: Map<string, ICommand>;
+	subcommands: Map<string, ICommand> = new Map();
 	usage: string;
 
 	/**
@@ -36,13 +36,9 @@ export abstract class Command implements ICommand {
 			}
 		}
 		this.aliases = metadata.aliases || [];
-		this.category = "General";
-		this.color = "BLUE";
 		this.client = client;
 		this.example = !metadata.example ? "" : `\`${metadata.example}\``;
-		this.hidden = false;
 		this.metadata = metadata;
-		this.subcommands = new Map();
 		this.usage = !metadata.usage ? "" : `\`${metadata.usage}\``;
 	}
 

@@ -37,17 +37,13 @@ export default class CommandsCommand extends Command {
 		const guild = ctx.message.guild ? await ctx.guild() : null;
 		const commands: { [key: string]: string[] } = {};
 		for (const [name, data] of ctx.client.commands.commands) {
-			if (await data.check(ctx)) {
-				if ((!data.hidden || args.showHidden)
-					&& (!guild || (guild && guild.commandOverrides[name]))
-				) {
-					if (commands[data.category] === undefined)
-						commands[data.category] = [];
-					if (name === data.name) {
-						commands[data.category].push(name);
-					} else if (!args.hideAliases) {
-						commands[data.category].push(`*${name}*`);
-					}
+			if (args.showHidden || (await data.check(ctx) && !data.hidden)) {
+				if (commands[data.category] === undefined)
+					commands[data.category] = [];
+				if (name === data.name) {
+					commands[data.category].push(name);
+				} else if (!args.hideAliases) {
+					commands[data.category].push(`*${name}*`);
 				}
 			}
 		}
