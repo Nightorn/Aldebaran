@@ -19,19 +19,17 @@ export default async (ctx: MessageContext) => {
 		"<@170915625722576896> ",
 		guild.settings.discordrpgprefix
 	]) {
-		if (element !== undefined)
-			if (content.match(`^${escape(element.toString())}adv(\\b|enture\\b)`)) {
-				prefix = element;
-			}
+		if (element && content.indexOf(`${element}adv`) === 0) {
+			prefix = element;
+		}
 	}
-	if (prefix !== null) {
+	if (prefix) {
 		if (guild.settings.autodelete === "on") {
 			setTimeout(() => ctx.message.delete().catch(() => {}), 1000);
 		}
 		const delay = user.settings.adventuretimer === "random"
 			? Math.random() * 3000
 			: 0;
-		// eslint-disable-next-line no-param-reassign
 		user.timers.adventure = setTimeout(() => {
 			const ping = user.settings.timerping === "adventure"
 				|| user.settings.timerping === "on"
@@ -42,7 +40,6 @@ export default async (ctx: MessageContext) => {
 					setTimeout(() => msg.delete(), 10000);
 				}
 			});
-			// eslint-disable-next-line no-param-reassign
 			user.timers.adventure = null;
 		}, 13900 + delay);
 	}
