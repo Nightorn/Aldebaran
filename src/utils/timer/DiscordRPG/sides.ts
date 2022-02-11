@@ -7,13 +7,14 @@ export default async (ctx: MessageContext) => {
 	if (!ctx.message.guild) return;
 	const guild = (await ctx.guild())!;
 	const user = await ctx.author();
-	const supportedST = ["on", "mine", "forage", "chop", "fish"];
+
+	if (!user.settings.sidestimer || user.settings.sidestimer === "off"
+		|| !guild.settings.sidestimer || guild.settings.sidestimer === "off") {
+		return;
+	}
+
 	let prefix = null;
-	let primaryAction = null;
-	if (user.settings.sidestimer !== undefined) {
-		if (user.settings.sidestimer === "on") primaryAction = "mine";
-		else primaryAction = user.settings.sidestimer;
-	} else primaryAction = "mine";
+
 	const content = `${ctx.message.content.toLowerCase()} `;
 	for (const element of [
 		"discordrpg ",
@@ -26,16 +27,32 @@ export default async (ctx: MessageContext) => {
 			}
 		}
 	}
+
 	if (prefix) {
 		if (guild.settings.autodelete === "on") {
 			setTimeout(() => ctx.message.delete().catch(() => {}), 2000);
 		}
 		if (user.timers.sides !== null) return;
-		if (
-			supportedST.indexOf(user.settings.sidestimer!) !== -1
-				&& guild.settings.sidestimer === "on"
-		) {
-			const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
+
+		const setting = user.settings.sidestimer;
+		const primaryAction = setting === "on" ? "mine" : setting;
+
+		if (content.indexOf(`${prefix}${primaryAction}`) === 0) {
+			// Setting the timer on
+			user.timers.sides = setTimeout(() => {
+				const ping = user.settings.timerping === "on"
+					|| user.settings.timerping === "sides"
+					? `<@${user.id}>`
+					: `${user.username},`;
+				const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
+				ctx.reply(`${ping} sides time! ${randomemoji}`).then(msg => {
+					if (guild.settings.autodelete === "on") {
+						setTimeout(() => msg.delete(), 180000);
+					}
+				});
+				user.timers.sides = null;
+			}, 299250);
+
 			const timerEmbed = new MessageEmbed()
 				.setAuthor(
 					ctx.message.author.username,
@@ -57,24 +74,16 @@ export default async (ctx: MessageContext) => {
 							.setColor(0x00ae86);
 						ctx.reply(embed).then(timerset => {
 							setTimeout(() => timerset.delete(), 5000);
-							user.timers.sides = setTimeout(() => {
-								const ping = user.settings.timerping === "on"
-									|| user.settings.timerping === "sides"
-									? `<@${user.id}>`
-									: `${user.username},`;
-								ctx.reply(`${ping} sides time! ${randomemoji}`).then(msg => {
-									if (guild.settings.autodelete === "on") {
-										setTimeout(() => msg.delete(), 180000);
-									}
-								});
-								user.timers.sides = null;
-							}, 299250);
 						});
 					} else {
 						const embed1 = new MessageEmbed()
-							.setDescription("Timer Canceled")
+							.setDescription("Timer Cancelled")
 							.setAuthor(`${user.username}`)
 							.setColor("RED");
+
+						clearTimeout(user.timers.sides!);
+						user.timers.sides = null;
+
 						ctx.reply(embed1).then(timernotset => {
 							setTimeout(() => timernotset.delete(), 5000);
 						});
