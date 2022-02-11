@@ -18,8 +18,7 @@ export default class WeaponCommand extends Command {
 	run(ctx: MessageContext) {
 		const args = ctx.args as { level: string };
 		const level = Number(args.level);
-		if (level === undefined)
-			return ctx.reply("You need to specify a level!");
+
 		if (level < 1)
 			return ctx.reply("You cannot search for weapons requiring a negative level!");
 

@@ -7,7 +7,7 @@ import MessageContext from "../../structures/aldebaran/MessageContext.js";
 export default class InfoCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays informations about the bot"
+			description: "Displays information about the bot"
 		});
 	}
 
@@ -51,6 +51,7 @@ export default class InfoCommand extends Command {
 				"Affiliation",
 				`${ctx.client.name} uses but is not affiliated with [DiscordRPG](https://discorddungeons.me), [TheCatAPI](https://thecatapi.com), [Dog API](https://dog.ceo/), [nekos.life](https://nekos.life/), [Giphy](https://giphy.com), [osu!](https://osu.ppy.sh), [Some Random Api](https://some-random-api.ml/) and [Pexels](https://www.pexels.com).`
 			)
+			.addField("Privacy Policy", "As of now, if Aldebaran has read permissions in a channel, it can read all messages inside it. Because Discord now requires Discord bot developers to be transparent about how they use messages' content, you should know about [Aldebaran's Privacy Policy](https://aldebaran.ciborn.dev/privacy-policy).")
 			.setThumbnail(ctx.client.user.avatarURL()!)
 			.setColor(ctx.message.guild ? ctx.message.guild.me!.displayColor : "BLUE");
 			if (ctx.message.guild) {

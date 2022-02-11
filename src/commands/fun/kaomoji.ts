@@ -9,7 +9,6 @@ export default class KaomojiCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
-		ctx.message.delete().catch(() => {});
 		ctx.reply((await ctx.client.nekoslife.sfw.catText()).cat);
 	}
 };

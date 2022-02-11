@@ -10,7 +10,7 @@ export default class AvatarCommand extends Command {
 			usage: "UserMention/UserID",
 			example: "320933389513523220",
 			aliases: ["pfp"],
-			args: { user: { as: "user?" } }
+			args: { user: { as: "user", optional: true } }
 		});
 	}
 

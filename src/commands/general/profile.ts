@@ -9,7 +9,7 @@ export default class ProfileCommand extends Command {
 			description: "Shows your social profile",
 			usage: "UserMention|UserID",
 			example: "320933389513523220",
-			args: { user: { as: "user" } }
+			args: { user: { as: "user", optional: true } }
 		});
 	}
 

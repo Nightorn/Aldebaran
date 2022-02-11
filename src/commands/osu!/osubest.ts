@@ -44,8 +44,8 @@ export default class OsubestCommand extends Command {
 			example: "Ciborn",
 			aliases: ["osutop"],
 			args: {
-				user: { as: "word", desc: "Username/ID" },
-				mode: { as: "mode?" }
+				user: { as: "word", desc: "Username/ID", optional: true },
+				mode: { as: "mode", optional: true }
 			}
 		});
 	}
@@ -127,7 +127,7 @@ export default class OsubestCommand extends Command {
 								`https://a.ppy.sh/${user.userId}`,
 								`https://osu.ppy.sh/users/${user.userId}`)
 							.setDescription(description);
-						if (mode !== "osu") embed.setFooter("Because this is not an osu!standard map, some informations about the scores are unavailable.");
+						if (mode !== "osu") embed.setFooter("Because this is not an osu!standard map, some information about the scores are unavailable.");
 						ctx.reply(embed);
 					});
 				});
@@ -136,7 +136,7 @@ export default class OsubestCommand extends Command {
 				ctx.reply("the user you specified does not exist, or at least in the mode specified.");
 			});
 		} else {
-			ctx.reply("the mode you specified does not exist. Check `&?osu` for more informations.");
+			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
 };

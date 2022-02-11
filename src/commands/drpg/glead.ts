@@ -85,10 +85,10 @@ export default class GleadCommand extends Command {
 			usage: "[user] [--showid] [--desc] [attribute]",
 			example: "141610251299454976 showid --desc lastseen",
 			args: {
-				user: { as: "user?" },
-				showid: { as: "boolean?", flag: { short: "s", long: "showid" } },
-				desc: { as: "boolean?", flag: { short: "s", long: "desc" } },
-				attribute: { as: "word?" }
+				user: { as: "user", optional: true },
+				showid: { as: "boolean", flag: { short: "s", long: "showid" }, optional: true },
+				desc: { as: "boolean", flag: { short: "s", long: "desc" }, optional: true },
+				attribute: { as: "word", optional: true }
 			}
 		});
 	}

@@ -14,8 +14,8 @@ export default class UpgradecalcCommand extends Command {
 				maxPetDamage: { as: "number" },
 				minWeaponDamage: { as: "number" },
 				maxWeaponDamage: { as: "number" },
-				strMultiplier: { as: "number?" },
-				shots: { as: "number?" }
+				strMultiplier: { as: "number", optional: true },
+				shots: { as: "number", optional: true }
 			}
 		});
 	}
@@ -39,13 +39,8 @@ export default class UpgradecalcCommand extends Command {
 		const minPetDMG = Number(args.minPetDamage);
 		const maxWeaponDMG = Number(args.maxWeaponDamage);
 		const minWeaponDMG = Number(args.minWeaponDamage);
-		const shots = Number(args.shots);
-		const strMultiplier = Number(args.strMultiplier);
-
-		if (!charLevel || !petLevel || !maxPetDMG || !minPetDMG ||
-			!maxWeaponDMG || !minWeaponDMG || !shots || !strMultiplier) {
-			return ctx.error("MISSING_ARGS", "Please check `&?upgradecalc` for more information on how to use this command.");
-		}
+		const shots = args.shots ? Number(args.shots) : 1;
+		const strMultiplier = args.strMultiplier ? Number(args.strMultiplier) : 1;
 
 		const petDamage = maxPetDMG > petLevel * 10 ? maxPetDMG - petLevel * 10 : 0;
 		const hp = ((charLevel * 50) - 10 + petDamage); // I don't actually know what that is

@@ -1,10 +1,11 @@
 export interface Arg {
-	as: string,
+	as: "boolean" | "expression" | "mode" | "number" | "user" | "word",
 	desc?: string,
 	flag?: {
 		short?: string,
 		long?: string
 	},
+	optional?: boolean,
 	regex?: RegExp
 }
 

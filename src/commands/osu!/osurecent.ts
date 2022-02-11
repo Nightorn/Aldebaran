@@ -25,8 +25,8 @@ export default class OsurecentCommand extends Command {
 			example: "Ciborn",
 			aliases: ["osurs"],
 			args: {
-				user: { as: "word", desc: "Username/UserID" },
-				mode: { as: "mode" }
+				user: { as: "word", desc: "Username/UserID", optional: true },
+				mode: { as: "mode", optional: true }
 			}
 		});
 	}
@@ -92,7 +92,7 @@ export default class OsurecentCommand extends Command {
 				console.error(err);
 			});
 		} else {
-			ctx.reply("the mode you specified does not exist. Check `&?osu` for more informations.");
+			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
 };

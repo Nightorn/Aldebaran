@@ -13,18 +13,37 @@ const checkType = (element: string) => {
 };
 
 export default class MessageContext {
+	private _argsMetadata?: Args;
 	private _author?: User;
 	private _guild?: Guild;
-	args?: string[] | { [key: string]: string | boolean; };
+	private _args?: string[] | { [key: string]: string | boolean; };
 	client: Client;
+	level: number = 0; // 0 if command, 1 if subcommand, 2 if subsubcommand, etc.
 	message: DMessage;
 	prefix: string;
 
 	constructor(client: Client, message: DMessage, prefix: string, args?: Args) {
+		this._argsMetadata = args;
 		this.client = client;
 		this.message = message;
 		this.prefix = prefix;
-		this.args = args ? this.getArgs(args) : this.getSplitArgs();
+	}
+
+	get args() {
+		if (!this._args) {
+			this._args = this.getArgs();
+		}
+		return this._args;
+	}
+	
+	argsCheck() {
+		if (this._argsMetadata) {
+			const mandatory = Object.keys(this._argsMetadata)
+				.filter(k => !this._argsMetadata![k].optional);
+			const mandatoryFound = Object.keys(this.args).filter(k => mandatory.includes(k));
+			return mandatory.length === mandatoryFound.length;
+		}
+		return true;
 	}
 
 	async author() {
@@ -53,62 +72,69 @@ export default class MessageContext {
 	}
 
 	// the shift parameter should be 1 when a subcommand is used, 2 when a subsubcommand is used (which is sadly not supported), etc.
-	getSplitArgs(shift = 0) {
+	getSplitArgs() {
 		const split = this.message.content
 			.slice(this.prefix.length + this.command.length)
 			.split(" ");
-		for (let i = 0; i < shift + 1; i++) {
+		for (let i = 0; i < this.level + 1; i++) {
 			split.shift();
 		}
 		return split;
 	}
 
-	getArgs(required?: Args, shift = 0) {
-		const split = this.getSplitArgs(shift);
-		if (required) {
-			const deconstructed = [];
+	getArgs() {
+		const split = this.getSplitArgs();
+		if (this._argsMetadata) {
+			const deconstructed = []; // All arguments and their type
 			for (let i = 0; i < split.length; i++) {
 				const type = checkType(split[i]);
-				if (type === "user")
+				if (type === "user") {
 					deconstructed.push({ user: split[i].match(/\d{17,19}/g)![0] });
-				else if (type === "number") deconstructed.push({ number: Number(split[i]) });
-				else if (type === "flag") {
+				} else if (type === "number") {
+					deconstructed.push({ number: Number(split[i]) });
+				} else if (type === "flag") {
 					deconstructed.push({
 						flag: {
 							id: split[i].replace(/-/g, ""),
 							pv: split[i + 1]
 						}
 					});
-				} else if (type === "word") deconstructed.push({ word: split[i] });
+				} else if (type === "word") {
+					deconstructed.push({ word: split[i] });
+				}
 			}
 			const args: { [key: string]: string | boolean } = { };
 			for (const element of deconstructed) {
 				const [[type, value]] = Object.entries(element);
 				let result = null;
-				for (const [arg, data] of Object.entries(required)) {
-					const as = data.as.replace("?", "");
-					if (result !== null) break;
+				for (const [arg, data] of Object.entries(this._argsMetadata)) {
+					if (result) break;
 					if (args[arg] === undefined) {
-						if (as === type && data.flag === undefined) {
+						if (data.as === type && data.flag === undefined) {
 							result = { arg, value };
-						} else if (type === "flag" && data.flag !== undefined) {
+						} else if (type === "flag" && data.flag) {
 							if ([data.flag.short, data.flag.long].includes(value.id)) {
-								if (as === "boolean") {
+								if (data.as === "boolean") {
 									result = { arg, value: true };
 								} else if (value.pv !== undefined) {
-									if (checkType(value.pv) === as)
+									if (checkType(value.pv) === data.as) {
 										result = { arg, value: value.pv };
+									}
 								}
 							}
-						} else if (type === "flag" && as === "mode") {
+						} else if (type === "flag" && data.as === "mode") {
 							result = { arg, value: value.id };
-						} else if (type !== "flag" && as === "expression") {
+						} else if (type !== "flag" && data.as === "expression") {
 							const match = String(value).match(data.regex!);
-							if (match) result = { arg, value: match[0] };
+							if (match) {
+								result = { arg, value: match[0] };
+							}
 						}
 					}
 				}
-				if (result !== null) args[result.arg] = result.value;
+				if (result) {
+					args[result.arg] = result.value;
+				}
 			}
 			return args;
 		}
@@ -120,6 +146,11 @@ export default class MessageContext {
 		if (this.message.content.indexOf(`${this.prefix}?`) === 0) return "HELP";
 		if (this.message.content.indexOf(`${this.prefix}-`) === 0) return "IMAGE";
 		return "NORMAL";
+	}
+
+	setLevel(level: number) {
+		this.level = level;
+		this._args = undefined;
 	}
 
 	async error(type: ErrorString, desc?: string, value?: string) {

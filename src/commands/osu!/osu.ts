@@ -25,8 +25,8 @@ export default class OsuCommand extends Command {
 			example: "Ciborn --mania",
 			aliases: ["osuprofile"],
 			args: {
-				user: { as: "word", desc: "Username/UserID" },
-				mode: { as: "mode" }
+				user: { as: "word", desc: "Username/UserID", optional: true },
+				mode: { as: "mode", optional: true }
 			}
 		});
 	}
@@ -90,7 +90,7 @@ export default class OsuCommand extends Command {
 				ctx.reply("the user you specified does not exist, or at least in the mode specified.");
 			});
 		} else {
-			ctx.reply("the mode you specified does not exist. Check `&?osu` for more informations.");
+			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
 };

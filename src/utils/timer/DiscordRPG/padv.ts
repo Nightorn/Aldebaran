@@ -19,14 +19,14 @@ export default async (ctx: MessageContext) => {
 		"<@170915625722576896> ",
 		guild.settings.discordrpgprefix
 	]) {
-		if (element !== undefined)
-			if (content.match(`^${escape(element.toString())}padv(\\b|enture\\b)`)) {
-				prefix = element;
-			}
+		if (element && content.indexOf(`${element}padv`) === 0) {
+			prefix = element;
+		}
 	}
-	if (prefix !== null) {
-		if (guild.settings.autodelete === "on")
-			setTimeout(() => ctx.message.delete(), 1000);
+	if (prefix) {
+		if (guild.settings.autodelete === "on") {
+			setTimeout(() => ctx.message.delete().catch(() => {}), 1000);
+		}
 		user.timers.padventure = setTimeout(() => {
 			const ping = user.settings.timerping === "adventure"
 				|| user.settings.timerping === "on"

@@ -7,7 +7,7 @@ import MessageContext from "../../../structures/aldebaran/MessageContext.js";
 export default class ViewSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Shows detailled informations about the specified user or guild",
+			description: "Shows detailled information about the specified user or guild",
 			perms: { aldebaran: ["EDIT_USERS"] }
 		});
 	}

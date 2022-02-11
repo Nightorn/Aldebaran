@@ -14,7 +14,6 @@ export default class EmojilistCommand extends Command {
 	run(ctx: MessageContext) {
 		const emojilist = ctx.message.guild!.emojis.cache
 			.map(e => e.toString()).join("");
-		ctx.message.delete();
 		if (emojilist.length <= 2000)
 			ctx.reply(emojilist);
 		else ctx.error("IMPOSSIBLE", "There are too many emojis on this server to show in a single message.");

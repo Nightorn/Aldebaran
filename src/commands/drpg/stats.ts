@@ -17,7 +17,7 @@ export default class StatsCommand extends Command {
 			description: "Displays a DiscordRPG user's character and pet infos",
 			usage: "UserMention|UserID",
 			example: "141610251299454976",
-			args: { user: { as: "user" } }
+			args: { user: { as: "user", optional: true } }
 		});
 	}
 

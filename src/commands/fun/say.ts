@@ -14,7 +14,6 @@ export default class SayCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as string[];
-		ctx.message.delete().catch(() => {});
 		const embed = new Embed(this)
 			.setAuthor(
 				ctx.message.author.username,

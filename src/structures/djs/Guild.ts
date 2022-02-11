@@ -9,7 +9,6 @@ function sanitize(data: string | number) {
 
 export default class Guild {
 	client!: AldebaranClient;
-	commandOverrides: { [key: string]: string | false } = {};
 	guild: DJSGuild;
 	id: Snowflake;
 	polluxBoxPing: C<string, User> = new C<string, User>();
@@ -19,7 +18,6 @@ export default class Guild {
 
 	constructor(client: AldebaranClient, guild: DJSGuild, data: DBGuild) {
 		this.client = client;
-		this.commandOverrides = JSON.parse(data.commands);
 		this.guild = guild;
 		this.id = data.guildid;
 		for (const [k, v] of Object.entries(JSON.parse(data.settings))) {
@@ -28,18 +26,6 @@ export default class Guild {
 		this.prefix = this.client.debugMode && process.env.PREFIX
 			? process.env.PREFIX
 			: this.settings.aldebaranprefix as string || "&";
-	}
-
-	async changeCommandSetting(property: string, override: string | boolean) {
-		if (override || (!this.client.commands.exists(property) && !override)) {
-			delete this.commandOverrides[property];
-		} else {
-			this.commandOverrides[property] = override;
-		}
-		return this.client.database.guilds.updateOneById(
-			this.id,
-			new Map([["commands", JSON.stringify(this.commandOverrides)]])
-		);
 	}
 
 	async changeSetting(property: GuildSetting, value: string) {
