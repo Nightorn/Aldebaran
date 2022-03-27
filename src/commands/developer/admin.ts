@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import { Command } from "../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
@@ -14,8 +14,8 @@ export default class AdminCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Admin Portal Command",
-			allowIndexCommand: true,
-			perms: { aldebaran: ["EDIT_USERS"] }
+			perms: { aldebaran: ["EDIT_USERS"] },
+			platforms: ["DISCORD"]
 		});
 		this.registerSubcommands(
 			mod,
@@ -30,10 +30,7 @@ export default class AdminCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const embed = new MessageEmbed()
-			.setAuthor(
-				ctx.message.author.username,
-				ctx.message.author.displayAvatarURL()
-			)
+			.setAuthor(ctx.author.username, ctx.author.avatarURL)
 			.setTitle("Warning")
 			.setDescription("The admin action specified is invalid.")
 			.setColor("ORANGE");

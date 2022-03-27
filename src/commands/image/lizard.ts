@@ -1,11 +1,11 @@
 import { Command as C, Embed as E } from "../../groups/ImageCommand.js";
 import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const { Command, Embed } = subCategory(C, E);
 
-export default class NekoCommand extends Command {
+export default class LizardCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays a random lizard picture or a GIF"

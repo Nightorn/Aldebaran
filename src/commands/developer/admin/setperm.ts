@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import MessageContext from "../../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../../structures/contexts/MessageContext.js";
 import { PermissionString } from "../../../utils/Constants.js";
 import { Command } from "../../../groups/DeveloperCommand.js";
 import AldebaranPermissions from "../../../structures/aldebaran/AldebaranPermissions.js";
@@ -19,8 +19,8 @@ export default class SetpermSubcommand extends Command {
 		if (args[0] === undefined) {
 			const embed = new MessageEmbed()
 				.setAuthor(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				)
 				.setTitle("Warning")
 				.setDescription("You need to specify the ID of the user you want to change the permissions of.")
@@ -30,8 +30,8 @@ export default class SetpermSubcommand extends Command {
 		if (args[1] === undefined) {
 			const embed = new MessageEmbed()
 				.setAuthor(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				)
 				.setTitle("Warning")
 				.setDescription("You need to specify the operation you want to perform (ADD or REMOVE)")
@@ -41,8 +41,8 @@ export default class SetpermSubcommand extends Command {
 		if (args[1].toLowerCase() !== "add" && args[1].toLowerCase() !== "remove") {
 			const embed = new MessageEmbed()
 				.setAuthor(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				)
 				.setTitle("Warning")
 				.setDescription("You need to specify either ADD or REMOVE as the operation.")
@@ -52,8 +52,8 @@ export default class SetpermSubcommand extends Command {
 		if (args[2] === undefined) {
 			const embed = new MessageEmbed()
 				.setAuthor(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				)
 				.setTitle("Warning")
 				.setDescription(`You need to specify the ${ctx.client.name} permissions you want to set (seperated by spaces). (See \`assets/data/aldebaranPermissions.json\` for valid flags.)`)
@@ -66,8 +66,8 @@ export default class SetpermSubcommand extends Command {
 				.includes(permission)) as PermissionString[];
 			const embedFailure = (error: Error) => new MessageEmbed()
 				.setAuthor(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				)
 				.setTitle("Warning")
 				.setDescription(`Something went wrong: \n\`${error}\``)
@@ -78,8 +78,8 @@ export default class SetpermSubcommand extends Command {
 						await user.addPermissions(permissions);
 						const embedAddSuccess = new MessageEmbed()
 							.setAuthor(
-								ctx.message.author.username,
-								ctx.message.author.displayAvatarURL()
+								ctx.author.username,
+								ctx.author.avatarURL
 							)
 							.setTitle("Success")
 							.setDescription(`Successfully added:\n\`${permissions.join(", ")}\`\n to ${user.username}.`)
@@ -95,8 +95,8 @@ export default class SetpermSubcommand extends Command {
 						await user.removePermissions(permissions);
 						const embedRemoveSuccess = new MessageEmbed()
 							.setAuthor(
-								ctx.message.author.username,
-								ctx.message.author.displayAvatarURL()
+								ctx.author.username,
+								ctx.author.avatarURL
 							)
 							.setTitle("Success")
 							.setDescription(`Successfully removed:\n\`${permissions.join(", ")}\`\n from ${user.username}.`)
@@ -113,8 +113,8 @@ export default class SetpermSubcommand extends Command {
 		}).catch(() => {
 			const embed = new MessageEmbed()
 				.setAuthor(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				)
 				.setTitle("Warning")
 				.setDescription("The ID specified does not correspond to a valid user.")

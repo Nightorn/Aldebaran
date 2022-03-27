@@ -1,7 +1,7 @@
 import { Mode, User } from "nodesu";
 import { Command, Embed } from "../../groups/OsuCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode } from "../../utils/Constants.js";
 
 const f = (x: number | string) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -25,8 +25,13 @@ export default class OsuCommand extends Command {
 			example: "Ciborn --mania",
 			aliases: ["osuprofile"],
 			args: {
-				user: { as: "word", desc: "Username/UserID", optional: true },
-				mode: { as: "mode", optional: true }
+				user: { as: "string", desc: "Username/UserID", optional: true },
+				mode: {
+					as: "mode",
+					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
+					desc: "osu! Mode",
+					optional: true
+				}
 			}
 		});
 	}
@@ -34,13 +39,12 @@ export default class OsuCommand extends Command {
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
 		const client = ctx.client.nodesu!;
-		const author = await ctx.author();
-		const mode = (args.mode || author.settings.osumode || "osu") as OsuMode;
+		const mode = (args.mode || ctx.author.settings.osumode || "osu") as OsuMode;
 		if (Mode[mode] !== undefined) {
 			client.user.get(
 				args.user
-				|| author.settings.osuusername
-				|| author.username,
+				|| ctx.author.settings.osuusername
+				|| ctx.author.username,
 				Mode[mode]
 			).then(data => {
 				const user = new User(data);

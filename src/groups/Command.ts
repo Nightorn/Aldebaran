@@ -1,8 +1,8 @@
-import { Client, ColorResolvable, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
+import { Client, ColorResolvable, MessageEmbed, PermissionString as DJSPermission, TextChannel } from "discord.js";
 import AldebaranClient from "../structures/djs/Client.js";
-import { PermissionString as AldebaranPermission } from "../utils/Constants";
+import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
 import { CommandMetadata, ICommand } from "../interfaces/Command.js";
-import MessageContext from "../structures/aldebaran/MessageContext.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
 
 export abstract class Command implements ICommand {
 	aliases: string[];
@@ -14,8 +14,7 @@ export abstract class Command implements ICommand {
 	metadata: CommandMetadata;
 	name: string = "dummy";
 	perms: { discord: DJSPermission[], aldebaran: AldebaranPermission[] };
-	subcommands: Map<string, ICommand> = new Map();
-	usage: string;
+	subcommands: Map<string, Command> = new Map();
 
 	/**
    	* Command abstract class, extend it to build a command
@@ -39,11 +38,10 @@ export abstract class Command implements ICommand {
 		this.client = client;
 		this.example = !metadata.example ? "" : `\`${metadata.example}\``;
 		this.metadata = metadata;
-		this.usage = !metadata.usage ? "" : `\`${metadata.usage}\``;
 	}
 
 	guildCheck(ctx: MessageContext) {
-		return this.metadata.requiresGuild ? !!ctx.message.guild : true;
+		return this.metadata.requiresGuild ? !!ctx.guild : true;
 	}
 
 	/**
@@ -53,12 +51,11 @@ export abstract class Command implements ICommand {
 		let check = true;
 		if (this.perms.discord && this.guildCheck(ctx)) {
 			check = this.perms.discord
-				.every(p => ctx.message.member!.permissionsIn(ctx.channel).has(p));
+				.every(p => ctx.member!.permissionsIn(ctx.channel as TextChannel).has(p));
 		}
 		if (this.perms.aldebaran && check) {
-			const user = await ctx.author();
 			check = this.perms.aldebaran
-				.every(perm => user.hasPermission(perm));
+				.every(perm => ctx.author.hasPermission(perm));
 		}
 		return check;
 	}
@@ -70,18 +67,32 @@ export abstract class Command implements ICommand {
 	/**
 	 * Executes the specified command
 	 */
-	async execute(ctx: MessageContext): Promise<void> {
+	async execute(ctx: MessageContext, platform: Platform): Promise<void> {
 		const guild = this.guildCheck(ctx);
 		if (!guild) throw new Error("NOT_IN_GUILD");
 		const perms = await this.permsCheck(ctx);
 		if (!perms) throw new Error("MISSING_PERMS");
 		if (!ctx.argsCheck()) throw new Error("INVALID_ARGS");
-		return this.run(ctx);
+		return this.run(ctx, platform);
 	}
 
-	abstract run(ctx: MessageContext): void;
+	/**
+	 * Whether the string in parameter matches the identity (name, aliases) of this command
+	 */
+	matches(name: string) {
+		return this.name === name || this.aliases.includes(name);
+	}
 
-	toHelpEmbed(command: string, prefix = "&") {
+	abstract run(ctx: MessageContext, platform: Platform): void;
+
+	/**
+	 * Whether this command supports the platform in parameter
+	 */
+	supports(platform: Platform) {
+		return !this.metadata.platforms || this.metadata.platforms.includes(platform);
+	}
+
+	toHelpEmbed(prefix = "&") {
 		const embed = new MessageEmbed()
 			.setAuthor(
 				`${this.client.name}  |  Command Help  |  ${this.name}`,
@@ -89,10 +100,8 @@ export abstract class Command implements ICommand {
 			)
 			.setTitle(this.metadata.description)
 			.addField("Category", this.category, true)
-			.addField("Example", `${prefix}${command} ${this.example}`, true)
+			.addField("Example", `${prefix}${this.name} ${this.example}`, true)
 			.setColor("BLUE");
-		if (this.metadata.usage !== undefined)
-			embed.addField("Usage", `${prefix}${command} ${this.usage}`, true);
 		if (this.metadata.help !== undefined)
 			embed.setDescription(this.metadata.help);
 		if (this.aliases.length > 0)
@@ -109,11 +118,15 @@ export abstract class Command implements ICommand {
 			for (const [id, data] of Object.entries(this.metadata.args)) {
 				const begin = `\`${id}\` (${data.as}${data.optional ? ", optional" : ""})`;
 				const t = data.as.includes("?") ? ["[", "]"] : ["<", ">"];
-				if (data.flag === undefined) args += `${begin}${data.desc ? ` - *${data.desc}*` : ""}\n`;
-				else args += `${begin} - \`-${data.flag.short}\`/\`--${data.flag.long}\`${data.desc ? ` - *${data.desc}*` : ""}\n`;
-				usage += data.flag === undefined ? `${t[0]}${id}${t[1]} ` : `${t[0]}-${data.flag.short}|--${data.flag.long}${data.as !== "boolean" ? ` ${id}` : ""}${t[1]} `;
+				if ((data.as === "mode" || data.as === "boolean") && data.flag) {
+					args += `${begin} - \`-${data.flag.short}\`/\`--${data.flag.long}\`${data.desc ? ` - *${data.desc}*` : ""}\n`;
+					usage += `${t[0]}-${data.flag.short}|--${data.flag.long}${data.as !== "boolean" ? ` ${id}` : ""}${t[1]} `;
+				} else {
+					args += `${begin}${data.desc ? ` - *${data.desc}*` : ""}\n`;
+					usage += `${t[0]}${id}${t[1]} `;
+				}
 			}
-			embed.addField("Usage", `${prefix}${command} \`${usage.trim()}\``, true);
+			embed.addField("Usage", `${prefix}${this.name} \`${usage.trim()}\``, true);
 			embed.addField("Arguments", args);
 		}
 		return embed;

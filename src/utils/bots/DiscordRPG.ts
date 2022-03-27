@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import { imageUrls } from "../../utils/Constants.js";
 import User from "../../structures/djs/User.js";
 
@@ -108,7 +108,7 @@ async function percentageCheck(
 
 export default async (ctx: MessageContext) => {
 	if (!ctx.message.guild) return false;
-	const guild = (await ctx.guild())!;
+	const guild = (await ctx.fetchGuild())!;
 	if (guild.settings.healthmonitor === "off") return false;
 	const player = {
 		currentHP: 0,

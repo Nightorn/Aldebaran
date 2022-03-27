@@ -2,24 +2,32 @@ import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/SettingsCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { GuildSetting, Settings, SettingsModel, TargetedSettings, UserSetting } from "../../utils/Constants.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class UconfigCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Manages your personal settings",
-			usage: "Parameter Value",
-			example: "adventureTimer on"
+			example: "adventureTimer on",
+			args: {
+				setting: {
+					as: "string",
+					desc: "The setting you want to edit (or \"help\", \"list\" and \"view\" for more information)"
+				},
+				value: {
+					as: "string",
+					desc: "The value to which you want to edit the setting you just selected, if any",
+					optional: true
+				}
+			}
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
-		const args = ctx.args as string[];
-		const author = await ctx.author();
-		const setting = args[0] as UserSetting;
+		const args = ctx.args as { setting: string, value?: string };
 		const parametersAvailable = SettingsModel.user as Settings["user"];
-		if (args.length === 0) {
+		if (args.setting === "help") {
 			const embed = new MessageEmbed()
 				.setAuthor("User Settings", ctx.client.user.avatarURL()!)
 				.setDescription(
@@ -30,14 +38,14 @@ export default class UconfigCommand extends Command {
 					`Make sure to also use \`${ctx.prefix}gconfig\` for server settings.`
 				);
 			ctx.reply(embed);
-		} else if (args.includes("list")) {
+		} else if (args.setting === "list") {
 			const list: { [key: string]: { [key: string]: TargetedSettings } } = {};
 			for (const [key, data] of Object.entries(parametersAvailable)) {
 				if (list[data.category] === undefined) list[data.category] = {};
-				if (data.showOnlyIfBotIsInGuild && ctx.message.guild) {
+				if (data.showOnlyIfBotIsInGuild && ctx.guild) {
 					try {
 						// eslint-disable-next-line no-await-in-loop
-						await ctx.message.guild.members.fetch(data.showOnlyIfBotIsInGuild);
+						await ctx.guild.guild.members.fetch(data.showOnlyIfBotIsInGuild);
 						list[data.category][key] = data;
 					} catch {} // eslint-disable-line no-empty
 				} else {
@@ -46,21 +54,20 @@ export default class UconfigCommand extends Command {
 			}
 			const embed = new MessageEmbed()
 				.setAuthor(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				)
 				.setTitle("Config Command Help Page")
 				.setDescription(
 					`**__IMPORTANT: If the setting is disabled in ${ctx.prefix}gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties.`
 				)
 				.setColor("BLUE");
-				
-			const guild = (await ctx.guild())!;
+
 			for (const [category, parameters] of Object.entries(list)) {
 				let entries = "";
 				for (const [key, data] of Object.entries(parameters)) {
-					if (ctx.message.guild) {
-						if (!guild.settings[key as GuildSetting]
+					if (ctx.guild) {
+						if (!ctx.guild.settings[key as GuildSetting]
 							&& ctx.client.models.settings.guild[key as GuildSetting]
 						) {
 							entries += ":warning: ";
@@ -73,9 +80,9 @@ export default class UconfigCommand extends Command {
 				}
 			}
 			ctx.reply(embed);
-		} else if (args.includes("view")) {
+		} else if (args.setting === "view") {
 			let list = "";
-			for (const [key, value] of Object.entries(author.settings)) {
+			for (const [key, value] of Object.entries(ctx.author.settings)) {
 				list += `**${key}** - \`${value}\`\n`;
 			}
 			const embed = new MessageEmbed()
@@ -83,50 +90,43 @@ export default class UconfigCommand extends Command {
 				.setDescription(list === "" ? "None" : list)
 				.setColor("BLUE");
 			ctx.reply(embed);
-		} else if (Object.keys(parametersAvailable).indexOf(args[0]) !== -1) {
-			if (parametersAvailable[setting]!.support(args[1])) {
-				author.changeSetting(setting, args[1])
-					.then(() => {
-						if (parametersAvailable[setting]!.postUpdate) {
-							/* eslint-disable no-param-reassign */
-							parametersAvailable[setting]!.postUpdate!(
-								args[1],
-								ctx.message.author
-							);
-						}
-						if (parametersAvailable[setting]!.postUpdate) {
-							parametersAvailable[setting]!
-								.postUpdate!(args[1], ctx.message.author);
-						}
-						const embed = new MessageEmbed()
-							.setAuthor(
-								ctx.message.author.username,
-								ctx.message.author.displayAvatarURL()
-							)
-							.setTitle("Settings successfully changed")
-							.setDescription(
-								`The property **\`${
-									setting
-								}\`** has successfully been changed to the value **\`${
-									args[1]
-								}\`**.`
-							)
-							.setColor("GREEN");
-						ctx.reply(embed);
-					}).catch(err => {
-						const embed = new MessageEmbed()
-							.setAuthor(
-								ctx.message.author.username,
-								ctx.message.author.displayAvatarURL()
-							)
-							.setTitle("An Error Occured")
-							.setDescription(
-								"An error occured and we could not change your settings. Please retry later."
-							)
-							.setColor("RED");
-						ctx.reply(embed);
-						throw err;
-					});
+		} else if (Object.keys(parametersAvailable).includes(args.setting) && args.value) {
+			const setting = args.setting.toLowerCase() as UserSetting;
+			if (parametersAvailable[setting]!.support(args.value)) {
+				ctx.author.changeSetting(setting, args.value).then(() => {
+					if (parametersAvailable[setting]!.postUpdate) {
+						parametersAvailable[setting]!.postUpdate!(
+							args.value!,
+							ctx.author.user
+						);
+					}
+					if (parametersAvailable[setting]!.postUpdate) {
+						parametersAvailable[setting]!
+							.postUpdate!(args.value!, ctx.author.user);
+					}
+					const embed = new MessageEmbed()
+						.setAuthor(ctx.author.username, ctx.author.avatarURL)
+						.setTitle("Settings successfully changed")
+						.setDescription(
+							`The property **\`${
+								setting
+							}\`** has successfully been changed to the value **\`${
+								args.value
+							}\`**.`
+						)
+						.setColor("GREEN");
+					ctx.reply(embed);
+				}).catch(err => {
+					const embed = new MessageEmbed()
+						.setAuthor(ctx.author.username, ctx.author.avatarURL)
+						.setTitle("An Error Occured")
+						.setDescription(
+							"An error occured and we could not change your settings. Please retry later."
+						)
+						.setColor("RED");
+					ctx.reply(embed);
+					throw err;
+				});
 			} else {
 				const embed = new MessageEmbed()
 					.setTitle("Not supported")

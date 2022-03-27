@@ -1,7 +1,7 @@
 import request from "request";
 import { Command, Embed } from "../../groups/ImageCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class BirbCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -9,12 +9,12 @@ export default class BirbCommand extends Command {
 	}
 
 	run(ctx: MessageContext) {
-		request({ uri: "http://random.birb.pw/tweet.json/" }, (err, response, body) => {
+		request({ uri: "https://some-random-api.ml/img/birb" }, (err, response, body) => {
 			if (err || response.statusCode !== 200) return ctx.reply("This seems to be a birb problem");
 			const embed = new Embed(this)
 				.setTitle("You want some __Birb__?")
-				.setImage(`http://random.birb.pw/img/${JSON.parse(body).file}`)
-				.setFooter("Birb powered by http://random.brib.pw");
+				.setImage(JSON.parse(body).link)
+				.setFooter("Birb powered by https://some-random-api.ml/img/birb");
 			return ctx.reply(embed);
 		});
 	}

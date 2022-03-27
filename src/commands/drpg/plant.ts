@@ -1,7 +1,7 @@
 import { evaluate } from "mathjs";
 import request from "request";
 import { Command, Embed } from "../../groups/DRPGCommand.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
@@ -10,11 +10,18 @@ export default class PlantCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays users plant information and estimated loots",
-			usage: "UserMention|UserID",
 			example: "320933389513523220",
 			args: {
-				user: { as: "user", optional: true },
-				plant: { as: "number", optional: true }
+				user: {
+					as: "user",
+					desc: "The user whose plant information you want to see",
+					optional: true
+				},
+				plant: {
+					as: "number",
+					desc: "The plant ID",
+					optional: true 
+				}
 			}
 		});
 	}
@@ -22,7 +29,7 @@ export default class PlantCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user: string, plant: string };
-		const userid = args.user || ctx.message.author.id;
+		const userid = args.user || ctx.author.id;
 		const plantId = args.plant || null;
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${userid}`,
@@ -68,8 +75,8 @@ export default class PlantCommand extends Command {
 						const highestRewards = highestMin === highestMax
 							? `**${highestMin} ${rewardName}**`
 							: `between **${highestMin}** and **${highestMax} ${rewardName}**`;
-						const pronoun = ctx.message.author.id === userid ? "You" : "They";
-						const ownership = ctx.message.author.id === userid ? "your" : "their";
+						const pronoun = ctx.author.id === userid ? "You" : "They";
+						const ownership = ctx.author.id === userid ? "your" : "their";
 						const embed = new Embed(this)
 							.setAuthor(`${target.username}  |  Plant information  |  ${item.name} @ ${drpgLocationdb[plantId]}`, target.displayAvatarURL())
 							.setDescription(`With ${ownership} current reaping skills (${luck === 1 ? 0 : luck} points), ${pronoun} will receive ${normalRewards}. With the highest reaping skills possible for ${ownership} level (${luckMax} points) ${pronoun.toLowerCase()} could have, ${pronoun.toLowerCase()} will receive ${highestRewards}.`)
@@ -87,12 +94,12 @@ export default class PlantCommand extends Command {
 				if (plantsList !== "") {
 					const embed = new Embed(this)
 						.setAuthor(`${target.username}  |  Sapling information`, target.displayAvatarURL())
-						.setDescription(`${ctx.message.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)!.length} plants** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
+						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)!.length} plants** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
 					return ctx.reply(embed);
 				}
 				const embed = new Embed(this)
 					.setAuthor(`${target.username}  |  Sapling information`, target.displayAvatarURL())
-					.setDescription(`${ctx.message.author.id === userid ? "You have" : `**${target.username}** has`} no plant set.`);
+					.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} no plant set.`);
 				return ctx.reply(embed);
 			}
 			return ctx.reply("the DiscordRPG API seems down, please retry later.");

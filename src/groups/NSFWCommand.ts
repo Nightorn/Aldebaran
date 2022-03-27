@@ -1,6 +1,6 @@
 import { TextChannel, ThreadChannel } from "discord.js";
 import { CommandMetadata } from "../interfaces/Command.js";
-import MessageContext from "../structures/aldebaran/MessageContext.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
 import AldebaranClient from "../structures/djs/Client.js";
 import { Command as C, Embed as E } from "./Command.js";
 

@@ -4,7 +4,7 @@ import retrieveBeatmapFile from "../../utils/osu!/retrieveBeatmapFile.js";
 import ppv2Results from "../../utils/osu!/ppv2Results.js";
 import { Command, Embed } from "../../groups/OsuCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const supportedMods = ["NF", "EZ", "HT", "SO", "HR", "DT", "NC", "HD", "FL"];
 const d = (x: number | string) => (x.toString().length === 1 ? `0${x}` : x);
@@ -27,6 +27,7 @@ export default class OsumapCommand extends Command {
 				map: { as: "expression", regex: /\d+$/, desc: "Beatmap URL / ID" },
 				mode: {
 					as: "mode",
+					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
 					desc: "Game Mode (--osu, --mania, --ctb, --taiko)",
 					optional: true
 				},

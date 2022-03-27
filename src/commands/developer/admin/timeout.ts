@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import MessageContext from "../../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../../structures/contexts/MessageContext.js";
 import { Command } from "../../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../../structures/djs/Client.js";
 
@@ -33,7 +33,7 @@ export default class TimeoutSubcommand extends Command {
 							.addField("Reason", args.join(" "), true)
 							.addField("Server Invite", "https://discord.gg/3x6rXAv", true)
 							.setColor("RED")
-							.setFooter(`Action taken by ${ctx.message.author.tag}`, ctx.message.author.displayAvatarURL());
+							.setFooter(`Action taken by ${ctx.author.user.tag}`, ctx.author.avatarURL);
 						user.user.send({ embeds: [embed] });
 					}).catch((err: Error) => {
 						console.error(err);
@@ -46,8 +46,8 @@ export default class TimeoutSubcommand extends Command {
 					.setDescription("This ID does not correspond to any Discord user. Make sure you did not make a mistake typing it.")
 					.setColor("RED")
 					.setFooter(
-						ctx.message.author.username,
-						ctx.message.author.displayAvatarURL()
+						ctx.author.username,
+						ctx.author.avatarURL
 					);
 				ctx.reply(embed);
 			});
@@ -57,8 +57,8 @@ export default class TimeoutSubcommand extends Command {
 				.setDescription("This command requires three arguments in order to work, the user to timeout, the length and the reason of it.")
 				.setColor("RED")
 				.setFooter(
-					ctx.message.author.username,
-					ctx.message.author.displayAvatarURL()
+					ctx.author.username,
+					ctx.author.avatarURL
 				);
 			ctx.reply(embed);
 		}

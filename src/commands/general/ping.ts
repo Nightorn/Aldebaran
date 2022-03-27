@@ -1,7 +1,10 @@
-import { ColorResolvable, MessageEmbed } from "discord.js";
+import { ColorResolvable, Message, MessageEmbed } from "discord.js";
 import { Command } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
+import { Platform } from "../../utils/Constants.js";
+import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
+import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 
 const messages = {
 	good: [
@@ -25,18 +28,24 @@ export default class PingCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays the bot's current ping to Discord",
-			aliases: ["pong"]
+			aliases: ["pong"],
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(ctx: MessageContext) {
+	async run(ctx: MessageContext, platform: Platform) {
 		const embed = new MessageEmbed()
 			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
 			.addField(`${ctx.client.name} Ping`, "Computing...", true)
 			.setColor("BLUE");
-		const newMessage = await ctx.reply(embed);
-		const ping = newMessage.createdTimestamp - ctx.message.createdTimestamp;
+		let msg = null;
+		if (platform === "DISCORD") {
+			msg = await (ctx as DiscordMessageContext).reply(embed);
+		} else if (platform === "DISCORD_SLASH") {
+			msg = await (ctx as DiscordSlashMessageContext).reply(embed, false, true);
+		}
+		const ping = msg!.createdTimestamp - ctx.createdTimestamp;
 		let color: ColorResolvable = "BLUE";
 		let desc = "Hi.";
 
@@ -62,6 +71,6 @@ export default class PingCommand extends Command {
 			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
 			.addField(`${ctx.client.name} Ping`, `${ping} ms`, true)
 			.setColor(color);
-		newMessage.edit({ content: desc, embeds: [embedResult] });
+		msg!.edit({ content: desc, embeds: [embedResult] });
 	}
 };

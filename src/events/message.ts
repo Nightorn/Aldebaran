@@ -1,7 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
 import { IImageCommand } from "../interfaces/Command.js";
 import AldebaranClient from "../structures/djs/Client.js";
-import MessageContext from "../structures/aldebaran/MessageContext.js";
+import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 
 import DiscordRPG from "../utils/bots/DiscordRPG.js";
 import DRPGAdventure from "../utils/timer/DiscordRPG/adv.js";
@@ -13,7 +13,7 @@ export default async (client: AldebaranClient, message: Message) => {
 
 	const guild = message.guild
 		? await client.customGuilds.fetch(message.guild.id)
-		: null;
+		: undefined;
 
 	let prefix = guild
 		? process.argv[2] === "dev"
@@ -21,20 +21,21 @@ export default async (client: AldebaranClient, message: Message) => {
 			: guild.prefix
 		: "";
 
-	const ctx = new MessageContext(client, message, prefix);
+	const author = await client.customUsers.fetch(message.author.id);
 
-	const user = await ctx.author();
-	if (user.banned) return;
+	const ctx = new DiscordMessageContext(client, message, author, guild);
+
+	if (author.banned) return;
 
 	const drpgIDs = ["170915625722576896", "891614347015626762"];
-	if (guild && drpgIDs.includes(ctx.message.author.id)) {
+	if (guild && drpgIDs.includes(ctx.author.id)) {
 		DiscordRPG(ctx);
-	} else if (!user.user.bot) {
-		const drpgMatch = ctx.message.content.toLowerCase()
+	} else if (!author.user.bot) {
+		const drpgMatch = ctx.content.toLowerCase()
 			.match(/.+(?=stats|adv|padv|mine|forage|fish|chop)/);
 		if (drpgMatch) {
 			const filter = (msg: Message) => drpgIDs.includes(msg.author.id);
-			ctx.message.channel.awaitMessages({ filter, max: 1, time: 2000 })
+			ctx.channel.awaitMessages({ filter, max: 1, time: 2000 })
 				.then(async () => {
 					if (!guild!.settings.discordrpgprefix) {
 						guild!.settings.discordrpgprefix = drpgMatch[0];
@@ -46,38 +47,31 @@ export default async (client: AldebaranClient, message: Message) => {
 		}
 	}
 
-	if (user.user.bot) return;
+	if (author.user.bot) return;
 	if (!message.mentions.users.get(client.user.id)) {
-		if (ctx.message.content.indexOf(prefix) !== 0) return;
-		if (ctx.message.content.slice(prefix.length)[0] === " ") return;
+		if (ctx.content.indexOf(prefix) !== 0) return;
+		if (ctx.content.slice(prefix.length)[0] === " ") return;
 	} else {
-		prefix = ctx.message.content.trim().substring(0, ctx.message.content.indexOf(">") + 1);
+		prefix = ctx.content.trim().substring(0, ctx.content.indexOf(">") + 1);
 	}
 
-	const args = ctx.message.content.slice(prefix.length).trim().split(/ +/g);
-	const command = args.shift()!.toLowerCase();
-
-	const sliced = command.slice(1);
-	if (command.indexOf("?") === 0) {
-		ctx.reply(ctx.client.commands.getHelp(sliced, prefix));
+	if (ctx.command && ctx.mode === "HELP") {
+		ctx.reply(ctx.command.toHelpEmbed(prefix)); /*
 	} else if (command.indexOf("#") === 0) {
-		ctx.client.commands.bypassRun(sliced, message, prefix).catch(err => {
+		ctx.client.commands.bypassRun(ctx).catch(err => {
 			if (err.message === "INVALID_COMMAND") return;
 			if (err.message === "UNALLOWED_ADMIN_BYPASS") {
 				const embed = new MessageEmbed()
 					.setTitle("You are not allowed to use this.")
 					.setDescription(`By using \`#\`, you are trying to bypass Discord permissions requirements and other checks, which is only allowed for ${ctx.client.name} Administrators.`)
-					.setFooter(
-						ctx.message.author.username,
-						ctx.message.author.displayAvatarURL()
-					)
+					.setFooter(ctx.author.username, ctx.author.avatarURL)
 					.setColor("RED");
 				ctx.reply(embed);
 			} else {
 				console.error(err);
 			}
 		});
-	} else if (command.indexOf("-") === 0) {
+	} *//* else if (command.indexOf("-") === 0) {
 		try {
 			const cmd = ctx.client.commands.get(sliced) as IImageCommand;
 			if (cmd && cmd.image) {
@@ -91,13 +85,16 @@ export default async (client: AldebaranClient, message: Message) => {
 				.setFooter(message.author.username, message.author.displayAvatarURL())
 				.setColor("RED");
 			ctx.reply(embed);
-		}
-	} else {
-		client.commands.execute(command, message, prefix).catch(err => {
+		} */
+	} else if (ctx.command) {
+		ctx.command.execute(ctx, "DISCORD").then(() => {
+			const user = `USER: ${message.author.tag} (${message.author.id})`;
+			console.log(`\x1b[34m- COMMAND: ${ctx.command!.name} | ${user}\x1b[0m`);
+		}).catch(err => {
 			if (err.message === "INVALID_PERMISSIONS") {
 				const embed = new MessageEmbed()
 					.setTitle("You are not allowed to use this.")
-					.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${command}\` for more information about the requirements to use this command.`)
+					.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${ctx.command!.name}\` for more information about the requirements to use this command.`)
 					.setFooter(message.author.username, message.author.displayAvatarURL())
 					.setColor("RED");
 				ctx.reply(embed);
@@ -110,18 +107,11 @@ export default async (client: AldebaranClient, message: Message) => {
 					.setFooter(message.author.username, message.author.displayAvatarURL())
 					.setColor("RED");
 				ctx.reply(embed);
-			} else if (err.message === "INVALID_COMMAND") {
-				console.log(`Someone unsuccessfully tried ${command}.`);
 			} else if (err.message === "INVALID_ARGS") {
-				ctx.error("INVALID_ARGS", `Please check \`${prefix}?${command}\` for more information on how to use this command.`)
-			} else {
+				ctx.error("INVALID_ARGS", `Please check \`${prefix}?${ctx.command!.name}\` for more information on how to use this command.`)
+			} else if (err.message !== "INVALID_COMMAND") {
 				console.error(err);
 			}
 		});
 	}
-	console.log(
-		`\x1b[34m- COMMAND: ${command} | USER: ${message.author.tag} (${
-			message.author.id
-		}) | ARGS: ${args.join(" ") || "None"}\x1b[0m`
-	);
 };

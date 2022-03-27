@@ -1,8 +1,10 @@
-import { MessageEmbed, MessageReaction, User } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
 import { Command } from "../../groups/SettingsCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
-import { GuildSetting, UserSetting } from "../../utils/Constants.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
+import { GuildSetting, Platform, UserSetting } from "../../utils/Constants.js";
+import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
+import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 
 const guildParameters = [
 	{
@@ -33,7 +35,8 @@ export default class EnableDRPGCommand extends Command {
 			aliases: ["edrpg"],
 			description:
 				"Utility command to enable configuration values for DiscordRPG usage",
-			requiresGuild: true
+			requiresGuild: true,
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
@@ -45,62 +48,61 @@ export default class EnableDRPGCommand extends Command {
 			.setDescription(`**This will enable the following ${
 				type} settings:**\n${
 				parameters.reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "")
-			}**Do you want to proceed?** Click :white_check_mark: to continue. You can always configure the settings in \`${ctx.prefix}${type[0]}config\`.`)
+			}**Do you want to proceed?** Click the **Proceed** button to continue. You can always configure the settings using \`${ctx.prefix}${type[0]}config\`.`)
 			.setColor("BLUE");
 	}
 
-	setUserSettings(ctx: MessageContext) {
+	setSettings(
+		ctx: DiscordMessageContext | DiscordSlashMessageContext,
+		type: "user" | "guild",
+	) {
 		return new Promise(async resolve => {
-			const author = await ctx.author();
-			const embed = this.configuringEmbed(ctx, "user");
-			const checkMark = "✅";
-			const filter = (r: MessageReaction, u: User) => r.emoji.name === checkMark
-				&& u.id === ctx.message.author.id;
-			const msg = await ctx.reply(embed);
-			await msg.react(checkMark);
-			msg.awaitReactions({ filter, time: 30000, max: 1, errors: ["time"] })
-				.then(() => {
-					userParameters.forEach(parameter => {
-						author.changeSetting(parameter.name as UserSetting, "on");
-					});
-					resolve(true);
-				}).catch(() => {
-					msg.reactions.removeAll();
-					msg.edit("The operation has been cancelled.");
-				});
-		});
-	}
+			const embed = this.configuringEmbed(ctx, type);
+			const button = new MessageButton()
+				.setStyle("PRIMARY")
+				.setLabel("Proceed")
+				.setCustomId("ok");
+			const actionRow = new MessageActionRow().setComponents([button]);
+			const opt = { embeds: [embed], components: [actionRow] };
+			const msg = ctx instanceof DiscordSlashMessageContext
+				? await ctx.reply(opt, true, true)
+				: await ctx.reply(opt);
 
-	setGuildSettings(ctx: MessageContext) {
-		return new Promise(async resolve => {
-			const guild = (await ctx.guild())!;
-			const embed = this.configuringEmbed(ctx, "guild");
-			const checkMark = "✅";
-			const filter = (r: MessageReaction, u: User) => r.emoji.name === checkMark
-				&& u.id === ctx.message.author.id;
-			const msg = await ctx.reply(embed);
-			await msg.react(checkMark);
-			msg.awaitReactions({ filter, time: 30000, max: 1, errors: ["time"] }).then(() => {
-				guildParameters.forEach(parameter => {
-					guild.changeSetting(parameter.name as GuildSetting, "on");
-				});
+			msg.awaitMessageComponent({ componentType: "BUTTON" }).then(interaction => {
+				if (type === "user") {
+					userParameters.forEach(parameter => {
+						ctx.author.changeSetting(parameter.name as UserSetting, "on");
+					});
+				} else {
+					guildParameters.forEach(parameter => {
+						ctx.guild!.changeSetting(parameter.name as GuildSetting, "on");
+					});
+				}
+				interaction.deferUpdate();
 				resolve(true);
 			}).catch(() => {
-				msg.reactions.removeAll();
 				msg.edit("The operation has been cancelled.");
 			});
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	done(ctx: MessageContext) {
+	done(
+		ctx: DiscordMessageContext | DiscordSlashMessageContext,
+		followUp: boolean = false
+	) {
 		const embed = new MessageEmbed()
 			.setTitle("Done!")
 			.setDescription(
 				`${ctx.client.name}'s DRPG features are now enabled. Feel free to use DRPG normally. ${ctx.client.name} will respond appropriately when your adventure and sides are ready, and when you have low health.\nYou can always turn off features in \`${ctx.prefix}uconfig\` and \`${ctx.prefix}gconfig\`.\n*If this guild has changed its DRPG prefix, it must also be set using \`${ctx.prefix}gconfig discordrpgPrefix <prefix>\`.*`
 			)
 			.setColor("GREEN");
-		ctx.reply(embed);
+
+		if (ctx instanceof DiscordSlashMessageContext) {
+			followUp ? ctx.followUp(embed, true) : ctx.reply(embed, true);
+		} else {
+			ctx.reply(embed);
+		}
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -115,36 +117,31 @@ export default class EnableDRPGCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(ctx: MessageContext) {
-		const author = await ctx.author();
-		const guild = (await ctx.guild())!;
-
-		const isAdmin = ctx.message.member!
-			.permissionsIn(ctx.channel)
+	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
+		const isAdmin = ctx.member!
+			.permissionsIn(ctx.channel as TextChannel)
 			.has("MANAGE_GUILD");
 
 		const guildEnabled = guildParameters
-			.every(parameter => guild.settings[parameter.name as GuildSetting] === "on");
+			.every(parameter => ctx.guild!.settings[parameter.name as GuildSetting] === "on");
 		const userEnabled = userParameters
-			.every(parameter => author.settings[parameter.name as UserSetting] === "on");
+			.every(parameter => ctx.author.settings[parameter.name as UserSetting] === "on");
 
 		if (isAdmin && !guildEnabled && !userEnabled) {
-			await this.setGuildSettings(ctx);
-			await this.setUserSettings(ctx);
-			this.done(ctx);
+			await this.setSettings(ctx, "guild");
+			await this.setSettings(ctx, "user");
+			this.done(ctx, true);
 		} else if (isAdmin && !guildEnabled) {
-			await this.setGuildSettings(ctx);
-			this.done(ctx);
+			await this.setSettings(ctx, "guild");
+			this.done(ctx, true);
 		} else if (isAdmin && !userEnabled) {
-			await this.setUserSettings(ctx);
-			this.done(ctx);
-		} else if (isAdmin) {
-			this.done(ctx);
+			await this.setSettings(ctx, "user");
+			this.done(ctx, true);
 		} else if (!isAdmin && !guildEnabled) {
 			this.noPermissions(ctx);
 		} else if (!isAdmin && !userEnabled) {
-			await this.setUserSettings(ctx);
-			this.done(ctx);
+			await this.setSettings(ctx, "user");
+			this.done(ctx, true);
 		} else {
 			this.done(ctx);
 		}

@@ -2,7 +2,7 @@ import request, { Response } from "request";
 import { Command, Embed } from "../../groups/UtilitiesCommand.js";
 import { ICommand } from "../../interfaces/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const fixerURL = "http://data.fixer.io/api";
 
@@ -19,26 +19,22 @@ export default class CurConvCommand extends Command implements ICommand {
 		super(client, {
 			description:
 				"Converts from one currency unit to another, or lists currency equalivents",
-			example: "USD GBP 10"
+			example: "USD GBP 10",
+			args: {
+				from: { as: "string", desc: "The currency you want to convert from" },
+				to: { as: "string", desc: "The currency you want to convert to" },
+				amount: {
+					as: "number",
+					desc: "The amount you want to convert",
+					optional: true
+				}
+			}
 		});
 	}
 
 	run(ctx: MessageContext) {
-		const args = ctx.args as string[];
-		if (args.length < 2) {
-			ctx.error("MISSING_ARGS", "Please use `&?curconv` to see how to use this command!");
-		} else if (args.length >= 2) {
-			const fromCurrency = args[0] as Currency;
-			const toCurrency = args[1] as Currency;
-			const value = Number(args[2]);
-			if (fromCurrency && toCurrency && value) {
-				this.convCurToAnotherCur(ctx, fromCurrency, toCurrency, value);
-			} else if (fromCurrency && toCurrency) {
-				this.convCurToAnotherCur(ctx, fromCurrency, toCurrency, 1);
-			} else {
-				ctx.error("WRONG_USAGE", "At least one argument is missing or incorrect. Please use `&?curconv` to see how to use this command!");
-			}
-		}
+		const args = ctx.args as { from: Currency, to: Currency, amount: number };
+		this.convCurToAnotherCur(ctx, args.from, args.to, args.amount || 1);
 	}
 
 	convCurToAnotherCur(

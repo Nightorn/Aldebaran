@@ -10,7 +10,7 @@ export default (client: AldebaranClient) => {
 	console.log(
 		`\x1b[36m# ${client.users.cache.size} users, ${client.channels.cache.size} channels, ${
 			client.guilds.cache.size
-		} servers, ${client.commands.size} commands\x1b[0m`
+		} servers\x1b[0m`
 	);
 
 	const parseText = (value: string) => {

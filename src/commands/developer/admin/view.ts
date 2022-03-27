@@ -2,21 +2,22 @@ import util from "util";
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../../structures/djs/Client.js";
-import MessageContext from "../../../structures/aldebaran/MessageContext.js";
+import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
 
 export default class ViewSubcommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Shows detailled information about the specified user or guild",
-			perms: { aldebaran: ["EDIT_USERS"] }
+			perms: { aldebaran: ["EDIT_USERS"] },
+			platforms: ["DISCORD"]
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(ctx: MessageContext) {
+	async run(ctx: DiscordMessageContext) {
 		const args = ctx.args as string[];
-		const id = ctx.message.mentions.members!.size === 1
-			? ctx.message.mentions.members!.first()!.id : args[0];
+		const id = ctx.mentions.members!.size === 1
+			? ctx.mentions.members!.first()!.id : args[0];
 		ctx.client.customUsers.fetch(id).then(async user => {
 			const guilds = [];
 			const embed = new MessageEmbed()
@@ -39,9 +40,9 @@ export default class ViewSubcommand extends Command {
 		}).catch(async () => {
 			const customGuild = await ctx.client.customGuilds.fetch(id);
 			const settings = customGuild.settings;
-			if (ctx.message.guild) {
+			if (ctx.guild) {
 				let adminsStr = "";
-				const members = Array.from(ctx.message.guild.members.cache.values());
+				const members = Array.from(ctx.guild.guild.members.cache.values());
 				const bots = members.filter(m => m.user.bot === true);
 				const humans = members.filter(m => m.user.bot === false);
 				const botRate = bots.length * 100 / members.length;
@@ -49,18 +50,18 @@ export default class ViewSubcommand extends Command {
 				for (const member of admins) {
 					adminsStr += `\`${member.user.id}\` | **\`[${member.user.tag}]\`** <@${member.user.id}>\n`;
 				}
-				const owner = await ctx.message.guild.fetchOwner();
+				const owner = await ctx.guild.guild.fetchOwner();
 				const embed = new MessageEmbed()
-					.setAuthor(`${ctx.message.guild.name} | ${ctx.message.guild.id}`, ctx.message.guild.iconURL()!)
-					.setDescription(`**Owner** : <@${ctx.message.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${humans.length} Members (+${bots.length} Bots / ${Math.floor(botRate)}%)`);
+					.setAuthor(`${ctx.guild.guild.name} | ${ctx.guild.id}`, ctx.guild.guild.iconURL()!)
+					.setDescription(`**Owner** : <@${ctx.guild.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${humans.length} Members (+${bots.length} Bots / ${Math.floor(botRate)}%)`);
 				if (Object.entries(settings).length !== 0) embed.addField("Settings", `\`\`\`js\n${util.inspect(settings, false, null)}\`\`\``);
 				if (adminsStr !== "") embed.addField("Admins", adminsStr);
 				ctx.reply(embed);
 			} else {
 				const embed = new MessageEmbed()
 					.setAuthor(
-						ctx.message.author.username,
-						ctx.message.author.displayAvatarURL()
+						ctx.author.username,
+						ctx.author.avatarURL
 					)
 					.setTitle("Warning")
 					.setDescription(`The ID specified does not correspond to a valid user or a guild where ${ctx.client.name} is.`)

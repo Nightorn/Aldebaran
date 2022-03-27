@@ -1,5 +1,5 @@
 import { Command, Embed } from "../../groups/DRPGCommand.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
 export default class UpgradecalcCommand extends Command {
@@ -8,14 +8,22 @@ export default class UpgradecalcCommand extends Command {
 			description: "Displays the number of upgrades you need for your weapon",
 			example: "400 386 7283 7408 1050 1.56 2",
 			args: {
-				charLevel: { as: "number" },
-				petLevel: { as: "number" },
-				minPetDamage: { as: "number" },
-				maxPetDamage: { as: "number" },
-				minWeaponDamage: { as: "number" },
-				maxWeaponDamage: { as: "number" },
-				strMultiplier: { as: "number", optional: true },
-				shots: { as: "number", optional: true }
+				charLevel: { as: "number", desc: "The character's level" },
+				petLevel: { as: "number", desc: "The pet's level" },
+				minPetDamage: { as: "number", desc: "The least damage the pet can deal" },
+				maxPetDamage: { as: "number", desc: "The most damage the pet can deal" },
+				minWeaponDamage: { as: "number", desc: "The least damage the weapon can deal" },
+				maxWeaponDamage: { as: "number", desc: "The most damage the weapon can deal" },
+				strMultiplier: {
+					as: "number",
+					desc: "The character's strength multiplier",
+					optional: true
+				},
+				shots: {
+					as: "number",
+					desc: "The most shots you want to give to one enemy",
+					optional: true
+				}
 			}
 		});
 	}

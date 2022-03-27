@@ -1,13 +1,14 @@
 import { ColorResolvable, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
 import { Command } from "../groups/Command";
-import MessageContext from "../structures/aldebaran/MessageContext";
+import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
+import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
 import Client from "../structures/djs/Client";
-import { PermissionString as AldebaranPermission } from "../utils/Constants";
-import { Args } from "./Arg.js";
+import { Args } from "../utils/Args";
+import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
 
 export interface CommandMetadata {
 	aliases?: string[],
-	allowIndexCommand?: boolean,
 	allowUnknownSubcommands?: boolean,
 	args?: Args,
 	cooldown?: {
@@ -23,8 +24,8 @@ export interface CommandMetadata {
 		discord?: DJSPermission[],
 		aldebaran?: AldebaranPermission[]
 	},
-	requiresGuild?: boolean,
-	usage?: string,
+	platforms?: Platform[],
+	requiresGuild?: boolean
 };
 
 export interface ICommand {
@@ -38,14 +39,16 @@ export interface ICommand {
 	name: string;
 	perms: { discord: DJSPermission[], aldebaran: AldebaranPermission[] };
 	subcommands: Map<string, ICommand>;
-	usage: string;
 
 	check(ctx: MessageContext): Promise<boolean>;
-	execute(ctx: MessageContext): object | void;
+	execute(ctx: MessageContext, platform: Platform): object | void;
 	guildCheck(ctx: MessageContext): boolean;
 	permsCheck(ctx: MessageContext): Promise<boolean>;
 	registerSubcommands<T extends typeof Command>(...subcommands: T[]): void;
-	run(ctx: MessageContext): void;
+	run(
+		ctx: MessageContext | DiscordMessageContext | DiscordSlashMessageContext,
+		platform: Platform
+	): void;
 	toHelpEmbed(command: string, prefix: string): MessageEmbed;
 };
 

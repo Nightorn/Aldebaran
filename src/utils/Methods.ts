@@ -1,7 +1,8 @@
-import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
 import moment from "moment-timezone";
-import MessageContext from "../structures/aldebaran/MessageContext";
+import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
+import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 
 const timeNames = moment.tz.names();
 
@@ -90,7 +91,7 @@ export async function paginate(
 	list: string[],
 	pageSize: number,
 	headerText: string,
-	ctx: MessageContext,
+	ctx: DiscordMessageContext | DiscordSlashMessageContext,
 	codeblock?: string,
 	embed: MessageEmbed = new MessageEmbed()
 ) {
@@ -118,18 +119,20 @@ export async function paginate(
 	}
 	updateEmbed();
 
-	const msg = await ctx.message.channel
-		.send({ embeds: [embed], components: maxPage > 1 ? [buttonRow] : [] });
+	const opt = { embeds: [embed], components: maxPage > 1 ? [buttonRow] : [] };
+	const reply = ctx instanceof DiscordSlashMessageContext
+		? await ctx.reply(opt, false, true)
+		: await ctx.reply(opt);
 
 	// Keep collecting interactions as long as there's pages to paginate.
 	while (maxPage > 1) {
-		const interaction = await msg.awaitMessageComponent({
-			filter: i => i.user.id === ctx.message.author.id ? true : !i.deferUpdate(),
+		const interaction = await reply.awaitMessageComponent({
+			filter: i => i.user.id === ctx.author.id ? true : !i.deferUpdate(),
 			time: 60000
 		}).catch(() => {});
 
 		if (!interaction || interaction.customId === "❌") {
-			msg.edit({ components: [] });
+			reply.edit({ components: [] });
 			break;
 		}
 

@@ -1,5 +1,5 @@
 import { Command } from "../../groups/FunCommand.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
 export default class EmojilistCommand extends Command {
@@ -12,7 +12,7 @@ export default class EmojilistCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
-		const emojilist = ctx.message.guild!.emojis.cache
+		const emojilist = ctx.guild!.guild.emojis.cache
 			.map(e => e.toString()).join("");
 		if (emojilist.length <= 2000)
 			ctx.reply(emojilist);

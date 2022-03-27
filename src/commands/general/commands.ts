@@ -1,6 +1,7 @@
 import { Command, Embed } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
+import { Platform } from "../../utils/Constants.js";
 
 export default class CommandsCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -24,29 +25,35 @@ export default class CommandsCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(ctx: MessageContext) {
+	async run(ctx: MessageContext, platform: Platform) {
 		const args = ctx.args as { showHidden: boolean, hideAliases: boolean };
-		const guild = ctx.message.guild ? await ctx.guild() : null;
-		const commands: { [key: string]: string[] } = {};
-		for (const [name, data] of ctx.client.commands.commands) {
-			if (args.showHidden || (await data.check(ctx) && !data.hidden)) {
-				if (commands[data.category] === undefined)
-					commands[data.category] = [];
-				if (name === data.name) {
-					commands[data.category].push(name);
-				} else if (!args.hideAliases) {
-					commands[data.category].push(`*${name}*`);
+		const categories: { [key: string]: string[] } = {};
+		const commands = ctx.client.commands.commands
+			.filter(c => c.supports(platform));
+		let count = 0;
+		for (const command of commands) {
+			if (args.showHidden || (await command.check(ctx) && !command.hidden)) {
+				if (!categories[command.category]) {
+					categories[command.category] = [];
+				}
+				categories[command.category].push(`${command.name}`);
+				count++;
+				if (!args.hideAliases) {
+					command.aliases.forEach(a => {
+						categories[command.category].push(`*${a}*`);
+					});
 				}
 			}
 		}
 
-		const embed = new Embed(this)
-			.setAuthor(
-				`${ctx.client.name}  |  List of ${ctx.client.commands.size} commands`,
-				ctx.client.user.avatarURL()!
-			);
-		embed.setFooter(`${!args.showHidden && !args.hideAliases ? "Use --showhidden to view all commands and --hidealiases to hide aliases." : ""} To learn how to use the customized commands, check ${ctx.prefix}commands guide.`);
-		for (const [category, list] of Object.entries(commands)) {
+		const embed = new Embed(this).setAuthor(
+			`${ctx.client.name}  |  List of ${count} commands`,
+			ctx.client.user.avatarURL()!
+		);
+		if (!args.showHidden && !args.hideAliases) {
+			embed.setFooter("Use --showhidden to view all commands and --hidealiases to hide aliases.");
+		}
+		for (const [category, list] of Object.entries(categories)) {
 			embed.addField(category, list.join(", "), true);
 		}
 		ctx.reply(embed);

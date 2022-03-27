@@ -1,10 +1,13 @@
 import { Client } from "discord.js";
+import { REST } from "@discordjs/rest";
+import { Routes, Snowflake } from "discord-api-types/v9";
 import fs from "fs";
 import NekosClient from "nekos.life";
 import { Client as NodesuClient } from "nodesu";
 import CommandHandler from "../../handlers/CommandHandler.js";
 import importCommands from "../../commands/commands.js";
 import DatabaseProvider from "../../handlers/DatabaseProvider.js";
+import interactionCreate from "../../events/interactionCreate.js";
 import message from "../../events/message.js";
 import ready from "../../events/ready.js";
 import { aldebaranTeam, packageFile, presences, SettingsModel } from "../../utils/Constants.js";
@@ -23,6 +26,7 @@ export default class AldebaranClient extends Client<true> {
 	drpgCache: { [key: string]: User | Guild } = {};
 	database = new DatabaseProvider(this);
 	databaseData = { profiles: new Map() };
+	id: Snowflake = process.env.DISCORD_CLIENT_ID!;
 	models = { settings: SettingsModel };
 	name = process.env.NAME || "Aldebaran";
 	nekoslife = new NekosClient();
@@ -58,9 +62,18 @@ export default class AldebaranClient extends Client<true> {
 			this.drpgCache = JSON.parse(fs.readFileSync("./cache/drpgCache.json").toString());
 		}
 
+		this.on("interactionCreate", int => interactionCreate(this, int));
 		this.on("messageCreate", msg => message(this, msg));
 		this.on("ready", () => ready(this));
 
+		if (process.env.DEPLOY_SLASH) {
+			const rest = new REST({ version: '9' }).setToken(process.env.TOKEN!);
+			const body = this.commands.slashCommands.map(c => c.toJSON()); 
+			rest.put(Routes.applicationCommands(this.id), { body })
+				.then(() => console.log("Slash commands registered"))
+				.catch(console.error);
+		}
+	
 		this.login(process.env.TOKEN).then(() => {
 			console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
 		});

@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { Command } from "../../groups/DRPGCommand.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
 
@@ -8,9 +8,8 @@ export default class WeaponCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Recommends you the best weapons for your level",
-			usage: "Level",
 			example: "150",
-			args: { level: { as: "number" } }
+			args: { level: { as: "number", desc: "The level you want your weapon to be at" } }
 		});
 	}
 
@@ -45,13 +44,17 @@ export default class WeaponCommand extends Command {
 
 		const embed = new MessageEmbed()
 			.setTitle(`Obtainable Weapons Available At Level ${level}`)
-			.setAuthor(
-				ctx.message.author.username,
-				ctx.message.author.displayAvatarURL()
-			)
+			.setAuthor(ctx.author.username, ctx.author.avatarURL)
 			.setColor(0x00AE86)
 			.setDescription("Will display weapon available at level specfied, unless none exist which will return close matches above and below level specfied.");
-		for (const weapon of results) embed.addField(`__*${weapon.name} - Lvl.${weapon.level}*__`, `*${weapon.desc}*\n**Price:** ${weapon.cost} gold\n**Damage:** ${weapon.weapon!.dmg.min} - ${weapon.weapon!.dmg.max}\n**ItemID:** ${weapon.id}`, false);
+
+		for (const weapon of results) {
+			embed.addField(
+				`__*${weapon.name} - Lvl.${weapon.level}*__`,
+				`*${weapon.desc}*\n**Price:** ${weapon.cost} gold\n**Damage:** ${weapon.weapon!.dmg.min} - ${weapon.weapon!.dmg.max}\n**ItemID:** ${weapon.id}`,
+				false
+			);
+		}
 		return ctx.reply(embed);
 	}
 };

@@ -1,7 +1,7 @@
 import { Command as C, Embed as E } from "../../groups/NSFWCommand.js";
 import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const { Command, Embed } = subCategory(C, E);
 
@@ -14,7 +14,7 @@ export default class XBoobsCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const embed = new Embed(this,
-			`${ctx.message.author} You want boobs? I give you... BOOBS!`);
+			`${ctx.author} You want boobs? I give you... BOOBS!`);
 		embed.send(ctx, ctx.client.nekoslife.nsfw.boobs);
 	}
 };

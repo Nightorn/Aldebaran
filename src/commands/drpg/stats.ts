@@ -7,7 +7,7 @@ import { formatNumber, getTimeString, lightOrDark } from "../../utils/Methods.js
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const { createCanvas, Image, registerFont, loadImage } = canvasModule;
 
@@ -15,16 +15,19 @@ export default class StatsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays a DiscordRPG user's character and pet infos",
-			usage: "UserMention|UserID",
 			example: "141610251299454976",
-			args: { user: { as: "user", optional: true } }
+			args: { user: {
+				as: "user",
+				desc: "The user whose stats you want to see",
+				optional: true
+			} }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.users.fetch(args.user || ctx.message.author.id).then(user => {
+		ctx.client.users.fetch(args.user || ctx.author.id).then(user => {
 			request({
 				uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
 				headers: { Authorization: process.env.API_DISCORDRPG }
@@ -111,7 +114,7 @@ export default class StatsCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	image(ctx: MessageContext, args: { user: string }) {
-		const userId = args.user || ctx.message.author.id;
+		const userId = args.user || ctx.author.id;
 		ctx.client.users.fetch(userId).then(user => {
 			request({
 				uri: `http://api.discorddungeons.me/v3/user/${userId}`,
@@ -136,13 +139,13 @@ export default class StatsCommand extends Command {
 						registerFont("./assets/fonts/Exo2-Regular.ttf", {
 							family: "Exo 2"
 						});
-						const bannerFG = lightOrDark(ctx.message.member!.displayHexColor)
+						const bannerFG = lightOrDark(ctx.member!.displayHexColor)
 							? ["black", "#222222"] : ["white", "#DDDDDD"];
 
 						context.fillStyle = "#222222";
 						context.fillRect(0, 0, 840, 775);
 
-						context.fillStyle = ctx.message.member!.displayHexColor;
+						context.fillStyle = ctx.member!.displayHexColor;
 						context.fillRect(0, 0, 840, 126);
 
 						context.save();

@@ -2,7 +2,7 @@ import request from "request";
 import parser from "xml2js";
 import { Command, Embed } from "../../groups/ImageCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 type ExpectedResponse = {
 	response: {

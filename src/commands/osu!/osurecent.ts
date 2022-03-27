@@ -3,7 +3,7 @@ import ojsama from "ojsama";
 import ppv2Results, { Result } from "../../utils/osu!/ppv2Results.js";
 import { Command, Embed } from "../../groups/OsuCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode } from "../../utils/Constants.js";
 
 const ranks = {
@@ -25,8 +25,13 @@ export default class OsurecentCommand extends Command {
 			example: "Ciborn",
 			aliases: ["osurs"],
 			args: {
-				user: { as: "word", desc: "Username/UserID", optional: true },
-				mode: { as: "mode", optional: true }
+				user: { as: "string", desc: "Username/UserID", optional: true },
+				mode: {
+					as: "mode",
+					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
+					desc: "osu! Mode",
+					optional: true
+				}
 			}
 		});
 	}
@@ -34,14 +39,13 @@ export default class OsurecentCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
-		const author = await ctx.author();
 		const client = ctx.client.nodesu!;
-		const mode = (args.mode || author.settings.osumode || "osu") as OsuMode;
+		const mode = (args.mode || ctx.author.settings.osumode || "osu") as OsuMode;
 		if (Mode[mode] !== undefined) {
 			client.user.getRecent(
 				args.user
-				|| author.settings.osuusername
-				|| author.username,
+				|| ctx.author.settings.osuusername
+				|| ctx.author.username,
 				Mode[mode],
 				1
 			).then(async data => {

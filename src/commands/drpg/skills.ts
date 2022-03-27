@@ -4,22 +4,25 @@ import { Command } from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class SkillsCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays users' skills information",
-			usage: "UserMention|UserID",
 			example: "246302641930502145",
-			args: { user: { as: "user", optional: true } }
+			args: { user: {
+				as: "user",
+				desc: "The user whose skills you want to see",
+				optional: true
+			} }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.users.fetch(args.user || ctx.message.author.id).then(user => {
+		ctx.client.users.fetch(args.user || ctx.author.id).then(user => {
 			request({ uri: `http://api.discorddungeons.me/v3/user/${user.id}`, headers: { Authorization: process.env.API_DISCORDRPG } }, (err, response, body) => {
 				if (err) throw err;
 				if (response.statusCode === 404) {

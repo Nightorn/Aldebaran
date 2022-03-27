@@ -1,22 +1,25 @@
 import { ColorResolvable, MessageEmbed } from "discord.js";
 import { Command } from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class ProfileCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Shows your social profile",
-			usage: "UserMention|UserID",
+			description: "Shows your Aldebaran social profile",
 			example: "320933389513523220",
-			args: { user: { as: "user", optional: true } }
+			args: { user: {
+				as: "user",
+				desc: "The user whose social profile you want to see",
+				optional: true
+			} }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.customUsers.fetch(args.user || ctx.message.author.id)
+		ctx.client.customUsers.fetch(args.user || ctx.author.id)
 			.then(async user => {
 				const profile = (await user.profile()).profile;
 				if (profile.name) {
@@ -44,8 +47,8 @@ export default class ProfileCommand extends Command {
 				} else {
 					const embed = new MessageEmbed()
 						.setAuthor(
-							ctx.message.author.username,
-							ctx.message.author.displayAvatarURL()
+							ctx.author.username,
+							ctx.author.avatarURL
 						)
 						.setTitle("No Profile Found")
 						.setDescription(`Please use \`${ctx.prefix}setprofile name <yournamehere>\` to create your profile`)
