@@ -137,6 +137,7 @@ export abstract class Command implements ICommand {
 			const command = new Structure(this.client);
 			const name = command.constructor.name
 				.replace("Subcommand", "").toLowerCase();
+			command.name = name;
 			this.subcommands.set(name, command);
 		}, this);
 	}
