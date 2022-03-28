@@ -7,8 +7,8 @@ export default (beatmapId: number) => new Promise((resolve, reject) => {
 	else {
 		fetch(`http://osu.ppy.sh/osu/${beatmapId}`).then(res => {
 			const dest = fs.createWriteStream(`./cache/osu!/${beatmapId}.osu`);
-			res.body.pipe(dest);
-			res.body.on("error", reject);
+			res.body!.pipe(dest);
+			res.body!.on("error", reject);
 			dest.on("finish", resolve);
 			dest.on("error", reject);
 		});
