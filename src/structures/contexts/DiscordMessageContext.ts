@@ -50,6 +50,10 @@ export default class DiscordMessageContext extends MessageContext {
 		return this.message.createdTimestamp;
 	}
 
+	get embeds() {
+		return this.message.embeds;
+	}
+
 	get member() {
 		return this.message.member;
 	}
