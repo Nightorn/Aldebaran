@@ -29,40 +29,31 @@ export default class ViewSubcommand extends Command {
 				const member = await data.members.fetch(user.id);
 				if (member) {
 					let elevation = null;
-					if (data.ownerId === user.id) elevation = "(Owner)";
-					else if (member.permissions.has("ADMINISTRATOR"))
+					if (data.ownerId === user.id) {
+						elevation = "(Owner)";
+					} else if (member.permissions.has("ADMINISTRATOR")) {
 						elevation = "(Admin)";
+					}
 					guilds.push(`\`${guildId}\` **${data.name}** ${elevation !== null ? elevation : ""}`);
 				}
 			}
 			if (guilds.length > 0) embed.addField("Servers", guilds.join("\n"));
 			ctx.reply(embed);
 		}).catch(async () => {
-			const customGuild = await ctx.client.customGuilds.fetch(id);
-			const settings = customGuild.settings;
+			const guild = await ctx.client.customGuilds.fetch(id);
+			const settings = guild.settings;
 			if (ctx.guild) {
-				let adminsStr = "";
-				const members = Array.from(ctx.guild.guild.members.cache.values());
-				const bots = members.filter(m => m.user.bot === true);
-				const humans = members.filter(m => m.user.bot === false);
-				const botRate = bots.length * 100 / members.length;
-				const admins = members.filter(m => m.permissions.has("ADMINISTRATOR") && !m.user.bot && m.id !== m.guild.ownerId);
-				for (const member of admins) {
-					adminsStr += `\`${member.user.id}\` | **\`[${member.user.tag}]\`** <@${member.user.id}>\n`;
-				}
 				const owner = await ctx.guild.guild.fetchOwner();
 				const embed = new MessageEmbed()
 					.setAuthor(`${ctx.guild.guild.name} | ${ctx.guild.id}`, ctx.guild.guild.iconURL()!)
-					.setDescription(`**Owner** : <@${ctx.guild.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${humans.length} Members (+${bots.length} Bots / ${Math.floor(botRate)}%)`);
-				if (Object.entries(settings).length !== 0) embed.addField("Settings", `\`\`\`js\n${util.inspect(settings, false, null)}\`\`\``);
-				if (adminsStr !== "") embed.addField("Admins", adminsStr);
+					.setDescription(`**Owner** : <@${ctx.guild.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${guild.guild.memberCount} Members`);
+				if (Object.entries(settings).length !== 0) {
+					embed.addField("Settings", `\`\`\`js\n${util.inspect(settings, false, null)}\`\`\``);
+				}
 				ctx.reply(embed);
 			} else {
 				const embed = new MessageEmbed()
-					.setAuthor(
-						ctx.author.username,
-						ctx.author.avatarURL
-					)
+					.setAuthor(ctx.author.username, ctx.author.avatarURL)
 					.setTitle("Warning")
 					.setDescription(`The ID specified does not correspond to a valid user or a guild where ${ctx.client.name} is.`)
 					.setColor("ORANGE");
