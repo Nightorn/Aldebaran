@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import request from "request";
-import { Command } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgXpBases } from "../../utils/Constants.js";
@@ -109,7 +109,10 @@ export default class WallsCommand extends Command {
 
 			const embed = new MessageEmbed()
 				.setColor(0x00ae86)
-				.setAuthor(`${user.username}  |  DiscordRPG Walls`, user.displayAvatarURL())
+				.setAuthor({
+					name: `${user.username}  |  DiscordRPG Walls`,
+					iconURL: user.displayAvatarURL()
+				})
 				.addField(
 					`Base at Level ${baseLvl}`,
 					`The baseXP (the increment of XP needed to level up - the "XP ramp") for Level ${baseLvl} is ${drpgXpBases[baseLvl]}.`

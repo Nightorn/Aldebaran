@@ -1,6 +1,5 @@
-import { MessageEmbed } from "discord.js";
 import request from "request";
-import { Command } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
@@ -70,9 +69,11 @@ export default class SkillsCommand extends Command {
 						const maxMax = max + Math.floor(maxpoints / 125);
 						return `With your current mining boosts skills, you would get between **${minMin} and ${minMax} skill XP**.\nWith the highest mining boosts skills, you would get between **${maxMin} and ${maxMax} skill XP**.`;
 					};
-					const embed = new MessageEmbed()
-						.setAuthor(`${user.username}  |  Skills`, user.displayAvatarURL())
-						.setColor(0x00AE86)
+					const embed = this.createEmbed(ctx)
+						.setAuthor({
+							name: `${user.username}  |  Skills`,
+							iconURL: user.displayAvatarURL()
+						})
 						.addField("Mining", `**Level ${skillinfo.mine.level}** (${formatNumber(skillinfo.mine.xp)} XP)\nWith your **current** mining boost skills, you would get **${miningCurrent} ores or essences**.\nWith the **highest** mining boost skills, you would get **${miningMax} ores**, or between **${essenceMax} and ${miningMax} essences**.\n${mineXp(skillinfo.mine.level)}`)
 						.addField("Chopping", `**Level ${skillinfo.chop.level}** (${formatNumber(skillinfo.chop.xp)} XP)\nWith your **current** lumber boost skills, you would get **${lumbercurrent} logs**.\nWith the **highest** lumber boost skills, you would get **${lumbermax} logs**.\n${xp(skillinfo.chop.level)}`)
 						.addField("Foraging", `**Level ${skillinfo.forage.level}** (${formatNumber(skillinfo.forage.xp)} XP)\nWith your **current** scavenging skills, you would get **${forageCurrent} items**.\nWith the **highest** scavenging skills, you would get **${forageMax} items**.\n${xp(skillinfo.forage.level)}`)

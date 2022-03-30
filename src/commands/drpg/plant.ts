@@ -1,10 +1,11 @@
 import { evaluate } from "mathjs";
 import request from "request";
-import { Command, Embed } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
+import { MessageEmbed } from "discord.js";
 
 export default class PlantCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -77,10 +78,14 @@ export default class PlantCommand extends Command {
 							: `between **${highestMin}** and **${highestMax} ${rewardName}**`;
 						const pronoun = ctx.author.id === userid ? "You" : "They";
 						const ownership = ctx.author.id === userid ? "your" : "their";
-						const embed = new Embed(this)
-							.setAuthor(`${target.username}  |  Plant information  |  ${item.name} @ ${drpgLocationdb[plantId]}`, target.displayAvatarURL())
+						const embed = new MessageEmbed()
+							.setAuthor({
+								name: `${target.username}  |  Plant information  |  ${item.name} @ ${drpgLocationdb[plantId]}`,
+								iconURL: target.displayAvatarURL()
+							})
+							.setColor(this.color)
 							.setDescription(`With ${ownership} current reaping skills (${luck === 1 ? 0 : luck} points), ${pronoun} will receive ${normalRewards}. With the highest reaping skills possible for ${ownership} level (${luckMax} points) ${pronoun.toLowerCase()} could have, ${pronoun.toLowerCase()} will receive ${highestRewards}.`)
-							.setFooter(`${pronoun} have set this plant the ${getDate(plant.time)}.`);
+							.setFooter({ text: `${pronoun} have set this plant the ${getDate(plant.time)}.` });
 						return ctx.reply(embed);
 					}
 					return ctx.error("NOT_FOUND", `You have specified a location where there is no sapling. Make sure you are checking the right location by using \`${ctx.prefix}plant\`.`, "location");
@@ -92,13 +97,19 @@ export default class PlantCommand extends Command {
 							plantsList += `\`[${location}]\` **${drpgItems[plant.id].name}** @ **${drpgLocationdb[location]}** - ${getDate(plant.time, true)}\n`;
 				}
 				if (plantsList !== "") {
-					const embed = new Embed(this)
-						.setAuthor(`${target.username}  |  Sapling information`, target.displayAvatarURL())
+					const embed = new MessageEmbed()
+						.setAuthor({
+							name: `${target.username}  |  Sapling information`,
+							iconURL: target.displayAvatarURL()
+						})
 						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)!.length} plants** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
 					return ctx.reply(embed);
 				}
-				const embed = new Embed(this)
-					.setAuthor(`${target.username}  |  Sapling information`, target.displayAvatarURL())
+				const embed = new MessageEmbed()
+					.setAuthor({
+						name: `${target.username}  |  Sapling information`,
+						iconURL: target.displayAvatarURL()
+					})
 					.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} no plant set.`);
 				return ctx.reply(embed);
 			}

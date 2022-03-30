@@ -1,5 +1,4 @@
-import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { categories, Platform } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -29,8 +28,11 @@ export default class HelpCommand extends Command {
 					.filter(c => (c.category === category.name || c.matches(command))
 						&& c.supports(platform))
 					.reduce((acc, c) => `${acc}${emoji} **${c.name}** : ${c.shortDesc}\n`, "");
-				const categoryEmbed = new MessageEmbed()
-					.setAuthor("Category Help", ctx.client.user.avatarURL()!)
+				const categoryEmbed = this.createEmbed(ctx)
+					.setAuthor({
+						name: "Category Help",
+						iconURL: ctx.client.user.avatarURL()!
+					})
 					.setTitle(`${category.title} - ${category.description}`)
 					.setDescription(list)
 					.setColor(this.color);
@@ -41,8 +43,11 @@ export default class HelpCommand extends Command {
 				ctx.error("NOT_FOUND", "You are trying to find help for a command or a category that does not exist. Make sure you did not make a typo in your request.");
 			}
 		} else {
-			const embed = new MessageEmbed()
-				.setAuthor(`${ctx.client.name}'s Help Pages`, ctx.client.user.avatarURL()!);
+			const embed = this.createEmbed(ctx)
+				.setAuthor({
+					name: `${ctx.client.name}'s Help Pages`,
+					iconURL: ctx.client.user.avatarURL()!
+				});
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {
 				if (data.name !== "Developer"  && typeof data !== "string")

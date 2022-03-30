@@ -1,5 +1,5 @@
 import request, { Response } from "request";
-import { Command, Embed } from "../../groups/UtilitiesCommand.js";
+import Command from "../../groups/UtilitiesCommand.js";
 import { ICommand } from "../../interfaces/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -118,7 +118,7 @@ export default class CurConvCommand extends Command implements ICommand {
 
 			const str = `**${value.toFixed(2)} ${fromCurrency}** is equal to **${valueInTarget.toFixed(2)} ${toCurrency}** as of ${getDate(data.timestamp * 1000)}, with a **${rate.toFixed(2)} rate**.`;
 
-			const embed = new Embed(this)
+			const embed = this.createEmbed(ctx)
 				.setTitle(`Conversion from ${fromCurrency} to ${toCurrency}`)
 				.setDescription(str);
 			ctx.reply(embed);

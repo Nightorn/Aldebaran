@@ -4,7 +4,7 @@ import { PermissionString as AldebaranPermission, Platform } from "../utils/Cons
 import { CommandMetadata, ICommand } from "../interfaces/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
 
-export abstract class Command implements ICommand {
+export default abstract class Command implements ICommand {
 	aliases: string[];
 	category: string = "General";
 	color: ColorResolvable = "BLUE";
@@ -64,6 +64,12 @@ export abstract class Command implements ICommand {
 		return await this.permsCheck(ctx) && this.guildCheck(ctx);
 	}
 
+	createEmbed(ctx: MessageContext) {
+		return new MessageEmbed()
+			.setAuthor({ name: ctx.author.username, iconURL: ctx.author.avatarURL })
+			.setColor(this.color);
+	}
+
 	/**
 	 * Executes the specified command
 	 */
@@ -94,14 +100,14 @@ export abstract class Command implements ICommand {
 
 	toHelpEmbed(prefix = "&") {
 		const embed = new MessageEmbed()
-			.setAuthor(
-				`${this.client.name}  |  Command Help  |  ${this.name}`,
-				this.client.user!.avatarURL()!
-			)
+			.setAuthor({
+				name: `${this.client.name}  |  Command Help  |  ${this.name}`,
+				iconURL: this.client.user!.avatarURL()!
+			})
 			.setTitle(this.metadata.description)
 			.addField("Category", this.category, true)
 			.addField("Example", `${prefix}${this.name} ${this.example}`, true)
-			.setColor("BLUE");
+			.setColor(this.color);
 		if (this.metadata.help !== undefined)
 			embed.setDescription(this.metadata.help);
 		if (this.aliases.length > 0)
@@ -147,12 +153,5 @@ export abstract class Command implements ICommand {
 		if (desc.length > 60)
 			return `${this.metadata.description.substr(0, 60)}...`;
 		return desc;
-	}
-};
-
-export const Embed = class Embed extends MessageEmbed {
-	constructor(command: ICommand | Command) {
-		super();
-		this.setColor(command.color);
 	}
 };

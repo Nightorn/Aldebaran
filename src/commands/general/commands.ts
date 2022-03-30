@@ -1,7 +1,8 @@
-import { Command, Embed } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { Platform } from "../../utils/Constants.js";
+import { MessageEmbed } from "discord.js";
 
 export default class CommandsCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -46,12 +47,15 @@ export default class CommandsCommand extends Command {
 			}
 		}
 
-		const embed = new Embed(this).setAuthor(
-			`${ctx.client.name}  |  List of ${count} commands`,
-			ctx.client.user.avatarURL()!
-		);
+		const embed = this.createEmbed(ctx)
+			.setAuthor({
+				name: `${ctx.client.name}  |  List of ${count} commands`,
+				iconURL: ctx.client.user.avatarURL()!
+			});
 		if (!args.showHidden && !args.hideAliases) {
-			embed.setFooter("Use --showhidden to view all commands and --hidealiases to hide aliases.");
+			embed.setFooter({
+				text: "Use --showhidden to view all commands and --hidealiases to hide aliases."
+			});
 		}
 		for (const [category, list] of Object.entries(categories)) {
 			embed.addField(category, list.join(", "), true);

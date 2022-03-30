@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 import request from "request";
 import fs from "fs";
 import canvasModule from "canvas";
-import { Command } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import { formatNumber, getTimeString, lightOrDark } from "../../utils/Methods.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgLocationdb } from "../../utils/Constants.js";
@@ -48,7 +48,10 @@ export default class StatsCommand extends Command {
 							if (value !== 0) attributes.push(`**${key[0].toUpperCase() + key.slice(1)}** ${format(value)} Points`);
 					const location = data.location ? drpgLocationdb[data.location.current] : "The Abyss";
 					const embed = new MessageEmbed()
-						.setAuthor(data.name, user.displayAvatarURL())
+						.setAuthor({
+							name: data.name,
+							iconURL: user.displayAvatarURL()
+						})
 						.setColor(data.donate ? "GOLD" : 0x00ae86)
 						.setDescription(`Currently In **${location || "The Abyss"}**`)
 						.addField(
@@ -68,9 +71,9 @@ export default class StatsCommand extends Command {
 								attributes.length !== 0 ? attributes.join(", ") : "None"
 							}`
 						)
-						.setFooter(
-							`${data.donate ? "Donator, " : ""}Last seen ${getTimeString(Date.now() - data.lastseen, "DD day(s), HH hour(s), MM minute(s) and SS second(s)")} ago`
-						);
+						.setFooter({
+							text: `${data.donate ? "Donator, " : ""}Last seen ${getTimeString(Date.now() - data.lastseen, "DD day(s), HH hour(s), MM minute(s) and SS second(s)")} ago`
+						});
 					if (data.quest
 								&& (data.quest.current || data.quest.completed)
 					) {

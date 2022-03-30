@@ -1,6 +1,6 @@
 // Command Developed with the help of Akashic Bearer#2305
 import { MessageEmbed, WebhookClient } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
@@ -21,7 +21,7 @@ export default class BugreportCommand extends Command {
 		const { report } = ctx.args as { report: string };
 		const embed = new MessageEmbed()
 			.setDescription(report)
-			.setFooter(`User: ${ctx.author.user.tag} [ID: ${ctx.author.id}]`);
+			.setFooter({ text: `User: ${ctx.author.user.tag} [ID: ${ctx.author.id}]` });
 		new WebhookClient({
 			id: process.env.WEBHOOK_BUGREPORTS_ID!,
 			token: process.env.WEBHOOK_BUGREPORTS_TOKEN!

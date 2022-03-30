@@ -2,13 +2,14 @@
 /* eslint-disable no-await-in-loop */
 import fs from "fs";
 import request from "request";
-import { Command, Embed } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import { DRPGAttribute, DRPGGuild, DRPGItem, DRPGSkill, DRPGUser } from "../../interfaces/DiscordRPG.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { paginate, timeSince } from "../../utils/Methods.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
+import { MessageEmbed } from "discord.js";
 
 export type Guild = DRPGGuild & { users: User[], lastUpdate: number };
 export type User = DRPGUser & { lastUpdate: number };
@@ -226,6 +227,7 @@ export default class GleadCommand extends Command {
 				break;
 		}
 
+		const text = `${index === "lastseen" ? "Average" : "Sum"}: ${sum.toLocaleString()}`;
 		if (list && list.length > 0) {
 			paginate(
 				args.desc ? list.reverse() : list,
@@ -233,7 +235,7 @@ export default class GleadCommand extends Command {
 				`${guildData.name} Lead ${index}`,
 				ctx,
 				"md",
-				new Embed(this).setFooter(`${index === "lastseen" ? "Average" : "Sum"}: ${sum.toLocaleString()}`)
+				new MessageEmbed().setColor(this.color).setFooter({ text })
 			);
 		} else {
 			ctx.reply("Unknown leaderboard index.");

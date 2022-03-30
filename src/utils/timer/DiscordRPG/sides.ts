@@ -52,10 +52,10 @@ export default async (ctx: DiscordMessageContext) => {
 			}, 299250);
 
 			const timerEmbed = new MessageEmbed()
-				.setAuthor(
-					ctx.author.username,
-					ctx.author.avatarURL
-				)
+				.setAuthor({
+					name: ctx.author.username,
+					iconURL: ctx.author.avatarURL
+				})
 				.setColor(0x00ae86)
 				.setDescription("React with 🚫 to cancel timer.");
 			ctx.reply(timerEmbed).then(mesg => {
@@ -68,7 +68,10 @@ export default async (ctx: DiscordMessageContext) => {
 					setTimeout(() => mesg.delete(), 5000);
 					if (reactions.get("🚫") === undefined) {
 						const embed = new MessageEmbed()
-							.setAuthor("Your sides timer has been set!", ctx.author.avatarURL)
+							.setAuthor({
+								name: "Your sides timer has been set!",
+								iconURL: ctx.author.avatarURL
+							})
 							.setColor(0x00ae86);
 						ctx.reply(embed).then(timerset => {
 							setTimeout(() => timerset.delete(), 5000);
@@ -76,7 +79,7 @@ export default async (ctx: DiscordMessageContext) => {
 					} else {
 						const embed1 = new MessageEmbed()
 							.setDescription("Timer Cancelled")
-							.setAuthor(`${ctx.author.username}`)
+							.setAuthor({ name: ctx.author.username })
 							.setColor("RED");
 
 						clearTimeout(ctx.author.timers.sides!);

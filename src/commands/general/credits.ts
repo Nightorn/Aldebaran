@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 

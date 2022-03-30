@@ -1,5 +1,5 @@
 import AldebaranClient from "../structures/djs/Client.js";
-import { Command } from "../groups/Command.js";
+import Command from "../groups/Command.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Arg } from "../utils/Args.js";
 import { Platform, SlashCommandOption as Option } from "../utils/Constants.js";
@@ -26,14 +26,6 @@ export default class CommandHandler {
 	get(command: string, platform: Platform) {
 		return this.commands.find(c => c.matches(command) && c.supports(platform));
 	}
-
-	/* async bypassRun(ctx: MessageContext) {
-		const user = await this.client.customUsers.fetch(ctx.author.id);
-		if (!user.hasPermission("ADMINISTRATOR")) {
-			throw new Error("UNALLOWED_ADMIN_BYPASS");
-		}
-		return ctx.command.execute(ctx);
-	} */
 
 	exists(command: string, platform: Platform) {
 		return !!this.get(command, platform);

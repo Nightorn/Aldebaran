@@ -1,7 +1,8 @@
 import moment from "moment-timezone";
-import { Command, Embed } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import { MessageEmbed } from "discord.js";
 
 export default class TimeCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -46,23 +47,27 @@ export default class TimeCommand extends Command {
 			if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = `ETC/${timezone}`;
 			const time = moment().tz(timezone);
 			if (time === null) {
-				const embed = new Embed(this)
+				const embed = new MessageEmbed()
 					.setTitle(":x: Ooof!")
+					.setColor("RED")
 					.setDescription(`The timezone setting for ${user.username} seems to be invaild! Tell them to set it again with ${ctx.prefix}uconfig timezone!`)
 					.addField(":information_source:", `${
 						user.username
 					}'s timezone is set to ${timezone}.\nMake sure the timezone is a vaild [tz timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), or in the format: GMT+ or - <number>`);
 				ctx.reply(embed);
 			} else {
-				const embed = new Embed(this)
-					.setAuthor(`${user.username}  |  Date and Time`, user.user.displayAvatarURL())
-					.setDescription(
-						`${time.format("dddd, Do of MMMM YYYY")}\n**${time.format(
-							"hh:mm:ss A"
-						)}**`
-					);
+				const date = time.format("dddd, Do of MMMM YYYY");
+				const subDate = time.format("hh:mm:ss A");
+				const embed = this.createEmbed(ctx)
+					.setAuthor({
+						name: `${user.username}  |  Date and Time`,
+						iconURL: user.user.displayAvatarURL()
+					})
+					.setDescription(`${date}\n**${subDate}**`);
 				if (!args.clean)
-					embed.setFooter("If this is inaccurate, try setting a tz timezone instead of a GMT-based timezone!");
+					embed.setFooter({
+						text: "If this is inaccurate, try setting a tz timezone instead of a GMT-based timezone!"
+					});
 				ctx.reply(embed);
 			}
 		} else if (user.user.equals(ctx.author.user)) {

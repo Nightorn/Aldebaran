@@ -82,7 +82,7 @@ import SetprofileCommand from "./settings/setprofile.js";
 import UconfigCommand from "./settings/uconfig.js";
 
 // Social
-import { Command as SocialCommand } from "../groups/SocialCommand.js";
+import SocialCommand from "../groups/SocialCommand.js";
 import PokeCommand from "./social/poke.js";
 import TickleCommand from "./social/tickle.js";
 
@@ -126,8 +126,8 @@ export default () => {
 			}
 
 			// eslint-disable-next-line class-methods-use-this
-			run(ctx: DiscordMessageContext, platform: Platform) {
-				executeSocial(ctx, platform);
+			run(ctx: DiscordMessageContext) {
+				executeSocial(ctx);
 			}
 		});
 	}

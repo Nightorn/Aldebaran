@@ -1,8 +1,8 @@
-import { Embed } from "../groups/SocialCommand.js";
+import { MessageEmbed } from "discord.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import { actionText, imageUrls, Platform } from "./Constants.js";
 
-export default async (ctx: DiscordMessageContext, platform: Platform) => {
+export default async (ctx: DiscordMessageContext) => {
 	const args = ctx.args as { user: string };
 	const user = args.user || ctx.author.id;
 	ctx.client.users.fetch(user).then(() => {
@@ -23,8 +23,12 @@ export default async (ctx: DiscordMessageContext, platform: Platform) => {
 		const number = Math.floor(Math.random() * imageUrls[command].length);
 		const image = imageUrls[command][number];
 
-		const embed = new Embed(ctx.client.commands.get(command, platform)!)
-			.setAuthor(ctx.author.username, ctx.author.avatarURL)
+		const embed = new MessageEmbed()
+			.setAuthor({
+				name: ctx.author.username,
+				iconURL: ctx.author.avatarURL
+			})
+			.setColor("AQUA")
 			.setDescription(comment)
 			.setImage(image);
 		ctx.reply(embed);

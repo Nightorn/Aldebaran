@@ -1,5 +1,5 @@
 import { ColorResolvable, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
-import { Command } from "../groups/Command";
+import Command from "../groups/Command.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 import MessageContext from "../structures/contexts/MessageContext.js";

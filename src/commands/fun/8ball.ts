@@ -1,4 +1,4 @@
-import { Command, Embed } from "../../groups/FunCommand.js";
+import Command from "../../groups/FunCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
@@ -19,10 +19,13 @@ export default class EightballCommand extends Command {
 	async run(ctx: MessageContext) {
 		const { question } = ctx.args as { question: string };
 		const data = await ctx.client.nekoslife.sfw["eightBall"]({ text: question });
-		const embed = new Embed(this)
+		const embed = this.createEmbed(ctx)
 			.setDescription(`**${data.response}**`)
 			.setImage(data.url!)
-			.setFooter("Powered by nekos.life", ctx.client.user.avatarURL()!);
+			.setFooter({
+				text: "Powered by nekos.life",
+				iconURL: ctx.client.user.avatarURL()!
+			});
 		ctx.reply(embed);
 	}
 };

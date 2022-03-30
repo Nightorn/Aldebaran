@@ -4,7 +4,7 @@ import Guild from "../djs/Guild.js";
 import User from "../djs/User.js";
 import { parseArgs, parseInput } from "../../utils/Args.js";
 import Client from "../djs/Client.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 
 export default class DiscordMessageContext extends MessageContext {
 	private _splitArgs: string[];

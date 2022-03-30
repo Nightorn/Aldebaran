@@ -1,5 +1,5 @@
-import { MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed } from "discord.js";
-import { Command } from "../../groups/GamesCommand.js";
+import { MessageActionRow, MessageButton, MessageComponentInteraction } from "discord.js";
+import Command from "../../groups/GamesCommand.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
@@ -36,10 +36,12 @@ export default class RpsCommand extends Command {
 			return ctx.reply("You can't play this game against a bot.");
 		}
 
-		const introEmbed = new MessageEmbed()
-			.setAuthor("Rock. Paper. Scissors.", ctx.author.avatarURL)
-			.setDescription(`The person you want to play with has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.`)
-			.setColor(this.color);
+		const introEmbed = this.createEmbed(ctx)
+			.setAuthor({
+				name: "Rock. Paper. Scissors.",
+				iconURL: ctx.author.avatarURL
+			})
+			.setDescription(`The person you want to play with has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.`);
 		
 		const acceptButton = new MessageButton()
 			.setStyle("SUCCESS")
@@ -55,10 +57,12 @@ export default class RpsCommand extends Command {
 		msg.awaitMessageComponent({ filter }).then(async interaction => {
 			interaction.deferUpdate();
 
-			const startEmbed = new MessageEmbed()
-				.setAuthor("Rock. Paper. Scissors.", ctx.author.avatarURL)
-				.setDescription("And the fun begins now! Use the buttons below, and discover the winner once both of you have made their choice!")
-				.setColor(this.color);
+			const startEmbed = this.createEmbed(ctx)
+				.setAuthor({
+					name: "Rock. Paper. Scissors.",
+					iconURL: ctx.author.avatarURL
+				})
+				.setDescription("And the fun begins now! Use the buttons below, and discover the winner once both of you have made their choice!");
 			
 			const emojiButton = (emoji: string) => new MessageButton()
 				.setStyle("SECONDARY")
@@ -87,15 +91,19 @@ export default class RpsCommand extends Command {
 			if (authorResponse === targetResponse) {
 				content = `Both users played ${targetResponse}, retry!`;
 			} else if (win[authorResponse] === targetResponse) {
-				content = new MessageEmbed()
-					.setAuthor(`${ctx.author.username} won!`, ctx.author.avatarURL)
-					.setDescription(`They played ${words[authorResponse]}, while **${target.username}** played ${words[targetResponse]}.`)
-					.setColor(this.color);
+				content = this.createEmbed(ctx)
+					.setAuthor({
+						name: `${ctx.author.username} won!`,
+						iconURL: ctx.author.avatarURL
+					})
+					.setDescription(`They played ${words[authorResponse]}, while **${target.username}** played ${words[targetResponse]}.`);
 			} else {
-				content = new MessageEmbed()
-					.setAuthor(`${target.username} won!`, target.avatarURL)
-					.setDescription(`They played ${words[targetResponse]}, while ${ctx.author.username} played ${words[authorResponse]}.`)
-					.setColor(this.color);
+				content = this.createEmbed(ctx)
+					.setAuthor({
+						name: `${target.username} won!`,
+						iconURL: target.avatarURL
+					})
+					.setDescription(`They played ${words[targetResponse]}, while ${ctx.author.username} played ${words[authorResponse]}.`);
 			}
 
 			ctx instanceof DiscordSlashMessageContext

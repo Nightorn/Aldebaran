@@ -1,5 +1,5 @@
 import { MessageEmbed, version } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { formatNumber } from "../../utils/Methods.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -31,11 +31,11 @@ export default class InfoCommand extends Command {
 			.reduce((acc, cur) => acc + cur));
 
 		const embed = new MessageEmbed()
-			.setAuthor(
-				`${ctx.client.name} v${ctx.client.version}`,
-				ctx.client.user.avatarURL()!,
-				process.env.HOMEPAGE
-			)
+			.setAuthor({
+				name: `${ctx.client.name} v${ctx.client.version}`,
+				iconURL: ctx.client.user.avatarURL()!,
+				url: process.env.HOMEPAGE
+			})
 			.addField(`Developers of ${ctx.client.name}`, adminMentions)
 			.addField(
 				"Statistics",
@@ -55,7 +55,7 @@ export default class InfoCommand extends Command {
 			.setThumbnail(ctx.client.user.avatarURL()!)
 			.setColor(ctx.guild ? ctx.guild.guild.me!.displayColor : "BLUE");
 			if (ctx.guild) {
-				embed.setFooter(`The prefix in this guild is "${ctx.prefix}".`);
+				embed.setFooter({ text: `The prefix in this guild is "${ctx.prefix}".` });
 			}
 		ctx.reply(embed);
 	}

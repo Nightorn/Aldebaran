@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
@@ -42,10 +42,8 @@ export default class WeaponCommand extends Command {
 			}
 		}
 
-		const embed = new MessageEmbed()
+		const embed = this.createEmbed(ctx)
 			.setTitle(`Obtainable Weapons Available At Level ${level}`)
-			.setAuthor(ctx.author.username, ctx.author.avatarURL)
-			.setColor(0x00AE86)
 			.setDescription("Will display weapon available at level specfied, unless none exist which will return close matches above and below level specfied.");
 
 		for (const weapon of results) {

@@ -1,5 +1,5 @@
 import { Collection, Guild, Snowflake } from "discord.js";
-import { Command, Embed } from "../../../groups/DeveloperCommand.js";
+import Command from "../../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../../structures/djs/Client.js";
 import { paginate } from "../../../utils/Methods.js";
 import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
@@ -30,7 +30,10 @@ export default class ServerlistSubcommand extends Command {
 				"Server List",
 				ctx,
 				undefined,
-				new Embed(this).setAuthor(`${ctx.client.name}  |  Server List`, ctx.client.user.avatarURL()!)
+				this.createEmbed(ctx).setAuthor({
+					name: `${ctx.client.name}  |  Server List`,
+					iconURL: ctx.client.user.avatarURL()!
+				})
 			);
 		});
 	}

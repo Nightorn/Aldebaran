@@ -1,7 +1,6 @@
-import { MessageEmbed } from "discord.js";
 import request from "request";
 import { evaluate } from "mathjs";
-import { Command } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
@@ -75,19 +74,21 @@ export default class TrapCommand extends Command {
 									items += `- Between **${min}** and **${max} ${itemName}**\n`;
 							}
 						});
-						const embed = new MessageEmbed()
-							.setAuthor(`${target.username}  |  Trap information  |  ${drpgItems[trap.id].name} @ ${drpgLocationdb[trapId]}`, target.displayAvatarURL())
+						const embed = this.createEmbed(ctx)
+							.setAuthor({
+								name: `${target.username}  |  Trap information  |  ${drpgItems[trap.id].name} @ ${drpgLocationdb[trapId]}`,
+								iconURL: target.displayAvatarURL()
+							})
 							.setDescription(`${pronoun} will receive the following items (with ${luck} point(s) in salvaging)\n${items}`)
-							.setFooter(`${pronoun} have set this trap the ${getDate(trap.time)}. You can use "--max" to get results with the max amount of points in salvaging you can have at your current level.`)
-							.setColor("GREEN");
+							.setFooter({
+								text: `${pronoun} have set this trap the ${getDate(trap.time)}. You can use "--max" to get results with the max amount of points in salvaging you can have at your current level.`
+							});
 						ctx.reply(embed);
 					} else {
-						const embed = new MessageEmbed()
-							.setAuthor("The requested resource has not been found.")
-							.setDescription(`You have specified a location where there is no trap. Make sure you are checking the right location by using \`${ctx.prefix}trap\`.`)
-							.setColor("RED")
-							.setFooter(target.username, target.displayAvatarURL());
-						ctx.reply(embed);
+						ctx.error(
+							"NOT_FOUND",
+							`You have specified a location where there is no trap. Make sure you are checking the right location by using \`${ctx.prefix}trap\`.`
+						);
 					}
 				} else {
 					let traps = "";
@@ -95,10 +96,12 @@ export default class TrapCommand extends Command {
 						if (trap.id !== "")
 							traps += `\`[${location}]\` **${drpgItems[trap.id].name}** @ **${drpgLocationdb[location]}** - ${getDate(trap.time, true)}\n`;
 					}
-					const embed = new MessageEmbed()
-						.setAuthor(`${target.username}  |  Trap information`, target.displayAvatarURL())
-						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${traps.match(/\n/g)!.length} traps** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}trap 4\` for example.\n${traps}`)
-						.setColor("GREEN");
+					const embed = this.createEmbed(ctx)
+						.setAuthor({
+							name: `${target.username}  |  Trap information`,
+							iconURL: target.displayAvatarURL()
+						})
+						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${traps.match(/\n/g)!.length} traps** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}trap 4\` for example.\n${traps}`);
 					ctx.reply(embed);
 				}
 			} else {

@@ -37,7 +37,10 @@ const general = (
 	if (user === null) return;
 	if (healthmonitor && healthmonitor !== "off") {
 		const embed = new MessageEmbed()
-			.setAuthor(user.username, user.user.displayAvatarURL())
+			.setAuthor({
+				name: user.username,
+				iconURL: user.user.displayAvatarURL()
+			})
 			.setColor(embedColor(playerHP as number));
 		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
 			if (individualhealthmonitor === "character") {
@@ -63,7 +66,7 @@ const playerWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 		.setColor(0xff0000)
 		.setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
 		.setImage(senddeath)
-		.setFooter("Pay attention to your health or you are going to die!");
+		.setFooter({ text: "Pay attention to your health or you are going to die!" });
 	ctx.reply(embed).then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
@@ -75,7 +78,9 @@ const petWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 			`**${user.username}** your pet is at __**${hp}%**__ health!!!\n`
 		)
 		.setImage(senddeath)
-		.setFooter("Your pet is getting very weak, take care of it quickly!");
+		.setFooter({
+			text: "Your pet is getting very weak, take care of it quickly!"
+		});
 	ctx.reply(embed).then(msg => setTimeout(() => msg.delete(), 60000));
 };
 

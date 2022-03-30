@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/SettingsCommand.js";
+import Command from "../../groups/SettingsCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { GuildSetting, Settings, SettingsModel, TargetedSettings } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -31,11 +31,13 @@ export default class GconfigCommand extends Command {
 		const parametersAvailable = SettingsModel.guild as Settings["guild"];
 		if (args.setting === "help") {
 			const embed = new MessageEmbed()
-				.setAuthor("User Settings", ctx.client.user.avatarURL()!)
+				.setAuthor({
+					name: "User Settings",
+					iconURL: ctx.client.user.avatarURL()!
+				})
 				.setDescription(
 					`Welcome to your server settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}gconfig list\`, and your current settings are shown in \`${ctx.prefix}gconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}gconfig property value\`, and one example is \`${ctx.prefix}gconfig adventureTimer on\`.`
-				)
-				.setColor("BLUE");
+				);
 			ctx.reply(embed);
 		} else if (args.setting === "list") {
 			const list: { [key: string]: { [key: string]: TargetedSettings } } = {};
@@ -51,13 +53,8 @@ export default class GconfigCommand extends Command {
 					list[data.category][key] = data;
 				}
 			}
-			const embed = new MessageEmbed()
-				.setAuthor(
-					ctx.author.username,
-					ctx.author.avatarURL
-				)
-				.setTitle("Config Command Help Page")
-				.setColor("BLUE");
+			const embed = this.createEmbed(ctx)
+				.setTitle("Config Command Help Page");
 			for (const [category, parameters] of Object.entries(list)) {
 				let entries = "";
 				for (const [key, data] of Object.entries(parameters)) {
@@ -73,10 +70,12 @@ export default class GconfigCommand extends Command {
 			for (const [key, value] of Object.entries(ctx.guild!.settings)) {
 				list += `**${key}** - \`${value}\`\n`;
 			}
-			const embed = new MessageEmbed()
-				.setAuthor("Guild Settings  |  Overview", ctx.client.user.avatarURL()!)
-				.setDescription(list === "" ? "None" : list)
-				.setColor("BLUE");
+			const embed = this.createEmbed(ctx)
+				.setAuthor({
+					name: "Guild Settings  |  Overview",
+					iconURL: ctx.client.user.avatarURL()!
+				})
+				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
 		} else if (Object.keys(parametersAvailable).includes(args.setting) && args.value) {
 			const setting = args.setting.toLowerCase() as GuildSetting;
@@ -94,8 +93,7 @@ export default class GconfigCommand extends Command {
 					]!.postUpdate!(args.value, ctx.author.user, ctx.guild!.guild);
 				}
 				ctx.guild!.changeSetting(setting, args.value).then(() => {
-					const embed = new MessageEmbed()
-						.setAuthor(ctx.author.username, ctx.author.avatarURL)
+					const embed = this.createEmbed(ctx)
 						.setTitle("Settings successfully changed")
 						.setDescription(
 							`The property **\`${
@@ -107,8 +105,7 @@ export default class GconfigCommand extends Command {
 						.setColor("GREEN");
 					ctx.reply(embed);
 				}).catch(err => {
-					const embed = new MessageEmbed()
-						.setAuthor(ctx.author.username, ctx.author.avatarURL)
+					const embed = this.createEmbed(ctx)
 						.setTitle("An Error Occured")
 						.setDescription(
 							"An error occured and we could not change your settings. Please retry later."

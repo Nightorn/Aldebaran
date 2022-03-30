@@ -1,6 +1,6 @@
 // Command Developed with the help of Akashic Bearer#2305
 import { MessageEmbed, WebhookClient } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
@@ -21,7 +21,7 @@ export default class SuggestCommand extends Command {
 		const { suggestion } = ctx.args as { suggestion: string };
 		const embed = new MessageEmbed()
 			.setDescription(suggestion)
-			.setFooter(`User: ${ctx.author.user.tag} [ID: ${ctx.author.id}]`);
+			.setFooter({ text: `User: ${ctx.author.user.tag} [ID: ${ctx.author.id}]` });
 		new WebhookClient({
 			id: process.env.WEBHOOK_SUGGESTIONS_ID!,
 			token: process.env.WEBHOOK_SUGGESTIONS_TOKEN!

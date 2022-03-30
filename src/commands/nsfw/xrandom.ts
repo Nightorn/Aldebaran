@@ -1,11 +1,11 @@
-import { Command as C, Embed as E } from "../../groups/NSFWCommand.js";
-import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
+import Command from "../../groups/NSFWCommand.js";
+import nekoslife from "../../groups/sub/NekoslifeCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const { Command, Embed } = subCategory(C, E);
+const C = nekoslife(Command);
 
-export default class XRandomCommand extends Command {
+export default class XRandomCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays a random hentai picture or GIF"
@@ -13,8 +13,9 @@ export default class XRandomCommand extends Command {
 	}
 
 	async run(ctx: MessageContext) {
-		const embed = new Embed(this,
-			`${ctx.author}, you wanted something random? Here you go!`);
-		embed.send(ctx, ctx.client.nekoslife.nsfw.randomHentaiGif);
+		return ctx.reply(await this.createNekosEmbed(
+			`${ctx.author}, you wanted something random? Here you go!`,
+			ctx.client.nekoslife.nsfw.randomHentaiGif
+		));
 	}
 };

@@ -1,5 +1,4 @@
 import { Message, MessageEmbed } from "discord.js";
-import { IImageCommand } from "../interfaces/Command.js";
 import AldebaranClient from "../structures/djs/Client.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 
@@ -56,36 +55,7 @@ export default async (client: AldebaranClient, message: Message) => {
 	}
 
 	if (ctx.command && ctx.mode === "HELP") {
-		ctx.reply(ctx.command.toHelpEmbed(prefix)); /*
-	} else if (command.indexOf("#") === 0) {
-		ctx.client.commands.bypassRun(ctx).catch(err => {
-			if (err.message === "INVALID_COMMAND") return;
-			if (err.message === "UNALLOWED_ADMIN_BYPASS") {
-				const embed = new MessageEmbed()
-					.setTitle("You are not allowed to use this.")
-					.setDescription(`By using \`#\`, you are trying to bypass Discord permissions requirements and other checks, which is only allowed for ${ctx.client.name} Administrators.`)
-					.setFooter(ctx.author.username, ctx.author.avatarURL)
-					.setColor("RED");
-				ctx.reply(embed);
-			} else {
-				console.error(err);
-			}
-		});
-	} *//* else if (command.indexOf("-") === 0) {
-		try {
-			const cmd = ctx.client.commands.get(sliced) as IImageCommand;
-			if (cmd && cmd.image) {
-				const cArgs = cmd.metadata.args;
-				cmd.image(new MessageContext(client, message, prefix, cArgs));
-			}
-		} catch (err) {
-			const embed = new MessageEmbed()
-				.setTitle("The requested resource has not been found.")
-				.setDescription("By using `-`, you are trying to view the image version of this command, however, the image version of this command is not available. Try again without `-`.")
-				.setFooter(message.author.username, message.author.displayAvatarURL())
-				.setColor("RED");
-			ctx.reply(embed);
-		} */
+		ctx.reply(ctx.command.toHelpEmbed(prefix));
 	} else if (ctx.command) {
 		ctx.command.execute(ctx, "DISCORD").then(() => {
 			const user = `USER: ${message.author.tag} (${message.author.id})`;
@@ -95,7 +65,10 @@ export default async (client: AldebaranClient, message: Message) => {
 				const embed = new MessageEmbed()
 					.setTitle("You are not allowed to use this.")
 					.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${ctx.command!.name}\` for more information about the requirements to use this command.`)
-					.setFooter(message.author.username, message.author.displayAvatarURL())
+					.setFooter({
+						text: message.author.username,
+						iconURL: message.author.displayAvatarURL()
+					})
 					.setColor("RED");
 				ctx.reply(embed);
 			} else if (err.message === "NOT_NSFW_CHANNEL") {
@@ -104,7 +77,10 @@ export default async (client: AldebaranClient, message: Message) => {
 					.setDescription(
 						"As this command shows NSFW content, you need to use this command in a NSFW channel."
 					)
-					.setFooter(message.author.username, message.author.displayAvatarURL())
+					.setFooter({
+						text: message.author.username,
+						iconURL: message.author.displayAvatarURL()
+					})
 					.setColor("RED");
 				ctx.reply(embed);
 			} else if (err.message === "INVALID_ARGS") {

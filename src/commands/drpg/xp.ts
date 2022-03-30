@@ -1,5 +1,4 @@
-import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { formatNumber } from "../../utils/Methods.js";
@@ -41,10 +40,8 @@ export default class XpCommand extends Command {
 			return Math.round(xp * ring);
 		}
 
-		const embed = new MessageEmbed()
+		const embed = this.createEmbed(ctx)
 			.setTitle(`Average Xp Kill At Lvl. ${level}`)
-			.setAuthor(ctx.author.username, ctx.author.avatarURL)
-			.setColor(0x00ae86)
 			.setDescription(
 				`**Please note all infomation about XP are estimations, and only works with dynamobs!**\nYou have a +${enchant}% XP Boost on your equipment, and you have ${attrib} points in your XP Boost attribute.`
 			)

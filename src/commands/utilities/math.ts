@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { evaluate } from "mathjs";
-import { Command, Embed } from "../../groups/UtilitiesCommand.js";
+import Command from "../../groups/UtilitiesCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { formatNumber } from "../../utils/Methods.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -27,7 +27,7 @@ export default class MathCommand extends Command {
 		} catch (err) {
 			result = "The specified math expression is invalid.";
 		}
-		const embed = new Embed(this)
+		const embed = this.createEmbed(ctx)
 			.setTitle("Math Expression Evaluation")
 			.addField("Result", `\`\`\`${formatNumber(result)}\`\`\``);
 		ctx.reply(embed);

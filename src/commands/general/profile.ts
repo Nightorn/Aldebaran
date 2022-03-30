@@ -1,5 +1,5 @@
 import { ColorResolvable, MessageEmbed } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
@@ -32,9 +32,14 @@ export default class ProfileCommand extends Command {
 					if (profile.age) userDetails += `**Age**: ${profile.age}\n`;
 					if (profile.gender) userDetails += `**Gender**: ${profile.gender}\n`;
 					const embed = new MessageEmbed()
-						.setAuthor(`${user.username}'s Profile`, user.user.displayAvatarURL())
+						.setAuthor({
+							name: `${user.username}'s Profile`,
+							iconURL: user.user.displayAvatarURL()
+						})
 						.setColor(profile.profileColor as ColorResolvable);
-					if (profile.dmFriendly) embed.setFooter(`${/yes/i.test(profile.dmFriendly) ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`);
+					if (profile.dmFriendly) embed.setFooter({
+						text: `${/yes/i.test(profile.dmFriendly) ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`
+					});
 					if (profile.profilePictureLink) embed.setImage(`${profile.profilePictureLink}`);
 					if (profile.flavorText)
 						embed.setDescription(profile.flavorText);
@@ -45,11 +50,7 @@ export default class ProfileCommand extends Command {
 					if (profile.socialLinks) embed.addField("__**Social Network(s) Link**__", profile.socialLinks);
 					ctx.reply(embed);
 				} else {
-					const embed = new MessageEmbed()
-						.setAuthor(
-							ctx.author.username,
-							ctx.author.avatarURL
-						)
+					const embed = this.createEmbed(ctx)
 						.setTitle("No Profile Found")
 						.setDescription(`Please use \`${ctx.prefix}setprofile name <yournamehere>\` to create your profile`)
 						.setColor("RED");

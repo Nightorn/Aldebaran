@@ -1,11 +1,11 @@
-import { Command as C, Embed as E } from "../../groups/ImageCommand.js";
-import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
+import Command from "../../groups/ImageCommand.js";
+import nekoslife from "../../groups/sub/NekoslifeCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const { Command, Embed } = subCategory(C, E);
+const C = nekoslife(Command);
 
-export default class NekoCommand extends Command {
+export default class NekoCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays a random neko picture or a GIF"
@@ -13,8 +13,9 @@ export default class NekoCommand extends Command {
 	}
 
 	async run(ctx: MessageContext) {
-		const embed = new Embed(this,
-			`<@${ctx.author.id}>, here is your innocent neko.`);
-		embed.send(ctx, ctx.client.nekoslife.sfw.neko);
+		return ctx.reply(await this.createNekosEmbed(
+			`<@${ctx.author.id}>, here is your innocent neko.`,
+			ctx.client.nekoslife.sfw.neko
+		));
 	}
 };

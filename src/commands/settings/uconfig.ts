@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/SettingsCommand.js";
+import Command from "../../groups/SettingsCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { GuildSetting, Settings, SettingsModel, TargetedSettings, UserSetting } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -28,15 +28,17 @@ export default class UconfigCommand extends Command {
 		const args = ctx.args as { setting: string, value?: string };
 		const parametersAvailable = SettingsModel.user as Settings["user"];
 		if (args.setting === "help") {
-			const embed = new MessageEmbed()
-				.setAuthor("User Settings", ctx.client.user.avatarURL()!)
+			const embed = this.createEmbed(ctx)
+				.setAuthor({
+					name: "User Settings",
+					iconURL: ctx.client.user.avatarURL()!
+				})
 				.setDescription(
 					`Welcome to your user settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}uconfig list\`, and your current settings are shown in \`${ctx.prefix}uconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}uconfig property value\`, and one example is \`${ctx.prefix}uconfig adventureTimer on\`.`
 				)
-				.setColor("BLUE")
-				.setFooter(
-					`Make sure to also use \`${ctx.prefix}gconfig\` for server settings.`
-				);
+				.setFooter({
+					text: `Make sure to also use \`${ctx.prefix}gconfig\` for server settings.`
+				});
 			ctx.reply(embed);
 		} else if (args.setting === "list") {
 			const list: { [key: string]: { [key: string]: TargetedSettings } } = {};
@@ -52,16 +54,11 @@ export default class UconfigCommand extends Command {
 					list[data.category][key] = data;
 				}
 			}
-			const embed = new MessageEmbed()
-				.setAuthor(
-					ctx.author.username,
-					ctx.author.avatarURL
-				)
+			const embed = this.createEmbed(ctx)
 				.setTitle("Config Command Help Page")
 				.setDescription(
 					`**__IMPORTANT: If the setting is disabled in ${ctx.prefix}gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties.`
 				)
-				.setColor("BLUE");
 
 			for (const [category, parameters] of Object.entries(list)) {
 				let entries = "";
@@ -85,10 +82,12 @@ export default class UconfigCommand extends Command {
 			for (const [key, value] of Object.entries(ctx.author.settings)) {
 				list += `**${key}** - \`${value}\`\n`;
 			}
-			const embed = new MessageEmbed()
-				.setAuthor("User Settings  |  Overview", ctx.client.user.avatarURL()!)
+			const embed = this.createEmbed(ctx)
+				.setAuthor({
+					name: "User Settings  |  Overview",
+					iconURL: ctx.client.user.avatarURL()!
+				})
 				.setDescription(list === "" ? "None" : list)
-				.setColor("BLUE");
 			ctx.reply(embed);
 		} else if (Object.keys(parametersAvailable).includes(args.setting) && args.value) {
 			const setting = args.setting.toLowerCase() as UserSetting;
@@ -104,8 +103,7 @@ export default class UconfigCommand extends Command {
 						parametersAvailable[setting]!
 							.postUpdate!(args.value!, ctx.author.user);
 					}
-					const embed = new MessageEmbed()
-						.setAuthor(ctx.author.username, ctx.author.avatarURL)
+					const embed = this.createEmbed(ctx)
 						.setTitle("Settings successfully changed")
 						.setDescription(
 							`The property **\`${
@@ -117,8 +115,7 @@ export default class UconfigCommand extends Command {
 						.setColor("GREEN");
 					ctx.reply(embed);
 				}).catch(err => {
-					const embed = new MessageEmbed()
-						.setAuthor(ctx.author.username, ctx.author.avatarURL)
+					const embed = this.createEmbed(ctx)
 						.setTitle("An Error Occured")
 						.setDescription(
 							"An error occured and we could not change your settings. Please retry later."

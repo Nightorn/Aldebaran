@@ -1,5 +1,4 @@
-import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
@@ -21,8 +20,8 @@ export default class AvatarCommand extends Command {
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string };
 		ctx.client.users.fetch(args.user || ctx.author.id).then(user => {
-			const embed = new MessageEmbed()
-				.setAuthor(user.username, user.displayAvatarURL())
+			const embed = this.createEmbed(ctx)
+				.setAuthor({ name: user.username, iconURL: user.displayAvatarURL() })
 				.setTitle(`${user.username}'s Avatar`)
 				.setImage(user.displayAvatarURL({ size: 2048 }));
 			ctx.reply(embed);

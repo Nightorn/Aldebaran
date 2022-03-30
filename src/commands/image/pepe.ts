@@ -1,8 +1,9 @@
 // @ts-ignore
 import tenor from "tenorjs";
-import { Command, Embed } from "../../groups/ImageCommand.js";
+import Command from "../../groups/ImageCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import { MessageEmbed } from "discord.js";
 
 type Post = {
 	media: {
@@ -29,9 +30,10 @@ export default class PepeCommand extends Command {
 		});
 		Client.Search.Random("frog pepe", "1").then((results: Post[]) => {
 			results.forEach(post => {
-				const embed = new Embed(this)
+				const embed = new MessageEmbed()
+					.setColor(this.color)
 					.setImage(post.media[0].gif.url)
-					.setFooter(post.url);
+					.setFooter({ text: post.url });
 				ctx.reply(embed);
 			});
 		}).catch(console.error);

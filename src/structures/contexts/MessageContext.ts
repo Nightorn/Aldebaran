@@ -1,7 +1,7 @@
 import { GuildMember, Message, MessageEmbed, MessageOptions, TextBasedChannel } from "discord.js";
 import { ErrorString, Errors, CommandMode } from "../../utils/Constants.js";
 import Client from "../djs/Client.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import User from "../djs/User.js";
 import Guild from "../djs/Guild.js";
 

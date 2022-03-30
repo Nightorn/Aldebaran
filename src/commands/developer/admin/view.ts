@@ -1,6 +1,6 @@
 import util from "util";
 import { MessageEmbed } from "discord.js";
-import { Command } from "../../../groups/DeveloperCommand.js";
+import Command from "../../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../../structures/djs/Client.js";
 import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
 
@@ -21,7 +21,10 @@ export default class ViewSubcommand extends Command {
 		ctx.client.customUsers.fetch(id).then(async user => {
 			const guilds = [];
 			const embed = new MessageEmbed()
-				.setAuthor(`${user.user.tag} | ${user.id}`, user.user.displayAvatarURL());
+				.setAuthor({
+					name: `${user.user.tag} | ${user.id}`,
+					iconURL: user.user.displayAvatarURL()
+				});
 			if (Object.entries(user.settings).length !== 0) {
 				embed.addField("Settings", `\`\`\`js\n${util.inspect(user.settings, false, null)}\`\`\``);
 			}
@@ -45,19 +48,20 @@ export default class ViewSubcommand extends Command {
 			if (ctx.guild) {
 				const owner = await ctx.guild.guild.fetchOwner();
 				const embed = new MessageEmbed()
-					.setAuthor(`${ctx.guild.guild.name} | ${ctx.guild.id}`, ctx.guild.guild.iconURL()!)
+					.setAuthor({
+						name: `${ctx.guild.guild.name} | ${ctx.guild.id}`,
+						iconURL: ctx.guild.guild.iconURL()!
+					})
 					.setDescription(`**Owner** : <@${ctx.guild.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${guild.guild.memberCount} Members`);
 				if (Object.entries(settings).length !== 0) {
 					embed.addField("Settings", `\`\`\`js\n${util.inspect(settings, false, null)}\`\`\``);
 				}
 				ctx.reply(embed);
 			} else {
-				const embed = new MessageEmbed()
-					.setAuthor(ctx.author.username, ctx.author.avatarURL)
-					.setTitle("Warning")
-					.setDescription(`The ID specified does not correspond to a valid user or a guild where ${ctx.client.name} is.`)
-					.setColor("ORANGE");
-				ctx.reply(embed);
+				ctx.error(
+					"NOT_FOUND",
+					`The ID specified does not correspond to a valid user or a guild where ${ctx.client.name} is.`
+				);
 			}
 		});
 	}

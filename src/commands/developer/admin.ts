@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { Command } from "../../groups/DeveloperCommand.js";
+import Command from "../../groups/DeveloperCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
 import mod from "./admin/mod.js";
@@ -29,8 +29,7 @@ export default class AdminCommand extends Command {
 
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
-		const embed = new MessageEmbed()
-			.setAuthor(ctx.author.username, ctx.author.avatarURL)
+		const embed = this.createEmbed(ctx)
 			.setTitle("Warning")
 			.setDescription("The admin action specified is invalid.")
 			.setColor("ORANGE");

@@ -1,5 +1,5 @@
 import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message } from "discord.js";
-import { Command } from "../../groups/Command";
+import Command from "../../groups/Command.js";
 import { CommandMode } from "../../utils/Constants";
 import Client from "../djs/Client";
 import Guild from "../djs/Guild";

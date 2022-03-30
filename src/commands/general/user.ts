@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { getDateWithTimezone } from "../../utils/Methods.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
@@ -71,15 +71,18 @@ export default class UserCommand extends Command {
 					);
 				};
 
+				const guild = ctx.guild
+					? `${ctx.guild.guild.name}  |  Member Details`
+					: "User Details";
 				const embed = new MessageEmbed()
-					.setAuthor(
-						`${user.user.tag}  |  ${ctx.guild ? `${ctx.guild.guild.name}  |  Member Details` : "User Details"}`,
-						user.user.displayAvatarURL()
-					)
+					.setAuthor({
+						name: `${user.user.tag}  |  ${guild}`,
+						iconURL: user.user.displayAvatarURL()
+					})
 					.setDescription(`**User ID** ${user.id}\n${memberNick !== null ? `**Nickname** ${memberNick}\n` : ""}`)
 					.setThumbnail(user.user.displayAvatarURL())
 					.setColor(ctx.member ? ctx.member.displayColor : this.color)
-					.setFooter("User account created on")
+					.setFooter({ text: "User account created on" })
 					.setTimestamp(new Date(user.user.createdTimestamp));
 				if (mjd !== null)
 					embed.addField(
