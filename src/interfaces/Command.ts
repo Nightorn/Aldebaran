@@ -26,7 +26,7 @@ export interface CommandMetadata {
 	},
 	platforms?: Platform[],
 	requiresGuild?: boolean
-};
+}
 
 export interface ICommand {
 	aliases: string[];
@@ -50,8 +50,8 @@ export interface ICommand {
 		platform: Platform
 	): void;
 	toHelpEmbed(command: string, prefix: string): MessageEmbed;
-};
+}
 
 export interface IImageCommand extends ICommand {
 	image(ctx: MessageContext): void;
-};
+}

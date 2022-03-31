@@ -18,4 +18,4 @@ export default class XKittyCommand extends C {
 			ctx.client.nekoslife.nsfw.pussy
 		));
 	}
-};
+}

@@ -103,4 +103,4 @@ export default class OsurecentCommand extends Command {
 			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
-};
+}

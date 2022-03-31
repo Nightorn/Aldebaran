@@ -27,4 +27,4 @@ export default class CreditsCommand extends Command {
 			.setColor("PURPLE");
 		ctx.reply(embed);
 	}
-};
+}

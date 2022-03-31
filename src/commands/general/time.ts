@@ -80,4 +80,4 @@ export default class TimeCommand extends Command {
 			ctx.reply("it seems that the specified user has not configured his timezone yet.");
 		}
 	}
-};
+}

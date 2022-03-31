@@ -16,7 +16,9 @@ export default abstract class MessageContext {
 		this.client = client;
 	}
 
-	abstract get args(): string[] | { [key: string]: string | number | boolean | undefined; };
+	abstract get args(): string[] | {
+		[key: string]: string | number | boolean | undefined;
+	};
 	abstract get channel(): TextBasedChannel;
 	abstract get createdTimestamp(): number;
 	abstract get member(): GuildMember | null;
@@ -29,7 +31,8 @@ export default abstract class MessageContext {
 		if (this.command && this.command.metadata.args) {
 			const mandatory = Object.keys(this.command.metadata.args)
 				.filter(k => !this.command!.metadata.args![k].optional);
-			const mandatoryFound = Object.keys(this.args).filter(k => mandatory.includes(k));
+			const mandatoryFound = Object.keys(this.args)
+				.filter(k => mandatory.includes(k));
 			return mandatory.length === mandatoryFound.length;
 		}
 		return true;
@@ -51,4 +54,4 @@ export default abstract class MessageContext {
 	}
 
 	abstract reply(content: string | MessageOptions | MessageEmbed): any;
-};
+}

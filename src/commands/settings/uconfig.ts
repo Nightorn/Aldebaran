@@ -58,7 +58,7 @@ export default class UconfigCommand extends Command {
 				.setTitle("Config Command Help Page")
 				.setDescription(
 					`**__IMPORTANT: If the setting is disabled in ${ctx.prefix}gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties.`
-				)
+				);
 
 			for (const [category, parameters] of Object.entries(list)) {
 				let entries = "";
@@ -87,9 +87,10 @@ export default class UconfigCommand extends Command {
 					name: "User Settings  |  Overview",
 					iconURL: ctx.client.user.avatarURL()!
 				})
-				.setDescription(list === "" ? "None" : list)
+				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
-		} else if (Object.keys(parametersAvailable).includes(args.setting) && args.value) {
+		} else if (Object.keys(parametersAvailable).includes(args.setting)
+				&& args.value) {
 			const setting = args.setting.toLowerCase() as UserSetting;
 			if (parametersAvailable[setting]!.support(args.value)) {
 				ctx.author.changeSetting(setting, args.value).then(() => {
@@ -139,4 +140,4 @@ export default class UconfigCommand extends Command {
 			ctx.reply(embed);
 		}
 	}
-};
+}

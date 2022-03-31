@@ -1,4 +1,4 @@
-import { ColorResolvable, Message, MessageEmbed } from "discord.js";
+import { ColorResolvable, MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -73,4 +73,4 @@ export default class PingCommand extends Command {
 			.setColor(color);
 		msg!.edit({ content: desc, embeds: [embedResult] });
 	}
-};
+}

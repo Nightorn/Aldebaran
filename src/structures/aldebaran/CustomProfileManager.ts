@@ -39,4 +39,4 @@ export default class CustomProfileManager extends CM<Snow, Profile, UserR> {
 		}
 		return fetchedProfile;
 	}
-};
+}

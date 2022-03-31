@@ -34,4 +34,4 @@ export default class SuggestCommand extends Command {
 		});
 		return true;
 	}
-};
+}

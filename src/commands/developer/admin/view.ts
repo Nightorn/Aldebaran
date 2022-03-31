@@ -65,4 +65,4 @@ export default class ViewSubcommand extends Command {
 			}
 		});
 	}
-};
+}

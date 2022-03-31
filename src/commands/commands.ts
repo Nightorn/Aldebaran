@@ -1,7 +1,6 @@
 import CommandHandler from "../handlers/CommandHandler.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import AldebaranClient from "../structures/djs/Client.js";
-import { Platform } from "../utils/Constants.js";
 import executeSocial from "../utils/executeSocial.js";
 
 // Developer

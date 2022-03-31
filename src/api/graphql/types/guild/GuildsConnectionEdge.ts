@@ -26,4 +26,4 @@ export default class GuildsConnectionEdge {
 	node() {
 		return this.guild;
 	}
-};
+}

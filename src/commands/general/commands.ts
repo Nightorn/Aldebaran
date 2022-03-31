@@ -2,7 +2,6 @@ import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { Platform } from "../../utils/Constants.js";
-import { MessageEmbed } from "discord.js";
 
 export default class CommandsCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -62,4 +61,4 @@ export default class CommandsCommand extends Command {
 		}
 		ctx.reply(embed);
 	}
-};
+}

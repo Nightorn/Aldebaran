@@ -18,4 +18,4 @@ export default class XNekoCommand extends C {
 			ctx.client.nekoslife.nsfw.nekoGif
 		));
 	}
-};
+}

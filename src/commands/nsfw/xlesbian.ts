@@ -18,4 +18,4 @@ export default class XLesbianCommand extends C {
 			ctx.client.nekoslife.nsfw.lesbian
 		));
 	}
-};
+}

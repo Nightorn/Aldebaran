@@ -100,4 +100,4 @@ export default class UserCommand extends Command {
 				ctx.reply(embed);
 			}).catch(() => ctx.error("INVALID_USER"));
 	}
-};
+}

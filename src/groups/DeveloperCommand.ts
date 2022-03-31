@@ -13,4 +13,4 @@ export default abstract class Command extends C {
 		this.category = "Developer";
 		this.color = "#e74c3c";
 	}
-};
+}

@@ -53,6 +53,7 @@ export default class GconfigCommand extends Command {
 					list[data.category][key] = data;
 				}
 			}
+
 			const embed = this.createEmbed(ctx)
 				.setTitle("Config Command Help Page");
 			for (const [category, parameters] of Object.entries(list)) {
@@ -77,7 +78,8 @@ export default class GconfigCommand extends Command {
 				})
 				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
-		} else if (Object.keys(parametersAvailable).includes(args.setting) && args.value) {
+		} else if (Object.keys(parametersAvailable).includes(args.setting)
+				&& args.value) {
 			const setting = args.setting.toLowerCase() as GuildSetting;
 			if (parametersAvailable[setting]!.support(args.value)) {
 				if (parametersAvailable[setting]!.postUpdate) {
@@ -126,4 +128,4 @@ export default class GconfigCommand extends Command {
 		}
 		return true;
 	}
-};
+}

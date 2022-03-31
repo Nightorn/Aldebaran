@@ -54,9 +54,9 @@ export default class InfoCommand extends Command {
 			.addField("Privacy Policy", "As of now, if Aldebaran has read permissions in a channel, it can read all messages inside it. Because Discord now requires Discord bot developers to be transparent about how they use messages' content, you should know about [Aldebaran's Privacy Policy](https://aldebaran.ciborn.dev/privacy-policy).")
 			.setThumbnail(ctx.client.user.avatarURL()!)
 			.setColor(ctx.guild ? ctx.guild.guild.me!.displayColor : "BLUE");
-			if (ctx.guild) {
-				embed.setFooter({ text: `The prefix in this guild is "${ctx.prefix}".` });
-			}
+		if (ctx.guild) {
+			embed.setFooter({ text: `The prefix in this guild is "${ctx.prefix}".` });
+		}
 		ctx.reply(embed);
 	}
-};
+}

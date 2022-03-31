@@ -124,4 +124,4 @@ export default class CurConvCommand extends Command implements ICommand {
 			ctx.reply(embed);
 		}
 	}
-};
+}

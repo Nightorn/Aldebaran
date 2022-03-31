@@ -93,7 +93,9 @@ async function percentageCheck(
 	const user = await checkPlayer(ctx, name);
 	if (user) {
 		const { healthmonitor, individualhealthmonitor } = user.settings;
-		const percentage = !isNaN(Number(healthmonitor)) ? Number(healthmonitor) : 100;
+		const percentage = !isNaN(Number(healthmonitor))
+			? Number(healthmonitor)
+			: 100;
 		if (healthmonitor === undefined || healthmonitor === "off") return false;
 		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
 			if (individualhealthmonitor === "character") {
@@ -112,7 +114,7 @@ async function percentageCheck(
 		}
 	}
 	return false;
-};
+}
 
 export default async (ctx: DiscordMessageContext) => {
 	if (!ctx.guild) return false;

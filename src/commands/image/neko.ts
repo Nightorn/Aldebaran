@@ -18,4 +18,4 @@ export default class NekoCommand extends C {
 			ctx.client.nekoslife.sfw.neko
 		));
 	}
-};
+}

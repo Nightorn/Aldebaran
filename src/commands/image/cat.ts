@@ -35,4 +35,4 @@ export default class CatCommand extends Command {
 			return true;
 		});
 	}
-};
+}

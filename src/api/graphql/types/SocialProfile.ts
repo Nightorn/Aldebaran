@@ -167,4 +167,4 @@ export default class SocialProfile {
 	async zodiacSign(_: object, request: Request) {
 		return fetchProfile(request.app.db, this.ID, "zodiacName");
 	}
-};
+}

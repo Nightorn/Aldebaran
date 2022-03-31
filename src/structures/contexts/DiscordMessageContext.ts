@@ -1,5 +1,5 @@
 import { Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
-import MessageContext from "./MessageContext.js"
+import MessageContext from "./MessageContext.js";
 import Guild from "../djs/Guild.js";
 import User from "../djs/User.js";
 import { parseArgs, parseInput } from "../../utils/Args.js";

@@ -18,4 +18,4 @@ export default class LizardCommand extends C {
 			ctx.client.nekoslife.sfw.lizard
 		));
 	}
-};
+}

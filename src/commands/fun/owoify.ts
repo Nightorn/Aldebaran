@@ -19,4 +19,4 @@ export default class OwoifyCommand extends Command {
 			.setDescription(text.replace(/r|l/g, "w"));
 		ctx.reply(embed);
 	}
-};
+}

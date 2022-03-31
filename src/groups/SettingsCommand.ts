@@ -7,4 +7,4 @@ export default abstract class Command extends C {
 		super(client, metadata);
 		this.category = "Settings";
 	}
-};
+}

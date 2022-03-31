@@ -1,4 +1,4 @@
-import { Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
 import moment from "moment-timezone";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";

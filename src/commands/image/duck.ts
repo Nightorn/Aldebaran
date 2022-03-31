@@ -29,4 +29,4 @@ export default class DuckCommand extends Command {
 			return ctx.reply(embed);
 		});
 	}
-};
+}

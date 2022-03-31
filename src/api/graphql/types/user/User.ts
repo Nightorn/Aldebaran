@@ -65,4 +65,4 @@ export default class User extends DiscordStructWithSettings {
 		const results = await db.query(`SELECT settings FROM users WHERE userId="${this.ID}"`);
 		return results.length > 0 ? JSON.parse(results[0].settings) : null;
 	}
-};
+}

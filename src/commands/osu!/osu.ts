@@ -59,7 +59,7 @@ export default class OsuCommand extends Command {
 
 				const rank = user.pp !== 0
 					? `#${f(user.rank)} (${f(user.pp.toFixed(2))}pp)`
-					: "Unranked"
+					: "Unranked";
 				const embed = new MessageEmbed()
 					.setColor(this.color)
 					.setAuthor({
@@ -106,4 +106,4 @@ export default class OsuCommand extends Command {
 			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
-};
+}

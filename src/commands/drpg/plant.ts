@@ -116,4 +116,4 @@ export default class PlantCommand extends Command {
 			return ctx.reply("the DiscordRPG API seems down, please retry later.");
 		});
 	}
-};
+}

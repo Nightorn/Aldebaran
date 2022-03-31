@@ -22,4 +22,4 @@ export default class BirbCommand extends Command {
 			return ctx.reply(embed);
 		});
 	}
-};
+}

@@ -31,4 +31,4 @@ export default class RandimalCommand extends Command {
 			return ctx.reply(embed);
 		});
 	}
-};
+}

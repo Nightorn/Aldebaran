@@ -25,4 +25,4 @@ export default class PandaCommand extends Command {
 			}
 		);
 	}
-};
+}

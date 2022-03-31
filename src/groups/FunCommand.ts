@@ -8,4 +8,4 @@ export default abstract class Command extends C {
 		this.category = "Fun";
 		this.color = "PURPLE";
 	}
-};
+}

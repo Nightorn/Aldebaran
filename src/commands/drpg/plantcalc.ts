@@ -45,4 +45,4 @@ export default class PlantcalcCommand extends Command {
 			ctx.error("WRONG_USAGE", "You need to provide the name of a valid sapling.");
 		}
 	}
-};
+}

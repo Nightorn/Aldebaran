@@ -40,4 +40,4 @@ export default class CustomGuildManager extends CM<Snowflake, Guild, GuildR> {
 		}
 		return fetchedGuild;
 	}
-};
+}

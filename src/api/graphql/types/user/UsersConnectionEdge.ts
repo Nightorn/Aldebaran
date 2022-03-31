@@ -24,4 +24,4 @@ export default class UsersConnectionEdge {
 	node() {
 		return this.user;
 	}
-};
+}

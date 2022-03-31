@@ -242,4 +242,4 @@ export default class GleadCommand extends Command {
 		}
 		return true;
 	}
-};
+}

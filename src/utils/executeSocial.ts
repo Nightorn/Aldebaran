@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
-import { actionText, imageUrls, Platform } from "./Constants.js";
+import { actionText, imageUrls } from "./Constants.js";
 
 export default async (ctx: DiscordMessageContext) => {
 	const args = ctx.args as { user: string };

@@ -3,7 +3,7 @@ import AldebaranClient from "../../structures/djs/Client.js";
 import { categories, Platform } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const emoji = `:small_blue_diamond:`;
+const emoji = ":small_blue_diamond:";
 
 export default class HelpCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -64,4 +64,4 @@ export default class HelpCommand extends Command {
 			ctx.reply(embed);
 		}
 	}
-};
+}

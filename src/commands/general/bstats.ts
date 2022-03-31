@@ -32,4 +32,4 @@ export default class BStatsCommand extends Command {
 			.addField("Shard ID", ctx.client.shardId.toString(), true);
 		ctx.reply(embed);
 	}
-};
+}

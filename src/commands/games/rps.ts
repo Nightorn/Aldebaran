@@ -41,7 +41,7 @@ export default class RpsCommand extends Command {
 				name: "Rock. Paper. Scissors.",
 				iconURL: ctx.author.avatarURL
 			})
-			.setDescription(`The person you want to play with has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.`);
+			.setDescription("The person you want to play with has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.");
 		
 		const acceptButton = new MessageButton()
 			.setStyle("SUCCESS")
@@ -72,10 +72,10 @@ export default class RpsCommand extends Command {
 			const actionRow = new MessageActionRow()
 				.setComponents([rock, paper, scissors]);
 			
-			const opt = { embeds: [startEmbed], components: [actionRow] };
+			const startOpt = { embeds: [startEmbed], components: [actionRow] };
 			const game = ctx instanceof DiscordSlashMessageContext
-				? await ctx.followUp(opt, false, true)
-				: await ctx.reply(opt);
+				? await ctx.followUp(startOpt, false, true)
+				: await ctx.reply(startOpt);
 
 			const [authorPlay, targetPlay] = await Promise.all([
 				game.awaitMessageComponent({ filter: i => i.user.id === ctx.author.id }),
@@ -114,4 +114,4 @@ export default class RpsCommand extends Command {
 			throw error;
 		});
 	}
-};
+}

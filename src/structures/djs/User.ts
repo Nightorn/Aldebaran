@@ -94,4 +94,4 @@ export default class User {
 			}
 		}, { context: { shardId: this.client.shardId, id: this.id } });
 	}
-};
+}

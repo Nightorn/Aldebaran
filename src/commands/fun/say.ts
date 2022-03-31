@@ -18,4 +18,4 @@ export default class SayCommand extends Command {
 			.setDescription(text);
 		ctx.reply(embed);
 	}
-};
+}

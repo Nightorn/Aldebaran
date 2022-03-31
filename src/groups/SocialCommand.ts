@@ -14,4 +14,4 @@ export default abstract class Command extends C {
 		this.category = "Action";
 		this.color = "AQUA";
 	}
-};
+}

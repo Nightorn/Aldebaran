@@ -22,4 +22,4 @@ export default class RestartSubcommand extends Command {
 			ctx.client = new AldebaranClient();
 		});
 	}
-};
+}

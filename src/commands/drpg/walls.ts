@@ -142,4 +142,4 @@ export default class WallsCommand extends Command {
 			ctx.reply(embed);
 		});
 	}
-};
+}

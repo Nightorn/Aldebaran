@@ -18,4 +18,4 @@ export default class XRandomCommand extends C {
 			ctx.client.nekoslife.nsfw.randomHentaiGif
 		));
 	}
-};
+}

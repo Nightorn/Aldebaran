@@ -27,4 +27,4 @@ export default class LewdCommand extends Command {
 			ctx.reply("Please mention someone :thinking:");
 		});
 	}
-};
+}

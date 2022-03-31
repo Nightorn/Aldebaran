@@ -18,4 +18,4 @@ export default class XBoobsCommand extends C {
 			ctx.client.nekoslife.nsfw.boobs
 		));
 	}
-};
+}

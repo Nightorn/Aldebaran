@@ -38,4 +38,4 @@ export default class PepeCommand extends Command {
 			});
 		}).catch(console.error);
 	}
-};
+}

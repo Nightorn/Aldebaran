@@ -43,4 +43,4 @@ export default class TimecompletionCommand extends Command {
 			.setDescription(`We are **${weekCompletion}%** through the week.\nWe are **${monthCompletion}%** through the month.\nWe are **${yearCompletion}%** through the year.\nWe are **${decadeCompletion}%** through the decade.`);
 		ctx.reply(embed);
 	}
-};
+}

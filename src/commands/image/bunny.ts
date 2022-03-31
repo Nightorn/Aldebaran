@@ -29,4 +29,4 @@ export default class BunnyCommand extends Command {
 			return ctx.reply(embed);
 		});
 	}
-};
+}

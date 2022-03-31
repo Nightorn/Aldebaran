@@ -20,4 +20,4 @@ export default class DogCommand extends Command {
 			return ctx.reply(embed);
 		});
 	}
-};
+}

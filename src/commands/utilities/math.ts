@@ -1,4 +1,3 @@
-import { MessageEmbed } from "discord.js";
 import { evaluate } from "mathjs";
 import Command from "../../groups/UtilitiesCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
@@ -32,4 +31,4 @@ export default class MathCommand extends Command {
 			.addField("Result", `\`\`\`${formatNumber(result)}\`\`\``);
 		ctx.reply(embed);
 	}
-};
+}

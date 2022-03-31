@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 import Command from "../Command.js";
 
 export default (cmd: typeof Command) => {
-	abstract class Command extends cmd {
+	abstract class C extends cmd {
 		async createNekosEmbed(description: string, endpoint: Function) {
 			return new MessageEmbed()
 				.setDescription(description)
@@ -14,5 +14,5 @@ export default (cmd: typeof Command) => {
 		}
 	}
 
-	return Command;
+	return C;
 };

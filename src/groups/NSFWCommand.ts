@@ -21,4 +21,4 @@ export default abstract class Command extends C {
 		}
 		super.execute(ctx, platform);
 	}
-};
+}

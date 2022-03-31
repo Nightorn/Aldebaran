@@ -68,4 +68,4 @@ export default class UpgradecalcCommand extends Command {
 			.setFooter({ text: "Credits to Kalle#5105 for the upgradecalc blargbot tag!" });
 		ctx.reply(embed);
 	}
-};
+}

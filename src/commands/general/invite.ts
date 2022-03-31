@@ -34,4 +34,4 @@ export default class InviteCommand extends Command {
 			.setComponents([botButton, serverButton]);
 		ctx.reply({ embeds: [embed], components: [actionRow] });
 	}
-};
+}

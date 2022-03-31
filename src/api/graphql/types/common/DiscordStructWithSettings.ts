@@ -37,4 +37,4 @@ export default abstract class DiscordStructWithSettings {
 	abstract querySettings(
 		db: GenericDatabaseProvider
 	): Promise<{ [key: string]: string }>;
-};
+}

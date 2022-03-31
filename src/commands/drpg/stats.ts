@@ -240,4 +240,4 @@ export default class StatsCommand extends Command {
 			throw err;
 		});
 	}
-};
+}

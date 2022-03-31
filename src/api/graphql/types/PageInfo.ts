@@ -39,4 +39,4 @@ export default class PageInfo {
 	startCursor() {
 		return this._startCursor;
 	}
-};
+}

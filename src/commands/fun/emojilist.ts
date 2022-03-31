@@ -18,4 +18,4 @@ export default class EmojilistCommand extends Command {
 			ctx.reply(emojilist);
 		else ctx.error("IMPOSSIBLE", "There are too many emojis on this server to show in a single message.");
 	}
-};
+}

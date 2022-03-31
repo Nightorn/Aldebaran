@@ -4,7 +4,7 @@ import { CommandMode, Platform } from "./Constants";
 type DefaultArg = {
 	desc: string,
 	optional?: boolean
-}
+};
 
 type Flag = {
 	long: string,
@@ -14,47 +14,37 @@ type Flag = {
 export type BooleanArg = DefaultArg & {
 	as: "boolean",
 	flag: Flag
-}
+};
 
 export type ExpressionArg = DefaultArg & {
 	as: "expression",
 	regex: RegExp
-}
+};
 
 export type ModeArg = DefaultArg & {
 	as: "mode",
 	choices: [string, string][],
 	flag?: Flag
-}
+};
 
 export type NumberArg = DefaultArg & { as: "number" };
 export type StringArg = DefaultArg & { as: "string" };
 export type UserArg = DefaultArg & { as: "user" };
 
-export type Arg = BooleanArg | ExpressionArg | ModeArg | NumberArg | StringArg | UserArg;
-export type Args = { [key: string]: Arg }
+export type Arg = BooleanArg
+	| ExpressionArg
+	| ModeArg
+	| NumberArg
+	| StringArg
+	| UserArg;
+
+export type Args = { [key: string]: Arg };
 
 export function checkArgType(element: string) {
 	if (element.match(/\d{17,19}/g)) return "user";
 	if (element.match(/([-]{1,2}[\w]+)/g)) return "flag";
 	if (!Number.isNaN(Number(element))) return "number";
 	return "string";
-};
-
-/**
- * Parses the message content to filter the args from the command/subcommand name.
- * @param input The message content
- * @param prefix The prefix used in the input
- * @param command The name of the requsted command
- * @param level 1 when a subcommand is used, 2 when a subsubcommand is used (which is sadly not supported), etc.
- * @returns The args, in an array
- */
-export function getSplitArgs(input: string, prefix: string, command: string, level: number) {
-	const split = input.slice(prefix.length + command.length).split(" ");
-	for (let i = 0; i < level + 1; i++) {
-		split.shift();
-	}
-	return split;
 }
 
 export function parseArgs(split: string[], argsMetadata: Args) {

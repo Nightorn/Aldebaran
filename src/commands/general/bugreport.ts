@@ -34,4 +34,4 @@ export default class BugreportCommand extends Command {
 		});
 		return true;
 	}
-};
+}

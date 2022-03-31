@@ -29,4 +29,4 @@ export default class HedgehogCommand extends Command {
 			return ctx.reply(embed);
 		});
 	}
-};
+}

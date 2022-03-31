@@ -18,7 +18,7 @@ export default class EightballCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const { question } = ctx.args as { question: string };
-		const data = await ctx.client.nekoslife.sfw["eightBall"]({ text: question });
+		const data = await ctx.client.nekoslife.sfw.eightBall({ text: question });
 		const embed = this.createEmbed(ctx)
 			.setDescription(`**${data.response}**`)
 			.setImage(data.url!)
@@ -28,4 +28,4 @@ export default class EightballCommand extends Command {
 			});
 		ctx.reply(embed);
 	}
-};
+}

@@ -66,4 +66,4 @@ export default class ModSubcommand extends Command {
 			ctx.reply(embed);
 		}
 	}
-};
+}

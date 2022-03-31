@@ -11,4 +11,4 @@ export default class KaomojiCommand extends Command {
 	async run(ctx: MessageContext) {
 		ctx.reply((await ctx.client.nekoslife.sfw.catText()).cat);
 	}
-};
+}

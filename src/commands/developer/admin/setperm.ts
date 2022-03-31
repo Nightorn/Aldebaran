@@ -89,4 +89,4 @@ export default class SetpermSubcommand extends Command {
 			ctx.reply(embed);
 		});
 	}
-};
+}

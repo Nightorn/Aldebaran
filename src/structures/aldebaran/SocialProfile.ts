@@ -32,4 +32,4 @@ export default class SocialProfile {
 			(c as AldebaranClient).customProfiles.delete(id);
 		}, { context: { id: this.id } });
 	}
-};
+}

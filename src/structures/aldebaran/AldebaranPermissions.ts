@@ -3,4 +3,4 @@ import { PermissionString, Permissions } from "../../utils/Constants.js";
 
 export default class AldebaranPermissions extends BitField<PermissionString> {
 	static FLAGS = Permissions;
-};
+}

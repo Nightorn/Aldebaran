@@ -60,4 +60,4 @@ export default class ProfileCommand extends Command {
 				ctx.reply("the specified user does not exist.");
 			});
 	}
-};
+}

@@ -109,4 +109,4 @@ export default class TrapCommand extends Command {
 			}
 		});
 	}
-};
+}

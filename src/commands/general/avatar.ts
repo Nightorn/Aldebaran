@@ -29,4 +29,4 @@ export default class AvatarCommand extends Command {
 			ctx.reply("The ID of the user you specified is invalid. Please retry by mentionning him or by getting their right ID.");
 		});
 	}
-};
+}

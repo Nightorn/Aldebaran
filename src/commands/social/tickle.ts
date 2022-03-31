@@ -23,4 +23,4 @@ export default class TickleCommand extends C {
 			));
 		}).catch(() => { ctx.reply("Please mention someone :thinking:"); });
 	}
-};
+}

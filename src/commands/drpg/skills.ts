@@ -83,4 +83,4 @@ export default class SkillsCommand extends Command {
 			});
 		}).catch(() => { ctx.error("INVALID_USER"); });
 	}
-};
+}

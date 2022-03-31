@@ -20,4 +20,4 @@ export default class FactCommand extends Command {
 			});
 		ctx.reply(embed);
 	}
-};
+}

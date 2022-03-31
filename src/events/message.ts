@@ -84,7 +84,7 @@ export default async (client: AldebaranClient, message: Message) => {
 					.setColor("RED");
 				ctx.reply(embed);
 			} else if (err.message === "INVALID_ARGS") {
-				ctx.error("INVALID_ARGS", `Please check \`${prefix}?${ctx.command!.name}\` for more information on how to use this command.`)
+				ctx.error("INVALID_ARGS", `Please check \`${prefix}?${ctx.command!.name}\` for more information on how to use this command.`);
 			} else if (err.message !== "INVALID_COMMAND") {
 				console.error(err);
 			}

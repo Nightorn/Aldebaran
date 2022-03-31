@@ -13,14 +13,14 @@ export default class RCGPCommand extends Command {
 
 	run(ctx: MessageContext) {
 		request({ uri: "https://rcgp.anjara.eu/api/image" }, (err, response, body) => {
-		if (err) return;
+			if (err) return;
 			const { src, path } = JSON.parse(body);
 			const embed = new MessageEmbed()
 				.setColor(this.color)
 				.setTitle(src)
 				.setImage(`https://rcgp.anjara.eu/storage/${path}`)
-				.setFooter({ text: `Powered by https://rcgp.anjara.eu` });
+				.setFooter({ text: "Powered by https://rcgp.anjara.eu" });
 			ctx.reply(embed);
 		});
 	}
-};
+}

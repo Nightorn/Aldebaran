@@ -22,6 +22,6 @@ export default class PokeCommand extends C {
 				ctx.client.nekoslife.sfw.poke
 			));
 		}).catch(() => { ctx.reply("Please mention someone :thinking:"); });
-		return 
+		return; 
 	}
-};
+}

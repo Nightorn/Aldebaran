@@ -1,8 +1,8 @@
-import { Message, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
+import { MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { GuildSetting, Platform, UserSetting } from "../../utils/Constants.js";
+import { GuildSetting, UserSetting } from "../../utils/Constants.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 
@@ -54,7 +54,7 @@ export default class EnableDRPGCommand extends Command {
 
 	setSettings(
 		ctx: DiscordMessageContext | DiscordSlashMessageContext,
-		type: "user" | "guild",
+		type: "user" | "guild"
 	) {
 		return new Promise(async resolve => {
 			const embed = this.configuringEmbed(ctx, type);
@@ -146,4 +146,4 @@ export default class EnableDRPGCommand extends Command {
 			this.done(ctx);
 		}
 	}
-};
+}

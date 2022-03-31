@@ -68,4 +68,4 @@ export default class Guild extends DiscordStructWithSettings {
 		const results = await db.query(`SELECT settings FROM guilds WHERE guildid="${this.ID}"`);
 		return results.length > 0 ? JSON.parse(results[0].settings) : null;
 	}
-};
+}

@@ -38,7 +38,7 @@ export default class XpCommand extends Command {
 		const getXP = (ring = 1) => {
 			const xp = baseXP * (1 + (Math.floor(attrib / 10) + enchant) / 100) + level;
 			return Math.round(xp * ring);
-		}
+		};
 
 		const embed = this.createEmbed(ctx)
 			.setTitle(`Average Xp Kill At Lvl. ${level}`)
@@ -71,4 +71,4 @@ export default class XpCommand extends Command {
 			);
 		ctx.reply(embed);
 	}
-};
+}

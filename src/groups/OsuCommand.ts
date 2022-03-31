@@ -15,4 +15,4 @@ export default abstract class Command extends C {
 		this.category = "osu!";
 		this.color = "#ff66aa";
 	}
-};
+}

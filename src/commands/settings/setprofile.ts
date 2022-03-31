@@ -50,4 +50,4 @@ export default class SetprofileCommand extends Command {
 		});
 		return true;
 	}
-};
+}

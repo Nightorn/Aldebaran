@@ -154,4 +154,4 @@ export default abstract class Command implements ICommand {
 			return `${this.metadata.description.substr(0, 60)}...`;
 		return desc;
 	}
-};
+}

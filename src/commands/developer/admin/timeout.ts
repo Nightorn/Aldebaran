@@ -56,4 +56,4 @@ export default class TimeoutSubcommand extends Command {
 			);
 		}
 	}
-};
+}

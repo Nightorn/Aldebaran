@@ -67,7 +67,7 @@ export default class AldebaranClient extends Client<true> {
 		this.on("ready", () => ready(this));
 
 		if (process.env.DEPLOY_SLASH) {
-			const rest = new REST({ version: '9' }).setToken(process.env.TOKEN!);
+			const rest = new REST({ version: "9" }).setToken(process.env.TOKEN!);
 			const body = this.commands.slashCommands.map(c => c.toJSON()); 
 			rest.put(Routes.applicationCommands(this.id), { body })
 				.then(() => console.log("Slash commands registered"))
@@ -82,4 +82,4 @@ export default class AldebaranClient extends Client<true> {
 	get shardId() {
 		return this.guilds.cache.first()!.shardId;
 	}
-};
+}

@@ -42,4 +42,4 @@ export default class Guild {
 			new Map([["settings", JSON.stringify(toSave)]])
 		);
 	}
-};
+}
