@@ -1,22 +1,25 @@
 import { ColorResolvable, MessageEmbed } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class ProfileCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Shows your social profile",
-			usage: "UserMention|UserID",
+			description: "Shows your Aldebaran social profile",
 			example: "320933389513523220",
-			args: { user: { as: "user", optional: true } }
+			args: { user: {
+				as: "user",
+				desc: "The user whose social profile you want to see",
+				optional: true
+			} }
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.customUsers.fetch(args.user || ctx.message.author.id)
+		ctx.client.customUsers.fetch(args.user || ctx.author.id)
 			.then(async user => {
 				const profile = (await user.profile()).profile;
 				if (profile.name) {
@@ -29,9 +32,14 @@ export default class ProfileCommand extends Command {
 					if (profile.age) userDetails += `**Age**: ${profile.age}\n`;
 					if (profile.gender) userDetails += `**Gender**: ${profile.gender}\n`;
 					const embed = new MessageEmbed()
-						.setAuthor(`${user.username}'s Profile`, user.user.displayAvatarURL())
+						.setAuthor({
+							name: `${user.username}'s Profile`,
+							iconURL: user.user.displayAvatarURL()
+						})
 						.setColor(profile.profileColor as ColorResolvable);
-					if (profile.dmFriendly) embed.setFooter(`${/yes/i.test(profile.dmFriendly) ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`);
+					if (profile.dmFriendly) embed.setFooter({
+						text: `${/yes/i.test(profile.dmFriendly) ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`
+					});
 					if (profile.profilePictureLink) embed.setImage(`${profile.profilePictureLink}`);
 					if (profile.flavorText)
 						embed.setDescription(profile.flavorText);
@@ -42,11 +50,7 @@ export default class ProfileCommand extends Command {
 					if (profile.socialLinks) embed.addField("__**Social Network(s) Link**__", profile.socialLinks);
 					ctx.reply(embed);
 				} else {
-					const embed = new MessageEmbed()
-						.setAuthor(
-							ctx.message.author.username,
-							ctx.message.author.displayAvatarURL()
-						)
+					const embed = this.createEmbed(ctx)
 						.setTitle("No Profile Found")
 						.setDescription(`Please use \`${ctx.prefix}setprofile name <yournamehere>\` to create your profile`)
 						.setColor("RED");
@@ -56,4 +60,4 @@ export default class ProfileCommand extends Command {
 				ctx.reply("the specified user does not exist.");
 			});
 	}
-};
+}

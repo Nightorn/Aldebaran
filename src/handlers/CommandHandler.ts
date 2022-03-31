@@ -1,13 +1,14 @@
-import { Message } from "discord.js";
 import AldebaranClient from "../structures/djs/Client.js";
-import { Command } from "../groups/Command.js";
-import MessageContext from "../structures/aldebaran/MessageContext.js";
-import { ICommand } from "../interfaces/Command.js";
+import Command from "../groups/Command.js";
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { Arg } from "../utils/Args.js";
+import { Platform, SlashCommandOption as Option } from "../utils/Constants.js";
 
 export default class CommandHandler {
 	private static instance: CommandHandler;
 	client: AldebaranClient;
-	commands: Map<string, ICommand> = new Map();
+	commands: Command[] = [];
+	slashCommands: SlashCommandBuilder[] = [];
 
 	private constructor(client: AldebaranClient) {
 		this.client = client;
@@ -22,70 +23,22 @@ export default class CommandHandler {
 		return CommandHandler.instance;
 	}
 
-	async execute(name: string, message: Message, prefix: string) {
-		if (message.guild) {
-			const guild = await this.client.customGuilds.fetch(message.guild.id);
+	get(command: string, platform: Platform) {
+		return this.commands.find(c => c.matches(command) && c.supports(platform));
+	}
+
+	exists(command: string, platform: Platform) {
+		return !!this.get(command, platform);
+	}
+
+	static patchOption<T extends Option>(option: T, name: string, metadata: Arg) {
+		try {
+			return option.setName(name.toLowerCase())
+				.setDescription(metadata.desc)
+				.setRequired(!metadata.optional || false) as T;
+		} catch (err) {
+			throw new TypeError(`There is an issue with the '${name}' command.\n${err}`);
 		}
-		if (!this.exists(name)) throw new TypeError("INVALID_COMMAND");
-		const command = this.get(name)!;
-		const cArgs = command.metadata.args;
-		const ctx = new MessageContext(this.client, message, prefix, cArgs);
-		const args = ctx.getSplitArgs();
-		if (args.length === 0) {
-			if (command.subcommands.size > 0) {
-				if (command.metadata.allowIndexCommand) {
-					return command.execute(ctx);
-				} else {
-					throw new TypeError("INVALID_COMMAND");
-				}
-			} else {
-				return command.execute(ctx);
-			}
-		} else if (command.subcommands.size > 0) {
-			const subcommand = args.shift()!;
-			if (command.subcommands.get(subcommand)) {
-				ctx.setLevel(2);
-				return command.subcommands.get(subcommand)!.execute(ctx);
-			} else if (command.metadata.allowUnknownSubcommands) {
-				return command.execute(ctx);
-			} else {
-				throw new TypeError("INVALID_COMMAND");
-			}
-		} else {
-			return command.execute(ctx);
-		}
-	}
-
-	get size() {
-		let size = 0;
-		for (const [name, data] of this.commands)
-			if (name === data.name) size++;
-		return size;
-	}
-
-	get(command: string) {
-		return this.commands.get(command);
-	}
-
-	async bypassRun(name: string, message: Message, prefix: string) {
-		if (!this.exists(name)) throw new TypeError("INVALID_COMMAND");
-		const command = this.commands.get(name)!;
-		const { args } = command.metadata;
-		const ctx = new MessageContext(this.client, message, prefix, args);
-		const user = await this.client.customUsers.fetch(ctx.message.author.id);
-		if (!user.hasPermission("ADMINISTRATOR")) {
-			throw new Error("UNALLOWED_ADMIN_BYPASS");
-		}
-		return command.execute(ctx);
-	}
-
-	exists(command: string) {
-		return !!this.commands.get(command);
-	}
-
-	getHelp(command: string, prefix = "&") {
-		if (!this.exists(command)) throw new TypeError("INVALID_COMMAND");
-		return this.commands.get(command)!.toHelpEmbed(command, prefix);
 	}
 
 	register(...structures: (typeof Command)[]) {
@@ -93,10 +46,41 @@ export default class CommandHandler {
 			const command: Command = new (Structure as any)(this.client);
 			command.name = command.metadata.name
 				|| command.constructor.name.slice(0, -7).toLowerCase();
-			this.commands.set(command.name, command);
-			command.aliases.forEach(alias => {
-				this.commands.set(alias, command);
-			});
+			this.commands.push(command);
+
+			if (process.env.DEPLOY_SLASH && command.supports("DISCORD_SLASH")) {
+				const slash = new SlashCommandBuilder()
+					.setName(command.name)
+					.setDescription(command.metadata.description);
+
+				if (command.metadata.args) {
+					for (const [name, meta] of Object.entries(command.metadata.args)) {
+						if (meta.as === "boolean") {
+							slash.addBooleanOption(o => CommandHandler.patchOption(o, name, meta));
+						} else if (meta.as === "user") {
+							slash.addUserOption(o => CommandHandler.patchOption(o, name, meta));
+						} else if (meta.as === "mode") {
+							slash.addStringOption(o => CommandHandler.patchOption(o, name, meta)
+								.setChoices(meta.choices));
+						} else if (meta.as === "string" || meta.as === "expression") {
+							slash.addStringOption(o => CommandHandler.patchOption(o, name, meta));
+						} else if (meta.as === "number") {
+							slash.addIntegerOption(o => CommandHandler.patchOption(o, name, meta));
+						}
+					}
+				}
+
+				for (const [name, subcommand] of command.subcommands) {
+					if (subcommand.supports("DISCORD_SLASH")) {
+						slash.addSubcommand(sub => sub
+							.setName(name)
+							.setDescription(subcommand.metadata.description)
+						);
+					}
+				}
+				
+				this.slashCommands.push(slash);
+			}
 		}, this);
 	}
-};
+}

@@ -113,4 +113,4 @@ export default class UsersConnection {
 	pageInfo() {
 		return new PageInfo(this.endCursor, this.startCursor, this.totalCount);
 	}
-};
+}

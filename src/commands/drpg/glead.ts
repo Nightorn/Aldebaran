@@ -2,12 +2,14 @@
 /* eslint-disable no-await-in-loop */
 import fs from "fs";
 import request from "request";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
-import { Command, Embed } from "../../groups/DRPGCommand.js";
+import Command from "../../groups/DRPGCommand.js";
 import { DRPGAttribute, DRPGGuild, DRPGItem, DRPGSkill, DRPGUser } from "../../interfaces/DiscordRPG.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { paginate, timeSince } from "../../utils/Methods.js";
+import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
+import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
+import { MessageEmbed } from "discord.js";
 
 export type Guild = DRPGGuild & { users: User[], lastUpdate: number };
 export type User = DRPGUser & { lastUpdate: number };
@@ -82,19 +84,37 @@ export default class GleadCommand extends Command {
 		super(client, {
 			description: "Displays a DiscordRPG user's guild leaderboard",
 			help: "These are the attributes you can use as the \"attribute\" argument: `level`, `item name`, `gold`, `xp`, `lux`, `deaths`, `kills`, `points`, `questPoints`, `mine`, `chop`, `fish`, `forage`, `crits`, `defense`, `goldBoost`, `lumberBoost`, `mineBoost`, `reaping`, `salvaging`, `scavenge`, `strength`, `taming`, `xpBoost`, `lastseen` and `location`.",
-			usage: "[user] [--showid] [--desc] [attribute]",
 			example: "141610251299454976 showid --desc lastseen",
 			args: {
-				user: { as: "user", optional: true },
-				showid: { as: "boolean", flag: { short: "s", long: "showid" }, optional: true },
-				desc: { as: "boolean", flag: { short: "s", long: "desc" }, optional: true },
-				attribute: { as: "word", optional: true }
-			}
+				user: {
+					as: "user",
+					desc: "The user whose guild you want to target",
+					optional: true
+				},
+				showid: {
+					as: "boolean",
+					desc: "Whether user IDs should be displayed",
+					flag: { short: "s", long: "showid" },
+					optional: true
+				},
+				desc: {
+					as: "boolean",
+					desc: "Whether the list should be displayed in the reverse order",
+					flag: { short: "s", long: "desc" },
+					optional: true
+				},
+				attribute: {
+					as: "string",
+					desc: "The attribute whose leaderboard you want to see",
+					optional: true
+				}
+			},
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(ctx: MessageContext) {
+	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
 		const args = ctx.args as {
 			user?: string,
 			showid?: boolean,
@@ -104,10 +124,10 @@ export default class GleadCommand extends Command {
 
 		// Get guild data, either from the cache or from the API
 		const userData = await getUserData(
-			args.user || ctx.message.author.id, ctx.client
+			args.user || ctx.author.id, ctx.client
 		);
 		if (!userData || !userData.guild) {
-			return ctx.reply(`That user isn't in a guild, ${ctx.message.author.username}.`);
+			return ctx.reply(`That user isn't in a guild, ${ctx.author.username}.`);
 		}
 
 		const guildData = await getGuild(userData, ctx.client) as Guild;
@@ -207,6 +227,7 @@ export default class GleadCommand extends Command {
 				break;
 		}
 
+		const text = `${index === "lastseen" ? "Average" : "Sum"}: ${sum.toLocaleString()}`;
 		if (list && list.length > 0) {
 			paginate(
 				args.desc ? list.reverse() : list,
@@ -214,11 +235,11 @@ export default class GleadCommand extends Command {
 				`${guildData.name} Lead ${index}`,
 				ctx,
 				"md",
-				new Embed(this).setFooter(`${index === "lastseen" ? "Average" : "Sum"}: ${sum.toLocaleString()}`)
+				new MessageEmbed().setColor(this.color).setFooter({ text })
 			);
 		} else {
 			ctx.reply("Unknown leaderboard index.");
 		}
 		return true;
 	}
-};
+}

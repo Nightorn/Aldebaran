@@ -6,4 +6,4 @@ export default interface OAuth2Client {
 	name: string;
 	redirectUris?: string[];
 	refreshTokenLifetime?: number;
-};
+}

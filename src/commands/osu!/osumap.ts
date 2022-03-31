@@ -2,9 +2,9 @@ import { ApprovalStatus, Beatmap, Converts, Mode } from "nodesu";
 import ojsama from "ojsama";
 import retrieveBeatmapFile from "../../utils/osu!/retrieveBeatmapFile.js";
 import ppv2Results from "../../utils/osu!/ppv2Results.js";
-import { Command, Embed } from "../../groups/OsuCommand.js";
+import Command from "../../groups/OsuCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const supportedMods = ["NF", "EZ", "HT", "SO", "HR", "DT", "NC", "HD", "FL"];
 const d = (x: number | string) => (x.toString().length === 1 ? `0${x}` : x);
@@ -27,6 +27,7 @@ export default class OsumapCommand extends Command {
 				map: { as: "expression", regex: /\d+$/, desc: "Beatmap URL / ID" },
 				mode: {
 					as: "mode",
+					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
 					desc: "Game Mode (--osu, --mania, --ctb, --taiko)",
 					optional: true
 				},
@@ -119,12 +120,12 @@ export default class OsumapCommand extends Command {
 						);
 					}
 
-					const embed = new Embed(this)
-						.setAuthor(
-							beatmap.creator,
-							`https://a.ppy.sh/${beatmap.mapperId}`,
-							`https://osu.ppy.sh/users/${beatmap.mapperId}`
-						)
+					const embed = this.createEmbed(ctx)
+						.setAuthor({
+							name: beatmap.creator,
+							iconURL: `https://a.ppy.sh/${beatmap.mapperId}`,
+							url: `https://osu.ppy.sh/users/${beatmap.mapperId}`
+						})
 						.setTitle(
 							`__${beatmap.artist} - **${beatmap.title}**__ [${beatmap.version}] (**\`${r(beatmap.difficultyRating)}\`★${mods.length === 0 ? "" : ` +${mods.join("")}`}**)`
 						)
@@ -199,7 +200,9 @@ export default class OsumapCommand extends Command {
 							r(results === null ? beatmap.diffDrain : results.hp)
 						} | **${mode === "osu" ? "OD" : "AC"}** ${r(results === null ? beatmap.diffOverall : results.od)}`
 					);
-					if (beatmap.source !== null) { embed.setFooter(`Source: ${beatmap.source}`); }
+					if (beatmap.source) {
+						embed.setFooter({ text: `Source: ${beatmap.source}` });
+					}
 					ctx.reply(embed);
 				});
 			} else {
@@ -210,4 +213,4 @@ export default class OsumapCommand extends Command {
 		}
 		return true;
 	}
-};
+}

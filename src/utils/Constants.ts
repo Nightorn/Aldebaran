@@ -2,6 +2,7 @@ import { Guild, Snowflake, User } from "discord.js";
 import { importAssets, timezoneSupport } from "./Methods.js";
 import { DRPGXPBases, DRPGItemList, DRPGLocationDB } from "../interfaces/DiscordRPG.js";
 import { Mode } from "nodesu";
+import { SlashCommandBooleanOption, SlashCommandIntegerOption, SlashCommandStringOption, SlashCommandUserOption } from "@discordjs/builders";
 
 type AldebaranTeam = { [key: string]: {
 	titles: string[],
@@ -186,7 +187,7 @@ export const Errors = {
 	CUSTOM: (res: string) => res,
 	IMPOSSIBLE: () => "You are asking the impossible",
 	INCORRECT_CMD_USAGE: () => "This command has been used incorrectly.",
-	INVALID_ARGS: () => `You are not supplying the arguments this command needs.`,
+	INVALID_ARGS: () => "You are not supplying the arguments this command needs.",
 	INVALID_USER: () => "The user specified does not exist.",
 	MISSING_ARGS: () => "Some arguments are missing.",
 	NOT_FOUND: (res: string) => `The requested ${res || "resource"} has not been found.`,
@@ -210,6 +211,12 @@ export const Permissions = {
 	DEVELOPER: 2048
 };
 
+export type CommandMode = "ADMIN" | "HELP" | "IMAGE" | "NORMAL";
+export type Platform = "DISCORD" | "DISCORD_SLASH";
+export type SlashCommandOption = SlashCommandBooleanOption
+	| SlashCommandIntegerOption
+	| SlashCommandStringOption
+	| SlashCommandUserOption;
 export type SocialProfileProperty = "aboutMe" | "dmFriendly" | "age" | "gender" | "name" | "country" | "timezone" | "birthday" | "profilePictureLink" | "favoriteGames" | "profileColor" | "favoriteMusic" | "socialLinks" | "zodiacName" | "flavorText";
 
 export type DBUser = {

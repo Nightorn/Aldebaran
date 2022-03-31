@@ -1,4 +1,5 @@
 import CommandHandler from "../handlers/CommandHandler.js";
+import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import AldebaranClient from "../structures/djs/Client.js";
 import executeSocial from "../utils/executeSocial.js";
 
@@ -49,7 +50,6 @@ import UserCommand from "./general/user.js";
 import BirbCommand from "./image/birb.js";
 import BunnyCommand from "./image/bunny.js";
 import CatCommand from "./image/cat.js";
-import CuteagCommand from "./image/cuteag.js";
 import DogCommand from "./image/dog.js";
 import DuckCommand from "./image/duck.js";
 import HedgehogCommand from "./image/hedgehog.js";
@@ -58,6 +58,7 @@ import NekoCommand from "./image/neko.js";
 import PandaCommand from "./image/panda.js";
 import PepeCommand from "./image/pepe.js";
 import RandimalCommand from "./image/randimal.js";
+import RCGPCommand from "./image/rcgp.js";
 
 // NSFW
 import LewdCommand from "./nsfw/lewd.js";
@@ -80,15 +81,13 @@ import SetprofileCommand from "./settings/setprofile.js";
 import UconfigCommand from "./settings/uconfig.js";
 
 // Social
-import { Command as SocialCommand } from "../groups/SocialCommand.js";
+import SocialCommand from "../groups/SocialCommand.js";
 import PokeCommand from "./social/poke.js";
 import TickleCommand from "./social/tickle.js";
 
 // Utilities
 import CurconvCommand from "./utilities/curconv.js";
 import MathCommand from "./utilities/math.js";
-import TranslateCommand from "./utilities/translate.js";
-import MessageContext from "../structures/aldebaran/MessageContext.js";
 
 export default () => {
 	const commandHandler = CommandHandler.getInstance();
@@ -116,12 +115,17 @@ export default () => {
 				super(client, {
 					name,
 					description,
-					args: { user: { as: "user" } }
+					args: { user: {
+						as: "user",
+						desc: "The user you want to socialize with",
+						optional: true
+					} },
+					platforms: ["DISCORD"]
 				});
 			}
 
 			// eslint-disable-next-line class-methods-use-this
-			run(ctx: MessageContext) {
+			run(ctx: DiscordMessageContext) {
 				executeSocial(ctx);
 			}
 		});
@@ -149,11 +153,11 @@ export default () => {
 		TimeCommand,
 		UserCommand,
 		BirbCommand,
-		CuteagCommand,
 		DogCommand,
 		LizardCommand,
 		NekoCommand,
 		PandaCommand,
+		RCGPCommand,
 		LewdCommand,
 		XboobsCommand,
 		XkittyCommand,
@@ -223,9 +227,5 @@ export default () => {
 
 	if (process.env.API_FIXER) {
 		commandHandler.register(CurconvCommand);
-	}
-
-	if (process.env.API_YANDEX) {
-		commandHandler.register(TranslateCommand);
 	}
 };

@@ -1,10 +1,11 @@
 import { Beatmap, Mode, User, UserScore } from "nodesu";
 import ojsama from "ojsama";
 import ppv2Results, { Result } from "../../utils/osu!/ppv2Results.js";
-import { Command, Embed } from "../../groups/OsuCommand.js";
+import Command from "../../groups/OsuCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode } from "../../utils/Constants.js";
+import { MessageEmbed } from "discord.js";
 
 type Score = {
 	id: number,
@@ -44,8 +45,13 @@ export default class OsubestCommand extends Command {
 			example: "Ciborn",
 			aliases: ["osutop"],
 			args: {
-				user: { as: "word", desc: "Username/ID", optional: true },
-				mode: { as: "mode", optional: true }
+				user: { as: "string", desc: "Username/UserID", optional: true },
+				mode: {
+					as: "mode",
+					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
+					desc: "osu! Mode",
+					optional: true
+				}
 			}
 		});
 	}
@@ -53,13 +59,12 @@ export default class OsubestCommand extends Command {
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
 		const client = ctx.client.nodesu!;
-		const author = await ctx.author();
-		const mode = (args.mode || author.settings.osumode || "osu") as OsuMode;
+		const mode = (args.mode || ctx.author.settings.osumode || "osu") as OsuMode;
 		if (Mode[mode] !== undefined) {
 			client.user.getBest(
 				args.user
-				|| author.settings.osuusername
-				|| author.username,
+				|| ctx.author.settings.osuusername
+				|| ctx.author.username,
 				Mode[mode], 5
 			).then(async (data: any) => {
 				const best = data.reduce(
@@ -122,12 +127,17 @@ export default class OsubestCommand extends Command {
 						for (const s of scores) {
 							description += `[__${s.artist} - **${s.title}**__ [${s.diff}]](${s.link}) (${s.mapper}) [**${s.sr}★${s.mods !== "" ? ` +${s.mods}` : ""}**]\n**\`[${s.rank}]\`** (${mode === "osu" ? `**${s.acc}%**, ` : ""}**x${s.combo}**${["osu", "ctb"].includes(mode) ? `/${s.maxcombo}` : ""}) - **${f(s.pp)}pp** - \`${s.n300}\` 300, \`${s.n100}\` 100, \`${s.n50}\` 50, \`${s.nmiss}\` miss\n\n`;
 						}
-						const embed = new Embed(this)
-							.setAuthor(`${user.username}  |  Top 5 Best Plays  |  osu!${mode === "osu" ? "" : mode}`,
-								`https://a.ppy.sh/${user.userId}`,
-								`https://osu.ppy.sh/users/${user.userId}`)
+						const embed = new MessageEmbed()
+							.setColor(this.color)
+							.setAuthor({
+								name: `${user.username}  |  Top 5 Best Plays  |  osu!${mode === "osu" ? "" : mode}`,
+								iconURL: `https://a.ppy.sh/${user.userId}`,
+								url: `https://osu.ppy.sh/users/${user.userId}`
+							})
 							.setDescription(description);
-						if (mode !== "osu") embed.setFooter("Because this is not an osu!standard map, some information about the scores are unavailable.");
+						if (mode !== "osu") embed.setFooter({
+							text: "Because this is not an osu!standard map, some information about the scores are unavailable."
+						});
 						ctx.reply(embed);
 					});
 				});
@@ -139,4 +149,4 @@ export default class OsubestCommand extends Command {
 			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
-};
+}

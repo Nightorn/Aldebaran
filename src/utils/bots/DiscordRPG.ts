@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import { imageUrls } from "../../utils/Constants.js";
 import User from "../../structures/djs/User.js";
 
@@ -20,21 +20,27 @@ const emojiColor = (percentage: number) => {
 	return "🟢";
 };
 
-const checkPlayer = (ctx: MessageContext, username: string) => {
-	const match = ctx.message.channel.messages.cache
+const checkPlayer = (ctx: DiscordMessageContext, username: string) => {
+	const match = ctx.channel.messages.cache
 		.filter(m => m.author.username === username).first();
 	if (match) return ctx.client.customUsers.fetch(match.author.id);
 	return null;
 };
 
 const general = (
-	user: User, playerHP: number, petHP: string | number, ctx: MessageContext
+	user: User,
+	playerHP: number,
+	petHP: string | number,
+	ctx: DiscordMessageContext
 ) => {
 	const { healthmonitor, individualhealthmonitor } = user.settings;
 	if (user === null) return;
 	if (healthmonitor && healthmonitor !== "off") {
 		const embed = new MessageEmbed()
-			.setAuthor(user.username, user.user.displayAvatarURL())
+			.setAuthor({
+				name: user.username,
+				iconURL: user.user.displayAvatarURL()
+			})
 			.setColor(embedColor(playerHP as number));
 		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
 			if (individualhealthmonitor === "character") {
@@ -54,17 +60,17 @@ const general = (
 	}
 };
 
-const playerWarning = (user: User, hp: number, ctx: MessageContext) => {
+const playerWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 	const embed = new MessageEmbed()
 		.setTitle(`__${user.username} Health Warning!!! - ${hp}%__`)
 		.setColor(0xff0000)
 		.setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
 		.setImage(senddeath)
-		.setFooter("Pay attention to your health or you are going to die!");
+		.setFooter({ text: "Pay attention to your health or you are going to die!" });
 	ctx.reply(embed).then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
-const petWarning = (user: User, hp: number, ctx: MessageContext) => {
+const petWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 	const embed = new MessageEmbed()
 		.setTitle(`${user.username} PET Health Warning!!! - ${hp}%__`)
 		.setColor(0xff0000)
@@ -72,20 +78,24 @@ const petWarning = (user: User, hp: number, ctx: MessageContext) => {
 			`**${user.username}** your pet is at __**${hp}%**__ health!!!\n`
 		)
 		.setImage(senddeath)
-		.setFooter("Your pet is getting very weak, take care of it quickly!");
+		.setFooter({
+			text: "Your pet is getting very weak, take care of it quickly!"
+		});
 	ctx.reply(embed).then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
 async function percentageCheck(
 	name: string,
-	ctx: MessageContext,
+	ctx: DiscordMessageContext,
 	player: number,
 	pet: number
 ) {
 	const user = await checkPlayer(ctx, name);
 	if (user) {
 		const { healthmonitor, individualhealthmonitor } = user.settings;
-		const percentage = !isNaN(Number(healthmonitor)) ? Number(healthmonitor) : 100;
+		const percentage = !isNaN(Number(healthmonitor))
+			? Number(healthmonitor)
+			: 100;
 		if (healthmonitor === undefined || healthmonitor === "off") return false;
 		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
 			if (individualhealthmonitor === "character") {
@@ -104,11 +114,11 @@ async function percentageCheck(
 		}
 	}
 	return false;
-};
+}
 
-export default async (ctx: MessageContext) => {
-	if (!ctx.message.guild) return false;
-	const guild = (await ctx.guild())!;
+export default async (ctx: DiscordMessageContext) => {
+	if (!ctx.guild) return false;
+	const guild = await ctx.guild;
 	if (guild.settings.healthmonitor === "off") return false;
 	const player = {
 		currentHP: 0,
@@ -121,18 +131,19 @@ export default async (ctx: MessageContext) => {
 		healthPercent: 0,
 		maxHP: 0
 	};
-	if (ctx.message.embeds.length === 0) {
-		if (ctx.message.content.includes("'s Adventure")
-			|| ctx.message.content.includes("Party Adventure")
+	if (ctx.embeds.length === 0) {
+		if (ctx.content.includes("'s Adventure")
+			|| ctx.content.includes("Party Adventure")
 		) {
-			if (ctx.message.content.indexOf(") | +") !== -1) {
-				const match = ctx.message.content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
+			let content = ctx.content;
+			if (ctx.content.indexOf(") | +") !== -1) {
+				const match = content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
 				if (match) player.name = match[1];
 				// eslint-disable-next-line no-useless-escape
-				const hpMatches = ctx.message.content.match(/(Dead|[\d\.]+% HP)/g)!;
+				const hpMatches = content.match(/(Dead|[\d\.]+% HP)/g)!;
 				const deadPet = hpMatches[1] === "Dead";
 				// eslint-disable-next-line no-param-reassign
-				ctx.message.content = ctx.message.content.replace(/%/g, "");
+				content = content.replace(/%/g, "");
 				return percentageCheck(
 					player.name,
 					ctx,
@@ -142,14 +153,14 @@ export default async (ctx: MessageContext) => {
 			}
 			const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
 			const namePattern = /\+ (.*) has [\d,]+\/[\d,]+ HP left\./;
-			const healthMessage = ctx.message.content.match(healthMessagePattern);
-			if (healthMessage && ctx.message.content.match(namePattern)) {
+			const healthMessage = content.match(healthMessagePattern);
+			if (healthMessage && content.match(namePattern)) {
 				const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/)!;
 				player.currentHP = Number(nums[1].replace(/,/g, ""));
 				player.maxHP = Number(nums[2].replace(/,/g, ""));
-				player.name = ctx.message.content.match(namePattern)![1];
+				player.name = content.match(namePattern)![1];
 			}
-			const messageArray = ctx.message.content.split("\n");
+			const messageArray = content.split("\n");
 			let dealtLine = null;
 			let tookLine = null;
 			for (const i in messageArray) {
@@ -177,11 +188,11 @@ export default async (ctx: MessageContext) => {
 			}
 		}
 	} else if (
-		ctx.message.embeds[0].author !== undefined
-		&& ctx.message.embeds[0].author !== null
+		ctx.embeds[0].author !== undefined
+		&& ctx.embeds[0].author !== null
 	) {
-		const adventureEmbed = ctx.message.embeds[0];
-		if (ctx.message.embeds[0].author.name!.includes("Adventure")) {
+		const adventureEmbed = ctx.embeds[0];
+		if (ctx.embeds[0].author.name!.includes("Adventure")) {
 			const petData = adventureEmbed.fields[
 				adventureEmbed.fields[1].name === "Critical Hit!" ? 2 : 1
 			].value.split("\n")[2];

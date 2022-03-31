@@ -1,48 +1,53 @@
-import { MessageEmbed } from "discord.js";
-import { Command } from "../../groups/Command.js";
+import Command from "../../groups/Command.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import { categories } from "../../utils/Constants.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import { categories, Platform } from "../../utils/Constants.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
+
+const emoji = ":small_blue_diamond:";
 
 export default class HelpCommand extends Command {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays detailled help about the bot's commands"
+			description: "Displays detailled help about the bot's commands",
+			args: { query: {
+				as: "string",
+				desc: "The command or command category whose details you want to see",
+				optional: true
+			} }
 		});
 	}
 
-	async run(ctx: MessageContext) {
-		const args = ctx.args as string[];
-		if (args[0] !== undefined) {
-			const match = categories[args[0].toLowerCase()];
+	async run(ctx: MessageContext, platform: Platform) {
+		const { query } = ctx.args as { query?: string };
+		if (query) {
+			const command = query.toLowerCase();
+			const match = categories[command];
 			const category = typeof match === "string" ? categories[match] : match;
 			if (category !== undefined) {
-				let list = "";
-				const categoryCommands = new Map();
-				for (const cmd of ctx.client.commands.commands) {
-					categoryCommands.set(...cmd);
-				}
-				for (const [cmd, data] of categoryCommands) {
-					if (data.category === category.name && !data.aliases.includes(cmd)) {
-						list += `:small_blue_diamond: **${cmd}** : ${data.shortDesc}\n`;
-					}
-				}
-				const categoryEmbed = new MessageEmbed()
-					.setAuthor("Category Help", ctx.client.user.avatarURL()!)
+				const list = ctx.client.commands.commands
+					.filter(c => (c.category === category.name || c.matches(command))
+						&& c.supports(platform))
+					.reduce((acc, c) => `${acc}${emoji} **${c.name}** : ${c.shortDesc}\n`, "");
+				const categoryEmbed = this.createEmbed(ctx)
+					.setAuthor({
+						name: "Category Help",
+						iconURL: ctx.client.user.avatarURL()!
+					})
 					.setTitle(`${category.title} - ${category.description}`)
 					.setDescription(list)
 					.setColor(this.color);
 				ctx.reply({ embeds: [categoryEmbed] });
-			} else if (ctx.client.commands.exists(args[0].toLowerCase())) {
-				ctx.reply(
-					ctx.client.commands.getHelp(args[0].toLowerCase(), ctx.prefix)
-				);
+			} else if (ctx.client.commands.exists(command, platform)) {
+				ctx.reply(ctx.client.commands.get(command, platform)!.toHelpEmbed());
 			} else {
 				ctx.error("NOT_FOUND", "You are trying to find help for a command or a category that does not exist. Make sure you did not make a typo in your request.");
 			}
 		} else {
-			const embed = new MessageEmbed()
-				.setAuthor(`${ctx.client.name}'s Help Pages`, ctx.client.user.avatarURL()!);
+			const embed = this.createEmbed(ctx)
+				.setAuthor({
+					name: `${ctx.client.name}'s Help Pages`,
+					iconURL: ctx.client.user.avatarURL()!
+				});
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {
 				if (data.name !== "Developer"  && typeof data !== "string")
@@ -59,4 +64,4 @@ export default class HelpCommand extends Command {
 			ctx.reply(embed);
 		}
 	}
-};
+}

@@ -1,26 +1,26 @@
-import { Command as C, Embed as E } from "../../groups/SocialCommand.js";
-import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
+import Command from "../../groups/SocialCommand.js";
+import nekoslife from "../../groups/sub/NekoslifeCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const { Command, Embed } = subCategory(C, E);
+const C = nekoslife(Command);
 
-export default class TickleCommand extends Command {
+export default class TickleCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Tickle someone!",
-			example: "<@437802197539880970>"
+			example: "<@437802197539880970>",
+			args: { target: { as: "user", desc: "The person to tickle" } }
 		});
 	}
 
 	async run(ctx: MessageContext) {
-		if (ctx.message.mentions.users.first()) {
-			const target = ctx.message.mentions.users.first();
-			const embed = new Embed(this,
-				`${ctx.message.author} won't stop tickling ${target}!`);
-			embed.send(ctx, ctx.client.nekoslife.sfw.tickle);
-		} else {
-			ctx.reply("Please mention someone :thinking:");
-		}
+		const args = ctx.args as { target: string };
+		ctx.client.users.fetch(args.target).then(async target => {
+			ctx.reply(await this.createNekosEmbed(
+				`<@${ctx.author.id}> won't stop tickling ${target}!`,
+				ctx.client.nekoslife.sfw.tickle
+			));
+		}).catch(() => { ctx.reply("Please mention someone :thinking:"); });
 	}
-};
+}

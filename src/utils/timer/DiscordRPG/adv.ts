@@ -1,46 +1,44 @@
-import MessageContext from "../../../structures/aldebaran/MessageContext.js";
+import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
 
-export default async (ctx: MessageContext) => {
-	if (!ctx.message.guild) return;
-	const guild = (await ctx.guild())!;
-	const user = await ctx.author();
+export default async (ctx: DiscordMessageContext) => {
+	if (!ctx.guild) return;
 	if (
-		user.timers.adventure !== null
-		|| guild.settings.adventuretimer === "off"
-		|| guild.settings.adventuretimer === undefined
-		|| user.settings.adventuretimer === "off"
-		|| user.settings.adventuretimer === undefined
+		ctx.author.timers.adventure !== null
+		|| ctx.guild!.settings.adventuretimer === "off"
+		|| ctx.guild!.settings.adventuretimer === undefined
+		|| ctx.author.settings.adventuretimer === "off"
+		|| ctx.author.settings.adventuretimer === undefined
 	) return;
-	const content = ctx.message.content.toLowerCase();
+	const content = ctx.content.toLowerCase();
 	let prefix = null;
 	for (const element of [
 		"discordrpg ",
 		"#!",
 		"<@170915625722576896> ",
-		guild.settings.discordrpgprefix
+		ctx.guild!.settings.discordrpgprefix
 	]) {
 		if (element && content.indexOf(`${element}adv`) === 0) {
 			prefix = element;
 		}
 	}
 	if (prefix) {
-		if (guild.settings.autodelete === "on") {
-			setTimeout(() => ctx.message.delete().catch(() => {}), 1000);
+		if (ctx.guild!.settings.autodelete === "on") {
+			ctx.delete(1000).catch(() => {});
 		}
-		const delay = user.settings.adventuretimer === "random"
+		const delay = ctx.author.settings.adventuretimer === "random"
 			? Math.random() * 3000
 			: 0;
-		user.timers.adventure = setTimeout(() => {
-			const ping = user.settings.timerping === "adventure"
-				|| user.settings.timerping === "on"
-				? `<@${ctx.message.author.id}>`
-				: `${ctx.message.author.username},`;
+		ctx.author.timers.adventure = setTimeout(() => {
+			const ping = ctx.author.settings.timerping === "adventure"
+				|| ctx.author.settings.timerping === "on"
+				? `<@${ctx.author.id}>`
+				: `${ctx.author.username},`;
 			ctx.reply(`${ping} adventure time! :crossed_swords:`).then(msg => {
-				if (guild.settings.autodelete === "on") {
+				if (ctx.guild!.settings.autodelete === "on") {
 					setTimeout(() => msg.delete(), 10000);
 				}
 			});
-			user.timers.adventure = null;
+			ctx.author.timers.adventure = null;
 		}, 13900 + delay);
 	}
 };

@@ -112,4 +112,4 @@ export default class GuildsConnection {
 	pageInfo() {
 		return new PageInfo(this.endCursor, this.startCursor, this.totalCount);
 	}
-};
+}

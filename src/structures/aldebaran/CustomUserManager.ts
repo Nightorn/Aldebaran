@@ -40,4 +40,4 @@ export default class CustomUserManager extends CM<Snowflake, User, UserR> {
 		}
 		return fetchedUser;
 	}
-};
+}

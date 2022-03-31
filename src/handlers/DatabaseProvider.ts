@@ -161,4 +161,4 @@ export default class DatabaseProvider extends GenericDatabaseProvider {
 			);
 		return updates;
 	}
-};
+}

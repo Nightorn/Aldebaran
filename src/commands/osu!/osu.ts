@@ -1,8 +1,9 @@
 import { Mode, User } from "nodesu";
-import { Command, Embed } from "../../groups/OsuCommand.js";
+import Command from "../../groups/OsuCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode } from "../../utils/Constants.js";
+import { MessageEmbed } from "discord.js";
 
 const f = (x: number | string) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const t = (x: number) => {
@@ -25,8 +26,13 @@ export default class OsuCommand extends Command {
 			example: "Ciborn --mania",
 			aliases: ["osuprofile"],
 			args: {
-				user: { as: "word", desc: "Username/UserID", optional: true },
-				mode: { as: "mode", optional: true }
+				user: { as: "string", desc: "Username/UserID", optional: true },
+				mode: {
+					as: "mode",
+					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
+					desc: "osu! Mode",
+					optional: true
+				}
 			}
 		});
 	}
@@ -34,13 +40,12 @@ export default class OsuCommand extends Command {
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
 		const client = ctx.client.nodesu!;
-		const author = await ctx.author();
-		const mode = (args.mode || author.settings.osumode || "osu") as OsuMode;
+		const mode = (args.mode || ctx.author.settings.osumode || "osu") as OsuMode;
 		if (Mode[mode] !== undefined) {
 			client.user.get(
 				args.user
-				|| author.settings.osuusername
-				|| author.username,
+				|| ctx.author.settings.osuusername
+				|| ctx.author.username,
 				Mode[mode]
 			).then(data => {
 				const user = new User(data);
@@ -52,8 +57,16 @@ export default class OsuCommand extends Command {
 					+ user.countRankA
 				);
 
-				const embed = new Embed(this)
-					.setAuthor(`${user.username}  |  ${user.pp !== 0 ? `#${f(user.rank)} (${f(user.pp.toFixed(2))}pp)` : "Unranked"}  |  osu!${mode === "osu" ? "" : mode}`, `https://a.ppy.sh/${user.id}`, `https://osu.ppy.sh/users/${user.id}`)
+				const rank = user.pp !== 0
+					? `#${f(user.rank)} (${f(user.pp.toFixed(2))}pp)`
+					: "Unranked";
+				const embed = new MessageEmbed()
+					.setColor(this.color)
+					.setAuthor({
+						name: `${user.username}  |  ${rank}  |  osu!${mode === "osu" ? "" : mode}`,
+						iconURL: `https://a.ppy.sh/${user.id}`,
+						url: `https://osu.ppy.sh/users/${user.id}`
+					})
 					.addField("Progression", `**Level ${Math.floor(user.level)}** (${((user.level % 1) * 100).toFixed(2)}%)`, true)
 					.addField("Hit Accuracy", `${user.accuracy.toFixed(2)}%`, true)
 					.addField("Country Rank", `${user.country !== "" ? `:flag_${user.country.toLowerCase()}:` : "No Country"}឵឵ ឵឵឵឵ ឵឵${user.pp !== 0 ? `#${f(user.countryRank)}` : "Unranked"}`, true)
@@ -93,4 +106,4 @@ export default class OsuCommand extends Command {
 			ctx.reply("the mode you specified does not exist. Check `&?osu` for more information.");
 		}
 	}
-};
+}

@@ -1,5 +1,6 @@
-import { Command, Embed } from "../../groups/DRPGCommand.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import { MessageEmbed } from "discord.js";
+import Command from "../../groups/DRPGCommand.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 import AldebaranClient from "../../structures/djs/Client.js";
 
 export default class UpgradecalcCommand extends Command {
@@ -8,14 +9,22 @@ export default class UpgradecalcCommand extends Command {
 			description: "Displays the number of upgrades you need for your weapon",
 			example: "400 386 7283 7408 1050 1.56 2",
 			args: {
-				charLevel: { as: "number" },
-				petLevel: { as: "number" },
-				minPetDamage: { as: "number" },
-				maxPetDamage: { as: "number" },
-				minWeaponDamage: { as: "number" },
-				maxWeaponDamage: { as: "number" },
-				strMultiplier: { as: "number", optional: true },
-				shots: { as: "number", optional: true }
+				charLevel: { as: "number", desc: "The character's level" },
+				petLevel: { as: "number", desc: "The pet's level" },
+				minPetDamage: { as: "number", desc: "The least damage the pet can deal" },
+				maxPetDamage: { as: "number", desc: "The most damage the pet can deal" },
+				minWeaponDamage: { as: "number", desc: "The least damage the weapon can deal" },
+				maxWeaponDamage: { as: "number", desc: "The most damage the weapon can deal" },
+				strMultiplier: {
+					as: "number",
+					desc: "The character's strength multiplier",
+					optional: true
+				},
+				shots: {
+					as: "number",
+					desc: "The most shots you want to give to one enemy",
+					optional: true
+				}
 			}
 		});
 	}
@@ -49,13 +58,14 @@ export default class UpgradecalcCommand extends Command {
 		const cost = Math.floor((minWeaponDMG + maxWeaponDMG)
 			/ 6.5 * 50 * upgrades * (upgrades + 1)
 			* ((2 * upgrades + 1) / 6) + 500 * upgrades);
-		const embed = new Embed(this)
+		const embed = new MessageEmbed()
 			.setTitle("Upgrade Cost")
+			.setColor(this.color)
 			.setDescription(`**Character's Weapon Stats** (Lv**${charLevel.toLocaleString()}**): Deals between **${minWeaponDMG.toLocaleString()}** and **${maxWeaponDMG.toLocaleString()}** damage\n**Pet Stats** (Lv**${petLevel.toLocaleString()}**): Deals between **${minPetDMG.toLocaleString()}** and **${maxPetDMG.toLocaleString()}** damage`)
 			.addField("Upgrades Needed", `**${upgrades}** Upgrades`, true)
 			.addField("Required Strength", `**${(upgrades * 15).toLocaleString()}** Points`, true)
 			.addField("Upgrades Cost", `**${cost.toLocaleString()}** Gold`, true)
-			.setFooter("Credits to Kalle#5105 for the upgradecalc blargbot tag!");
+			.setFooter({ text: "Credits to Kalle#5105 for the upgradecalc blargbot tag!" });
 		ctx.reply(embed);
 	}
-};
+}

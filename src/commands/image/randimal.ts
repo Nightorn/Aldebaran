@@ -1,7 +1,8 @@
 import request from "request";
-import { Command, Embed } from "../../groups/ImageCommand.js";
+import Command from "../../groups/ImageCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
+import { MessageEmbed } from "discord.js";
 
 export default class RandimalCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -20,11 +21,14 @@ export default class RandimalCommand extends Command {
 			if (err) return ctx.reply("This seems to be a problem");
 			if (parsed.error) return ctx.reply("Someone has requested too many animals recently, the only thing you can do is waiting for your turn!");
 			const { src, photographer } = parsed.photos[0];
-			const embed = new Embed(this)
+			const embed = new MessageEmbed()
+				.setColor(this.color)
 				.setTitle("**__Virtual Safari__**")
 				.setImage(src.large)
-				.setFooter(`Virtual Safari Powered By: ${photographer} on Pexels.com`);
+				.setFooter({
+					text: `Virtual Safari Powered By: ${photographer} on Pexels.com`
+				});
 			return ctx.reply(embed);
 		});
 	}
-};
+}

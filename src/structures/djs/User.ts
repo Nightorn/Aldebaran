@@ -31,6 +31,10 @@ export default class User {
 		this.username = user.username;
 	}
 
+	get avatarURL() {
+		return this.user.displayAvatarURL();
+	}
+
 	get banned() {
 		return this.timeout > Date.now();
 	}
@@ -90,4 +94,4 @@ export default class User {
 			}
 		}, { context: { shardId: this.client.shardId, id: this.id } });
 	}
-};
+}

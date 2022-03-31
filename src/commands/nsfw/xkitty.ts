@@ -1,11 +1,11 @@
-import { Command as C, Embed as E } from "../../groups/NSFWCommand.js";
-import subCategory from "../../groups/multi/NekoslifeSubcategory.js";
+import Command from "../../groups/NSFWCommand.js";
+import nekoslife from "../../groups/sub/NekoslifeCommand.js";
 import AldebaranClient from "../../structures/djs/Client.js";
-import MessageContext from "../../structures/aldebaran/MessageContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const { Command, Embed } = subCategory(C, E);
+const C = nekoslife(Command);
 
-export default class XKittyCommand extends Command {
+export default class XKittyCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
 			description: "Displays a hentai picture or a GIF with a kitty"
@@ -13,8 +13,9 @@ export default class XKittyCommand extends Command {
 	}
 
 	async run(ctx: MessageContext) {
-		const embed = new Embed(this,
-			`${ctx.message.author}, here is your kitty!`);
-		embed.send(ctx, ctx.client.nekoslife.nsfw.pussy);
+		return ctx.reply(await this.createNekosEmbed(
+			`${ctx.author}, here is your kitty!`,
+			ctx.client.nekoslife.nsfw.pussy
+		));
 	}
-};
+}
