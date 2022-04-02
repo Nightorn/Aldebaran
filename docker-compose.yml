@@ -2,14 +2,12 @@ version: '3.3'
 
 services:
   db:
-    image: mysql:5.7
+    image: mariadb:10.6
     volumes:
       - ./db:/var/lib/mysql
     restart: always
     env_file:
       - .env
-    ports:
-      - "44490:3306"
     
   aldebaran:
     depends_on:
@@ -18,12 +16,5 @@ services:
     restart: always
     env_file:
       - .env
-    command: sh -c "/wait && node app"
-    environment:
-      - WAIT_HOSTS=db:3306
-      - WAIT_SLEEP_INTERVAL=5
     ports: 
       - "44400:44400"
-
-volumes:
-  db-data:
