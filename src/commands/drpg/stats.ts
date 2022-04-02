@@ -1,7 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import request from "request";
 import fs from "fs";
-import canvasModule from "canvas";
+// import canvasModule from "canvas";
 import Command from "../../groups/DRPGCommand.js";
 import { formatNumber, getTimeString, lightOrDark } from "../../utils/Methods.js";
 import AldebaranClient from "../../structures/djs/Client.js";
@@ -9,7 +9,7 @@ import { drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const { createCanvas, Image, registerFont, loadImage } = canvasModule;
+// const { createCanvas, Image, registerFont, loadImage } = canvasModule;
 
 export default class StatsCommand extends Command {
 	constructor(client: AldebaranClient) {
@@ -116,7 +116,7 @@ export default class StatsCommand extends Command {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	image(ctx: MessageContext, args: { user: string }) {
+	/* image(ctx: MessageContext, args: { user: string }) {
 		const userId = args.user || ctx.author.id;
 		ctx.client.users.fetch(userId).then(user => {
 			request({
@@ -239,5 +239,5 @@ export default class StatsCommand extends Command {
 		}).catch(err => {
 			throw err;
 		});
-	}
+	} */
 }

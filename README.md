@@ -38,8 +38,8 @@ $ node app
 ```
 If your environment file is valid (`.env` file, take example on the `.env.example` file if needed), your instance of Aldebaran should be online!
 ### Run Aldebaran with Docker (Pt. 2.2: Docker Environment)
-**In order to run this project, you need [Docker](https://www.docker.com).**
+In order to easily run Aldebaran with Docker, you need both [Docker](https://www.docker.com) and [Docker Compose](https://docs.docker.com/compose/install/). If you use Windows, you will need to run Docker through the Windows Subsystem for Linux using [this guide](https://docs.docker.com/desktop/windows/wsl/). If you use any other platform than Linux, you won't be able to run Aldebaran with Docker unless you use a virtual machine.
 
-Download the `docker-compose.yml` file from the [Aldebaran GitHub repository](https://github.com/Nightorn/Aldebaran), fill the `.env` file by taking example on the `.env.example` file and type `docker-compose up -d` in a command-line interface; Aldebaran should be up and running!
+Download the `docker-compose.yml` file from the [Aldebaran GitHub repository](https://github.com/Nightorn/Aldebaran), fill the `.env` file by copying on the `.env.example` file and type `docker-compose up -d` in a command-line interface; wait a few seconds and Aldebaran should be up and running!
 ### Contribute as a developer (Pt. 3: Getting help)
 If you need help for working on Aldebaran, just go to the main server and go to the channels that have been created for that. You should get help easily by the Aldebaran team or by other external developers of Aldebaran. Remember that no question is stupid, as long as you are sure your problem isn't about pure JavaScript, you should not be worried as we are already very happy you want to contribute to the project!
