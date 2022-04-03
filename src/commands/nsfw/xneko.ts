@@ -8,7 +8,8 @@ const C = nekoslife(Command);
 export default class XNekoCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays a hentai neko picture or GIF"
+			description: "Displays a hentai neko picture or GIF",
+			platforms: ["DISCORD"]
 		});
 	}
 

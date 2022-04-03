@@ -8,7 +8,8 @@ const C = nekoslife(Command);
 export default class XRandomCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays a random hentai picture or GIF"
+			description: "Displays a random hentai picture or GIF",
+			platforms: ["DISCORD"]
 		});
 	}
 

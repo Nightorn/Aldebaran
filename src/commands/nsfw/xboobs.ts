@@ -8,7 +8,8 @@ const C = nekoslife(Command);
 export default class XBoobsCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays a hentai picture or GIF showing boobs"
+			description: "Displays a hentai picture or GIF showing boobs",
+			platforms: ["DISCORD"]
 		});
 	}
 

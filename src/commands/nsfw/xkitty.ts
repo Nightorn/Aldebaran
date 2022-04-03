@@ -8,7 +8,8 @@ const C = nekoslife(Command);
 export default class XKittyCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays a hentai picture or a GIF with a kitty"
+			description: "Displays a hentai picture or a GIF with a kitty",
+			platforms: ["DISCORD"]
 		});
 	}
 

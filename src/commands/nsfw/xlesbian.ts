@@ -8,7 +8,8 @@ const C = nekoslife(Command);
 export default class XLesbianCommand extends C {
 	constructor(client: AldebaranClient) {
 		super(client, {
-			description: "Displays a lesbian hentai picture or GIF"
+			description: "Displays a lesbian hentai picture or GIF",
+			platforms: ["DISCORD"]
 		});
 	}
 
