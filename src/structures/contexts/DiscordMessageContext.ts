@@ -8,16 +8,15 @@ import Command from "../../groups/Command.js";
 
 export default class DiscordMessageContext extends MessageContext {
 	private _splitArgs: string[];
-	private message: Message;
 	public command?: Command;
-	public author: User;
-	public guild?: Guild;
 
-	constructor(client: Client, message: Message, author: User, guild?: Guild) {
+	constructor(client: Client, 
+		private message: Message, 
+		public author: User, 
+		public guild?: Guild,
+		public interactionUser?: User
+	) {
 		super(client);
-		this.author = author;
-		this.guild = guild;
-		this.message = message;
 
 		const parsedInput = parseInput(
 			client,
@@ -52,6 +51,10 @@ export default class DiscordMessageContext extends MessageContext {
 
 	get embeds() {
 		return this.message.embeds;
+	}
+
+	get interaction() {
+		return this.message.interaction;
 	}
 
 	get member() {

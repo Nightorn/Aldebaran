@@ -20,44 +20,34 @@ const emojiColor = (percentage: number) => {
 	return "🟢";
 };
 
-const checkPlayer = (ctx: DiscordMessageContext, username: string) => {
-	const match = ctx.channel.messages.cache
-		.filter(m => m.author.username === username).first();
-	if (match) return ctx.client.customUsers.fetch(match.author.id);
-	return null;
-};
-
 const general = (
 	user: User,
 	playerHP: number,
 	petHP: string | number,
 	ctx: DiscordMessageContext
 ) => {
-	const { healthmonitor, individualhealthmonitor } = user.settings;
-	if (user === null) return;
-	if (healthmonitor && healthmonitor !== "off") {
-		const embed = new MessageEmbed()
-			.setAuthor({
-				name: user.username,
-				iconURL: user.user.displayAvatarURL()
-			})
-			.setColor(embedColor(playerHP as number));
-		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
-			if (individualhealthmonitor === "character") {
-				embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
-			} else {
-				embed.addField("__Pet Health__", petHP === 0 ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}**%`, true);
-			}
-		} else {
+	const { individualhealthmonitor } = user.settings;
+	const embed = new MessageEmbed()
+		.setAuthor({
+			name: user.username,
+			iconURL: user.user.displayAvatarURL()
+		})
+		.setColor(embedColor(playerHP as number));
+	if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
+		if (individualhealthmonitor === "character") {
 			embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
-			embed.addField(
-				"__Pet Health__",
-				petHP === "Dead" ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}%**`,
-				true
-			);
+		} else {
+			embed.addField("__Pet Health__", petHP === 0 ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}**%`, true);
 		}
-		ctx.reply(embed);
+	} else {
+		embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
+		embed.addField(
+			"__Pet Health__",
+			petHP === "Dead" ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}%**`,
+			true
+		);
 	}
+	ctx.reply(embed);
 };
 
 const playerWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
@@ -85,46 +75,44 @@ const petWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 };
 
 async function percentageCheck(
-	name: string,
+	user: User,
 	ctx: DiscordMessageContext,
 	player: number,
 	pet: number
 ) {
-	const user = await checkPlayer(ctx, name);
-	if (user) {
-		const { healthmonitor, individualhealthmonitor } = user.settings;
-		const percentage = !isNaN(Number(healthmonitor))
-			? Number(healthmonitor)
-			: 100;
-		if (healthmonitor === undefined || healthmonitor === "off") return false;
-		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
-			if (individualhealthmonitor === "character") {
-				if (player <= percentage) {
-					if (player <= 11) return playerWarning(user, player, ctx);
-					return general(user, player, pet, ctx);
-				}
-			} else if (pet <= percentage) {
-				if (pet <= 11) return petWarning(user, pet, ctx);
+	const { healthmonitor, individualhealthmonitor } = user.settings;
+	const percentage = !isNaN(Number(healthmonitor))
+		? Number(healthmonitor)
+		: 100;
+	if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
+		if (individualhealthmonitor === "character") {
+			if (player <= percentage) {
+				if (player <= 11) return playerWarning(user, player, ctx);
 				return general(user, player, pet, ctx);
 			}
-		} else if (player <= percentage || pet <= percentage) {
-			if (player <= 11) return playerWarning(user, player, ctx);
-			if (pet <= 11 && pet !== 0) return petWarning(user, pet, ctx);
+		} else if (pet <= percentage) {
+			if (pet <= 11) return petWarning(user, pet, ctx);
 			return general(user, player, pet, ctx);
 		}
+	} else if (player <= percentage || pet <= percentage) {
+		if (player <= 11) return playerWarning(user, player, ctx);
+		if (pet <= 11 && pet !== 0) return petWarning(user, pet, ctx);
+		return general(user, player, pet, ctx);
 	}
 	return false;
 }
 
 export default async (ctx: DiscordMessageContext) => {
-	if (!ctx.guild) return false;
-	const guild = await ctx.guild;
-	if (guild.settings.healthmonitor === "off") return false;
+	if (!ctx.guild || !ctx.interactionUser) return false;
+	const guild = await ctx.guild, user = ctx.interactionUser;
+	if ((guild.settings.healthmonitor ?? "off") === "off"
+		|| (user.settings.healthmonitor ?? "off") === "off"
+	) return false;
+
 	const player = {
 		currentHP: 0,
 		healthPercent: 0,
-		maxHP: 0,
-		name: "null"
+		maxHP: 0
 	};
 	const pet = {
 		currentHP: 0,
@@ -137,28 +125,24 @@ export default async (ctx: DiscordMessageContext) => {
 		) {
 			let content = ctx.content;
 			if (ctx.content.indexOf(") | +") !== -1) {
-				const match = content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
-				if (match) player.name = match[1];
 				// eslint-disable-next-line no-useless-escape
 				const hpMatches = content.match(/(Dead|[\d\.]+% HP)/g)!;
 				const deadPet = hpMatches[1] === "Dead";
 				// eslint-disable-next-line no-param-reassign
 				content = content.replace(/%/g, "");
 				return percentageCheck(
-					player.name,
+					user,
 					ctx,
 					parseInt(hpMatches[0].split(" ")[0], 10),
 					deadPet ? 0 : parseInt(hpMatches[1].split(" ")[0], 10)
 				);
 			}
 			const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
-			const namePattern = /\+ (.*) has [\d,]+\/[\d,]+ HP left\./;
 			const healthMessage = content.match(healthMessagePattern);
-			if (healthMessage && content.match(namePattern)) {
+			if (healthMessage) {
 				const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/)!;
 				player.currentHP = Number(nums[1].replace(/,/g, ""));
 				player.maxHP = Number(nums[2].replace(/,/g, ""));
-				player.name = content.match(namePattern)![1];
 			}
 			const messageArray = content.split("\n");
 			let dealtLine = null;
@@ -197,7 +181,6 @@ export default async (ctx: DiscordMessageContext) => {
 				adventureEmbed.fields[1].name === "Critical Hit!" ? 2 : 1
 			].value.split("\n")[2];
 			if (petData) {
-				player.name = adventureEmbed.fields[0].name;
 				const split = petData.split(" ")[1].split("/");
 				pet.currentHP = Number(split[0].replace(",", ""));
 				pet.maxHP = Number(split[1].replace(",", ""));
@@ -208,20 +191,16 @@ export default async (ctx: DiscordMessageContext) => {
 		}
 	}
 
-	const user = await checkPlayer(ctx, player.name);
-	if (user === null) return false;
 	player.healthPercent = Math
 		.round((1000 * player.currentHP) / player.maxHP) / 10;
 	pet.healthPercent = Math.round((10 * pet.currentHP * 100) / pet.maxHP) / 10;
 	if (
 		user !== undefined
-    && player.name !== undefined
-    && player.healthPercent !== pet.healthPercent
+		&& player.healthPercent !== pet.healthPercent
 	) {
-		if (user.settings.healthmonitor === "off") return false;
 
 		percentageCheck(
-			player.name,
+			user,
 			ctx,
 			player.healthPercent,
 			pet.healthPercent

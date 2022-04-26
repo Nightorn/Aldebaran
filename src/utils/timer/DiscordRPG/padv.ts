@@ -1,41 +1,30 @@
 import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
 
 export default async (ctx: DiscordMessageContext) => {
-	if (!ctx.guild) return;
+	if (!ctx.guild || !ctx.interactionUser) return;
+	if (ctx.content.startsWith("You") || ctx.content.startsWith("Recovering")) return;
+
+	const guild = ctx.guild, user = ctx.interactionUser;
 	if (
-		ctx.author.timers.padventure !== null
-		|| ctx.guild!.settings.adventuretimer === "off"
-		|| ctx.guild!.settings.adventuretimer === undefined
-		|| ctx.author.settings.adventuretimer === "off"
-		|| ctx.author.settings.adventuretimer === undefined
+		user.timers.padventure !== null
+		|| (guild.settings.adventuretimer ?? "off") === "off"
+		|| (user.settings.adventuretimer ?? "off") === "off"
 	) return;
-	const content = ctx.content.toLowerCase();
-	let prefix = null;
-	for (const element of [
-		"discordrpg ",
-		"#!",
-		"<@170915625722576896> ",
-		ctx.guild!.settings.discordrpgprefix
-	]) {
-		if (element && content.indexOf(`${element}padv`) === 0) {
-			prefix = element;
-		}
+
+	if (guild.settings.autodelete === "on") {
+		ctx.delete(1000).catch(() => { });
 	}
-	if (prefix) {
-		if (ctx.guild!.settings.autodelete === "on") {
-			ctx.delete(1000).catch(() => {});
-		}
-		ctx.author.timers.padventure = setTimeout(() => {
-			const ping = ctx.author.settings.timerping === "adventure"
-				|| ctx.author.settings.timerping === "on"
-				? `<@${ctx.author.id}>`
-				: `${ctx.author.username},`;
-			ctx.reply(`${ping} party adventure time! :crossed_swords:`).then(msg => {
-				if (ctx.guild!.settings.autodelete === "on") {
-					setTimeout(() => msg.delete(), 10000);
-				}
-			});
-			ctx.author.timers.padventure = null;
-		}, 19900);
-	}
+	user.timers.padventure = setTimeout(() => {
+		const ping = user.settings.timerping === "adventure"
+			|| user.settings.timerping === "on"
+			? `<@${user.id}>`
+			: `${user.username},`;
+		ctx.reply(`${ping} party adventure time! :crossed_swords:`).then(msg => {
+			if (guild.settings.autodelete === "on") {
+				setTimeout(() => msg.delete(), 10000);
+			}
+		});
+		user.timers.padventure = null;
+	}, 19900);
+
 };

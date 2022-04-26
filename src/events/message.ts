@@ -8,7 +8,7 @@ import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
 import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
 
 export default async (client: AldebaranClient, message: Message) => {
-	if (message.webhookId) return;
+	if (message.webhookId && !message.interaction) return;
 
 	const guild = message.guild
 		? await client.customGuilds.fetch(message.guild.id)
@@ -21,28 +21,31 @@ export default async (client: AldebaranClient, message: Message) => {
 		: "";
 
 	const author = await client.customUsers.fetch(message.author.id);
+	const interactionUser = message.interaction !== null ? 
+		await client.customUsers.fetch(message.interaction.user.id) : 
+		undefined;
 
-	const ctx = new DiscordMessageContext(client, message, author, guild);
+	const ctx = new DiscordMessageContext(
+		client,
+		message,
+		author, 
+		guild,
+		interactionUser
+	);
 
-	if (author.banned) return;
+	if (author.banned || interactionUser?.banned) return;
 
 	const drpgIDs = ["170915625722576896", "891614347015626762"];
-	if (guild && drpgIDs.includes(ctx.author.id)) {
-		DiscordRPG(ctx);
-	} else if (!author.user.bot) {
-		const drpgMatch = ctx.content.toLowerCase()
-			.match(/.+(?=stats|adv|padv|mine|forage|fish|chop)/);
-		if (drpgMatch) {
-			const filter = (msg: Message) => drpgIDs.includes(msg.author.id);
-			ctx.channel.awaitMessages({ filter, max: 1, time: 2000 })
-				.then(async () => {
-					if (!guild!.settings.discordrpgprefix) {
-						guild!.settings.discordrpgprefix = drpgMatch[0];
-					}
-				});
-			DRPGAdventure(ctx);
+	if (guild && drpgIDs.includes(ctx.author.id) && ctx.interaction !== null) {
+		if (["adv", "padv"].includes(ctx.interaction.commandName)) {
+			// Health monitor
+			DiscordRPG(ctx);
+			// Adv or Party Adv
+			if (ctx.interaction.commandName === "adv")
+				DRPGAdventure(ctx);
+			else DRPGPadventure(ctx);
+		} else if (["mine", "forage", "fish", "chop"].includes(ctx.interaction.commandName)) {
 			DRPGSides(ctx);
-			DRPGPadventure(ctx);
 		}
 	}
 

@@ -9,21 +9,15 @@ import MessageContext from "./MessageContext.js";
 type M = Promise<Message<boolean>>;
 
 export default class DiscordSlashMessageContext extends MessageContext {
-	private interaction: CommandInteraction;
-	public author: User;
 	public command: Command;
-	public guild?: Guild;
 
 	constructor(
 		client: Client,
-		interaction: CommandInteraction,
-		author: User,
-		guild?: Guild
+		private interaction: CommandInteraction,
+		public author: User,
+		public guild?: Guild
 	) {
 		super(client);
-		this.author = author;
-		this.guild = guild;
-		this.interaction = interaction;
         
 		const subcommand = interaction.options.getSubcommand(false);
 		if (subcommand) {
@@ -64,6 +58,10 @@ export default class DiscordSlashMessageContext extends MessageContext {
 
 	get prefix() {
 		return "/";
+	}
+
+	get replied() {
+		return this.interaction.replied;
 	}
 
 	async delete(): Promise<false> {
