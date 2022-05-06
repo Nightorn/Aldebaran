@@ -21,9 +21,9 @@ export default async (client: AldebaranClient, message: Message) => {
 		: "";
 
 	const author = await client.customUsers.fetch(message.author.id);
-	const interactionUser = message.interaction !== null ? 
-		await client.customUsers.fetch(message.interaction.user.id) : 
-		undefined;
+	const interactionUser = message.interaction !== null
+		? await client.customUsers.fetch(message.interaction.user.id)
+		: undefined;
 
 	const ctx = new DiscordMessageContext(
 		client,

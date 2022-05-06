@@ -12,7 +12,7 @@ export default class DiscordSlashMessageContext extends MessageContext {
 	public command: Command;
 
 	constructor(
-		client: Client,
+		public client: Client,
 		private interaction: CommandInteraction,
 		public author: User,
 		public guild?: Guild

@@ -10,7 +10,8 @@ export default class DiscordMessageContext extends MessageContext {
 	private _splitArgs: string[];
 	public command?: Command;
 
-	constructor(client: Client, 
+	constructor(
+		public client: Client, 
 		private message: Message, 
 		public author: User, 
 		public guild?: Guild,
