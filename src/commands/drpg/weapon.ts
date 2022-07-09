@@ -1,10 +1,10 @@
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
 
 export default class WeaponCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Recommends you the best weapons for your level",
 			example: "150",

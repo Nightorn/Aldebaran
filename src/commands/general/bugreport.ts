@@ -2,10 +2,10 @@
 import { MessageEmbed, WebhookClient } from "discord.js";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 
 export default class BugreportCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Sends a bug report",
 			example: "ur bot doesnt work",
@@ -21,7 +21,7 @@ export default class BugreportCommand extends Command {
 		const { report } = ctx.args as { report: string };
 		const embed = new MessageEmbed()
 			.setDescription(report)
-			.setFooter({ text: `User: ${ctx.author.user.tag} [ID: ${ctx.author.id}]` });
+			.setFooter({ text: `User: ${ctx.author.tag} [ID: ${ctx.author.id}]` });
 		new WebhookClient({
 			id: process.env.WEBHOOK_BUGREPORTS_ID!,
 			token: process.env.WEBHOOK_BUGREPORTS_TOKEN!

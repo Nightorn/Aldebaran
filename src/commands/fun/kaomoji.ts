@@ -1,14 +1,14 @@
 import Command from "../../groups/FunCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 
 export default class KaomojiCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, { description: "Displays a random kaomoji" });
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
-		ctx.reply((await ctx.client.nekoslife.sfw.catText()).cat);
+		ctx.reply((await ctx.client.nekoslife.catText()).cat);
 	}
 }

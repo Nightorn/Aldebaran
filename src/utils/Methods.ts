@@ -1,12 +1,21 @@
 import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { readFileSync } from "fs";
 import moment from "moment-timezone";
+import DatabaseProvider from "../handlers/DatabaseProvider.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 
 const timeNames = moment.tz.names();
 
-// export const escape = (s: string) => s.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+export async function createNekosEmbed(description: string, endpoint: Function) {
+    return new MessageEmbed()
+        .setDescription(description)
+        .setFooter({
+            text: "Powered by nekos.life",
+            iconURL: "https://avatars2.githubusercontent.com/u/34457007?s=200&v=4"
+        })
+        .setImage((await endpoint()).url);
+}
 
 // With the contribution of holroy
 export const formatNumber = (n: number | string) => {
@@ -182,3 +191,19 @@ export const timezoneSupport = (value: string) => {
 		return true;
 	} return false;
 };
+
+export function tableConf(modelName: string) {
+	return { modelName, sequelize: DatabaseProvider.getInstance() };
+}
+
+// https://github.com/tindoductran/zodiac/blob/master/getZodiac2.html
+const zodBounds = [20, 19, 20, 20, 20, 21, 22, 22, 21, 22, 21, 21];
+const zodMonths = ["Capricorn", "Aquarius", "Pisces", "Aries", "Taurus",
+    "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius"];
+export function zodiacName(date: Date) {
+	const monthIndex = date.getMonth() - 1;
+    const signMonthIndex = date.getDate() <= zodBounds[monthIndex]
+        ? monthIndex
+        : (monthIndex + 1) % 12
+	return zodMonths[signMonthIndex];
+}

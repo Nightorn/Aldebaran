@@ -4,47 +4,38 @@ import DiscordMessageContext from "../../../structures/contexts/DiscordMessageCo
 const emoji = ["🥕", "🍋", "🥔", "🐟"];
 
 export default async (ctx: DiscordMessageContext) => {
-	if (!ctx.guild) return;
+	if (!ctx.server) return;
 
-	if (!ctx.author.settings.sidestimer || ctx.author.settings.sidestimer === "off"
-		|| !ctx.guild!.settings.sidestimer || ctx.guild!.settings.sidestimer === "off") {
-		return;
-	}
+	const deleteSetting = ctx.server!.base.getSetting("autodelete");
+	const prefixSetting = ctx.server!.base.getSetting("discordrpgprefix");
+	const serverSetting = ctx.server!.base.getSetting("adventuretimer");
+	const timerSetting = ctx.author.base.getSetting("timerping");
+	const userSetting = ctx.author.base.getSetting("adventuretimer");
 
-	let prefix = null;
+	if (userSetting !== "on" || serverSetting !== "on") return;
 
 	const content = `${ctx.content.toLowerCase()} `;
-	for (const element of [
-		"discordrpg ",
-		"#!",
-		ctx.guild!.settings.discordrpgprefix
-	]) {
-		for (const action of ["mine", "forage", "chop", "fish"]) {
-			if (content.indexOf(`${element}${action} `) === 0) {
-				prefix = element;
-			}
-		}
-	}
+	const prefix = [prefixSetting, "discordrpg ", "#!", "<@170915625722576896> "]
+		.find(p => p && content.indexOf(`${p}adv`) === 0);
 
 	if (prefix) {
-		if (ctx.guild!.settings.autodelete === "on") {
+		if (deleteSetting === "on") {
 			ctx.delete(2000).catch(() => {});
 		}
 		if (ctx.author.timers.sides !== null) return;
 
-		const setting = ctx.author.settings.sidestimer;
+		const setting = userSetting;
 		const primaryAction = setting === "on" ? "mine" : setting;
 
 		if (content.indexOf(`${prefix}${primaryAction}`) === 0) {
 			// Setting the timer on
 			ctx.author.timers.sides = setTimeout(() => {
-				const ping = ctx.author.settings.timerping === "on"
-					|| ctx.author.settings.timerping === "sides"
+				const ping = timerSetting === "on" || timerSetting === "sides"
 					? `<@${ctx.author.id}>`
 					: `${ctx.author.username},`;
 				const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
 				ctx.reply(`${ping} sides time! ${randomemoji}`).then(msg => {
-					if (ctx.guild!.settings.autodelete === "on") {
+					if (deleteSetting === "on") {
 						setTimeout(() => msg.delete(), 180000);
 					}
 				});

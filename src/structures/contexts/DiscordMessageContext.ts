@@ -1,9 +1,9 @@
 import { Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
 import MessageContext from "./MessageContext.js";
-import Guild from "../djs/Guild.js";
-import User from "../djs/User.js";
+import Server from "../models/DiscordServer.js";
+import User from "../models/DiscordUser.js";
 import { parseArgs, parseInput } from "../../utils/Args.js";
-import Client from "../djs/Client.js";
+import Client from "../Client.js";
 import Command from "../../groups/Command.js";
 
 export default class DiscordMessageContext extends MessageContext {
@@ -11,12 +11,12 @@ export default class DiscordMessageContext extends MessageContext {
 	private message: Message;
 	public command?: Command;
 	public author: User;
-	public guild?: Guild;
+	public server?: Server;
 
-	constructor(client: Client, message: Message, author: User, guild?: Guild) {
+	constructor(client: Client, message: Message, author: User, server?: Server) {
 		super(client);
 		this.author = author;
-		this.guild = guild;
+		this.server = server;
 		this.message = message;
 
 		const parsedInput = parseInput(
@@ -70,12 +70,12 @@ export default class DiscordMessageContext extends MessageContext {
 	}
 
 	get prefix() {
-		return this.guild?.prefix ?? "";
+		return this.server?.base.prefix || "";
 	}
 
 	async delete(delay?: number): Promise<Message<boolean> | false> {
-		const hasPermission = this.guild && (this.channel as TextChannel)
-			.permissionsFor(this.client.user.id)?.has("MANAGE_MESSAGES");
+		const hasPermission = this.server && (this.channel as TextChannel)
+			.permissionsFor(this.client.discord.user!.id)?.has("MANAGE_MESSAGES");
 
 		if (hasPermission) {
 			if (delay) {

@@ -1,12 +1,12 @@
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { categories, Platform } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const emoji = ":small_blue_diamond:";
 
 export default class HelpCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays detailled help about the bot's commands",
 			args: { query: {
@@ -31,12 +31,12 @@ export default class HelpCommand extends Command {
 				const categoryEmbed = this.createEmbed(ctx)
 					.setAuthor({
 						name: "Category Help",
-						iconURL: ctx.client.user.avatarURL()!
+						iconURL: ctx.client.discord.user!.avatarURL()!
 					})
 					.setTitle(`${category.title} - ${category.description}`)
 					.setDescription(list)
 					.setColor(this.color);
-				ctx.reply({ embeds: [categoryEmbed] });
+				ctx.reply(categoryEmbed);
 			} else if (ctx.client.commands.exists(command, platform)) {
 				ctx.reply(ctx.client.commands.get(command, platform)!.toHelpEmbed());
 			} else {
@@ -46,7 +46,7 @@ export default class HelpCommand extends Command {
 			const embed = this.createEmbed(ctx)
 				.setAuthor({
 					name: `${ctx.client.name}'s Help Pages`,
-					iconURL: ctx.client.user.avatarURL()!
+					iconURL: ctx.client.discord.user!.avatarURL()!
 				});
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {

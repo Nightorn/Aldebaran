@@ -1,6 +1,6 @@
 import { ColorResolvable, MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { Platform } from "../../utils/Constants.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
@@ -25,7 +25,7 @@ const messages = {
 };
 
 export default class PingCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays the bot's current ping to Discord",
 			aliases: ["pong"],
@@ -36,7 +36,7 @@ export default class PingCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext, platform: Platform) {
 		const embed = new MessageEmbed()
-			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
+			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.discord.ws.ping)} ms`, true)
 			.addField(`${ctx.client.name} Ping`, "Computing...", true)
 			.setColor("BLUE");
 		let msg = null;
@@ -67,8 +67,9 @@ export default class PingCommand extends Command {
 			];
 		}
 
+        const ws = Math.floor(ctx.client.discord.ws.ping);
 		const embedResult = new MessageEmbed()
-			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.ws.ping)} ms`, true)
+			.addField("WebSocket Heartbeat", `${ws} ms`, true)
 			.addField(`${ctx.client.name} Ping`, `${ping} ms`, true)
 			.setColor(color);
 		msg!.edit({ content: desc, embeds: [embedResult] });

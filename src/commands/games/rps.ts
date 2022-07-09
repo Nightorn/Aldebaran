@@ -2,7 +2,7 @@ import { MessageActionRow, MessageButton, MessageComponentInteraction } from "di
 import Command from "../../groups/GamesCommand.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 
 const win = {
 	"🪨": "✂️",
@@ -17,7 +17,7 @@ const words = {
 };
 
 export default class RpsCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, { 
 			description: "Rock. Paper. Scissors!",
 			args: {
@@ -30,7 +30,7 @@ export default class RpsCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
 		const args = ctx.args as { user: string };
-		const target = await ctx.client.customUsers.fetch(args.user);
+		const target = await ctx.client.users.fetchDiscord(args.user);
 
 		if (target.user.bot) {
 			return ctx.reply("You can't play this game against a bot.");

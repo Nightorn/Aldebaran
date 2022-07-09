@@ -1,11 +1,11 @@
 import { MessageEmbed } from "discord.js";
 import { getDateWithTimezone } from "../../utils/Methods.js";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class UserCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Shows detailled user information",
 			example: "437802197539880970",
@@ -13,14 +13,15 @@ export default class UserCommand extends Command {
 				as: "user",
 				desc: "The user whose information you want to see",
 				optional: true
-			} }
+			} },
+            platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.customUsers.fetch(args.user || ctx.author.id)
+		ctx.client.users.fetchDiscord(args.user || ctx.author.id)
 			.then(async user => {
 				const allRoles = new Map();
 				const rolesList = [];
@@ -59,28 +60,24 @@ export default class UserCommand extends Command {
 				}
 
 				const getDate = (date: Date) => {
-					const { dateformat } = user.settings;
-					return getDateWithTimezone(
-						date,
-						`${
-							dateformat !== undefined
-								? `**${dateformat}** [@] HH:mm`
-								: "**MM/DD/YYYY** [@] HH:mm"
-						}`,
-						user.settings.timezone
-					);
+                    const dateformat = user.base.getSetting("dateformat");
+                    const timezone = user.base.getSetting("timezone");
+                    const format = dateformat
+                        ? `**${dateformat}** [@] HH:mm`
+                        : "**MM/DD/YYYY** [@] HH:mm"
+					return getDateWithTimezone(date, `${format}`, timezone);
 				};
 
-				const guild = ctx.guild
-					? `${ctx.guild.guild.name}  |  Member Details`
+				const guild = ctx.server
+					? `${ctx.server.name}  |  Member Details`
 					: "User Details";
 				const embed = new MessageEmbed()
 					.setAuthor({
 						name: `${user.user.tag}  |  ${guild}`,
-						iconURL: user.user.displayAvatarURL()
+						iconURL: user.avatarURL
 					})
 					.setDescription(`**User ID** ${user.id}\n${memberNick !== null ? `**Nickname** ${memberNick}\n` : ""}`)
-					.setThumbnail(user.user.displayAvatarURL())
+					.setThumbnail(user.avatarURL)
 					.setColor(ctx.member ? ctx.member.displayColor : this.color)
 					.setFooter({ text: "User account created on" })
 					.setTimestamp(new Date(user.user.createdTimestamp));

@@ -1,10 +1,10 @@
 import { MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class CreditsCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Lists the people who contributed to Aldebaran, its codebase, and its forks"
 		});

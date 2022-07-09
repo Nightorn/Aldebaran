@@ -1,5 +1,5 @@
 import { Message, MessageEmbed } from "discord.js";
-import AldebaranClient from "../structures/djs/Client.js";
+import Client from "../structures/Client.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 
 import DiscordRPG from "../utils/bots/DiscordRPG.js";
@@ -7,37 +7,31 @@ import DRPGAdventure from "../utils/timer/DiscordRPG/adv.js";
 import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
 import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
 
-export default async (client: AldebaranClient, message: Message) => {
+export default async (client: Client, message: Message) => {
 	if (message.webhookId) return;
 
 	const guild = message.guild
-		? await client.customGuilds.fetch(message.guild.id)
+		? await client.guilds.fetchDiscord(message.guild.id)
 		: undefined;
 
-	let prefix = guild
-		? process.argv[2] === "dev"
-			? process.argv[4] || process.env.PREFIX!
-			: guild.prefix
-		: "";
+	let prefix = guild?.base.prefix || "";
 
-	const author = await client.customUsers.fetch(message.author.id);
+	const author = await client.users.fetchDiscord(message.author.id);
 
 	const ctx = new DiscordMessageContext(client, message, author, guild);
-
-	if (author.banned) return;
 
 	const drpgIDs = ["170915625722576896", "891614347015626762"];
 	if (guild && drpgIDs.includes(ctx.author.id)) {
 		DiscordRPG(ctx);
-	} else if (!author.user.bot) {
+	} else if (guild && !author.user.bot) {
 		const drpgMatch = ctx.content.toLowerCase()
 			.match(/.+(?=stats|adv|padv|mine|forage|fish|chop)/);
 		if (drpgMatch) {
 			const filter = (msg: Message) => drpgIDs.includes(msg.author.id);
 			ctx.channel.awaitMessages({ filter, max: 1, time: 2000 })
 				.then(async () => {
-					if (!guild!.settings.discordrpgprefix) {
-						guild!.settings.discordrpgprefix = drpgMatch[0];
+					if (!guild.base.getSetting("discordrpgprefix")) {
+						guild.base.setSetting("discordrpgprefix", drpgMatch[0]);
 					}
 				});
 			DRPGAdventure(ctx);
@@ -47,7 +41,7 @@ export default async (client: AldebaranClient, message: Message) => {
 	}
 
 	if (author.user.bot) return;
-	if (!message.mentions.users.get(client.user.id)) {
+	if (!message.mentions.users.get(client.discord.user!.id)) {
 		if (ctx.content.indexOf(prefix) !== 0) return;
 		if (ctx.content.slice(prefix.length)[0] === " ") return;
 	} else {

@@ -1,4 +1,5 @@
-import AldebaranClient from "../structures/djs/Client";
+import { APIApplicationCommandOptionChoice } from "discord-api-types/v10";
+import Client from "../structures/Client.js";
 import { CommandMode, Platform } from "./Constants";
 
 type DefaultArg = {
@@ -23,7 +24,7 @@ export type ExpressionArg = DefaultArg & {
 
 export type ModeArg = DefaultArg & {
 	as: "mode",
-	choices: [string, string][],
+    choices: APIApplicationCommandOptionChoice<string>[]
 	flag?: Flag
 };
 
@@ -127,7 +128,7 @@ export function parseArgs(split: string[], argsMetadata: Args) {
  * Parses the message content into the requested command and its arguments.
  */
 export function parseInput(
-	client: AldebaranClient,
+	client: Client,
 	content: string,
 	mode: CommandMode,
 	prefix: string,

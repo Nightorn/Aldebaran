@@ -1,12 +1,12 @@
 import { TextChannel, ThreadChannel } from "discord.js";
 import { CommandMetadata } from "../interfaces/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
-import AldebaranClient from "../structures/djs/Client.js";
+import Client from "../structures/Client.js";
 import { Platform } from "../utils/Constants.js";
 import C from "./Command.js";
 
 export default abstract class Command extends C {
-	constructor(client: AldebaranClient, metadata: CommandMetadata) {
+	constructor(client: Client, metadata: CommandMetadata) {
 		super(client, metadata);
 		this.category = "NSFW";
 		this.color = "#ff66aa";

@@ -1,11 +1,11 @@
 import { evaluate } from "mathjs";
 import Command from "../../groups/UtilitiesCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { formatNumber } from "../../utils/Methods.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class MathCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Evaluates a math expression",
 			example: "sqrt(4) * 2",

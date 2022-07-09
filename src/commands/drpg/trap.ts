@@ -1,13 +1,13 @@
 import request from "request";
 import { evaluate } from "mathjs";
 import Command from "../../groups/DRPGCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class TrapCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays users' trap information and estimated loots",
 			example: "240971835330658305 4 --max",
@@ -43,7 +43,7 @@ export default class TrapCommand extends Command {
 			if (response.statusCode === 404) {
 				ctx.reply("it looks like the user you specified has not started his adventure on DiscordRPG yet.");
 			} else if (response.statusCode === 200) {
-				const target = await ctx.client.users.fetch(userid);
+				const target = await ctx.client.users.fetchDiscord(userid);
 				const user = JSON.parse(body).data as DRPGUser;
 				let luck = isMax ? user.level * 5 : user.attributes.salvaging;
 				if (luck === 0) luck = 1;
@@ -77,7 +77,7 @@ export default class TrapCommand extends Command {
 						const embed = this.createEmbed(ctx)
 							.setAuthor({
 								name: `${target.username}  |  Trap information  |  ${drpgItems[trap.id].name} @ ${drpgLocationdb[trapId]}`,
-								iconURL: target.displayAvatarURL()
+								iconURL: target.avatarURL
 							})
 							.setDescription(`${pronoun} will receive the following items (with ${luck} point(s) in salvaging)\n${items}`)
 							.setFooter({
@@ -99,7 +99,7 @@ export default class TrapCommand extends Command {
 					const embed = this.createEmbed(ctx)
 						.setAuthor({
 							name: `${target.username}  |  Trap information`,
-							iconURL: target.displayAvatarURL()
+							iconURL: target.avatarURL
 						})
 						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${traps.match(/\n/g)!.length} traps** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}trap 4\` for example.\n${traps}`);
 					ctx.reply(embed);

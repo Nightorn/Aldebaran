@@ -1,16 +1,17 @@
 import { GuildMember, Message, MessageEmbed, MessageOptions, TextBasedChannel } from "discord.js";
 import { ErrorString, Errors, CommandMode } from "../../utils/Constants.js";
-import Client from "../djs/Client.js";
+import Client from "../Client.js";
 import Command from "../../groups/Command.js";
-import User from "../djs/User.js";
-import Guild from "../djs/Guild.js";
+import ContextAuthor from "../../interfaces/ContextAuthor.js";
+import ContextServer from "../../interfaces/ContextServer.js";
 
 export default abstract class MessageContext {
+    public abstract author: ContextAuthor;
+    public abstract server?: ContextServer;
+
 	protected _args?: string[] | { [key: string]: string | boolean; };
-	public abstract author: User;
 	public client: Client;
 	public abstract command?: Command;
-	public abstract guild?: Guild;
 
 	constructor(client: Client) {
 		this.client = client;
@@ -53,5 +54,5 @@ export default abstract class MessageContext {
 		return this.reply(embed);
 	}
 
-	abstract reply(content: string | MessageOptions | MessageEmbed): any;
+	abstract reply(content: string | MessageEmbed): any;
 }

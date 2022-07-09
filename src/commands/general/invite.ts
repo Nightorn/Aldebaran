@@ -1,6 +1,6 @@
-import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { InteractionReplyOptions, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 
@@ -8,7 +8,7 @@ const botInvite = process.env.BOT_INVITE || "https://discordapp.com/api/oauth2/a
 const serverInvite = process.env.SERVER_INVITE || "https://discord.gg/8J8ZH9AjsC";
 
 export default class InviteCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays the bot and server invites",
 			platforms: ["DISCORD", "DISCORD_SLASH"]

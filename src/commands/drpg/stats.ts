@@ -4,7 +4,7 @@ import fs from "fs";
 // import canvasModule from "canvas";
 import Command from "../../groups/DRPGCommand.js";
 import { formatNumber, getTimeString, lightOrDark } from "../../utils/Methods.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -12,7 +12,7 @@ import MessageContext from "../../structures/contexts/MessageContext.js";
 // const { createCanvas, Image, registerFont, loadImage } = canvasModule;
 
 export default class StatsCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays a DiscordRPG user's character and pet infos",
 			example: "141610251299454976",
@@ -27,7 +27,7 @@ export default class StatsCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.users.fetch(args.user || ctx.author.id).then(user => {
+		ctx.client.users.fetchDiscord(args.user || ctx.author.id).then(user => {
 			request({
 				uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
 				headers: { Authorization: process.env.API_DISCORDRPG }
@@ -48,10 +48,7 @@ export default class StatsCommand extends Command {
 							if (value !== 0) attributes.push(`**${key[0].toUpperCase() + key.slice(1)}** ${format(value)} Points`);
 					const location = data.location ? drpgLocationdb[data.location.current] : "The Abyss";
 					const embed = new MessageEmbed()
-						.setAuthor({
-							name: data.name,
-							iconURL: user.displayAvatarURL()
-						})
+						.setAuthor({ name: data.name, iconURL: user.avatarURL })
 						.setColor(data.donate ? "GOLD" : 0x00ae86)
 						.setDescription(`Currently In **${location || "The Abyss"}**`)
 						.addField(

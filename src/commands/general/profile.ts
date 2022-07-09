@@ -1,10 +1,12 @@
 import { ColorResolvable, MessageEmbed } from "discord.js";
+import moment from "moment";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import { zodiacName } from "../../utils/Methods.js";
 
 export default class ProfileCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Shows your Aldebaran social profile",
 			example: "320933389513523220",
@@ -19,26 +21,30 @@ export default class ProfileCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.customUsers.fetch(args.user || ctx.author.id)
+		ctx.client.users.fetchDiscord(args.user || ctx.author.id)
 			.then(async user => {
-				const profile = (await user.profile()).profile;
+                const profile = await user.base.getProfile();
 				if (profile.name) {
+                    const timezone = user.base.getSetting("timezone");
 					let userDetails = "";
 					if (profile.name) userDetails += `**Name**: ${profile.name}\n`;
 					if (profile.country) userDetails += `**Country**: ${profile.country}\n`;
-					if (profile.timezone) userDetails += `**Timezone**: ${profile.timezone}\n`;
-					if (profile.birthday) userDetails += `**Birthday**: ${profile.birthday}\n`;
-					if (profile.zodiacName) userDetails += `**Zodiac Sign**: ${profile.zodiacName}\n`;
-					if (profile.age) userDetails += `**Age**: ${profile.age}\n`;
+                    if (timezone) userDetails += `**Timezone**: ${timezone}\n`;
+					if (profile.birthday) {
+                        const age = moment().diff(moment(profile.birthday), "years");
+                        const zodiac = zodiacName(profile.birthday);
+                        userDetails += `**Birthday**: ${profile.birthday}\n`;
+                        userDetails += `**Age**: ${age}\n**Zodiac Sign**: ${zodiac}\n`;
+                    }
 					if (profile.gender) userDetails += `**Gender**: ${profile.gender}\n`;
 					const embed = new MessageEmbed()
 						.setAuthor({
 							name: `${user.username}'s Profile`,
-							iconURL: user.user.displayAvatarURL()
+							iconURL: user.avatarURL
 						})
 						.setColor(profile.profileColor as ColorResolvable);
 					if (profile.dmFriendly) embed.setFooter({
-						text: `${/yes/i.test(profile.dmFriendly) ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`
+						text: `${profile.dmFriendly ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`
 					});
 					if (profile.profilePictureLink) embed.setImage(`${profile.profilePictureLink}`);
 					if (profile.flavorText)

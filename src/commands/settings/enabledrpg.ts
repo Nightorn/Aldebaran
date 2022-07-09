@@ -1,12 +1,14 @@
-import { MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { GuildSetting, UserSetting } from "../../utils/Constants.js";
+import { ServerSettingKey, UserSettingKey } from "../../utils/Constants.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 
-const guildParameters = [
+type Parameters<T> = { name: T, description: string }[];
+
+const guildParameters: Parameters<ServerSettingKey> = [
 	{
 		name: "healthmonitor",
 		description: "DiscordRPG Health Monitor"
@@ -21,8 +23,8 @@ const guildParameters = [
 	}
 ];
 
-const userParameters = [
-	...guildParameters,
+const userParameters: Parameters<UserSettingKey> = [
+	...guildParameters as Parameters<UserSettingKey>,
 	{
 		name: "timerping",
 		description: "DiscordRPG Timer Pings"
@@ -30,7 +32,7 @@ const userParameters = [
 ];
 
 export default class EnableDRPGCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			aliases: ["edrpg"],
 			description:
@@ -43,18 +45,20 @@ export default class EnableDRPGCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	configuringEmbed(ctx: MessageContext, type: string) {
 		const parameters = type === "user" ? userParameters : guildParameters;
+        const list = (parameters as Parameters<string>)
+            .reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "");
 		return new MessageEmbed()
 			.setTitle(`Configuring ${type}'s settings`)
 			.setDescription(`**This will enable the following ${
-				type} settings:**\n${
-				parameters.reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "")
+				type} settings:**\n${list
 			}**Do you want to proceed?** Click the **Proceed** button to continue. You can always configure the settings using \`${ctx.prefix}${type[0]}config\`.`)
 			.setColor("BLUE");
 	}
 
 	setSettings(
 		ctx: DiscordMessageContext | DiscordSlashMessageContext,
-		type: "user" | "guild"
+		type: "user" | "guild",
+        followUp: boolean = false
 	) {
 		return new Promise(async resolve => {
 			const embed = this.configuringEmbed(ctx, type);
@@ -64,18 +68,24 @@ export default class EnableDRPGCommand extends Command {
 				.setCustomId("ok");
 			const actionRow = new MessageActionRow().setComponents([button]);
 			const opt = { embeds: [embed], components: [actionRow] };
-			const msg = ctx instanceof DiscordSlashMessageContext
-				? await ctx.reply(opt, true, true)
-				: await ctx.reply(opt);
+
+            let msg: Message<boolean>;
+            if (ctx instanceof DiscordSlashMessageContext && followUp) {
+                msg = await ctx.followUp(opt, true, true);
+            } else if (ctx instanceof DiscordSlashMessageContext) {
+                msg = await ctx.reply(opt, true, true);
+            } else {
+                msg = await ctx.reply(opt);
+            }
 
 			msg.awaitMessageComponent({ componentType: "BUTTON" }).then(interaction => {
 				if (type === "user") {
 					userParameters.forEach(parameter => {
-						ctx.author.changeSetting(parameter.name as UserSetting, "on");
+                        ctx.author.base.setSetting(parameter.name, "on");
 					});
 				} else {
 					guildParameters.forEach(parameter => {
-						ctx.guild!.changeSetting(parameter.name as GuildSetting, "on");
+                        ctx.server!.base.setSetting(parameter.name, "on");
 					});
 				}
 				interaction.deferUpdate();
@@ -123,13 +133,13 @@ export default class EnableDRPGCommand extends Command {
 			.has("MANAGE_GUILD");
 
 		const guildEnabled = guildParameters
-			.every(parameter => ctx.guild!.settings[parameter.name as GuildSetting] === "on");
+			.every(parameter => ctx.server!.base.getSetting(parameter.name) === "on");
 		const userEnabled = userParameters
-			.every(parameter => ctx.author.settings[parameter.name as UserSetting] === "on");
+			.every(parameter => ctx.author.base.getSetting(parameter.name) === "on");
 
 		if (isAdmin && !guildEnabled && !userEnabled) {
 			await this.setSettings(ctx, "guild");
-			await this.setSettings(ctx, "user");
+			await this.setSettings(ctx, "user", true);
 			this.done(ctx, true);
 		} else if (isAdmin && !guildEnabled) {
 			await this.setSettings(ctx, "guild");

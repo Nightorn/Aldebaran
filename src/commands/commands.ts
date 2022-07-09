@@ -1,6 +1,6 @@
 import CommandHandler from "../handlers/CommandHandler.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
-import AldebaranClient from "../structures/djs/Client.js";
+import Client from "../structures/Client.js";
 import executeSocial from "../utils/executeSocial.js";
 
 // Developer
@@ -62,11 +62,6 @@ import RCGPCommand from "./image/rcgp.js";
 
 // NSFW
 import LewdCommand from "./nsfw/lewd.js";
-import XboobsCommand from "./nsfw/xboobs.js";
-import XkittyCommand from "./nsfw/xkitty.js";
-import XlesbianCommand from "./nsfw/xlesbian.js";
-import XnekoCommand from "./nsfw/xneko.js";
-import XrandomCommand from "./nsfw/xrandom.js";
 
 // osu!
 import OsuCommand from "./osu!/osu.js";
@@ -111,7 +106,7 @@ export default () => {
 	};
 	for (const [name, description] of Object.entries(socialCommands)) {
 		commandHandler.register(class Command extends SocialCommand {
-			constructor(client: AldebaranClient) {
+			constructor(client: Client) {
 				super(client, {
 					name,
 					description,
@@ -120,7 +115,7 @@ export default () => {
 						desc: "The user you want to socialize with",
 						optional: true
 					} },
-					platforms: ["DISCORD"]
+					platforms: ["DISCORD", "DISCORD_SLASH"]
 				});
 			}
 
@@ -159,11 +154,6 @@ export default () => {
 		PandaCommand,
 		RCGPCommand,
 		LewdCommand,
-		XboobsCommand,
-		XkittyCommand,
-		XlesbianCommand,
-		XnekoCommand,
-		XrandomCommand,
 		EnabledrpgCommand,
 		GconfigCommand,
 		SetprofileCommand,

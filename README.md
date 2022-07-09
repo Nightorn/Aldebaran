@@ -33,7 +33,7 @@ If you know JavaScript and more particulary Node.js using the "discord.js" libra
 **In order to run this project, you need Node.js 12+ and a MySQL database.**
 ```
 $ git clone https://github.com/Nightorn/Aldebaran.git
-$ npm install
+$ yarn install
 $ node app
 ```
 If your environment file is valid (`.env` file, take example on the `.env.example` file if needed), your instance of Aldebaran should be online!

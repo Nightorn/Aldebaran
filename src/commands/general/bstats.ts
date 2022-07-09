@@ -1,11 +1,11 @@
 import os from "os";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { getTimeString } from "../../utils/Methods.js";
 
 export default class BStatsCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays the bot usage statistics since the last start"
 		});
@@ -21,14 +21,14 @@ export default class BStatsCommand extends Command {
 		const embed = this.createEmbed(ctx)
 			.setAuthor({
 				name: `${ctx.client.name}  |  Bot Statistics`,
-				iconURL: ctx.client.user.displayAvatarURL()
+				iconURL: ctx.client.discord.user!.displayAvatarURL()
 			})
 			.setDescription(
 				`Data about ${ctx.client.name} are shown on this page, mainly the used resources and the global usage statistics.`
 			)
 			.addField("Memory Usage", `**${mem} MB**`, true)
 			.addField("System CPU Load", `**${load}** (${loadPC}%)`, true)
-			.addField("Uptime", getTimeString(ctx.client.uptime!, "DD day(s), HH:MM:SS"), true)
+			.addField("Uptime", getTimeString(ctx.client.discord.uptime!, "DD day(s), HH:MM:SS"), true)
 			.addField("Shard ID", ctx.client.shardId.toString(), true);
 		ctx.reply(embed);
 	}

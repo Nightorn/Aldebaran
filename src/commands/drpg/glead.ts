@@ -4,7 +4,7 @@ import fs from "fs";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { DRPGAttribute, DRPGGuild, DRPGItem, DRPGSkill, DRPGUser } from "../../interfaces/DiscordRPG.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { paginate, timeSince } from "../../utils/Methods.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
@@ -31,7 +31,7 @@ function apiFetch(endpoint: string) {
 	});
 }
 
-async function updateCache(bot: AldebaranClient) {
+async function updateCache(bot: Client) {
 	for (const id in bot.drpgCache) {
 		if (bot.drpgCache[id].lastUpdate < Date.now() - 3600000) {
 			delete bot.drpgCache[id];
@@ -40,7 +40,7 @@ async function updateCache(bot: AldebaranClient) {
 	fs.writeFile("./cache/drpgCache.json", JSON.stringify(bot.drpgCache), e => e ? console.error(e) : null);
 }
 
-async function getUserData(userID: string, bot: AldebaranClient) {
+async function getUserData(userID: string, bot: Client) {
 	const userCache = bot.drpgCache[userID];
 	if (userCache && userCache.lastUpdate > Date.now() - 3600000) {
 		return userCache as User;
@@ -52,7 +52,7 @@ async function getUserData(userID: string, bot: AldebaranClient) {
 	return userData as User;
 }
 
-async function getGuild(userData: User, bot: AldebaranClient) {
+async function getGuild(userData: User, bot: Client) {
 	const guildID = userData.guild;
 	const guildCache = bot.drpgCache[guildID];
 	if (guildCache && guildCache.lastUpdate > Date.now() - 3600000) {
@@ -80,7 +80,7 @@ async function getGuild(userData: User, bot: AldebaranClient) {
 }
 
 export default class GleadCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays a DiscordRPG user's guild leaderboard",
 			help: "These are the attributes you can use as the \"attribute\" argument: `level`, `item name`, `gold`, `xp`, `lux`, `deaths`, `kills`, `points`, `questPoints`, `mine`, `chop`, `fish`, `forage`, `crits`, `defense`, `goldBoost`, `lumberBoost`, `mineBoost`, `reaping`, `salvaging`, `scavenge`, `strength`, `taming`, `xpBoost`, `lastseen` and `location`.",

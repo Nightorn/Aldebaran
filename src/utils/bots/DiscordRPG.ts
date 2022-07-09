@@ -1,7 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import { imageUrls } from "../../utils/Constants.js";
-import User from "../../structures/djs/User.js";
+import User from "../../structures/models/DiscordUser.js";
 
 const senddeath = imageUrls
 	.deathimage[Math.floor(Math.random() * imageUrls.deathimage.length)];
@@ -23,7 +23,7 @@ const emojiColor = (percentage: number) => {
 const checkPlayer = (ctx: DiscordMessageContext, username: string) => {
 	const match = ctx.channel.messages.cache
 		.filter(m => m.author.username === username).first();
-	if (match) return ctx.client.customUsers.fetch(match.author.id);
+	if (match) return ctx.client.users.fetchDiscord(match.author.id);
 	return null;
 };
 
@@ -33,29 +33,26 @@ const general = (
 	petHP: string | number,
 	ctx: DiscordMessageContext
 ) => {
-	const { healthmonitor, individualhealthmonitor } = user.settings;
+    const healthmonitor = user.base.getSetting("healthmonitor");
+    const selection = user.base.getSetting("individualhealthmonitor");
 	if (user === null) return;
 	if (healthmonitor && healthmonitor !== "off") {
 		const embed = new MessageEmbed()
-			.setAuthor({
-				name: user.username,
-				iconURL: user.user.displayAvatarURL()
-			})
+			.setAuthor({ name: user.username, iconURL: user.avatarURL })
 			.setColor(embedColor(playerHP as number));
-		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
-			if (individualhealthmonitor === "character") {
-				embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
-			} else {
-				embed.addField("__Pet Health__", petHP === 0 ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}**%`, true);
-			}
-		} else {
+
+        if (selection === "character") {
+            embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
+        } else if (selection === "pet") {
+            embed.addField("__Pet Health__", petHP === 0 ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}**%`, true);
+        } else {
 			embed.addField("__Character Health__", `${emojiColor(playerHP)} **${playerHP}%**`, true);
 			embed.addField(
 				"__Pet Health__",
 				petHP === "Dead" ? "**DEAD**" : `${emojiColor(petHP as number)} **${petHP}%**`,
 				true
 			);
-		}
+        }
 		ctx.reply(embed);
 	}
 };
@@ -92,34 +89,36 @@ async function percentageCheck(
 ) {
 	const user = await checkPlayer(ctx, name);
 	if (user) {
-		const { healthmonitor, individualhealthmonitor } = user.settings;
+        const healthmonitor = user.base.getSetting("healthmonitor");
+        const selection = user.base.getSetting("individualhealthmonitor");
 		const percentage = !isNaN(Number(healthmonitor))
 			? Number(healthmonitor)
 			: 100;
 		if (healthmonitor === undefined || healthmonitor === "off") return false;
-		if (["character", "pet"].indexOf(individualhealthmonitor!) !== -1) {
-			if (individualhealthmonitor === "character") {
-				if (player <= percentage) {
-					if (player <= 11) return playerWarning(user, player, ctx);
-					return general(user, player, pet, ctx);
-				}
-			} else if (pet <= percentage) {
-				if (pet <= 11) return petWarning(user, pet, ctx);
-				return general(user, player, pet, ctx);
-			}
-		} else if (player <= percentage || pet <= percentage) {
-			if (player <= 11) return playerWarning(user, player, ctx);
-			if (pet <= 11 && pet !== 0) return petWarning(user, pet, ctx);
+
+        if (selection === "character" && player <= percentage) {
+            return player <= 11
+                ? playerWarning(user, player, ctx)
+                : general(user, player, pet, ctx);
+        } else if (selection === "pet" && pet <= percentage) {
+            return pet <= 11
+                ? petWarning(user, pet, ctx)
+                : general(user, player, pet, ctx);
+        } else if (player <= percentage && player <= 11) {
+            return playerWarning(user, player, ctx);
+        } else if (pet <= percentage && pet <= 11 && pet > 0) {
+            return petWarning(user, pet, ctx);
+        } else if (player <= percentage || pet <= percentage) {
 			return general(user, player, pet, ctx);
-		}
+        }
 	}
 	return false;
 }
 
 export default async (ctx: DiscordMessageContext) => {
-	if (!ctx.guild) return false;
-	const guild = await ctx.guild;
-	if (guild.settings.healthmonitor === "off") return false;
+	if (!ctx.server) return false;
+	const guild = await ctx.server;
+    if (guild.base.getSetting("healthmonitor") === "off") return false;
 	const player = {
 		currentHP: 0,
 		healthPercent: 0,
@@ -214,18 +213,17 @@ export default async (ctx: DiscordMessageContext) => {
 		.round((1000 * player.currentHP) / player.maxHP) / 10;
 	pet.healthPercent = Math.round((10 * pet.currentHP * 100) / pet.maxHP) / 10;
 	if (
-		user !== undefined
-    && player.name !== undefined
-    && player.healthPercent !== pet.healthPercent
+        user !== undefined
+        && player.name !== undefined
+        && player.healthPercent !== pet.healthPercent
+        && user.base.getSetting("healthmonitor") !== "off"
 	) {
-		if (user.settings.healthmonitor === "off") return false;
-
-		percentageCheck(
-			player.name,
-			ctx,
-			player.healthPercent,
-			pet.healthPercent
-		);
+        percentageCheck(
+            player.name,
+            ctx,
+            player.healthPercent,
+            pet.healthPercent
+        );
 	}
 	return false;
 };

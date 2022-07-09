@@ -1,4 +1,3 @@
-import { Guild, Snowflake, User } from "discord.js";
 import { importAssets, timezoneSupport } from "./Methods.js";
 import { DRPGXPBases, DRPGItemList, DRPGLocationDB } from "../interfaces/DiscordRPG.js";
 import { Mode } from "nodesu";
@@ -49,19 +48,25 @@ export const presences: Presences = importAssets("./config/presence.json");
 
 export type OsuMode = keyof typeof Mode;
 
+export const osuModeChoices = [
+    { name: "osu!", value: "osu" },
+    { name: "osu!mania", value: "mania" },
+    { name: "osu!ctb", value: "ctb" },
+    { name: "osu!taiko", value: "taiko" }
+];
+
 export type ErrorString = keyof typeof Errors;
 export type PermissionString = keyof typeof Permissions;
-export type CommonSetting = keyof typeof SettingsModel.common;
-export type UserSetting = CommonSetting | keyof typeof SettingsModel.user;
-export type GuildSetting = CommonSetting | keyof typeof SettingsModel.guild;
+export type CommonSettingKey = keyof typeof CommonSettingsModel;
+export type UserSettingKey = CommonSettingKey | keyof typeof UserSettingsModel;
+export type ServerSettingKey = CommonSettingKey | keyof typeof ServerSettingsModel;
 
-export type UserSettings = { [key in UserSetting]?: string };
-export type GuildSettings = { [key in GuildSetting]?: string };
+export type UserSettings = { [key in UserSettingKey]?: string };
+export type ServerSettings = { [key in ServerSettingKey]?: string };
 
-export type TargetedSettings = {
+export type Setting = {
 	category: string,
 	help: string,
-	postUpdate?: (value: string, user: User, guild?: Guild) => void,
 	showOnlyIfBotIsInGuild?: string,
 	support: (value: string) => boolean,
 };
@@ -85,100 +90,98 @@ const CommonSettingsModel = {
 	}
 };
 
-export type Settings = {
-	common: { [key in CommonSetting]?: TargetedSettings },
-	guild: { [key in GuildSetting]?: TargetedSettings },
-	user: { [key in UserSetting]?: TargetedSettings }
-};
+const UserSettingsModel = {
+    ...CommonSettingsModel,
+    individualhealthmonitor: {
+        support: (value: string) => ["off", "character", "pet"].indexOf(value) !== -1,
+        help:
+    "Lets you choose whether you want to display the health of your character or your pet with the health monitor - [off | character | pet]",
+        showOnlyIfBotIsInGuild: "170915625722576896",
+        category: "DiscordRPG"
+    },
+    sidestimer: {
+        support: (value: string) => (
+            value === "on"
+      || value === "off"
+      || value === "mine"
+      || value === "forage"
+      || value === "chop"
+      || value === "fish"
+        ),
+        help: "Sides Timer - [on | off | primaryAction (mine, forage...)]",
+        showOnlyIfBotIsInGuild: "170915625722576896",
+        category: "DiscordRPG"
+    },
+    timerping: {
+        support: (value: string) => (
+            value === "on"
+            || value === "adventure"
+            || value === "sides"
+            || value === "off"
+        ),
+        help: "Timer Pings - [on | adventure | sides | off]",
+        showOnlyIfBotIsInGuild: "170915625722576896",
+        category: "DiscordRPG"
+    },
+    timezone: {
+        support: timezoneSupport,
+        help:
+    "Sets your timezone - [GMT, UTC, or [tz database timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]",
+        category: process.env.NAME || "Aldebaran"
+    },
+    dateformat: {
+        support: (value: string) => (
+            value.indexOf("DD") !== -1
+      && value.indexOf("MM") !== -1
+      && value.indexOf("YYYY") !== -1
+        ),
+        help:
+    "Time Format - Use DD (day of month), MM (month number) and YYYY (year)",
+        category: process.env.NAME || "Aldebaran"
+    },
+    osuusername: {
+        support: () => true,
+        help: "osu! default username (for osu! commmands)",
+        category: "osu!"
+    },
+    osumode: {
+        support: () => true,
+        help: "osu! default mode (for osu! commmands) [osu | mania | taiko | ctb]",
+        category: "osu!"
+    }
+}
+
+const ServerSettingsModel = {
+    ...CommonSettingsModel,
+    autodelete: {
+        support: (value: string) => value === "on" || value === "off",
+        help: "Auto Delete Sides & Adv Commands - [on | off]",
+        showOnlyIfBotIsInGuild: "170915625722576896",
+        category: "DiscordRPG"
+    },
+    sidestimer: {
+        support: (value: string) => value === "on" || value === "off",
+        help: "Sides Timer - [on | off]",
+        showOnlyIfBotIsInGuild: "170915625722576896",
+        category: "DiscordRPG"
+    },
+    aldebaranprefix: {
+        support: () => true,
+        help: `${process.env.NAME}'s Prefix - [& | Guild Customized]`,
+        category: process.env.NAME || "Aldebaran"
+    },
+    discordrpgprefix: {
+        support: () => true,
+        help: "Prefix",
+        showOnlyIfBotIsInGuild: "170915625722576896",
+        category: "DiscordRPG"
+    }
+}
 
 export const SettingsModel = {
 	common: CommonSettingsModel,
-	user: {
-		...CommonSettingsModel,
-		individualhealthmonitor: {
-			support: (value: string) => ["off", "character", "pet"].indexOf(value) !== -1,
-			help:
-        "Lets you choose whether you want to display the health of your character or your pet with the health monitor - [off | character | pet]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
-		sidestimer: {
-			support: (value: string) => (
-				value === "on"
-          || value === "off"
-          || value === "mine"
-          || value === "forage"
-          || value === "chop"
-          || value === "fish"
-			),
-			help: "Sides Timer - [on | off | primaryAction (mine, forage...)]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
-		timerping: {
-			support: (value: string) => (
-				value === "on"
-				|| value === "adventure"
-				|| value === "sides"
-				|| value === "off"
-			),
-			help: "Timer Pings - [on | adventure | sides | off]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
-		timezone: {
-			support: timezoneSupport,
-			help:
-        "Sets your timezone - [GMT, UTC, or [tz database timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]",
-			category: process.env.NAME
-		},
-		dateformat: {
-			support: (value: string) => (
-				value.indexOf("DD") !== -1
-          && value.indexOf("MM") !== -1
-          && value.indexOf("YYYY") !== -1
-			),
-			help:
-        "Time Format - Use DD (day of month), MM (month number) and YYYY (year)",
-			category: process.env.NAME
-		},
-		osuusername: {
-			support: () => true,
-			help: "osu! default username (for osu! commmands)",
-			category: "osu!"
-		},
-		osumode: {
-			support: () => true,
-			help: "osu! default mode (for osu! commmands) [osu | mania | taiko | ctb]",
-			category: "osu!"
-		}
-	},
-	guild: {
-		...CommonSettingsModel,
-		autodelete: {
-			support: (value: string) => value === "on" || value === "off",
-			help: "Auto Delete Sides & Adv Commands - [on | off]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
-		sidestimer: {
-			support: (value: string) => value === "on" || value === "off",
-			help: "Sides Timer - [on | off]",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		},
-		aldebaranprefix: {
-			support: () => true,
-			help: `${process.env.NAME}'s Prefix - [& | Guild Customized]`,
-			category: process.env.NAME
-		},
-		discordrpgprefix: {
-			support: () => true,
-			help: "Prefix",
-			showOnlyIfBotIsInGuild: "170915625722576896",
-			category: "DiscordRPG"
-		}
-	}
+	user: UserSettingsModel,
+	guild: ServerSettingsModel
 };
 
 export const Errors = {
@@ -220,20 +223,20 @@ export type SlashCommandOption = SlashCommandBooleanOption
 export type SocialProfileProperty = "aboutMe" | "dmFriendly" | "age" | "gender" | "name" | "country" | "timezone" | "birthday" | "profilePictureLink" | "favoriteGames" | "profileColor" | "favoriteMusic" | "socialLinks" | "zodiacName" | "flavorText";
 
 export type DBUser = {
-	userId: Snowflake;
+	userId: string;
 	settings: string;
 	permissions?: number;
 	timeout?: number;
 };
 
 export type DBGuild = {
-	guildid: Snowflake;
+	guildid: string;
 	settings: string;
 	commands: string;
 };
 
 type BaseDBProfile = {
-	userId: Snowflake;
+	userId: string;
 	fortunePoints: number;
 };
 

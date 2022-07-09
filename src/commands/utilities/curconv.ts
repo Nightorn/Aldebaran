@@ -1,7 +1,7 @@
 import request, { Response } from "request";
 import Command from "../../groups/UtilitiesCommand.js";
 import { ICommand } from "../../interfaces/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const fixerURL = "http://data.fixer.io/api";
@@ -15,7 +15,7 @@ type ExpectedResponse = {
 };
 
 export default class CurConvCommand extends Command implements ICommand {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description:
 				"Converts from one currency unit to another, or lists currency equalivents",

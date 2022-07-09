@@ -13,7 +13,7 @@
     },
     "adorable": {
         "self": [
-            "Isn't {target} just adroable"
+            "Isn't {target} just adorable?"
         ],
         "user": [
             "{sender} thinks {target} is totally adorable!",

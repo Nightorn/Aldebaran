@@ -1,7 +1,7 @@
 // @ts-ignore
 import tenor from "tenorjs";
 import Command from "../../groups/ImageCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { MessageEmbed } from "discord.js";
 
@@ -13,7 +13,7 @@ type Post = {
 };
 
 export default class PepeCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Shows a random GIF of pepe"
 		});

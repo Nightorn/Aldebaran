@@ -2,13 +2,13 @@ import { evaluate } from "mathjs";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { DRPGUser } from "../../interfaces/DiscordRPG.js";
 import { MessageEmbed } from "discord.js";
 
 export default class PlantCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays users plant information and estimated loots",
 			example: "320933389513523220",
@@ -41,7 +41,7 @@ export default class PlantCommand extends Command {
 				return ctx.reply("it looks like the user you specified has not started his adventure on DiscordRPG yet.");
 			}
 			if (response.statusCode === 200) {
-				const target = await ctx.client.users.fetch(userid);
+				const target = await ctx.client.users.fetchDiscord(userid);
 				const { data } = JSON.parse(body) as { data: DRPGUser };
 				if (data.location === undefined) return ctx.reply(`Hey **${data.name}**, travel somewhere and set a trap on your way!`);
 				if (data.location.saplings === null || data.location.saplings === undefined) return ctx.reply(`Hey **${data.name}**, please plant some saplings at your purchased fields before!`);
@@ -81,7 +81,7 @@ export default class PlantCommand extends Command {
 						const embed = new MessageEmbed()
 							.setAuthor({
 								name: `${target.username}  |  Plant information  |  ${item.name} @ ${drpgLocationdb[plantId]}`,
-								iconURL: target.displayAvatarURL()
+								iconURL: target.avatarURL
 							})
 							.setColor(this.color)
 							.setDescription(`With ${ownership} current reaping skills (${luck === 1 ? 0 : luck} points), ${pronoun} will receive ${normalRewards}. With the highest reaping skills possible for ${ownership} level (${luckMax} points) ${pronoun.toLowerCase()} could have, ${pronoun.toLowerCase()} will receive ${highestRewards}.`)
@@ -100,7 +100,7 @@ export default class PlantCommand extends Command {
 					const embed = new MessageEmbed()
 						.setAuthor({
 							name: `${target.username}  |  Sapling information`,
-							iconURL: target.displayAvatarURL()
+							iconURL: target.avatarURL
 						})
 						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)!.length} plants** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
 					return ctx.reply(embed);
@@ -108,7 +108,7 @@ export default class PlantCommand extends Command {
 				const embed = new MessageEmbed()
 					.setAuthor({
 						name: `${target.username}  |  Sapling information`,
-						iconURL: target.displayAvatarURL()
+						iconURL: target.avatarURL
 					})
 					.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} no plant set.`);
 				return ctx.reply(embed);

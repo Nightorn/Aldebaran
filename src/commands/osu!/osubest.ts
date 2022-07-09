@@ -2,9 +2,9 @@ import { Beatmap, Mode, User, UserScore } from "nodesu";
 import ojsama from "ojsama";
 import ppv2Results, { Result } from "../../utils/osu!/ppv2Results.js";
 import Command from "../../groups/OsuCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { OsuMode } from "../../utils/Constants.js";
+import { OsuMode, osuModeChoices } from "../../utils/Constants.js";
 import { MessageEmbed } from "discord.js";
 
 type Score = {
@@ -38,7 +38,7 @@ const ranks = {
 const f = (x: string | number) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 export default class OsubestCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Displays the 5 best osu! plays of the specified user",
 			help: "Run the command with the osu! username of the user you want to see the stats of, or maybe their user ID and the according mode (osu, mania, taiko, ctb).\n**Supported Modes** : **osu!standard** : (by default), --osu; **osu!taiko**: --taiko; **osu!ctb**: --ctb; **osu!mania**: --mania.",
@@ -48,7 +48,7 @@ export default class OsubestCommand extends Command {
 				user: { as: "string", desc: "Username/UserID", optional: true },
 				mode: {
 					as: "mode",
-					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
+					choices: osuModeChoices,
 					desc: "osu! Mode",
 					optional: true
 				}
@@ -59,11 +59,11 @@ export default class OsubestCommand extends Command {
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
 		const client = ctx.client.nodesu!;
-		const mode = (args.mode || ctx.author.settings.osumode || "osu") as OsuMode;
+		const mode = (args.mode || ctx.author.base.getSetting("osumode") || "osu") as OsuMode;
 		if (Mode[mode] !== undefined) {
 			client.user.getBest(
 				args.user
-				|| ctx.author.settings.osuusername
+				|| ctx.author.base.getSetting("osuusername")
 				|| ctx.author.username,
 				Mode[mode], 5
 			).then(async (data: any) => {

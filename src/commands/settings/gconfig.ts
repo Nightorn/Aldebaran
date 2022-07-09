@@ -1,11 +1,11 @@
 import { MessageEmbed } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
-import { GuildSetting, Settings, SettingsModel, TargetedSettings } from "../../utils/Constants.js";
-import MessageContext from "../../structures/contexts/MessageContext.js";
+import Client from "../../structures/Client.js";
+import { ServerSettingKey, Setting, SettingsModel } from "../../utils/Constants.js";
+import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 
 export default class GconfigCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Manages the settings of your server",
 			example: "adventureTimer on",
@@ -21,36 +21,37 @@ export default class GconfigCommand extends Command {
 					desc: "The value to which you want to edit the setting you just selected, if any",
 					optional: true
 				}
-			}
+			},
+            platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async run(ctx: MessageContext) {
+	async run(ctx: DiscordMessageContext) {
 		const args = ctx.args as { setting: string, value?: string };
-		const parametersAvailable = SettingsModel.guild as Settings["guild"];
+		const parameters = SettingsModel.guild;
 		if (args.setting === "help") {
 			const embed = new MessageEmbed()
 				.setAuthor({
 					name: "User Settings",
-					iconURL: ctx.client.user.avatarURL()!
+					iconURL: ctx.client.discord.user!.avatarURL()!
 				})
 				.setDescription(
 					`Welcome to your server settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}gconfig list\`, and your current settings are shown in \`${ctx.prefix}gconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}gconfig property value\`, and one example is \`${ctx.prefix}gconfig adventureTimer on\`.`
 				);
 			ctx.reply(embed);
 		} else if (args.setting === "list") {
-			const list: { [key: string]: { [key: string]: TargetedSettings } } = {};
-			for (const [key, data] of Object.entries(parametersAvailable)) {
+			const list: { [key: string]: { [key in ServerSettingKey]?: Setting } } = {};
+			for (const [key, data] of Object.entries(parameters)) {
 				if (!list[data.category]) list[data.category] = {};
-				if (data.showOnlyIfBotIsInGuild) {
+				if ("showOnlyIfBotIsInGuild" in data) {
 					try {
 						// eslint-disable-next-line no-await-in-loop
-						await ctx.guild!.guild.members.fetch(data.showOnlyIfBotIsInGuild);
-						list[data.category][key] = data;
+						await ctx.server!.guild.members.fetch(data.showOnlyIfBotIsInGuild);
+						list[data.category][key as ServerSettingKey] = data;
 					} catch {} // eslint-disable-line no-empty
 				} else {
-					list[data.category][key] = data;
+					list[data.category][key as ServerSettingKey] = data;
 				}
 			}
 
@@ -68,33 +69,21 @@ export default class GconfigCommand extends Command {
 			ctx.reply(embed);
 		} else if (args.setting === "view") {
 			let list = "";
-			for (const [key, value] of Object.entries(ctx.guild!.settings)) {
-				list += `**${key}** - \`${value}\`\n`;
-			}
+            ctx.server!.base.settings.forEach(s => {
+				list += `**${s.key}** - \`${s.value}\`\n`;
+            });
 			const embed = this.createEmbed(ctx)
 				.setAuthor({
 					name: "Guild Settings  |  Overview",
-					iconURL: ctx.client.user.avatarURL()!
+					iconURL: ctx.client.discord.user!.avatarURL()!
 				})
 				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
-		} else if (Object.keys(parametersAvailable).includes(args.setting)
+		} else if (Object.keys(parameters).includes(args.setting)
 				&& args.value) {
-			const setting = args.setting.toLowerCase() as GuildSetting;
-			if (parametersAvailable[setting]!.support(args.value)) {
-				if (parametersAvailable[setting]!.postUpdate) {
-					parametersAvailable[setting]!.postUpdate!(
-						args.value,
-						ctx.author.user,
-						ctx.guild!.guild
-					);
-				}
-				if (parametersAvailable[setting]!.postUpdate) {
-					parametersAvailable[
-						setting
-					]!.postUpdate!(args.value, ctx.author.user, ctx.guild!.guild);
-				}
-				ctx.guild!.changeSetting(setting, args.value).then(() => {
+			const setting = args.setting.toLowerCase() as ServerSettingKey;
+			if (parameters[setting]!.support(args.value)) {
+				ctx.server!.base.setSetting(setting, args.value).then(() => {
 					const embed = this.createEmbed(ctx)
 						.setTitle("Settings successfully changed")
 						.setDescription(

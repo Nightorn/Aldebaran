@@ -1,11 +1,11 @@
 import MessageContext from "../../../structures/contexts/MessageContext.js";
 import { PermissionString } from "../../../utils/Constants.js";
 import Command from "../../../groups/DeveloperCommand.js";
-import AldebaranPermissions from "../../../structures/aldebaran/AldebaranPermissions.js";
-import AldebaranClient from "../../../structures/djs/Client.js";
+import AldebaranPermissions from "../../../structures/AldebaranPermissions.js";
+import Client from "../../../structures/Client.js";
 
 export default class SetpermSubcommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Set permissions of the specific user",
 			perms: { aldebaran: ["MANAGE_PERMISSIONS"] }
@@ -43,7 +43,7 @@ export default class SetpermSubcommand extends Command {
 				.setColor("ORANGE");
 			return ctx.reply(embed);
 		}
-		return ctx.client.customUsers.fetch(args[0]).then(async user => {
+		return ctx.client.users.fetchDiscord(args[0]).then(async user => {
 			const permissions = args.slice(2).filter(permission => Object
 				.keys(AldebaranPermissions.FLAGS)
 				.includes(permission)) as PermissionString[];
@@ -54,7 +54,7 @@ export default class SetpermSubcommand extends Command {
 			switch (args[1].toLowerCase()) {
 				case "add":
 					try {
-						await user.addPermissions(permissions);
+						await user.base.addPermissions(permissions);
 						const embedAddSuccess = this.createEmbed(ctx)
 							.setTitle("Success")
 							.setDescription(`Successfully added:\n\`${permissions.join(", ")}\`\n to ${user.username}.`)
@@ -67,7 +67,7 @@ export default class SetpermSubcommand extends Command {
 					break;
 				case "remove":
 					try {
-						await user.removePermissions(permissions);
+						await user.base.removePermissions(permissions);
 						const embedRemoveSuccess = this.createEmbed(ctx)
 							.setTitle("Success")
 							.setDescription(`Successfully removed:\n\`${permissions.join(", ")}\`\n from ${user.username}.`)

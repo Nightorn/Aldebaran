@@ -3,7 +3,7 @@ import Command from "../groups/Command.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
-import Client from "../structures/djs/Client";
+import Client from "../structures/Client.js";
 import { Args } from "../utils/Args";
 import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
 
@@ -50,8 +50,4 @@ export interface ICommand {
 		platform: Platform
 	): void;
 	toHelpEmbed(command: string, prefix: string): MessageEmbed;
-}
-
-export interface IImageCommand extends ICommand {
-	image(ctx: MessageContext): void;
 }

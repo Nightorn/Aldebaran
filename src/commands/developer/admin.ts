@@ -1,16 +1,14 @@
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import Command from "../../groups/DeveloperCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 
 import mod from "./admin/mod.js";
-import restart from "./admin/restart.js";
 import serverlist from "./admin/serverlist.js";
 import setperm from "./admin/setperm.js";
-import timeout from "./admin/timeout.js";
 import view from "./admin/view.js";
 
 export default class AdminCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Admin Portal Command",
 			perms: { aldebaran: ["EDIT_USERS"] },
@@ -18,10 +16,8 @@ export default class AdminCommand extends Command {
 		});
 		this.registerSubcommands(
 			mod,
-			restart,
 			serverlist,
 			setperm,
-			timeout,
 			view
 		);
 	}

@@ -1,13 +1,14 @@
 import { Interaction } from "discord.js";
 import Context from "../structures/contexts/DiscordSlashMessageContext.js";
-import AldebaranClient from "../structures/djs/Client";
+import Client from "../structures/Client.js";
 
-export default async (client: AldebaranClient, interaction: Interaction) => {
+export default async (client: Client, interaction: Interaction) => {
 	if (interaction.isCommand()) {
-		const author = await client.customUsers.fetch(interaction.user.id);
 		const guild = interaction.guild
-			? await client.customGuilds.fetch(interaction.guild.id)
+			? await client.guilds.fetchDiscord(interaction.guild.id)
 			: undefined;
+		const author = await client.users.fetchDiscord(interaction.user.id);
+
 		const ctx = new Context(client, interaction, author, guild);
 		ctx.command.execute(ctx, "DISCORD_SLASH");
 	}

@@ -1,9 +1,9 @@
 import Command from "../../groups/FunCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 
 export default class OwoifyCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Sends an owoified text",
 			example: "why is the grass green?",

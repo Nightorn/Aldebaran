@@ -1,4 +1,4 @@
-import AldebaranClient from "../structures/djs/Client.js";
+import Client from "../structures/Client.js";
 import Command from "../groups/Command.js";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { Arg } from "../utils/Args.js";
@@ -6,19 +6,19 @@ import { Platform, SlashCommandOption as Option } from "../utils/Constants.js";
 
 export default class CommandHandler {
 	private static instance: CommandHandler;
-	client: AldebaranClient;
+	client: Client;
 	commands: Command[] = [];
 	slashCommands: SlashCommandBuilder[] = [];
 
-	private constructor(client: AldebaranClient) {
+	private constructor(client: Client) {
 		this.client = client;
 	}
 
-	public static getInstance(client?: AldebaranClient): CommandHandler {
+	public static getInstance(client?: Client): CommandHandler {
 		if (!CommandHandler.instance && client) {
 			CommandHandler.instance = new CommandHandler(client);
 		} else if (!CommandHandler.instance && !client) {
-			throw new TypeError("CommandHandler requires an AldebaranClient as an argument to be instantiated.");
+			throw new TypeError("CommandHandler requires an Client as an argument to be instantiated.");
 		}
 		return CommandHandler.instance;
 	}
@@ -61,7 +61,7 @@ export default class CommandHandler {
 							slash.addUserOption(o => CommandHandler.patchOption(o, name, meta));
 						} else if (meta.as === "mode") {
 							slash.addStringOption(o => CommandHandler.patchOption(o, name, meta)
-								.setChoices(meta.choices));
+								.setChoices(...meta.choices));
 						} else if (meta.as === "string" || meta.as === "expression") {
 							slash.addStringOption(o => CommandHandler.patchOption(o, name, meta));
 						} else if (meta.as === "number") {

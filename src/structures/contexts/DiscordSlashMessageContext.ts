@@ -1,28 +1,27 @@
-import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message } from "discord.js";
+import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message, InteractionReplyOptions } from "discord.js";
 import Command from "../../groups/Command.js";
 import { CommandMode } from "../../utils/Constants";
-import Client from "../djs/Client";
-import Guild from "../djs/Guild";
-import User from "../djs/User";
+import Client from "../Client.js";
+import DiscordServer from "../models/DiscordServer.js";
+import DiscordUser from "../models/DiscordUser.js";
 import MessageContext from "./MessageContext.js";
 
 type M = Promise<Message<boolean>>;
-
 export default class DiscordSlashMessageContext extends MessageContext {
 	private interaction: CommandInteraction;
-	public author: User;
+	public author: DiscordUser;
 	public command: Command;
-	public guild?: Guild;
+	public server?: DiscordServer;
 
 	constructor(
 		client: Client,
 		interaction: CommandInteraction,
-		author: User,
-		guild?: Guild
+		author: DiscordUser,
+		server?: DiscordServer
 	) {
 		super(client);
 		this.author = author;
-		this.guild = guild;
+		this.server = server;
 		this.interaction = interaction;
         
 		const subcommand = interaction.options.getSubcommand(false);
@@ -38,7 +37,7 @@ export default class DiscordSlashMessageContext extends MessageContext {
 		const args: { [key: string]: string | number | boolean | undefined } = {};
 		if (this.command.metadata.args) {
 			Object.keys(this.command.metadata.args).forEach(k => {
-				args[k] = this.interaction.options.get(k)?.value;
+				args[k] = this.interaction.options.get(k.toLowerCase())?.value;
 			});
 		}
 		return args;
@@ -71,7 +70,7 @@ export default class DiscordSlashMessageContext extends MessageContext {
 	}
 
 	async followUp(
-		content: string | MessageOptions | MessageEmbed,
+		content: string | InteractionReplyOptions | MessageEmbed,
 		ephemeral: boolean = false,
 		fetchReply: boolean = false
 	) {
@@ -87,22 +86,22 @@ export default class DiscordSlashMessageContext extends MessageContext {
 
 	async reply(content: string | MessageOptions | MessageEmbed): Promise<never>;
 	async reply<B extends boolean>(
-		content: string | MessageOptions | MessageEmbed,
+		content: string | InteractionReplyOptions | MessageEmbed,
 		ephemeral?: boolean,
 		fetchReply?: B
 	): Promise<B extends true ? Message<boolean> : void>; 
 
 	async reply(
-		content: string | MessageOptions | MessageEmbed,
+		content: string | MessageOptions | InteractionReplyOptions | MessageEmbed,
 		ephemeral: boolean = false,
 		fetchReply: boolean = false
 	) {
 		if (content instanceof MessageEmbed) {
 			return this.interaction.reply({ embeds: [content], ephemeral, fetchReply });
-		} else if (typeof content === "string") {
+        } else if (typeof content === "string") {
 			return this.interaction.reply({ content, ephemeral, fetchReply });
 		} else {
-			return this.interaction.reply({ ...content, ephemeral, fetchReply });
+			return this.interaction.reply({ ...content, ephemeral, fetchReply } as InteractionReplyOptions);
 		}
 	}
 }

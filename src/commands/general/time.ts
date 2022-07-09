@@ -1,11 +1,11 @@
 import moment from "moment-timezone";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { MessageEmbed } from "discord.js";
 
 export default class TimeCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Prints a user's time based on their configured timezone",
 			example: "<@143026985763864576>",
@@ -27,9 +27,9 @@ export default class TimeCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, clean?: boolean };
-		const user = await ctx.client.customUsers
-			.fetch(args.user || ctx.author.id);
-		let { timezone } = user.settings;
+		const user = await ctx.client.users
+            .fetchDiscord(args.user || ctx.author.id);
+		let timezone = user.base.getSetting("timezone");
 		if (timezone !== undefined) {
 			if (!timezone.includes("/")) {
 				const symbol = timezone[3];
@@ -61,7 +61,7 @@ export default class TimeCommand extends Command {
 				const embed = this.createEmbed(ctx)
 					.setAuthor({
 						name: `${user.username}  |  Date and Time`,
-						iconURL: user.user.displayAvatarURL()
+						iconURL: user.avatarURL
 					})
 					.setDescription(`${date}\n**${subDate}**`);
 				if (!args.clean)
@@ -70,7 +70,7 @@ export default class TimeCommand extends Command {
 					});
 				ctx.reply(embed);
 			}
-		} else if (user.user.equals(ctx.author.user)) {
+		} else if (user.id === ctx.author.id) {
 			ctx.reply(
 				`it seems that you do not have configured your timezone. Please check \`${
 					ctx.prefix

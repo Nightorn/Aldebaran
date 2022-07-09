@@ -1,5 +1,5 @@
-import { Client, ColorResolvable, MessageEmbed, PermissionString as DJSPermission, TextChannel } from "discord.js";
-import AldebaranClient from "../structures/djs/Client.js";
+import { ColorResolvable, MessageEmbed, PermissionString as DJSPermission, TextChannel } from "discord.js";
+import Client from "../structures/Client.js";
 import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
 import { CommandMetadata, ICommand } from "../interfaces/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
@@ -8,7 +8,7 @@ export default abstract class Command implements ICommand {
 	aliases: string[];
 	category: string = "General";
 	color: ColorResolvable = "BLUE";
-	client: AldebaranClient;
+	client: Client;
 	example: string;
 	hidden: boolean = false;
 	metadata: CommandMetadata;
@@ -19,7 +19,7 @@ export default abstract class Command implements ICommand {
 	/**
    	* Command abstract class, extend it to build a command
    	*/
-	constructor(client: AldebaranClient, metadata: CommandMetadata) {
+	constructor(client: Client, metadata: CommandMetadata) {
 		if (!(client instanceof Client)) { throw new TypeError("The specified Client is invalid"); }
 		if (metadata === undefined) throw new TypeError("The metadata are invalid");
 		this.perms = {
@@ -41,7 +41,7 @@ export default abstract class Command implements ICommand {
 	}
 
 	guildCheck(ctx: MessageContext) {
-		return this.metadata.requiresGuild ? !!ctx.guild : true;
+		return this.metadata.requiresGuild ? !!ctx.server : true;
 	}
 
 	/**
@@ -55,7 +55,7 @@ export default abstract class Command implements ICommand {
 		}
 		if (this.perms.aldebaran && check) {
 			check = this.perms.aldebaran
-				.every(perm => ctx.author.hasPermission(perm));
+				.every(perm => ctx.author.base.hasPermission(perm));
 		}
 		return check;
 	}
@@ -102,7 +102,7 @@ export default abstract class Command implements ICommand {
 		const embed = new MessageEmbed()
 			.setAuthor({
 				name: `${this.client.name}  |  Command Help  |  ${this.name}`,
-				iconURL: this.client.user!.avatarURL()!
+				iconURL: this.client.discord.user!.avatarURL()!
 			})
 			.setTitle(this.metadata.description)
 			.addField("Category", this.category, true)

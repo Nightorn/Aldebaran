@@ -1,10 +1,10 @@
 import Command from "../../groups/SettingsCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { SocialProfileProperty } from "../../utils/Constants.js";
 
 export default class SetprofileCommand extends Command {
-	constructor(client: AldebaranClient) {
+	constructor(client: Client) {
 		super(client, {
 			description: "Changes your profile information",
 			example: "aboutme My name is Xxx_FortnitePro_xxX!",
@@ -24,7 +24,7 @@ export default class SetprofileCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { section: string, input: string };
-		const profile = await ctx.author.profile();
+		const profile = await ctx.author.base.getProfile();
 		const sectionMatches = {
 			profilepicturelink: "profilePictureLink",
 			favoritegames: "favoriteGames",
@@ -39,14 +39,14 @@ export default class SetprofileCommand extends Command {
 		const profiletarget = (sectionMatches[section as keyof typeof sectionMatches]
 			|| section) as SocialProfileProperty;
 
-		profile.changeProperty(profiletarget, args.input).then(() => {
+        profile.set({ [profiletarget]: args.input }).save().then(() => {
 			ctx.reply(`Your ${profiletarget} has been updated to \`${args.input}\`.`);
 		}).catch(() => {
 			const error = this.createEmbed(ctx)
 				.setTitle("Unknown Profile Section")
 				.setDescription("Please check to ensure this is a correct profile section. If you think the specified profile section was valid, please make sure the value is too.")
 				.setColor("RED");
-			ctx.reply({ embeds: [error] });
+			ctx.reply(error);
 		});
 		return true;
 	}

@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 // import canvas from "canvas";
 
-import AldebaranClient from "./structures/djs/Client.js";
+import Client from "./structures/Client.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -9,4 +9,4 @@ dotenv.config({ path: "./.env" });
 	family: "Exo 2"
 }); */
 
-const bot = new AldebaranClient(); // eslint-disable-line @typescript-eslint/no-unused-vars
+const bot = new Client(); // eslint-disable-line @typescript-eslint/no-unused-vars
