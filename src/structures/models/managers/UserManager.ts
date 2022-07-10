@@ -3,6 +3,7 @@ import RevoltUser from "../RevoltUser.js";
 import User from "../User.js";
 import UserSetting from "../UserSetting.js";
 import Client from "../../Client.js";
+import { deduplicateSettings } from "../../../utils/Methods.js";
 
 const TTL = 300000;
 
@@ -25,7 +26,7 @@ export default class UserManager {
 
 	public async cacheDiscord(user: DiscordUser, base: User) {
 		user.base = base;
-        user.base.settings = [];
+        user.base.settings = await deduplicateSettings(user.base.settings);
 		user.user = await this.client.discord.users.fetch(user.id);
 		this.discordCache.set(user.id, encap(user));
 		return user;
@@ -33,10 +34,9 @@ export default class UserManager {
 
     public async cacheRevolt(user: RevoltUser, base: User) {
         user.base = base;
-        user.base.settings = [];
+        user.base.settings = await deduplicateSettings(user.base.settings);
 		this.revoltCache.set(user.id, encap(user));
-        return user
-
+        return user;
     }
 
 	public async createDiscord(id: string) {

@@ -1,9 +1,10 @@
 import { DataTypes, Model } from "sequelize";
+import Setting from "../../interfaces/Setting.js";
 import { ServerSettingKey } from "../../utils/Constants.js";
 import { tableConf } from "../../utils/Methods.js";
 import Server from "./Server.js";
 
-export default class ServerSetting extends Model {
+export default class ServerSetting extends Model implements Setting {
     declare private id: number;
     declare public serverId: number;
     declare public key: ServerSettingKey;

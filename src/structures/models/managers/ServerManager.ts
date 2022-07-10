@@ -3,6 +3,7 @@ import RevoltServer from "../RevoltServer.js";
 import Server from "../Server.js";
 import ServerSetting from "../ServerSetting.js";
 import Client from "../../Client.js";
+import { deduplicateSettings } from "../../../utils/Methods.js";
 
 const TTL = 300000;
 
@@ -25,6 +26,7 @@ export default class ServerManager {
 
 	public async cacheDiscord(server: DiscordServer, base: Server) {
 		server.base = base;
+        server.base.settings = await deduplicateSettings(server.base.settings);
 		server.guild = await this.client.discord.guilds.fetch(server.id);
 		this.discordCache.set(server.id, encap(server));
 		return server;
@@ -32,6 +34,7 @@ export default class ServerManager {
 
     public async cacheRevolt(server: RevoltServer, base: Server) {
         server.base = base;
+        server.base.settings = await deduplicateSettings(server.base.settings);
         this.revoltCache.set(server.id, encap(server));
         return server;
     }

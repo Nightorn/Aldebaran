@@ -26,7 +26,7 @@ class Server extends Model {
 	async setSetting(key: ServerSettingKey, value: string) {
 		const setting = this.findSetting(key);
 		if (setting) {
-			await setting.set({ key: value }).save();
+			await setting.set({ key, value }).save();
 		} else {
 			const created = await this.createSetting({ key, value });
             this.settings.push(created);
