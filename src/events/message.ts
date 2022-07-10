@@ -7,6 +7,8 @@ import DRPGAdventure from "../utils/timer/DiscordRPG/adv.js";
 import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
 import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
 
+const drpgIDs = ["170915625722576896", "891614347015626762"];
+
 export default async (client: Client, message: Message) => {
 	if (message.webhookId) return;
 
@@ -20,7 +22,6 @@ export default async (client: Client, message: Message) => {
 
 	const ctx = new DiscordMessageContext(client, message, author, guild);
 
-	const drpgIDs = ["170915625722576896", "891614347015626762"];
 	if (guild && drpgIDs.includes(ctx.author.id)) {
 		DiscordRPG(ctx);
 	} else if (guild && !author.user.bot) {
