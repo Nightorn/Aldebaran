@@ -24,7 +24,6 @@ export default class UconfigCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: DiscordMessageContext) {
 		const args = ctx.args as { setting: string, value?: string };
 		const parameters = SettingsModel.user;
@@ -61,9 +60,9 @@ export default class UconfigCommand extends Command {
 					`**__IMPORTANT: If the setting is disabled in ${ctx.prefix}gconfig by server owner, it will be ignored.__** If a server setting is undefined, a :warning: icon will appear in front of the concerned properties.`
 				);
 
-			for (const [category, parameters] of Object.entries(list)) {
+			for (const [category, params] of Object.entries(list)) {
 				let entries = "";
-				for (const [key, data] of Object.entries(parameters)) {
+				for (const [key, data] of Object.entries(params)) {
 					if (ctx.server && !ctx.server.base.getSetting(key as ServerSettingKey)) {
 						entries += ":warning: ";
 					}

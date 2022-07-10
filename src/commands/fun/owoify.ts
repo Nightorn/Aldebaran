@@ -11,7 +11,6 @@ export default class OwoifyCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const { text } = ctx.args as { text: string };
 		const embed = this.createEmbed(ctx)

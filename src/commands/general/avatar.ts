@@ -17,7 +17,6 @@ export default class AvatarCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string };
 		ctx.client.users.fetchDiscord(args.user || ctx.author.id).then(user => {

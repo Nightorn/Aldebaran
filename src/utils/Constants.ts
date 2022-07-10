@@ -59,7 +59,8 @@ export type ErrorString = keyof typeof Errors;
 export type PermissionString = keyof typeof Permissions;
 export type CommonSettingKey = keyof typeof CommonSettingsModel;
 export type UserSettingKey = CommonSettingKey | keyof typeof UserSettingsModel;
-export type ServerSettingKey = CommonSettingKey | keyof typeof ServerSettingsModel;
+export type ServerSettingKey = CommonSettingKey
+    | keyof typeof ServerSettingsModel;
 
 export type UserSettings = { [key in UserSettingKey]?: string };
 export type ServerSettings = { [key in ServerSettingKey]?: string };
@@ -149,7 +150,7 @@ const UserSettingsModel = {
         help: "osu! default mode (for osu! commmands) [osu | mania | taiko | ctb]",
         category: "osu!"
     }
-}
+};
 
 const ServerSettingsModel = {
     ...CommonSettingsModel,
@@ -176,7 +177,7 @@ const ServerSettingsModel = {
         showOnlyIfBotIsInGuild: "170915625722576896",
         category: "DiscordRPG"
     }
-}
+};
 
 export const SettingsModel = {
 	common: CommonSettingsModel,

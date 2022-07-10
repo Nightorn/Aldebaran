@@ -24,7 +24,6 @@ export default class TrapCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const args = ctx.args as {
 			user: string,

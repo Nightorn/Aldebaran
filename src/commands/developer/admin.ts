@@ -22,7 +22,6 @@ export default class AdminCommand extends Command {
 		);
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const embed = this.createEmbed(ctx)
 			.setTitle("Warning")

@@ -16,7 +16,6 @@ export default class BugreportCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const { report } = ctx.args as { report: string };
 		const embed = new MessageEmbed()

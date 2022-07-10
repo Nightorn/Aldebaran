@@ -16,7 +16,6 @@ export default class SuggestCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const { suggestion } = ctx.args as { suggestion: string };
 		const embed = new MessageEmbed()

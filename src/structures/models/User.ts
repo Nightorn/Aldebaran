@@ -67,7 +67,7 @@ User.init({
 		allowNull: false,
 		defaultValue: 0,
 		get() {
-			return new AldebaranPermissions(this.getDataValue("permissions"))
+			return new AldebaranPermissions(this.getDataValue("permissions"));
 		},
 		set(value: AldebaranPermissions) {
 			this.setDataValue("permissions", value.bitfield);

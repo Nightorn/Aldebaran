@@ -8,9 +8,9 @@ import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessa
 
 const timeNames = moment.tz.names();
 
-export async function createNekosEmbed(description: string, endpoint: Function) {
+export async function createNekosEmbed(desc: string, endpoint: Function) {
     return new MessageEmbed()
-        .setDescription(description)
+        .setDescription(desc)
         .setFooter({
             text: "Powered by nekos.life",
             iconURL: "https://avatars2.githubusercontent.com/u/34457007?s=200&v=4"
@@ -221,6 +221,6 @@ export function zodiacName(date: Date) {
 	const monthIndex = date.getMonth() - 1;
     const signMonthIndex = date.getDate() <= zodBounds[monthIndex]
         ? monthIndex
-        : (monthIndex + 1) % 12
+        : (monthIndex + 1) % 12;
 	return zodMonths[signMonthIndex];
 }

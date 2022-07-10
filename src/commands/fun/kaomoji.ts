@@ -7,7 +7,6 @@ export default class KaomojiCommand extends Command {
 		super(client, { description: "Displays a random kaomoji" });
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		ctx.reply((await ctx.client.nekoslife.catText()).cat);
 	}

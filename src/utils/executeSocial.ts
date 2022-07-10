@@ -3,7 +3,9 @@ import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.
 import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 import { actionText, imageUrls } from "./Constants.js";
 
-export default async (ctx: DiscordMessageContext | DiscordSlashMessageContext) => {
+export default async (
+    ctx: DiscordMessageContext | DiscordSlashMessageContext
+) => {
 	const args = ctx.args as { user: string };
 	const user = args.user || ctx.author.id;
 	ctx.client.discord.users.fetch(user).then(() => {

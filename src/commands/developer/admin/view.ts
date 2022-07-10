@@ -13,7 +13,6 @@ export default class ViewSubcommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: DiscordMessageContext) {
 		const args = ctx.args as string[];
 		const id = ctx.mentions.members!.size === 1

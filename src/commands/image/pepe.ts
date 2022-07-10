@@ -19,16 +19,15 @@ export default class PepeCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
-		const Client = tenor.client({
+		const TenorClient = tenor.client({
 			Key: process.env.API_TENOR,
 			Filter: "off",
 			Locale: "en_US",
 			MediaFilter: "minimal",
 			DateFormat: "MM/DD/YYYY - HH:mm:ss A"
 		});
-		Client.Search.Random("frog pepe", "1").then((results: Post[]) => {
+		TenorClient.Search.Random("frog pepe", "1").then((results: Post[]) => {
 			results.forEach(post => {
 				const embed = new MessageEmbed()
 					.setColor(this.color)

@@ -27,7 +27,6 @@ export default class RpsCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
 		const args = ctx.args as { user: string };
 		const target = await ctx.client.users.fetchDiscord(args.user);

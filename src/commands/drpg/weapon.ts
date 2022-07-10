@@ -12,7 +12,6 @@ export default class WeaponCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { level: string };
 		const level = Number(args.level);

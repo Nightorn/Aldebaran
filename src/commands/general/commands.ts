@@ -24,7 +24,6 @@ export default class CommandsCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext, platform: Platform) {
 		const args = ctx.args as { showHidden: boolean, hideAliases: boolean };
 		const categories: { [key: string]: string[] } = {};

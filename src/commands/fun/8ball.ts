@@ -15,7 +15,6 @@ export default class EightballCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const { question } = ctx.args as { question: string };
 		const data = await ctx.client.nekoslife.eightBall({ text: question });

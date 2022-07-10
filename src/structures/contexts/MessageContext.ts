@@ -1,4 +1,4 @@
-import { GuildMember, Message, MessageEmbed, MessageOptions, TextBasedChannel } from "discord.js";
+import { GuildMember, Message, MessageEmbed, TextBasedChannel } from "discord.js";
 import { ErrorString, Errors, CommandMode } from "../../utils/Constants.js";
 import Client from "../Client.js";
 import Command from "../../groups/Command.js";

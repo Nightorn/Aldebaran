@@ -11,7 +11,6 @@ export default class BStatsCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const processMemory = process.memoryUsage().heapTotal;
 		const mem = Math.round((100 * processMemory) / 1048576) / 100;

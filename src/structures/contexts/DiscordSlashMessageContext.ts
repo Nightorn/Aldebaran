@@ -23,7 +23,7 @@ export default class DiscordSlashMessageContext extends MessageContext {
 		this.author = author;
 		this.server = server;
 		this.interaction = interaction;
-        
+		
 		const subcommand = interaction.options.getSubcommand(false);
 		if (subcommand) {
 			this.command = client.commands.get(interaction.commandName, "DISCORD_SLASH")!
@@ -56,7 +56,7 @@ export default class DiscordSlashMessageContext extends MessageContext {
 			? this.interaction.member as GuildMember
 			: null;
 	}
-    
+	
 	get mode(): CommandMode {
 		return "NORMAL";
 	}
@@ -98,10 +98,11 @@ export default class DiscordSlashMessageContext extends MessageContext {
 	) {
 		if (content instanceof MessageEmbed) {
 			return this.interaction.reply({ embeds: [content], ephemeral, fetchReply });
-        } else if (typeof content === "string") {
+		} else if (typeof content === "string") {
 			return this.interaction.reply({ content, ephemeral, fetchReply });
 		} else {
-			return this.interaction.reply({ ...content, ephemeral, fetchReply } as InteractionReplyOptions);
+			const args = { ...content, ephemeral, fetchReply };
+			return this.interaction.reply(args as InteractionReplyOptions);
 		}
 	}
 }

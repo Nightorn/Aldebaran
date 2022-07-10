@@ -80,7 +80,6 @@ export default class WallsCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const userId = (ctx.args as { user: string }).user || ctx.author.id;
 		const user = await ctx.client.users.fetchDiscord(userId);

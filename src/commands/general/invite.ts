@@ -1,4 +1,4 @@
-import { InteractionReplyOptions, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
 import Client from "../../structures/Client.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";

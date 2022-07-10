@@ -91,7 +91,7 @@ export default class ServerManager {
 			const s = await Server.findByPk(id, { include: {
                 as: "settings",
 				model: ServerSetting
-			} })
+			} });
 			if (s) {
 				this.serverCache.set(id, encap(s));
 			} else {

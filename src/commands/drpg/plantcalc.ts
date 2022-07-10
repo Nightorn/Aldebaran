@@ -27,7 +27,6 @@ export default class PlantcalcCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { seed: string, hours: number, points?: number };
 		const points = args.points || 0;

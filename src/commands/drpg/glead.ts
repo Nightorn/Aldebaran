@@ -113,7 +113,6 @@ export default class GleadCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
 		const args = ctx.args as {
 			user?: string,

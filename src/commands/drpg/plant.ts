@@ -27,7 +27,6 @@ export default class PlantCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user: string, plant: string };
 		const userid = args.user || ctx.author.id;

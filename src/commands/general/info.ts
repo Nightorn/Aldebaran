@@ -11,7 +11,6 @@ export default class InfoCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		let adminMentions = "";
 		for (const [id, member] of Object.entries(ctx.client.config.aldebaranTeam)) {

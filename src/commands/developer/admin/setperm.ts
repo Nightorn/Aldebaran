@@ -12,7 +12,6 @@ export default class SetpermSubcommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this, no-unused-vars
 	async run(ctx: MessageContext) {
 		const args = ctx.args as string[];
 		if (args[0] === undefined) {

@@ -10,7 +10,6 @@ export default class CreditsCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const embed = new MessageEmbed()
 			.setTitle(

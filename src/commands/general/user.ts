@@ -18,7 +18,6 @@ export default class UserCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
 		ctx.client.users.fetchDiscord(args.user || ctx.author.id)
@@ -64,7 +63,7 @@ export default class UserCommand extends Command {
                     const timezone = user.base.getSetting("timezone");
                     const format = dateformat
                         ? `**${dateformat}** [@] HH:mm`
-                        : "**MM/DD/YYYY** [@] HH:mm"
+                        : "**MM/DD/YYYY** [@] HH:mm";
 					return getDateWithTimezone(date, `${format}`, timezone);
 				};
 

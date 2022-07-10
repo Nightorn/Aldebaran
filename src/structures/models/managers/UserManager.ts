@@ -91,7 +91,7 @@ export default class UserManager {
 			const u = await User.findByPk(id, { include: {
 				as: "settings",
 				model: UserSetting
-			} })
+			} });
 			if (u) {
 				this.userCache.set(id, encap(u));
 			} else {

@@ -6,9 +6,9 @@ import { ServerSettingKey, UserSettingKey } from "../../utils/Constants.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 
-type Parameters<T> = { name: T, description: string }[];
+type SettingParameters<T> = { name: T, description: string }[];
 
-const guildParameters: Parameters<ServerSettingKey> = [
+const guildParameters: SettingParameters<ServerSettingKey> = [
 	{
 		name: "healthmonitor",
 		description: "DiscordRPG Health Monitor"
@@ -23,8 +23,8 @@ const guildParameters: Parameters<ServerSettingKey> = [
 	}
 ];
 
-const userParameters: Parameters<UserSettingKey> = [
-	...guildParameters as Parameters<UserSettingKey>,
+const userParameters: SettingParameters<UserSettingKey> = [
+	...guildParameters as SettingParameters<UserSettingKey>,
 	{
 		name: "timerping",
 		description: "DiscordRPG Timer Pings"
@@ -42,10 +42,9 @@ export default class EnableDRPGCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	configuringEmbed(ctx: MessageContext, type: string) {
 		const parameters = type === "user" ? userParameters : guildParameters;
-        const list = (parameters as Parameters<string>)
+        const list = (parameters as SettingParameters<string>)
             .reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "");
 		return new MessageEmbed()
 			.setTitle(`Configuring ${type}'s settings`)
@@ -96,7 +95,6 @@ export default class EnableDRPGCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	done(
 		ctx: DiscordMessageContext | DiscordSlashMessageContext,
 		followUp: boolean = false
@@ -115,7 +113,6 @@ export default class EnableDRPGCommand extends Command {
 		}
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	noPermissions(ctx: MessageContext) {
 		const embed = new MessageEmbed()
 			.setTitle("Oops!")
@@ -126,7 +123,6 @@ export default class EnableDRPGCommand extends Command {
 		ctx.reply(embed);
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
 		const isAdmin = ctx.member!
 			.permissionsIn(ctx.channel as TextChannel)

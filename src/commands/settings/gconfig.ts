@@ -26,7 +26,6 @@ export default class GconfigCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: DiscordMessageContext) {
 		const args = ctx.args as { setting: string, value?: string };
 		const parameters = SettingsModel.guild;
@@ -57,9 +56,9 @@ export default class GconfigCommand extends Command {
 
 			const embed = this.createEmbed(ctx)
 				.setTitle("Config Command Help Page");
-			for (const [category, parameters] of Object.entries(list)) {
+			for (const [category, params] of Object.entries(list)) {
 				let entries = "";
-				for (const [key, data] of Object.entries(parameters)) {
+				for (const [key, data] of Object.entries(params)) {
 					entries += `**${key}** - ${data.help}\n`;
 				}
 				if (entries) {

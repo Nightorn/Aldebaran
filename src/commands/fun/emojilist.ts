@@ -11,7 +11,6 @@ export default class EmojilistCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: DiscordMessageContext) {
 		const emojilist = ctx.server!.guild.emojis.cache
 			.map(e => e.toString()).join("");

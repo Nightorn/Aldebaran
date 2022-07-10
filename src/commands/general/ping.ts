@@ -33,7 +33,6 @@ export default class PingCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext, platform: Platform) {
 		const embed = new MessageEmbed()
 			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.discord.ws.ping)} ms`, true)

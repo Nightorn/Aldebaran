@@ -29,7 +29,6 @@ export default class UpgradecalcCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as {
 			charLevel: string,

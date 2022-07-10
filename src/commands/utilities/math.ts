@@ -16,7 +16,6 @@ export default class MathCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const { expression } = ctx.args as { expression: string };
 

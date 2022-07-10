@@ -58,7 +58,6 @@ export default class CurConvCommand extends Command implements ICommand {
 		);
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	doChecks(
 		err: Error,
 		data: ExpectedResponse,
