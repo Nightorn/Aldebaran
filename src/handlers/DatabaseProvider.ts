@@ -33,7 +33,7 @@ export default class DatabaseProvider {
 	public static authenticate() {
         return new Promise<void>((resolve, reject) => {
             this.sequelize.authenticate().then(() => {
-                this.sequelize.sync().then(() => {
+                this.sequelize.sync({ force: true }).then(() => {
                     console.log("Successfully logged in to the database!");
                     resolve();
                 }).catch(err => {

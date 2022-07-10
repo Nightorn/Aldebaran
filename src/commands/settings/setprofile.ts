@@ -1,7 +1,16 @@
 import Command from "../../groups/SettingsCommand.js";
 import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { SocialProfileProperty } from "../../utils/Constants.js";
+
+const sectionMatches: { [key: string]: string } = {
+    profilepicturelink: "profilePictureLink",
+    favoritegames: "favoriteGames",
+    profilecolor: "profileColor",
+    favoritemusic: "favoriteMusic",
+    sociallinks: "socialLinks",
+    zodiacname: "zodiacName",
+    flavortext: "flavorText"
+};
 
 export default class SetprofileCommand extends Command {
 	constructor(client: Client) {
@@ -24,20 +33,14 @@ export default class SetprofileCommand extends Command {
 	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { section: string, input: string };
-		const profile = await ctx.author.base.getProfile();
-		const sectionMatches = {
-			profilepicturelink: "profilePictureLink",
-			favoritegames: "favoriteGames",
-			profilecolor: "profileColor",
-			favoritemusic: "favoriteMusic",
-			sociallinks: "socialLinks",
-			zodiacname: "zodiacName",
-			flavortext: "flavorText"
-		};
+		
+        let profile = await ctx.author.base.getProfile();
+        if (!profile) {
+            profile = await ctx.author.base.createProfile();
+        }
 
 		const section = args.section.toLowerCase();
-		const profiletarget = (sectionMatches[section as keyof typeof sectionMatches]
-			|| section) as SocialProfileProperty;
+		const profiletarget = sectionMatches[section] || section;
 
         profile.set({ [profiletarget]: args.input }).save().then(() => {
 			ctx.reply(`Your ${profiletarget} has been updated to \`${args.input}\`.`);

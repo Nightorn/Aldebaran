@@ -1,8 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { tableConf } from "../../utils/Methods.js";
-import User from "./User.js";
 
-export default class SocialProfile extends Model {
+export default class Profile extends Model {
 	declare private id: number;
 	declare public aboutMe: string;
 	declare public birthday: Date;
@@ -20,8 +19,7 @@ export default class SocialProfile extends Model {
 	declare public socialLinks: string;
 }
 
-SocialProfile.init({
-	id: { type: DataTypes.INTEGER, primaryKey: true	},
+Profile.init({
 	aboutMe: { type: DataTypes.STRING(2000), defaultValue: null },
 	birthday: { type: DataTypes.DATE, defaultValue: null },
 	country: { type: DataTypes.STRING(100), defaultValue: null },
@@ -36,4 +34,4 @@ SocialProfile.init({
 	profilePictureLink: { type: DataTypes.STRING(1000), defaultValue: null },
 	profileColor: { type: DataTypes.STRING(20), defaultValue: null },
 	socialLinks: { type: DataTypes.STRING(1000), defaultValue: null }
-}, tableConf("user_profile"));
+}, tableConf("profile"));

@@ -1,8 +1,8 @@
-import { Model, DataTypes, HasOneGetAssociationMixin, HasManyCreateAssociationMixin } from "sequelize";
+import { Model, DataTypes, HasOneGetAssociationMixin, HasManyCreateAssociationMixin, HasOneCreateAssociationMixin } from "sequelize";
 import AldebaranPermissions from "../AldebaranPermissions.js";
 import { Permissions, PermissionString, UserSettingKey } from "../../utils/Constants.js";
 import { tableConf } from "../../utils/Methods.js";
-import SocialProfile from "./SocialProfile.js";
+import Profile from "./Profile.js";
 import UserSetting from "./UserSetting.js";
 
 class User extends Model {
@@ -11,7 +11,8 @@ class User extends Model {
 	declare public permissions: AldebaranPermissions;
 
 	declare private createSetting: HasManyCreateAssociationMixin<UserSetting>;
-	declare public getProfile: HasOneGetAssociationMixin<SocialProfile>;
+    declare public createProfile: HasOneCreateAssociationMixin<Profile>;
+	declare public getProfile: HasOneGetAssociationMixin<Profile>;
 
 	/**
 	 * Adds permissions to a user
