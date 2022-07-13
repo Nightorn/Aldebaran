@@ -11,7 +11,7 @@ class User extends Model {
 	declare public permissions: AldebaranPermissions;
 
 	declare private createSetting: HasManyCreateAssociationMixin<UserSetting>;
-    declare public createProfile: HasOneCreateAssociationMixin<Profile>;
+	declare public createProfile: HasOneCreateAssociationMixin<Profile>;
 	declare public getProfile: HasOneGetAssociationMixin<Profile>;
 
 	/**
@@ -52,12 +52,12 @@ class User extends Model {
 	async setSetting(key: UserSettingKey, value: string) {
 		const setting = this.findSetting(key);
 		if (setting) {
-			await setting.set({ key, value }).save();
+			return setting.set({ key, value }).save();
 		} else {
 			const created = await this.createSetting({ key, value });
-            this.settings.push(created);
+			this.settings.push(created);
+			return created;
 		}
-        return this.findSetting(key)!;
 	}
 }
 

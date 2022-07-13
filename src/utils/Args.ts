@@ -24,7 +24,7 @@ export type ExpressionArg = DefaultArg & {
 
 export type ModeArg = DefaultArg & {
 	as: "mode",
-    choices: APIApplicationCommandOptionChoice<string>[]
+	choices: APIApplicationCommandOptionChoice<string>[]
 	flag?: Flag
 };
 
@@ -48,12 +48,19 @@ export function checkArgType(element: string) {
 	return "string";
 }
 
+type Deconstructed = (
+	{ user: string }
+	| { string: string }
+	| { number: number }
+	| { flag: { id: string, pv: string } }
+)[];
+
 export function parseArgs(split: string[], argsMetadata: Args) {
 	if (Object.keys(argsMetadata).length === 1
 		&& Object.values(argsMetadata)[0].as === "string") {
 		return { [Object.keys(argsMetadata)[0]]: split.join(" ") };
 	}
-	const deconstructed = []; // All arguments and their type
+	const deconstructed: Deconstructed = []; // All arguments and their type
 	for (let i = 0; i < split.length; i++) {
 		// if the argument is between double quotes, then concatenate what needs to be concatenated
 		if (split[i].startsWith("\"")) {
@@ -78,7 +85,10 @@ export function parseArgs(split: string[], argsMetadata: Args) {
 		}
 		const type = checkArgType(split[i]);
 		if (type === "user") {
-			deconstructed.push({ user: split[i].match(/\d{17,19}/g)![0] });
+			const match = split[i].match(/\d{17,19}/g);
+			if (match) {
+				deconstructed.push({ user: match[0] });
+			}
 		} else if (type === "number") {
 			deconstructed.push({ number: Number(split[i]) });
 		} else if (type === "flag") {
@@ -94,7 +104,7 @@ export function parseArgs(split: string[], argsMetadata: Args) {
 	}
 	const args: { [key: string]: string | boolean } = { };
 	for (const element of deconstructed) {
-		const [[type, value]]: [string, any][] = Object.entries(element);
+		const [[type, value]] = Object.entries(element);
 		let result = null;
 		for (const [arg, data] of Object.entries(argsMetadata)) {
 			if (result) break;
@@ -110,7 +120,7 @@ export function parseArgs(split: string[], argsMetadata: Args) {
 				} else if (type === "flag" && data.as === "mode") {
 					result = { arg, value: value.id };
 				} else if (type !== "flag" && data.as === "expression") {
-					const match = String(value).match(data.regex!);
+					const match = String(value).match(data.regex);
 					if (match) {
 						result = { arg, value: match[0] };
 					}
@@ -137,10 +147,9 @@ export function parseInput(
 	const split = content.slice(prefix.length + +(mode !== "NORMAL")).split(" ");
 	let command = client.commands.get(split.shift() || "", platform);
 
-	if (command) {
-		while (command!.subcommands.get(split[0])) {
-			command = command!.subcommands.get(split.shift() || "");
-		}
+	while (command && command.subcommands.get(split[0])) {
+		command = command.subcommands.get(split.shift() || "");
 	}
+
 	return { command, args: split };
 }

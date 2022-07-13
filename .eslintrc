@@ -1,11 +1,10 @@
 {
     "root": true,
     "extends": [
-        "airbnb-typescript"
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
-    "plugins": [
-        "@typescript-eslint"
-    ],
+    "plugins": ["@typescript-eslint"],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2017,
@@ -15,30 +14,8 @@
         "es6": true
     },
     "rules": {
-        "@typescript-eslint/comma-dangle": ["error", "never"],
-        "@typescript-eslint/curly": "off",
-        "@typescript-eslint/guard-for-in": "off",
-        "@typescript-eslint/import/no-webpack-loader-syntax": "off",
-        "@typescript-eslint/indent": ["off"], // https://github.com/typescript-eslint/typescript-eslint/issues/1824
-        "@typescript-eslint/linebreak-style": "off",
-        "@typescript-eslint/lines-between-class-members": "off",
-        "@typescript-eslint/no-bitwise": "off",
-        "@typescript-eslint/no-confusing-arrow": "off",
-        "@typescript-eslint/no-console": "off",
-        "@typescript-eslint/no-mixed-operators": "off",
-        "@typescript-eslint/no-plusplus": "off",
-        "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true }],
-        "@typescript-eslint/object-curly-spacing": ["error", "always"],
-        "@typescript-eslint/object-curly-newline": "off",
-        "@typescript-eslint/quotes": ["warn", "double"],
-        "@typescript-eslint/semi": ["error", "always"],
-        "arrow-parens": ["off"],
-        "guard-for-in": "off",
-        "import/extensions": "off",
-        "import/no-cycle": "off",
-        "import/no-extraneous-dependencies": "off",
-        "import/no-webpack-loader-syntax": "off",
-        "linebreak-style": "off",
+        "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
+        "indent": ["warn", "tab", { "SwitchCase": 1 }],
         "max-len": ["warn", {
             "code": 80,
             "tabWidth": 1,
@@ -47,18 +24,7 @@
             "ignoreTemplateLiterals": true,
             "ignoreRegExpLiterals": true
         }],
-        "no-async-promise-executor": "off",
-        "no-bitwise": "off",
-        "no-confusing-arrow": "off",
-        "no-console": "off",
-        "no-mixed-operators": "off",
-        "no-plusplus": "off",
-        "no-tabs": ["error", { "allowIndentationTabs": true }],
-        "no-underscore-dangle": "off",
-        "object-curly-spacing": ["error", "always"],
-        "object-curly-newline": "off",
-        "prefer-destructuring": ["error", { "array": false }],
-        "quotes": ["off"],
-        "react/jsx-filename-extension": "off"
+        "no-empty": ["error", { "allowEmptyCatch": true }],
+        "no-tabs": ["error", { "allowIndentationTabs": true }]
     }
 }

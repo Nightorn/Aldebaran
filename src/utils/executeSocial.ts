@@ -1,15 +1,16 @@
 import { MessageEmbed } from "discord.js";
+import Command from "../groups/SocialCommand.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 import { actionText, imageUrls } from "./Constants.js";
 
 export default async (
-    ctx: DiscordMessageContext | DiscordSlashMessageContext
+	ctx: DiscordMessageContext | DiscordSlashMessageContext
 ) => {
 	const args = ctx.args as { user: string };
 	const user = args.user || ctx.author.id;
 	ctx.client.discord.users.fetch(user).then(() => {
-        const command = ctx.command!.name;
+		const command = (ctx.command as Command).name;
 		const target = `<@${user}>`;
 		const sender = ctx.author.user.username;
 

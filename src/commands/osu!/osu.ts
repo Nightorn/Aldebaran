@@ -39,9 +39,9 @@ export default class OsuCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
-		const client = ctx.client.nodesu!;
+		const client = ctx.client.nodesu;
 		const mode = (args.mode || ctx.author.base.getSetting("osumode") || "osu") as OsuMode;
-		if (Mode[mode] !== undefined) {
+		if (client && Mode[mode] !== undefined) {
 			client.user.get(
 				args.user
 				|| ctx.author.base.getSetting("osuusername")

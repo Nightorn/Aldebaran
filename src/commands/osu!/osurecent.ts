@@ -39,9 +39,9 @@ export default class OsurecentCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
-		const client = ctx.client.nodesu!;
+		const client = ctx.client.nodesu;
 		const mode = (args.mode || ctx.author.base.getSetting("osumode") || "osu") as OsuMode;
-		if (Mode[mode] !== undefined) {
+		if (client && Mode[mode] !== undefined) {
 			client.user.getRecent(
 				args.user
 				|| ctx.author.base.getSetting("osuusername")
@@ -53,19 +53,11 @@ export default class OsurecentCommand extends Command {
 				const user = new User(await client.user
 					.get(recent.userId, Mode[mode]));
 
-				const mapData = (await client.beatmaps.getByBeatmapId(
-					recent.beatmapId,
-					Mode[mode],
-					1,
-					Converts.include,
-					recent.enabledMods
-				))[0];
-				const map = new Beatmap(mapData);
 				let score: Result | null = null;
 				if (mode === "osu") {
 					score = await ppv2Results(
 						recent.beatmapId,
-						recent.enabledMods!,
+						recent.enabledMods as number,
 						recent.maxCombo,
 						undefined,
 						recent.countMiss,
@@ -74,14 +66,24 @@ export default class OsurecentCommand extends Command {
 						recent.count50
 					);
 				}
+
+				const map = new Beatmap((await client.beatmaps.getByBeatmapId(
+					recent.beatmapId,
+					Mode[mode],
+					1,
+					Converts.include,
+					recent.enabledMods
+				))[0]);
+
 				const mods = ojsama.modbits.string(Number(recent.enabledMods));
 				const completion = (
 					(recent.count300
 					+ recent.count100
 					+ recent.count50
 					+ recent.countMiss)
-				* 100 / (map.countNormal + map.countSlider + map.countSpinner))
+					* 100 / (map.countNormal + map.countSlider + map.countSpinner))
 					.toFixed(2);
+
 				const embed = new MessageEmbed()
 					.setAuthor({
 						name: `${user.username}  |  Most Recent osu!${mode !== "osu" ? mode : ""} Play`,
@@ -91,7 +93,7 @@ export default class OsurecentCommand extends Command {
 					.setColor(this.color)
 					.setTitle(`__${map.artist} - **${map.title}**__ [${map.version}] (${map.creator}) [**${Number(map.difficultyRating).toFixed(2)}★${mods !== "" ? ` +${mods}` : ""}]**`)
 					.setURL(`https://osu.ppy.sh/b/${recent.beatmapId}`)
-					.setDescription(`**\`[${ranks[recent.rank as "XH" | "X" | "SH"] || recent.rank}]\`** (${mode === "osu" ? `**${score!.accuracy}%**, ` : ""}**x${recent.maxCombo}**${["osu", "ctb"].includes(mode) ? `/${map.maxCombo}` : ""}) -${mode === "osu" ? ` **${score!.pp.toFixed(2)}pp** -` : ""} \`${recent.count300}\` 300, \`${recent.count100}\` 100, \`${recent.count50}\` 50, \`${recent.countMiss}\` miss${recent.rank === "F" ? `\n**${completion}%** Map Completion` : ""}`)
+					.setDescription(`**\`[${ranks[recent.rank as "XH" | "X" | "SH"] || recent.rank}]\`** (${score ? `**${score.accuracy}%**, ` : ""}**x${recent.maxCombo}**${["osu", "ctb"].includes(mode) ? `/${map.maxCombo}` : ""}) -${score ? ` **${score.pp.toFixed(2)}pp** -` : ""} \`${recent.count300}\` 300, \`${recent.count100}\` 100, \`${recent.count50}\` 50, \`${recent.countMiss}\` miss${recent.rank === "F" ? `\n**${completion}%** Map Completion` : ""}`)
 					.setFooter({ text: `Score set on ${parseDate(recent.date)}.` });
 				ctx.reply(embed);
 			}).catch(() => {

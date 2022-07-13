@@ -1,13 +1,13 @@
 import { GuildMember, Message, MessageEmbed, TextBasedChannel } from "discord.js";
-import { ErrorString, Errors, CommandMode } from "../../utils/Constants.js";
+import { ErrorString, Errors, CommandMode, If } from "../../utils/Constants.js";
 import Client from "../Client.js";
 import Command from "../../groups/Command.js";
-import ContextAuthor from "../../interfaces/ContextAuthor.js";
-import ContextServer from "../../interfaces/ContextServer.js";
+import Author from "../../interfaces/ContextAuthor.js";
+import Server from "../../interfaces/ContextServer.js";
 
-export default abstract class MessageContext {
-    public abstract author: ContextAuthor;
-    public abstract server?: ContextServer;
+export default abstract class MessageContext<InGuild extends boolean = false> {
+	public abstract author: Author;
+	public abstract server?: If<InGuild, Server>;
 
 	protected _args?: string[] | { [key: string]: string | boolean; };
 	public client: Client;
@@ -22,7 +22,7 @@ export default abstract class MessageContext {
 	};
 	abstract get channel(): TextBasedChannel;
 	abstract get createdTimestamp(): number;
-	abstract get member(): GuildMember | null;
+	abstract get member(): If<InGuild, GuildMember>;
 	abstract get mode(): CommandMode;
 	abstract get prefix(): string;
 
@@ -30,20 +30,23 @@ export default abstract class MessageContext {
 	
 	argsCheck() {
 		if (this.command && this.command.metadata.args) {
-			const mandatory = Object.keys(this.command.metadata.args)
-				.filter(k => !this.command!.metadata.args![k].optional);
+			const args = this.command.metadata.args;
+			const mandatory = Object.keys(args).filter(k => !args[k].optional);
 			const mandatoryFound = Object.keys(this.args)
-				.filter(k => mandatory.includes(k));
+				.filter(a => mandatory.includes(a));
 			return mandatory.length === mandatoryFound.length;
 		}
 		return true;
 	}
 
 	async error(type: ErrorString, desc?: string, value?: string) {
-		const title = Errors[type] ? Errors[type](value!) : "An error has occured.";
+		const title = Errors[type] && value
+			? Errors[type](value)
+			: "An error has occured.";
 		const embed = new MessageEmbed()
 			.setTitle(title)
 			.setColor("RED");
+
 		if (type === "UNEXPECTED_BEHAVIOR") {
 			embed.setDescription(`${desc}\nPlease contact the developers or fill a bug report using the \`bugreport\` command.`);
 		} else if (type === "INVALID_USER") {
@@ -51,8 +54,9 @@ export default abstract class MessageContext {
 		} else if (desc) {
 			embed.setDescription(desc);
 		}
+	
 		return this.reply(embed);
 	}
 
-	abstract reply(content: string | MessageEmbed): any;
+	abstract reply(content: string | MessageEmbed): unknown;
 }

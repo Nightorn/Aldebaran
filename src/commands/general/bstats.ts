@@ -20,15 +20,14 @@ export default class BStatsCommand extends Command {
 		const embed = this.createEmbed(ctx)
 			.setAuthor({
 				name: `${ctx.client.name}  |  Bot Statistics`,
-				iconURL: ctx.client.discord.user!.displayAvatarURL()
+				iconURL: ctx.client.discord.user.displayAvatarURL()
 			})
 			.setDescription(
 				`Data about ${ctx.client.name} are shown on this page, mainly the used resources and the global usage statistics.`
 			)
 			.addField("Memory Usage", `**${mem} MB**`, true)
 			.addField("System CPU Load", `**${load}** (${loadPC}%)`, true)
-			.addField("Uptime", getTimeString(ctx.client.discord.uptime!, "DD day(s), HH:MM:SS"), true)
-			.addField("Shard ID", ctx.client.shardId.toString(), true);
+			.addField("Uptime", getTimeString(ctx.client.discord.uptime, "DD day(s), HH:MM:SS"), true);
 		ctx.reply(embed);
 	}
 }

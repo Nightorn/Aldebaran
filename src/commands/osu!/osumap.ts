@@ -69,8 +69,8 @@ export default class OsumapCommand extends Command {
 			combo?: string,
 			nmiss?: string
 		};
-		const client = ctx.client.nodesu!;
-		if (args.map === undefined) {
+		const client = ctx.client.nodesu;
+		if (!client || args.map === undefined) {
 			return ctx.reply(
 				"You need to send a link of the beatmap or its ID. Check `&?osumap` for more information."
 			);
@@ -102,24 +102,6 @@ export default class OsumapCommand extends Command {
 							approvalStatus = key[0].toUpperCase() + key.slice(1);
 					}
 					const combo = comboArg || beatmap.maxCombo;
-					let results = null;
-					let resultsAcc = null;
-					if (mode === "osu") {
-						results = await ppv2Results(
-							beatmap.id,
-							ojsama.modbits.from_string(stringMods),
-							beatmap.maxCombo,
-							100,
-							0
-						);
-						resultsAcc = await ppv2Results(
-							beatmap.id,
-							ojsama.modbits.from_string(stringMods),
-							undefined,
-							Number(accuracy),
-							Number(nmiss)
-						);
-					}
 
 					const embed = this.createEmbed(ctx)
 						.setAuthor({
@@ -168,12 +150,28 @@ export default class OsumapCommand extends Command {
 								beatmap.setId
 							}/covers/cover.jpg`
 						);
+					let results = null;
+					let resultsAcc = null;
 					if (mode === "osu") {
+						results = await ppv2Results(
+							beatmap.id,
+							ojsama.modbits.from_string(stringMods),
+							beatmap.maxCombo,
+							100,
+							0
+						);
+						resultsAcc = await ppv2Results(
+							beatmap.id,
+							ojsama.modbits.from_string(stringMods),
+							undefined,
+							Number(accuracy),
+							Number(nmiss)
+						);
 						embed.addField(
 							"Estimated PPs",
-							`**FC 100%** : ${r(results!.pp)}pp\n**${
+							`**FC 100%** : ${r(results.pp)}pp\n**${
 								combo === beatmap.maxCombo ? "FC " : ""
-							}${accuracy}%** : ${r(resultsAcc!.pp)}pp`,
+							}${accuracy}%** : ${r(resultsAcc.pp)}pp`,
 							true
 						);
 					}
@@ -193,13 +191,13 @@ export default class OsumapCommand extends Command {
 								? Math.round(beatmap.bpm * 1.5)
 								: beatmap.bpm
 						} **BPM** ${
-							mode === "osu" ? `| **CS** ${r(results!.cs)} ` : ""
+							results ? `| **CS** ${r(results.cs)} ` : ""
 						}${mode === "ctb" ? `| **CS** ${r(beatmap.diffSize)} ` : ""}${
 							mode === "mania" ? `| **KA** ${beatmap.diffSize} ` : ""
-						}${mode === "osu" ? `| **AR** ${r(results!.ar)} ` : ""}${
+						}${results ? `| **AR** ${r(results.ar)} ` : ""}${
 							mode === "ctb" ? `| **AR** ${r(beatmap.diffApproach)} ` : ""}| **HP** ${
 							r(results === null ? beatmap.diffDrain : results.hp)
-						} | **${mode === "osu" ? "OD" : "AC"}** ${r(results === null ? beatmap.diffOverall : results.od)}`
+						} | **${mode === "osu" ? "OD" : "AC"}** ${r(results ? results.od : beatmap.diffOverall)}`
 					);
 					if (beatmap.source) {
 						embed.setFooter({ text: `Source: ${beatmap.source}` });

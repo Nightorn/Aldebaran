@@ -1,23 +1,25 @@
-import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message, InteractionReplyOptions } from "discord.js";
+import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message, InteractionReplyOptions, TextBasedChannel } from "discord.js";
 import Command from "../../groups/Command.js";
-import { CommandMode } from "../../utils/Constants";
+import { CommandMode, If } from "../../utils/Constants";
 import Client from "../Client.js";
-import DiscordServer from "../models/DiscordServer.js";
-import DiscordUser from "../models/DiscordUser.js";
+import Server from "../models/DiscordServer.js";
+import User from "../models/DiscordUser.js";
 import MessageContext from "./MessageContext.js";
 
 type M = Promise<Message<boolean>>;
-export default class DiscordSlashMessageContext extends MessageContext {
+export default class DiscordSlashMessageContext
+	<InGuild extends boolean = false> extends MessageContext<InGuild>
+{
 	private interaction: CommandInteraction;
-	public author: DiscordUser;
+	public author: User;
 	public command: Command;
-	public server?: DiscordServer;
+	public server: If<InGuild, Server>;
 
 	constructor(
 		client: Client,
 		interaction: CommandInteraction,
-		author: DiscordUser,
-		server?: DiscordServer
+		author: User,
+		server: If<InGuild, Server>
 	) {
 		super(client);
 		this.author = author;
@@ -26,10 +28,12 @@ export default class DiscordSlashMessageContext extends MessageContext {
 		
 		const subcommand = interaction.options.getSubcommand(false);
 		if (subcommand) {
-			this.command = client.commands.get(interaction.commandName, "DISCORD_SLASH")!
-				.subcommands.get(subcommand)!;
+			this.command = (client.commands
+				.get(interaction.commandName, "DISCORD_SLASH") as Command).subcommands
+				.get(subcommand) as Command;
 		} else {
-			this.command = client.commands.get(interaction.commandName, "DISCORD_SLASH")!;
+			this.command = client.commands
+				.get(interaction.commandName, "DISCORD_SLASH") as Command;
 		}
 	}
 
@@ -44,7 +48,7 @@ export default class DiscordSlashMessageContext extends MessageContext {
 	}
 
 	get channel() {
-		return this.interaction.channel!;
+		return this.interaction.channel as TextBasedChannel;
 	}
 
 	get createdTimestamp() {
@@ -52,9 +56,7 @@ export default class DiscordSlashMessageContext extends MessageContext {
 	}
 
 	get member() {
-		return this.interaction.inGuild()
-			? this.interaction.member as GuildMember
-			: null;
+		return this.interaction.member as If<InGuild, GuildMember>;
 	}
 	
 	get mode(): CommandMode {
@@ -71,8 +73,8 @@ export default class DiscordSlashMessageContext extends MessageContext {
 
 	async followUp(
 		content: string | InteractionReplyOptions | MessageEmbed,
-		ephemeral: boolean = false,
-		fetchReply: boolean = false
+		ephemeral = false,
+		fetchReply = false
 	) {
 		if (content instanceof MessageEmbed) {
 			return this.interaction
@@ -93,8 +95,8 @@ export default class DiscordSlashMessageContext extends MessageContext {
 
 	async reply(
 		content: string | MessageOptions | InteractionReplyOptions | MessageEmbed,
-		ephemeral: boolean = false,
-		fetchReply: boolean = false
+		ephemeral = false,
+		fetchReply = false
 	) {
 		if (content instanceof MessageEmbed) {
 			return this.interaction.reply({ embeds: [content], ephemeral, fetchReply });

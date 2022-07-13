@@ -4,6 +4,9 @@ import Command from "../../groups/Command.js";
 import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
+const id = process.env.WEBHOOK_SUGGESTIONS_ID || "";
+const token = process.env.WEBHOOK_SUGGESTIONS_TOKEN || "";
+
 export default class SuggestCommand extends Command {
 	constructor(client: Client) {
 		super(client, {
@@ -21,10 +24,7 @@ export default class SuggestCommand extends Command {
 		const embed = new MessageEmbed()
 			.setDescription(suggestion)
 			.setFooter({ text: `User: ${ctx.author.tag} [ID: ${ctx.author.id}]` });
-		new WebhookClient({
-			id: process.env.WEBHOOK_SUGGESTIONS_ID!,
-			token: process.env.WEBHOOK_SUGGESTIONS_TOKEN!
-		}).send({
+		new WebhookClient({ id, token }).send({
 			username: ctx.author.username,
 			avatarURL: ctx.author.avatarURL,
 			embeds: [embed]

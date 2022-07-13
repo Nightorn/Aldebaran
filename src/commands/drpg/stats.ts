@@ -4,7 +4,7 @@ import Command from "../../groups/DRPGCommand.js";
 import { getTimeString } from "../../utils/Methods.js";
 import Client from "../../structures/Client.js";
 import { drpgLocationdb } from "../../utils/Constants.js";
-import { DRPGUser } from "../../interfaces/DiscordRPG.js";
+import { User } from "../../interfaces/DiscordRPG.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class StatsCommand extends Command {
@@ -31,7 +31,7 @@ export default class StatsCommand extends Command {
 				if (response.statusCode === 404) {
 					ctx.reply("it looks like the user you specified has not started his adventure on DiscordRPG yet.");
 				} else if (response.statusCode === 200) {
-					const data = JSON.parse(body).data as DRPGUser;
+					const data = JSON.parse(body).data as User;
 
 					const format = (x: number) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 					const skills = [];

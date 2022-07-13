@@ -3,13 +3,13 @@ import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const sectionMatches: { [key: string]: string } = {
-    profilepicturelink: "profilePictureLink",
-    favoritegames: "favoriteGames",
-    profilecolor: "profileColor",
-    favoritemusic: "favoriteMusic",
-    sociallinks: "socialLinks",
-    zodiacname: "zodiacName",
-    flavortext: "flavorText"
+	profilepicturelink: "profilePictureLink",
+	favoritegames: "favoriteGames",
+	profilecolor: "profileColor",
+	favoritemusic: "favoriteMusic",
+	sociallinks: "socialLinks",
+	zodiacname: "zodiacName",
+	flavortext: "flavorText"
 };
 
 export default class SetprofileCommand extends Command {
@@ -33,15 +33,15 @@ export default class SetprofileCommand extends Command {
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { section: string, input: string };
 		
-        let profile = await ctx.author.base.getProfile();
-        if (!profile) {
-            profile = await ctx.author.base.createProfile();
-        }
+		let profile = await ctx.author.base.getProfile();
+		if (!profile) {
+			profile = await ctx.author.base.createProfile();
+		}
 
 		const section = args.section.toLowerCase();
 		const profiletarget = sectionMatches[section] || section;
 
-        profile.set({ [profiletarget]: args.input }).save().then(() => {
+		profile.set({ [profiletarget]: args.input }).save().then(() => {
 			ctx.reply(`Your ${profiletarget} has been updated to \`${args.input}\`.`);
 		}).catch(() => {
 			const error = this.createEmbed(ctx)

@@ -5,7 +5,7 @@ export default (client: Client) => {
 	const devMode = process.argv[2] === "dev"
 		? " The developer mode has been enabled." : "";
 	console.log(
-		`\x1b[36m# ${client.discord.user!.username} has started!${devMode}\x1b[0m`
+		`\x1b[36m# ${client.discord.user.username} has started!${devMode}\x1b[0m`
 	);
 
 	const users = client.discord.users.cache.size;
@@ -24,10 +24,10 @@ export default (client: Client) => {
 		return text;
 	};
 
-	client.discord.user!.setActivity("for a few seconds now");
+	client.discord.user.setActivity("for a few seconds now");
 	const { presence } = client.config;
 	setInterval(() => {
 		const { text, type } = presence[Math.floor(Math.random() * presence.length)];
-		client.discord.user!.setActivity(parseText(text), { type });
+		client.discord.user.setActivity(parseText(text), { type });
 	}, 30000);
 };

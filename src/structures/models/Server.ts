@@ -7,7 +7,7 @@ class Server extends Model {
 	declare public settings: ServerSetting[]; // Sequelize inclusion
 	declare public blacklisted: boolean;
 	declare public id: number;
-    
+	
 	declare private createSetting: HasManyCreateAssociationMixin<ServerSetting>;
 
 	get prefix() {
@@ -26,12 +26,12 @@ class Server extends Model {
 	async setSetting(key: ServerSettingKey, value: string) {
 		const setting = this.findSetting(key);
 		if (setting) {
-			await setting.set({ key, value }).save();
+			return setting.set({ key, value }).save();
 		} else {
 			const created = await this.createSetting({ key, value });
-            this.settings.push(created);
+			this.settings.push(created);
+			return created;
 		}
-        return this.findSetting(key)!;
 	}
 }
 

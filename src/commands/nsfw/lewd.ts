@@ -10,7 +10,7 @@ export default class LewdCommand extends Command {
 			description: "Performs a lewd action on the specified user",
 			example: "<@437802197539880970>",
 			args: { user: { as: "user", desc: "The user you want to be lewd to" } },
-            platforms: ["DISCORD", "DISCORD_SLASH"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 

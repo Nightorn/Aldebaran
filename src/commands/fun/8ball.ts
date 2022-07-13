@@ -18,13 +18,15 @@ export default class EightballCommand extends Command {
 	async run(ctx: MessageContext) {
 		const { question } = ctx.args as { question: string };
 		const data = await ctx.client.nekoslife.eightBall({ text: question });
-		const embed = this.createEmbed(ctx)
-			.setDescription(`**${data.response}**`)
-			.setImage(data.url!)
-			.setFooter({
-				text: "Powered by nekos.life",
-				iconURL: ctx.client.discord.user!.avatarURL()!
-			});
-		ctx.reply(embed);
+		if (data.url) {
+			const embed = this.createEmbed(ctx)
+				.setDescription(`**${data.response}**`)
+				.setImage(data.url)
+				.setFooter({
+					text: "Powered by nekos.life",
+					iconURL: ctx.client.discord.user.displayAvatarURL()
+				});
+			ctx.reply(embed);
+		}
 	}
 }

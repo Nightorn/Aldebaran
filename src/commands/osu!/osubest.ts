@@ -58,15 +58,15 @@ export default class OsubestCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
-		const client = ctx.client.nodesu!;
+		const client = ctx.client.nodesu;
 		const mode = (args.mode || ctx.author.base.getSetting("osumode") || "osu") as OsuMode;
-		if (Mode[mode] !== undefined) {
+		if (client && Mode[mode] !== undefined) {
 			client.user.getBest(
 				args.user
 				|| ctx.author.base.getSetting("osuusername")
 				|| ctx.author.username,
 				Mode[mode], 5
-			).then(async (data: any) => {
+			).then(async (data: object[]) => {
 				const best = data.reduce(
 					(acc: UserScore[], cur: object) => [...acc, new UserScore(cur)], []
 				);
@@ -88,7 +88,7 @@ export default class OsubestCommand extends Command {
 						for (let i = 0; i < best.length; i++) {
 							accuracyQueries.push(ppv2Results(
 								best[i].beatmapId,
-								best[i].enabledMods!,
+								best[i].enabledMods as number,
 								best[i].maxCombo,
 								undefined,
 								Number(best[i].countMiss),
@@ -112,7 +112,7 @@ export default class OsubestCommand extends Command {
 								diff: beatmaps[i].version,
 								mapper: beatmaps[i].creator,
 								sr: Number(beatmaps[i].difficultyRating).toFixed(2),
-								mods: ojsama.modbits.string(best[i].enabledMods!),
+								mods: ojsama.modbits.string(best[i].enabledMods as number),
 								score: best[i].score,
 								combo: best[i].maxCombo,
 								maxcombo: beatmaps[i].maxCombo,

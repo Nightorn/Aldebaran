@@ -22,19 +22,19 @@ export default class ProfileCommand extends Command {
 		const args = ctx.args as { user: string };
 		ctx.client.users.fetchDiscord(args.user || ctx.author.id)
 			.then(async user => {
-                const profile = await user.base.getProfile();
+				const profile = await user.base.getProfile();
 				if (profile.name) {
-                    const timezone = user.base.getSetting("timezone");
+					const timezone = user.base.getSetting("timezone");
 					let userDetails = "";
 					if (profile.name) userDetails += `**Name**: ${profile.name}\n`;
 					if (profile.country) userDetails += `**Country**: ${profile.country}\n`;
-                    if (timezone) userDetails += `**Timezone**: ${timezone}\n`;
+					if (timezone) userDetails += `**Timezone**: ${timezone}\n`;
 					if (profile.birthday) {
-                        const age = moment().diff(moment(profile.birthday), "years");
-                        const zodiac = zodiacName(profile.birthday);
-                        userDetails += `**Birthday**: ${profile.birthday}\n`;
-                        userDetails += `**Age**: ${age}\n**Zodiac Sign**: ${zodiac}\n`;
-                    }
+						const age = moment().diff(moment(profile.birthday), "years");
+						const zodiac = zodiacName(profile.birthday);
+						userDetails += `**Birthday**: ${profile.birthday}\n`;
+						userDetails += `**Age**: ${age}\n**Zodiac Sign**: ${zodiac}\n`;
+					}
 					if (profile.gender) userDetails += `**Gender**: ${profile.gender}\n`;
 					const embed = new MessageEmbed()
 						.setAuthor({

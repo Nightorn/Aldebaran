@@ -28,7 +28,7 @@ export default class TimeCommand extends Command {
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, clean?: boolean };
 		const user = await ctx.client.users
-            .fetchDiscord(args.user || ctx.author.id);
+			.fetchDiscord(args.user || ctx.author.id);
 		let timezone = user.base.getSetting("timezone");
 		if (timezone !== undefined) {
 			if (!timezone.includes("/")) {

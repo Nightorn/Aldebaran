@@ -22,18 +22,18 @@ export default class GconfigCommand extends Command {
 					optional: true
 				}
 			},
-            platforms: ["DISCORD", "DISCORD_SLASH"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
-	async run(ctx: DiscordMessageContext) {
+	async run(ctx: DiscordMessageContext<true>) {
 		const args = ctx.args as { setting: string, value?: string };
 		const parameters = SettingsModel.guild;
 		if (args.setting === "help") {
 			const embed = new MessageEmbed()
 				.setAuthor({
 					name: "User Settings",
-					iconURL: ctx.client.discord.user!.avatarURL()!
+					iconURL: ctx.client.discord.user.displayAvatarURL()
 				})
 				.setDescription(
 					`Welcome to your server settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}gconfig list\`, and your current settings are shown in \`${ctx.prefix}gconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}gconfig property value\`, and one example is \`${ctx.prefix}gconfig adventureTimer on\`.`
@@ -45,10 +45,9 @@ export default class GconfigCommand extends Command {
 				if (!list[data.category]) list[data.category] = {};
 				if ("showOnlyIfBotIsInGuild" in data) {
 					try {
-						// eslint-disable-next-line no-await-in-loop
-						await ctx.server!.guild.members.fetch(data.showOnlyIfBotIsInGuild);
+						await ctx.server.guild.members.fetch(data.showOnlyIfBotIsInGuild);
 						list[data.category][key as ServerSettingKey] = data;
-					} catch {} // eslint-disable-line no-empty
+					} catch {}
 				} else {
 					list[data.category][key as ServerSettingKey] = data;
 				}
@@ -68,21 +67,20 @@ export default class GconfigCommand extends Command {
 			ctx.reply(embed);
 		} else if (args.setting === "view") {
 			let list = "";
-            ctx.server!.base.settings.forEach(s => {
+			ctx.server.base.settings.forEach(s => {
 				list += `**${s.key}** - \`${s.value}\`\n`;
-            });
+			});
 			const embed = this.createEmbed(ctx)
 				.setAuthor({
 					name: "Guild Settings  |  Overview",
-					iconURL: ctx.client.discord.user!.avatarURL()!
+					iconURL: ctx.client.discord.user.displayAvatarURL()
 				})
 				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
-		} else if (Object.keys(parameters).includes(args.setting)
-				&& args.value) {
+		} else if (Object.keys(parameters).includes(args.setting) && args.value) {
 			const setting = args.setting.toLowerCase() as ServerSettingKey;
-			if (parameters[setting]!.support(args.value)) {
-				ctx.server!.base.setSetting(setting, args.value).then(() => {
+			if (parameters[setting].support(args.value)) {
+				ctx.server.base.setSetting(setting, args.value).then(() => {
 					const embed = this.createEmbed(ctx)
 						.setTitle("Settings successfully changed")
 						.setDescription(

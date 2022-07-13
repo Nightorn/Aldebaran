@@ -28,6 +28,11 @@ export interface CommandMetadata {
 	requiresGuild?: boolean
 }
 
+export type Context<T extends boolean | undefined = false> =
+	MessageContext<T extends boolean ? T : false>
+	| DiscordMessageContext<T extends boolean ? T : false>
+	| DiscordSlashMessageContext;
+
 export interface ICommand {
 	aliases: string[];
 	category: string;
@@ -44,9 +49,10 @@ export interface ICommand {
 	execute(ctx: MessageContext, platform: Platform): object | void;
 	guildCheck(ctx: MessageContext): boolean;
 	permsCheck(ctx: MessageContext): Promise<boolean>;
-	registerSubcommands<T extends typeof Command>(...subcommands: T[]): void;
+	registerSubcommands(...subcommands: { new(c: Client): Command }[]): void;
 	run(
-		ctx: MessageContext | DiscordMessageContext | DiscordSlashMessageContext,
+		this: ICommand,
+		ctx: Context<typeof this.metadata.requiresGuild>,
 		platform: Platform
 	): void;
 	toHelpEmbed(command: string, prefix: string): MessageEmbed;

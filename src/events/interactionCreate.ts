@@ -6,7 +6,7 @@ export default async (client: Client, interaction: Interaction) => {
 	if (interaction.isCommand()) {
 		const guild = interaction.guild
 			? await client.guilds.fetchDiscord(interaction.guild.id)
-			: undefined;
+			: null;
 		const author = await client.users.fetchDiscord(interaction.user.id);
 
 		const ctx = new Context(client, interaction, author, guild);

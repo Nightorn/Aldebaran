@@ -3,12 +3,10 @@ import DiscordMessageContext from "../../../structures/contexts/DiscordMessageCo
 
 const emoji = ["🥕", "🍋", "🥔", "🐟"];
 
-export default async (ctx: DiscordMessageContext) => {
-	if (!ctx.server) return;
-
-	const deleteSetting = ctx.server!.base.getSetting("autodelete");
-	const prefixSetting = ctx.server!.base.getSetting("discordrpgprefix");
-	const serverSetting = ctx.server!.base.getSetting("adventuretimer");
+export default async (ctx: DiscordMessageContext<true>) => {
+	const deleteSetting = ctx.server.base.getSetting("autodelete");
+	const prefixSetting = ctx.server.base.getSetting("discordrpgprefix");
+	const serverSetting = ctx.server.base.getSetting("adventuretimer");
 	const timerSetting = ctx.author.base.getSetting("timerping");
 	const userSetting = ctx.author.base.getSetting("adventuretimer");
 
@@ -67,13 +65,13 @@ export default async (ctx: DiscordMessageContext) => {
 						ctx.reply(embed).then(timerset => {
 							setTimeout(() => timerset.delete(), 5000);
 						});
-					} else {
+					} else if (ctx.author.timers.sides) {
 						const embed1 = new MessageEmbed()
 							.setDescription("Timer Cancelled")
 							.setAuthor({ name: ctx.author.username })
 							.setColor("RED");
 
-						clearTimeout(ctx.author.timers.sides!);
+						clearTimeout(ctx.author.timers.sides);
 						ctx.author.timers.sides = null;
 
 						ctx.reply(embed1).then(timernotset => {

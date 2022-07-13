@@ -4,7 +4,7 @@ import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
-import { DRPGUser } from "../../interfaces/DiscordRPG.js";
+import { Sapling, User } from "../../interfaces/DiscordRPG.js";
 import { MessageEmbed } from "discord.js";
 
 export default class PlantCommand extends Command {
@@ -41,7 +41,7 @@ export default class PlantCommand extends Command {
 			}
 			if (response.statusCode === 200) {
 				const target = await ctx.client.users.fetchDiscord(userid);
-				const { data } = JSON.parse(body) as { data: DRPGUser };
+				const { data } = JSON.parse(body) as { data: User };
 				if (data.location === undefined) return ctx.reply(`Hey **${data.name}**, travel somewhere and set a trap on your way!`);
 				if (data.location.saplings === null || data.location.saplings === undefined) return ctx.reply(`Hey **${data.name}**, please plant some saplings at your purchased fields before!`);
 				const f = (number: number) => String(number).length === 1 ? `0${number}` : number;
@@ -63,12 +63,12 @@ export default class PlantCommand extends Command {
 						const skillLevel = data.skills.forage.level;
 						const scope = { luck, passed, skillLevel };
 						const scopeMax = { luck: luckMax, passed, skillLevel };
-						const loots = item.sapling!.loot.amount;
+						const loots = (item.sapling as Sapling).loot.amount;
 						const normalMin = evaluate(loots.min, scope);
 						const normalMax = evaluate(loots.max, scope);
 						const highestMin = evaluate(loots.min, scopeMax);
 						const highestMax = evaluate(loots.max, scopeMax);
-						const rewardName = drpgItems[item.sapling!.loot.id[0]].name;
+						const rewardName = drpgItems[(item.sapling as Sapling).loot.id[0]].name;
 						const normalRewards = normalMin === normalMax
 							? `**${normalMin} ${rewardName}**`
 							: `between **${normalMin}** and **${normalMax} ${rewardName}**`;
@@ -101,7 +101,7 @@ export default class PlantCommand extends Command {
 							name: `${target.username}  |  Sapling information`,
 							iconURL: target.avatarURL
 						})
-						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)!.length} plants** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
+						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${plantsList.match(/\n/g)?.length} plants** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}plant 4\` for example.\n${plantsList}`);
 					return ctx.reply(embed);
 				}
 				const embed = new MessageEmbed()

@@ -18,16 +18,13 @@ export default (
 	acc?: number,
 	nmiss?: number,
 	n300?: number,
-	n100: number = 0,
-	n50: number = 0
+	n100 = 0,
+	n50 = 0
 ) => new Promise((resolve: (value: Result) => void) => {
 	retrieveBeatmapFile(beatmapId).then(() => {
 		const file = fs.readFileSync(`./cache/osu!/${beatmapId}.osu`, { encoding: "utf8" });
-		// eslint-disable-next-line new-cap
-		const parser = new ojsama.parser().feed(file.toString());
-		const { map } = parser;
+		const { map } = new ojsama.parser().feed(file.toString());
 		if (map.mode === 0) {
-			// eslint-disable-next-line new-cap
 			const stars = new ojsama.diff().calc({ map, mods });
 			const pp = ojsama.ppv2({
 				stars,
@@ -37,20 +34,17 @@ export default (
 				n100,
 				n50
 			});
-				// eslint-disable-next-line new-cap
-			const statsWithMods = new ojsama.std_beatmap_stats(
-				{ ...stars.map }
-			).with_mods(mods);
+			const { ar, cs, od, hp } = new ojsama.std_beatmap_stats({ ...stars.map })
+				.with_mods(mods);
 			resolve({
 				pp: pp.total,
-				// eslint-disable-next-line new-cap
 				accuracy: n300 ? Math.round(new ojsama.std_accuracy({
 					nmiss, n300, n100, n50
 				}).value() * 10000) / 100 : 0,
-				ar: Math.round(100 * statsWithMods.ar!) / 100,
-				cs: Math.round(100 * statsWithMods.cs!) / 100,
-				od: Math.round(100 * statsWithMods.od! / 100),
-				hp: Math.round(100 * statsWithMods.hp!) / 100
+				ar: Math.round(100 * (ar ? ar : 0)) / 100,
+				cs: Math.round(100 * (cs ? cs : 0)) / 100,
+				od: Math.round(od ? od : 0),
+				hp: Math.round(100 * (hp ? hp : 0)) / 100
 			});
 		}
 	});

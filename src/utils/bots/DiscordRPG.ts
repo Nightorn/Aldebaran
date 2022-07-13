@@ -109,7 +109,7 @@ async function percentageCheck(
 
 export default async (ctx: DiscordMessageContext) => {
 	const healthmonitor = ctx.server?.base.getSetting("healthmonitor");
-	if (!healthmonitor || healthmonitor === "off") return false;
+	if ((!healthmonitor && ctx.server) || healthmonitor === "off") return false;
 
 	const content = ctx.content;
 
@@ -118,11 +118,13 @@ export default async (ctx: DiscordMessageContext) => {
 		if (match) {
 			const user = await checkPlayer(ctx, match[1]);
 			if (user) {
-				const hpMatches = content.match(/(Dead|[\d\.]+% HP)/g)!;
-				const deadPet = hpMatches[1] === "Dead";
-				const playerHP = Number(hpMatches[0].split(" ")[0]);
-				const petHP = deadPet ? 0 : Number(hpMatches[1].split(" ")[0]);
-				return percentageCheck(user, ctx, playerHP, petHP);
+				const hpMatches = content.match(/(Dead|[\d.]+% HP)/g);
+				if (hpMatches) {
+					const deadPet = hpMatches[1] === "Dead";
+					const playerHP = Number(hpMatches[0].split(" ")[0]);
+					const petHP = deadPet ? 0 : Number(hpMatches[1].split(" ")[0]);
+					return percentageCheck(user, ctx, playerHP, petHP);
+				}
 			}
 		}
 	}
@@ -133,15 +135,18 @@ export default async (ctx: DiscordMessageContext) => {
 	if (ctx.embeds.length === 0 && content.includes(" Adventure ")) {
 		const healthMessage = content.match(healthMessagePattern);
 		if (healthMessage && content.match(namePattern)) {
-			const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/)!;
-			player.name = content.match(namePattern)![1];
-			player.hp = Number(nums[1].replace(/,/g, ""));
-			player.maxHp = Number(nums[2].replace(/,/g, ""));
+			const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
+			const name = content.match(namePattern);
+			if (nums && name) {
+				player.name = name[1];
+				player.hp = Number(nums[1].replace(/,/g, ""));
+				player.maxHp = Number(nums[2].replace(/,/g, ""));
+			}
 		}
 
 		const messageArray = content.split("\n");
-		let dealtLine = messageArray.findIndex(l => l.includes(" dealt "));
-		let tookLine = messageArray.findIndex(l => l.includes(" took "));
+		const dealtLine = messageArray.findIndex(l => l.includes(" dealt "));
+		const tookLine = messageArray.findIndex(l => l.includes(" took "));
 		if (tookLine === dealtLine + 1) {
 			const petInfosLine = messageArray[tookLine + 1].split(" ");
 			const currentHP = petInfosLine[petInfosLine.indexOf("has") + 1]
@@ -162,10 +167,12 @@ export default async (ctx: DiscordMessageContext) => {
 			pet.maxHp = Number(split[1].replace(",", ""));
 
 			const { name, value } = adventureEmbed.fields[0];
-			const healthLine = value.match(/Has ([\d,]+)\/([\d,]+) HP left/)!;
-			player.name = name;
-			player.hp = Number(healthLine[1].replace(/,/g, ""));
-			player.maxHp = Number(healthLine[2].replace(/,/g, ""));
+			const healthLine = value.match(/Has ([\d,]+)\/([\d,]+) HP left/);
+			if (healthLine) {
+				player.name = name;
+				player.hp = Number(healthLine[1].replace(/,/g, ""));
+				player.maxHp = Number(healthLine[2].replace(/,/g, ""));
+			}
 		}
 	}
 

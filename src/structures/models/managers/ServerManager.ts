@@ -5,12 +5,10 @@ import ServerSetting from "../ServerSetting.js";
 import Client from "../../Client.js";
 import { deduplicateSettings } from "../../../utils/Methods.js";
 
-const TTL = 300000;
-
 type CacheMap<K, T> = Map<K, { server: T, expires: number }>;
 
-function encap(server: any) {
-	return { server, expires: Date.now() + TTL };
+function cache<K, T extends { id: K }>(cache: CacheMap<K, T>, server: T) {
+	cache.set(server.id, { server, expires: Date.now() + 300000 });
 }
 
 export default class ServerManager {
@@ -26,18 +24,18 @@ export default class ServerManager {
 
 	public async cacheDiscord(server: DiscordServer, base: Server) {
 		server.base = base;
-        server.base.settings = await deduplicateSettings(server.base.settings);
+		server.base.settings = await deduplicateSettings(server.base.settings);
 		server.guild = await this.client.discord.guilds.fetch(server.id);
-		this.discordCache.set(server.id, encap(server));
+		cache(this.discordCache, server);
 		return server;
 	}
 
-    public async cacheRevolt(server: RevoltServer, base: Server) {
-        server.base = base;
-        server.base.settings = await deduplicateSettings(server.base.settings);
-        this.revoltCache.set(server.id, encap(server));
-        return server;
-    }
+	public async cacheRevolt(server: RevoltServer, base: Server) {
+		server.base = base;
+		server.base.settings = await deduplicateSettings(server.base.settings);
+		cache(this.revoltCache, server);
+		return server;
+	}
 
 	public async createDiscord(id: string) {
 		const server = await this.createGuild();
@@ -48,12 +46,12 @@ export default class ServerManager {
 	public async createRevolt(id: string) {
 		const server = await this.createGuild();
 		const s = await RevoltServer.create({ ulid: id, serverId: server.id });
-        return this.cacheRevolt(s, server);
+		return this.cacheRevolt(s, server);
 	}
 
 	public async createGuild() {
 		const server = await Server.create();
-		this.serverCache.set(server.id, encap(server));
+		cache(this.serverCache, server);
 		return server;
 	}
 
@@ -62,13 +60,13 @@ export default class ServerManager {
 		if (!cached || cached.expires < Date.now()) {
 			const s = await DiscordServer.findOne({ where: { snowflake: id } });
 			if (!s) {
-				await this.createDiscord(id);
+				return this.createDiscord(id);
 			} else {
 				const base = await this.fetchServer(s.serverId);
-				await this.cacheDiscord(s, base);
+				return this.cacheDiscord(s, base);
 			}
 		}
-		return this.discordCache.get(id)!.server;
+		return cached.server;
 	}
 
 	public async fetchRevolt(id: string) {
@@ -76,28 +74,29 @@ export default class ServerManager {
 		if (!cached || cached.expires < Date.now()) {
 			const s = await RevoltServer.findByPk(id);
 			if (!s) {
-				await this.createRevolt(id);
+				return this.createRevolt(id);
 			} else {
 				const base = await this.fetchServer(s.serverId);
-                await this.cacheRevolt(s, base);
+				return this.cacheRevolt(s, base);
 			}
 		}
-		return this.revoltCache.get(id)!.server;
+		return cached.server;
 	}
 
 	public async fetchServer(id: number) {
 		const cached = this.serverCache.get(id);
 		if (!cached || cached.expires < Date.now()) {
 			const s = await Server.findByPk(id, { include: {
-                as: "settings",
+				as: "settings",
 				model: ServerSetting
 			} });
 			if (s) {
-				this.serverCache.set(id, encap(s));
+				cache(this.serverCache, s);
+				return s;
 			} else {
-                throw new RangeError("The given ID is not associated to any server in the database.");
-            }
+				throw new RangeError("The given ID is not associated to any server in the database.");
+			}
 		}
-		return this.serverCache.get(id)!.server;
+		return cached.server;
 	}
 }

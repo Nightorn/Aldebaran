@@ -13,7 +13,7 @@ export default class AvatarCommand extends Command {
 				desc: "The user whose avatar you want to see",
 				optional: true
 			} },
-            platforms: ["DISCORD", "DISCORD_SLASH"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 

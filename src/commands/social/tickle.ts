@@ -9,7 +9,7 @@ export default class TickleCommand extends Command {
 			description: "Tickle someone!",
 			example: "<@437802197539880970>",
 			args: { target: { as: "user", desc: "The person to tickle" } },
-            platforms: ["DISCORD", "DISCORD_SLASH"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 

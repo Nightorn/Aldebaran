@@ -3,7 +3,7 @@ import { evaluate } from "mathjs";
 import Command from "../../groups/DRPGCommand.js";
 import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
-import { DRPGUser } from "../../interfaces/DiscordRPG.js";
+import { User, Trap } from "../../interfaces/DiscordRPG.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class TrapCommand extends Command {
@@ -43,7 +43,7 @@ export default class TrapCommand extends Command {
 				ctx.reply("it looks like the user you specified has not started his adventure on DiscordRPG yet.");
 			} else if (response.statusCode === 200) {
 				const target = await ctx.client.users.fetchDiscord(userid);
-				const user = JSON.parse(body).data as DRPGUser;
+				const user = JSON.parse(body).data as User;
 				let luck = isMax ? user.level * 5 : user.attributes.salvaging;
 				if (luck === 0) luck = 1;
 				const data = user.location.traps;
@@ -62,7 +62,7 @@ export default class TrapCommand extends Command {
 						const scope = { luck, passed: elapsedTime };
 						const pronoun = ctx.author.id === userid ? "You" : "They";
 						let items = "";
-						drpgItems[trap.id].trap!.loot.forEach(item => {
+						(drpgItems[trap.id].trap as Trap).loot.forEach(item => {
 							const min = evaluate(item.amount.min, scope);
 							const max = evaluate(item.amount.max, scope);
 							const itemName = drpgItems[item.id].name;
@@ -100,7 +100,7 @@ export default class TrapCommand extends Command {
 							name: `${target.username}  |  Trap information`,
 							iconURL: target.avatarURL
 						})
-						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${traps.match(/\n/g)!.length} traps** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}trap 4\` for example.\n${traps}`);
+						.setDescription(`${ctx.author.id === userid ? "You have" : `**${target.username}** has`} **${traps.match(/\n/g)?.length} traps** set. Please tell us which one you want to view the information of. Use \`${ctx.prefix}trap 4\` for example.\n${traps}`);
 					ctx.reply(embed);
 				}
 			} else {

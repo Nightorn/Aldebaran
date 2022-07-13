@@ -14,7 +14,7 @@ export default class UserCommand extends Command {
 				desc: "The user whose information you want to see",
 				optional: true
 			} },
-            platforms: ["DISCORD", "DISCORD_SLASH"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
@@ -28,13 +28,13 @@ export default class UserCommand extends Command {
 				let mjd = null;
 				let memberNick = null;
 				if (ctx.member) {
-					mjd = new Date(ctx.member.joinedTimestamp!);
+					mjd = new Date(ctx.member.joinedTimestamp || 0);
 					memberNick = ctx.member.nickname === undefined
 						? null : ctx.member.nickname;
 					if (ctx.member.permissions.has("ADMINISTRATOR"))
 						allPermissions.push("Administrator");
 					else {
-						for (let [name, value] of Object.entries(
+						for (const [name, value] of Object.entries(
 							ctx.member.permissions.serialize()
 						)) {
 							if (value) {
@@ -48,7 +48,6 @@ export default class UserCommand extends Command {
 					}
 					for (const [id, data] of ctx.member.roles.cache)
 						if (data.name !== "@everyone") allRoles.set(id, data.rawPosition);
-					// eslint-disable-next-line func-names
 					allRoles[Symbol.iterator] = function* () {
 						yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
 					};
@@ -59,11 +58,11 @@ export default class UserCommand extends Command {
 				}
 
 				const getDate = (date: Date) => {
-                    const dateformat = user.base.getSetting("dateformat");
-                    const timezone = user.base.getSetting("timezone");
-                    const format = dateformat
-                        ? `**${dateformat}** [@] HH:mm`
-                        : "**MM/DD/YYYY** [@] HH:mm";
+					const dateformat = user.base.getSetting("dateformat");
+					const timezone = user.base.getSetting("timezone");
+					const format = dateformat
+						? `**${dateformat}** [@] HH:mm`
+						: "**MM/DD/YYYY** [@] HH:mm";
 					return getDateWithTimezone(date, `${format}`, timezone);
 				};
 
@@ -89,8 +88,8 @@ export default class UserCommand extends Command {
 							(Date.now() - mjd.getTime()) / 86400000
 						)} days**.`
 					);
-				if (rolesList.length > 0)
-					embed.addField(`Roles (${ctx.member!.roles.cache.size - 1})`, `${rolesList.join(", ")}`);
+				if (ctx.member && rolesList.length > 0)
+					embed.addField(`Roles (${ctx.member.roles.cache.size - 1})`, `${rolesList.join(", ")}`);
 				if (allPermissions.length > 0)
 					embed.addField("Permissions", allPermissions.join(", "));
 				ctx.reply(embed);

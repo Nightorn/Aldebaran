@@ -76,7 +76,7 @@ export default class WallsCommand extends Command {
 				desc: "The user whose walls progression you want to see",
 				optional: true
 			} },
-            platforms: ["DISCORD", "DISCORD_SLASH"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 

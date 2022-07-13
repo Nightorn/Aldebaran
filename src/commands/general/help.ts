@@ -31,14 +31,15 @@ export default class HelpCommand extends Command {
 				const categoryEmbed = this.createEmbed(ctx)
 					.setAuthor({
 						name: "Category Help",
-						iconURL: ctx.client.discord.user!.avatarURL()!
+						iconURL: ctx.client.discord.user.displayAvatarURL()
 					})
 					.setTitle(`${category.title} - ${category.description}`)
 					.setDescription(list)
 					.setColor(this.color);
 				ctx.reply(categoryEmbed);
 			} else if (ctx.client.commands.exists(command, platform)) {
-				ctx.reply(ctx.client.commands.get(command, platform)!.toHelpEmbed());
+				const cmd = ctx.client.commands.get(command, platform) as Command;
+				ctx.reply(cmd.toHelpEmbed());
 			} else {
 				ctx.error("NOT_FOUND", "You are trying to find help for a command or a category that does not exist. Make sure you did not make a typo in your request.");
 			}
@@ -46,7 +47,7 @@ export default class HelpCommand extends Command {
 			const embed = this.createEmbed(ctx)
 				.setAuthor({
 					name: `${ctx.client.name}'s Help Pages`,
-					iconURL: ctx.client.discord.user!.avatarURL()!
+					iconURL: ctx.client.discord.user.displayAvatarURL()
 				});
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {

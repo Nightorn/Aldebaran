@@ -15,8 +15,7 @@ export default class ViewSubcommand extends Command {
 
 	async run(ctx: DiscordMessageContext) {
 		const args = ctx.args as string[];
-		const id = ctx.mentions.members!.size === 1
-			? ctx.mentions.members!.first()!.id : args[0];
+		const id = ctx.mentions.users.first()?.id ?? args[0];
 		ctx.client.users.fetchDiscord(id).then(async user => {
 			const guilds = [];
 			const embed = new MessageEmbed()
@@ -49,7 +48,7 @@ export default class ViewSubcommand extends Command {
 				const embed = new MessageEmbed()
 					.setAuthor({
 						name: `${ctx.server.guild.name} | ${ctx.server.id}`,
-						iconURL: ctx.server.guild.iconURL()!
+						iconURL: ctx.server.guild.iconURL() || undefined
 					})
 					.setDescription(`**Owner** : <@${ctx.server.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${guild.guild.memberCount} Members`);
 				if (Object.entries(settings).length !== 0) {

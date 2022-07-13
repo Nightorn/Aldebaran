@@ -1,8 +1,8 @@
 import { InstanceDestroyOptions } from "sequelize/types";
 
 export default interface Setting {
-    key: string;
-    value: string;
+	key: string;
+	value: string;
 
-    destroy(options?: InstanceDestroyOptions | undefined): Promise<void>;
+	destroy(options?: InstanceDestroyOptions | undefined): Promise<void>;
 }

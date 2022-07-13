@@ -1,4 +1,3 @@
-// @ts-ignore
 import tenor from "tenorjs";
 import Command from "../../groups/ImageCommand.js";
 import Client from "../../structures/Client.js";

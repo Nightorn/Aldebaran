@@ -37,7 +37,7 @@ export default class TimecompletionCommand extends Command {
 		const embed = new MessageEmbed()
 			.setAuthor({
 				name: "Time Completion",
-				iconURL: ctx.client.discord.user!.avatarURL()!
+				iconURL: ctx.client.discord.user.displayAvatarURL()
 			})
 			.setColor(this.color)
 			.setDescription(`We are **${weekCompletion}%** through the week.\nWe are **${monthCompletion}%** through the month.\nWe are **${yearCompletion}%** through the year.\nWe are **${decadeCompletion}%** through the decade.`);

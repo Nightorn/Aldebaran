@@ -1,4 +1,4 @@
-import { ColorResolvable, MessageEmbed } from "discord.js";
+import { ColorResolvable, Message, MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
 import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -38,13 +38,13 @@ export default class PingCommand extends Command {
 			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.discord.ws.ping)} ms`, true)
 			.addField(`${ctx.client.name} Ping`, "Computing...", true)
 			.setColor("BLUE");
-		let msg = null;
+		let msg: Message<boolean>;
 		if (platform === "DISCORD") {
 			msg = await (ctx as DiscordMessageContext).reply(embed);
-		} else if (platform === "DISCORD_SLASH") {
+		} else {
 			msg = await (ctx as DiscordSlashMessageContext).reply(embed, false, true);
 		}
-		const ping = msg!.createdTimestamp - ctx.createdTimestamp;
+		const ping = msg.createdTimestamp - ctx.createdTimestamp;
 		let color: ColorResolvable = "BLUE";
 		let desc = "Hi.";
 
@@ -66,11 +66,11 @@ export default class PingCommand extends Command {
 			];
 		}
 
-        const ws = Math.floor(ctx.client.discord.ws.ping);
+		const ws = Math.floor(ctx.client.discord.ws.ping);
 		const embedResult = new MessageEmbed()
 			.addField("WebSocket Heartbeat", `${ws} ms`, true)
 			.addField(`${ctx.client.name} Ping`, `${ping} ms`, true)
 			.setColor(color);
-		msg!.edit({ content: desc, embeds: [embedResult] });
+		msg.edit({ content: desc, embeds: [embedResult] });
 	}
 }

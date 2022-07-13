@@ -1,3 +1,3 @@
 export default interface ContextServer {
-    get name(): string;
+	get name(): string;
 }

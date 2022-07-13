@@ -48,7 +48,7 @@ export default class CommandsCommand extends Command {
 		const embed = this.createEmbed(ctx)
 			.setAuthor({
 				name: `${ctx.client.name}  |  List of ${count} commands`,
-				iconURL: ctx.client.discord.user!.avatarURL()!
+				iconURL: ctx.client.discord.user.displayAvatarURL()
 			});
 		if (!args.showHidden && !args.hideAliases) {
 			embed.setFooter({

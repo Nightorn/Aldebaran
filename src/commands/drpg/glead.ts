@@ -1,9 +1,8 @@
 /* eslint-disable no-case-declarations */
-/* eslint-disable no-await-in-loop */
 import fs from "fs";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
-import { DRPGAttribute, DRPGGuild, DRPGItem, DRPGSkill, DRPGUser } from "../../interfaces/DiscordRPG.js";
+import { Attribute, Guild as DGuild, Item, Skill, User as DUser } from "../../interfaces/DiscordRPG.js";
 import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { paginate, timeSince } from "../../utils/Methods.js";
@@ -11,8 +10,8 @@ import DiscordMessageContext from "../../structures/contexts/DiscordMessageConte
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 import { MessageEmbed } from "discord.js";
 
-export type Guild = DRPGGuild & { users: User[], lastUpdate: number };
-export type User = DRPGUser & { lastUpdate: number };
+export type Guild = DGuild & { users: User[], lastUpdate: number };
+export type User = DUser & { lastUpdate: number };
 
 function apiFetch(endpoint: string) {
 	return new Promise((resolve, reject) => {
@@ -139,7 +138,7 @@ export default class GleadCommand extends Command {
 
 		let list: string[] = [];
 		let filteredUsers: User[];
-		let itemIndex: DRPGItem[];
+		let itemIndex: Item[];
 		let sum: number | string = 0;
 		switch (index) {
 			case "level":
@@ -153,7 +152,7 @@ export default class GleadCommand extends Command {
 				guildUsers.sort((a, b) => (b[index as keyof User] as number || 0)
 					- (a[index as keyof User] as number || 0));
 				sum = guildUsers.reduce(
-				    (p, c) => (c[index as keyof User] as number || 0) + (p || 0), 0
+					(p, c) => (c[index as keyof User] as number || 0) + (p || 0), 0
 				);
 				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${(user[index as keyof User] || 0).toLocaleString()}>`);
 				break;
@@ -161,12 +160,12 @@ export default class GleadCommand extends Command {
 			case "chop":
 			case "fish":
 			case "forage":
-				guildUsers.sort((a, b) => b.skills[index as DRPGSkill].xp
-					- a.skills[index as DRPGSkill].xp);
+				guildUsers.sort((a, b) => b.skills[index as Skill].xp
+					- a.skills[index as Skill].xp);
 				sum = guildUsers.reduce(
-				    (p, c) => c.skills[index as DRPGSkill].level + p, 0
+					(p, c) => c.skills[index as Skill].level + p, 0
 				);
-				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.skills[index as DRPGSkill].level.toLocaleString()}>`);
+				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.skills[index as Skill].level.toLocaleString()}>`);
 				break;
 			case "crits":
 			case "defense":
@@ -180,18 +179,18 @@ export default class GleadCommand extends Command {
 			case "taming":
 			case "xpBoost":
 				guildUsers.sort(
-					(a, b) => b.attributes[index as DRPGAttribute]
-						- a.attributes[index as DRPGAttribute]
+					(a, b) => b.attributes[index as Attribute]
+						- a.attributes[index as Attribute]
 				);
 				sum = guildUsers
-				    .reduce((p, c) => c.attributes[index as DRPGAttribute] + p, 0);
-				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.attributes[index as DRPGAttribute].toLocaleString()}>`);
+					.reduce((p, c) => c.attributes[index as Attribute] + p, 0);
+				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.attributes[index as Attribute].toLocaleString()}>`);
 				break;
 
 			case "lastseen":
 				guildUsers.sort((a, b) => (b.lastseen || 0) - (a.lastseen || 0));
 				sum = timeSince(Math.floor(guildUsers.reduce(
-				    (p, c) => (c.lastseen || 0) + (p || 0), 0
+					(p, c) => (c.lastseen || 0) + (p || 0), 0
 				) / guildUsers.length));
 				list = guildUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${timeSince(user.lastseen || 0)}>`);
 				break;
@@ -216,12 +215,12 @@ export default class GleadCommand extends Command {
 					.filter(item => index.toLowerCase() === item.name.toLowerCase());
 				if (itemIndex.length === 1) {
 					filteredUsers = guildUsers.filter(user => user.inv
-						&& user.inv[itemIndex[0].id]
-						&& user.inv[itemIndex[0].id]! > 0);
-					filteredUsers
-						.sort((a, b) => b.inv[itemIndex[0].id]! - a.inv[itemIndex[0].id]!);
-					sum = filteredUsers.reduce((p, c) => c.inv[itemIndex[0].id]! + p, 0);
-					list = filteredUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${user.inv[itemIndex[0].id]!.toLocaleString()}>`);
+						&& (user.inv[itemIndex[0].id] || 0) > 0);
+					filteredUsers.sort((a, b) =>
+						(b.inv[itemIndex[0].id] || 0) - (a.inv[itemIndex[0].id] || 0));
+					sum = filteredUsers
+						.reduce((p, c) => (c.inv[itemIndex[0].id] || 0) + p, 0);
+					list = filteredUsers.map(user => `<${user.name}${args.showid ? ` (${user.id})` : ""} - ${(user.inv[itemIndex[0].id] || 0).toLocaleString()}>`);
 				}
 				break;
 		}

@@ -9,7 +9,7 @@ export default class PokeCommand extends Command {
 			description: "Poke someone!",
 			example: "<@437802197539880970>",
 			args: { target: { as: "user", desc: "The person to poke" } },
-            platforms: ["DISCORD", "DISCORD_SLASH"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 

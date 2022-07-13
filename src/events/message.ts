@@ -6,6 +6,7 @@ import DiscordRPG from "../utils/bots/DiscordRPG.js";
 import DRPGAdventure from "../utils/timer/DiscordRPG/adv.js";
 import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
 import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
+import Command from "../groups/Command.js";
 
 const drpgIDs = ["170915625722576896", "891614347015626762"];
 
@@ -14,12 +15,11 @@ export default async (client: Client, message: Message) => {
 
 	const guild = message.guild
 		? await client.guilds.fetchDiscord(message.guild.id)
-		: undefined;
+		: null;
 
 	let prefix = guild?.base.prefix || "";
 
 	const author = await client.users.fetchDiscord(message.author.id);
-
 	const ctx = new DiscordMessageContext(client, message, author, guild);
 
 	if (guild && drpgIDs.includes(ctx.author.id)) {
@@ -29,20 +29,20 @@ export default async (client: Client, message: Message) => {
 			.match(/.+(?=stats|adv|padv|mine|forage|fish|chop)/);
 		if (drpgMatch) {
 			const filter = (msg: Message) => drpgIDs.includes(msg.author.id);
-			ctx.channel.awaitMessages({ filter, max: 1, time: 2000 })
-				.then(async () => {
-					if (!guild.base.getSetting("discordrpgprefix")) {
-						guild.base.setSetting("discordrpgprefix", drpgMatch[0]);
-					}
-				});
-			DRPGAdventure(ctx);
-			DRPGSides(ctx);
-			DRPGPadventure(ctx);
+			ctx.channel.awaitMessages({ filter, max: 1, time: 2000 }).then(() => {
+				if (!guild.base.getSetting("discordrpgprefix")) {
+					guild.base.setSetting("discordrpgprefix", drpgMatch[0]);
+				}
+			});
+			const serverCtx = ctx as unknown as DiscordMessageContext<true>;
+			DRPGAdventure(serverCtx);
+			DRPGSides(serverCtx);
+			DRPGPadventure(serverCtx);
 		}
 	}
 
 	if (author.user.bot) return;
-	if (!message.mentions.users.get(client.discord.user!.id)) {
+	if (!message.mentions.users.get(client.discord.user.id)) {
 		if (ctx.content.indexOf(prefix) !== 0) return;
 		if (ctx.content.slice(prefix.length)[0] === " ") return;
 	} else {
@@ -54,12 +54,12 @@ export default async (client: Client, message: Message) => {
 	} else if (ctx.command) {
 		ctx.command.execute(ctx, "DISCORD").then(() => {
 			const user = `USER: ${message.author.tag} (${message.author.id})`;
-			console.log(`\x1b[34m- COMMAND: ${ctx.command!.name} | ${user}\x1b[0m`);
+			console.log(`\x1b[34m- COMMAND: ${(ctx.command as Command).name} | ${user}\x1b[0m`);
 		}).catch(err => {
 			if (err.message === "INVALID_PERMISSIONS") {
 				const embed = new MessageEmbed()
 					.setTitle("You are not allowed to use this.")
-					.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${ctx.command!.name}\` for more information about the requirements to use this command.`)
+					.setDescription(`This command requires permissions that you do not currently have. Please check \`${prefix}?${(ctx.command as Command).name}\` for more information about the requirements to use this command.`)
 					.setFooter({
 						text: message.author.username,
 						iconURL: message.author.displayAvatarURL()
@@ -79,7 +79,7 @@ export default async (client: Client, message: Message) => {
 					.setColor("RED");
 				ctx.reply(embed);
 			} else if (err.message === "INVALID_ARGS") {
-				ctx.error("INVALID_ARGS", `Please check \`${prefix}?${ctx.command!.name}\` for more information on how to use this command.`);
+				ctx.error("INVALID_ARGS", `Please check \`${prefix}?${(ctx.command as Command).name}\` for more information on how to use this command.`);
 			} else if (err.message !== "INVALID_COMMAND") {
 				console.error(err);
 			}

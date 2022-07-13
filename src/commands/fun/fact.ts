@@ -16,7 +16,7 @@ export default class FactCommand extends Command {
 			.setDescription(`*${data.fact}*`)
 			.setFooter({
 				text: "Powered by nekos.life",
-				iconURL: ctx.client.discord.user!.avatarURL()!
+				iconURL: ctx.client.discord.user.displayAvatarURL()
 			});
 		ctx.reply(embed);
 	}

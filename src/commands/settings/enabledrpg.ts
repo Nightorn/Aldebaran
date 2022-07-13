@@ -1,11 +1,11 @@
 import { Message, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
 import Client from "../../structures/Client.js";
-import MessageContext from "../../structures/contexts/MessageContext.js";
 import { ServerSettingKey, UserSettingKey } from "../../utils/Constants.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 
+type Context = DiscordMessageContext<true> | DiscordSlashMessageContext<true>;
 type SettingParameters<T> = { name: T, description: string }[];
 
 const guildParameters: SettingParameters<ServerSettingKey> = [
@@ -42,10 +42,10 @@ export default class EnableDRPGCommand extends Command {
 		});
 	}
 
-	configuringEmbed(ctx: MessageContext, type: string) {
+	configuringEmbed(ctx: Context, type: string) {
 		const parameters = type === "user" ? userParameters : guildParameters;
-        const list = (parameters as SettingParameters<string>)
-            .reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "");
+		const list = (parameters as SettingParameters<string>)
+			.reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "");
 		return new MessageEmbed()
 			.setTitle(`Configuring ${type}'s settings`)
 			.setDescription(`**This will enable the following ${
@@ -54,12 +54,8 @@ export default class EnableDRPGCommand extends Command {
 			.setColor("BLUE");
 	}
 
-	setSettings(
-		ctx: DiscordMessageContext | DiscordSlashMessageContext,
-		type: "user" | "guild",
-        followUp: boolean = false
-	) {
-		return new Promise(async resolve => {
+	setSettings(ctx: Context, type: "user" | "guild", followUp = false) {
+		return new Promise(resolve => {
 			const embed = this.configuringEmbed(ctx, type);
 			const button = new MessageButton()
 				.setStyle("PRIMARY")
@@ -68,37 +64,36 @@ export default class EnableDRPGCommand extends Command {
 			const actionRow = new MessageActionRow().setComponents([button]);
 			const opt = { embeds: [embed], components: [actionRow] };
 
-            let msg: Message<boolean>;
-            if (ctx instanceof DiscordSlashMessageContext && followUp) {
-                msg = await ctx.followUp(opt, true, true);
-            } else if (ctx instanceof DiscordSlashMessageContext) {
-                msg = await ctx.reply(opt, true, true);
-            } else {
-                msg = await ctx.reply(opt);
-            }
+			let message: Promise<Message<boolean>>;
+			if (ctx instanceof DiscordSlashMessageContext && followUp) {
+				message = ctx.followUp(opt, true, true);
+			} else if (ctx instanceof DiscordSlashMessageContext) {
+				message = ctx.reply(opt, true, true);
+			} else {
+				message = ctx.reply(opt);
+			}
 
-			msg.awaitMessageComponent({ componentType: "BUTTON" }).then(interaction => {
-				if (type === "user") {
-					userParameters.forEach(parameter => {
-                        ctx.author.base.setSetting(parameter.name, "on");
-					});
-				} else {
-					guildParameters.forEach(parameter => {
-                        ctx.server!.base.setSetting(parameter.name, "on");
-					});
-				}
-				interaction.deferUpdate();
-				resolve(true);
-			}).catch(() => {
-				msg.edit("The operation has been cancelled.");
+			message.then(msg => {
+				msg.awaitMessageComponent({ componentType: "BUTTON" }).then(interaction => {
+					if (type === "user") {
+						userParameters.forEach(parameter => {
+							ctx.author.base.setSetting(parameter.name, "on");
+						});
+					} else {
+						guildParameters.forEach(parameter => {
+							ctx.server.base.setSetting(parameter.name, "on");
+						});
+					}
+					interaction.deferUpdate();
+					resolve(true);
+				}).catch(() => {
+					msg.edit("The operation has been cancelled.");
+				});
 			});
 		});
 	}
 
-	done(
-		ctx: DiscordMessageContext | DiscordSlashMessageContext,
-		followUp: boolean = false
-	) {
+	done(ctx: Context, followUp = false) {
 		const embed = new MessageEmbed()
 			.setTitle("Done!")
 			.setDescription(
@@ -113,7 +108,7 @@ export default class EnableDRPGCommand extends Command {
 		}
 	}
 
-	noPermissions(ctx: MessageContext) {
+	noPermissions(ctx: Context) {
 		const embed = new MessageEmbed()
 			.setTitle("Oops!")
 			.setDescription(
@@ -123,13 +118,13 @@ export default class EnableDRPGCommand extends Command {
 		ctx.reply(embed);
 	}
 
-	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
-		const isAdmin = ctx.member!
+	async run(ctx: Context) {
+		const isAdmin = ctx.member
 			.permissionsIn(ctx.channel as TextChannel)
 			.has("MANAGE_GUILD");
 
 		const guildEnabled = guildParameters
-			.every(parameter => ctx.server!.base.getSetting(parameter.name) === "on");
+			.every(parameter => ctx.server.base.getSetting(parameter.name) === "on");
 		const userEnabled = userParameters
 			.every(parameter => ctx.author.base.getSetting(parameter.name) === "on");
 

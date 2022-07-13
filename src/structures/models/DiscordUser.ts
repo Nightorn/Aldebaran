@@ -22,30 +22,30 @@ export default class DiscordUser extends Model implements ContextAuthor {
 		return this.user.displayAvatarURL();
 	}
 
-    get id() {
-        return this.snowflake;
-    }
+	get id() {
+		return this.snowflake;
+	}
 
-    get tag() {
-        return this.user.tag;
-    }
+	get tag() {
+		return this.user.tag;
+	}
 
 	get username() {
 		return this.user.username;
 	}
 
-    public toString() {
-        return this.user.toString();
-    }
+	public toString() {
+		return this.user.toString();
+	}
 }
 
 DiscordUser.init({
 	_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        field: "id"
-    },
+		type: DataTypes.INTEGER,
+		primaryKey: true,
+		autoIncrement: true,
+		field: "id"
+	},
 	snowflake: {
 		type: DataTypes.STRING(19),
 		allowNull: false,

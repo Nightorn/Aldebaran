@@ -15,7 +15,7 @@ export default abstract class Command extends C {
 
 	async execute(ctx: MessageContext, platform: Platform) {
 		if ((ctx.channel instanceof TextChannel && !ctx.channel.nsfw)
-			|| (ctx.channel instanceof ThreadChannel && !ctx.channel.parent!.nsfw)
+			|| (ctx.channel instanceof ThreadChannel && !ctx.channel.parent?.nsfw)
 		) {
 			throw new Error("NOT_NSFW_CHANNEL");
 		}

@@ -16,15 +16,17 @@ import ServerManager from "./models/managers/ServerManager.js";
 import UserManager from "./models/managers/UserManager.js";
 import "./models/models.js";
 
+const discordId = process.env.DISCORD_CLIENT_ID;
+const discordToken = process.env.DISCORD_TOKEN;
+
 export default class Client {
 	commands = CommandHandler.getInstance(this);
 	config = { presence: presences, aldebaranTeam };
 	debugMode = process.argv[2] === "dev";
-	discord: DiscordClient;
+	discord: DiscordClient<true>;
 	drpgCache: { [key: string]: User | Guild } = {};
 	databaseData = { profiles: new Map() };
 	guilds = new ServerManager(this);
-	id: string = process.env.DISCORD_CLIENT_ID!;
 	models = { settings: SettingsModel };
 	name = process.env.NAME || "Aldebaran";
 	nekoslife = new NekosClient();
@@ -65,23 +67,19 @@ export default class Client {
 		this.discord.on("messageCreate", msg => message(this, msg));
 		this.discord.on("ready", () => ready(this));
 
-		if (process.env.DEPLOY_SLASH) {
-			const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
+		if (process.env.DEPLOY_SLASH && discordId && discordToken) {
+			const rest = new REST({ version: "10" }).setToken(discordToken);
 			const body = this.commands.slashCommands.map(c => c.toJSON()); 
-			rest.put(Routes.applicationCommands(this.id), { body })
+			rest.put(Routes.applicationCommands(discordId), { body })
 				.then(() => console.log("Slash commands registered"))
 				.catch(console.error);
 		}
-	
+
 		Promise.all([
 			this.discord.login(),
 			DatabaseProvider.authenticate()
 		]).then(() => {
 			console.log(`\x1b[36m# Everything was started, took ${Date.now() - this.started}ms.\x1b[0m`);
 		});
-	}
-
-	get shardId() {
-		return this.discord.guilds.cache.first()!.shardId;
 	}
 }

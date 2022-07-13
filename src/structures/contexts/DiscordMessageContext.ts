@@ -1,19 +1,27 @@
-import { Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
+import { GuildMember, Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
 import MessageContext from "./MessageContext.js";
 import Server from "../models/DiscordServer.js";
 import User from "../models/DiscordUser.js";
 import { parseArgs, parseInput } from "../../utils/Args.js";
 import Client from "../Client.js";
 import Command from "../../groups/Command.js";
+import { If } from "../../utils/Constants.js";
 
-export default class DiscordMessageContext extends MessageContext {
+export default class DiscordMessageContext
+	<InGuild extends boolean = false> extends MessageContext<InGuild>
+{
 	private _splitArgs: string[];
 	private message: Message;
 	public command?: Command;
 	public author: User;
-	public server?: Server;
+	public server: If<InGuild, Server>;
 
-	constructor(client: Client, message: Message, author: User, server?: Server) {
+	constructor(
+		client: Client,
+		message: Message,
+		author: User,
+		server: If<InGuild, Server>
+	) {
 		super(client);
 		this.author = author;
 		this.server = server;
@@ -55,7 +63,7 @@ export default class DiscordMessageContext extends MessageContext {
 	}
 
 	get member() {
-		return this.message.member;
+		return this.message.member as If<InGuild, GuildMember>;
 	}
 
 	get mentions() {
@@ -75,7 +83,7 @@ export default class DiscordMessageContext extends MessageContext {
 
 	async delete(delay?: number): Promise<Message<boolean> | false> {
 		const hasPermission = this.server && (this.channel as TextChannel)
-			.permissionsFor(this.client.discord.user!.id)?.has("MANAGE_MESSAGES");
+			.permissionsFor(this.client.discord.user.id)?.has("MANAGE_MESSAGES");
 
 		if (hasPermission) {
 			if (delay) {

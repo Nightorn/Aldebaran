@@ -1,4 +1,4 @@
-type DRPGFormulaData = {
+type FormulaData = {
 	amount: { max: string, min: string },
 	chance: number,
 	minlevel: number,
@@ -8,17 +8,17 @@ type DRPGFormulaData = {
 	}
 };
 
-type DRPGLootData = {
+type LootData = {
 	amount: { max: string; min: string },
 	id: string,
 	mintime: number
 };
 
-export type DRPGAttribute = "crits" | "defense" | "goldBoost" | "lumberBoost" | "mineBoost" | "reaping" | "salvaging" | "scavenge" | "strength" | "taming" | "xpBoost";
-export type DRPGSkill = "mine" | "chop" | "forage" | "fish";
-export type DRPGStat = "luck" | "strength" | "defense" | "charisma";
+export type Attribute = "crits" | "defense" | "goldBoost" | "lumberBoost" | "mineBoost" | "reaping" | "salvaging" | "scavenge" | "strength" | "taming" | "xpBoost";
+export type Skill = "mine" | "chop" | "forage" | "fish";
+export type Stat = "luck" | "strength" | "defense" | "charisma";
 
-export type DRPGGuild = {
+export type Guild = {
 	ad: { lasttime: number, messageid: string },
 	allies: string[],
 	blacklist: string[],
@@ -52,37 +52,48 @@ export type DRPGGuild = {
 	uinv: { [key: string]: number | null }
 };
 
-export type DRPGItem = {
-	attributes: { [key in DRPGAttribute]?: number },
+export type Potion = {
+	boost?: { [key in Attribute | Stat]?: string },
+	effects?: { [key in Attribute | Stat]?: number },
+	heal?: number,
+	last?: number,
+	temp?: boolean,
+	time?: number
+};
+
+export type Sapling = { loot: LootData, minlevel: number };
+
+export type Trap = { loot: LootData[], minlevel: number };
+
+export type Weapon = {
+	dmg: { max: number, min: number },
+	type?: string // "dagger"
+};
+
+export type Item = {
+	attributes: { [key in Attribute]?: number },
 	cost: number,
 	def?: number,
 	desc: string,
 	donate?: boolean,
-	fish?: DRPGFormulaData,
-	foragedata?: DRPGFormulaData,
+	fish?: FormulaData,
+	foragedata?: FormulaData,
 	id: string,
 	image?: string,
 	itemBoost?: number,
 	level: number,
 	name: string,
-	ore?: DRPGFormulaData,
+	ore?: FormulaData,
 	plural: string,
-	potion?: {
-		boost?: { [key in DRPGAttribute | DRPGStat]?: string },
-		effects?: { [key in DRPGAttribute | DRPGStat]?: number },
-		heal?: number,
-		last?: number,
-		temp?: boolean,
-		time?: number
-	},
+	potion?: Potion,
 	prefix: string,
 	price?: number,
 	ring?: {
-		attribute?: DRPGAttribute,
+		attribute?: Attribute,
 		boost: number,
-		stat?: DRPGStat
+		stat?: Stat
 	},
-	sapling?: { loot: DRPGLootData, minlevel: number },
+	sapling?: Sapling,
 	sell: number | string,
 	sellable: boolean,
 	skillLevel?: number,
@@ -90,20 +101,17 @@ export type DRPGItem = {
 	toolData?: { catchChance: number },
 	toolType?: string, // "pickaxe" | "axe"
 	tradable: boolean,
-	trap?: { loot: DRPGLootData[], minlevel: number }
+	trap?: Trap,
 	type: "potion" | "weapon" | "dummy" | "effectpotion" | "chest" | "boots" | "helm" | "ore" | "tool" | "necklace",
 	untradable?: boolean,
-	weapon?: {
-		dmg: { max: number, min: number },
-		type?: string // "dagger"
-	}
+	weapon?: Weapon
 };
 
-export type DRPGUser = {
+export type User = {
 	achievementEmbed: number,
 	achievements: string[],
 	adventureEmbed: number,
-	attributes: { [key in DRPGAttribute]: number },
+	attributes: { [key in Attribute]: number },
 	boots: string,
 	card: boolean,
 	chest: string,
@@ -163,7 +171,7 @@ export type DRPGUser = {
 	questPoints: number,
 	ring: string,
 	sapling: { id: string, time: number },
-	skills: { [key in DRPGSkill]: { level: number, xp: number } },
+	skills: { [key in Skill]: { level: number, xp: number } },
 	tool: {
 		axe: string,
 		fishingRod: string,
@@ -175,6 +183,6 @@ export type DRPGUser = {
 	xp: number
 };
 
-export type DRPGXPBases = { [key: string]: number };
-export type DRPGItemList = { [key: string]: DRPGItem };
-export type DRPGLocationDB = { [key: string]: string };
+export type XPBases = { [key: string]: number };
+export type ItemList = { [key: string]: Item };
+export type LocationDB = { [key: string]: string };

@@ -41,9 +41,9 @@ export default class CommandHandler {
 		}
 	}
 
-	register(...structures: (typeof Command)[]) {
+	register(...structures: { new(c: Client): Command }[]) {
 		structures.forEach(Structure => {
-			const command: Command = new (Structure as any)(this.client);
+			const command: Command = new Structure(this.client);
 			command.name = command.metadata.name
 				|| command.constructor.name.slice(0, -7).toLowerCase();
 			this.commands.push(command);

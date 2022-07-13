@@ -31,7 +31,7 @@ export default class UconfigCommand extends Command {
 			const embed = this.createEmbed(ctx)
 				.setAuthor({
 					name: "User Settings",
-					iconURL: ctx.client.discord.user!.avatarURL()!
+					iconURL: ctx.client.discord.user.displayAvatarURL()
 				})
 				.setDescription(
 					`Welcome to your user settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}uconfig list\`, and your current settings are shown in \`${ctx.prefix}uconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}uconfig property value\`, and one example is \`${ctx.prefix}uconfig adventureTimer on\`.`
@@ -46,10 +46,9 @@ export default class UconfigCommand extends Command {
 				if (list[data.category] === undefined) list[data.category] = {};
 				if ("showOnlyIfBotIsInGuild" in data && ctx.server) {
 					try {
-						// eslint-disable-next-line no-await-in-loop
 						await ctx.server.guild.members.fetch(data.showOnlyIfBotIsInGuild);
 						list[data.category][key as UserSettingKey] = data;
-					} catch {} // eslint-disable-line no-empty
+					} catch {}
 				} else {
 					list[data.category][key as UserSettingKey] = data;
 				}
@@ -79,7 +78,7 @@ export default class UconfigCommand extends Command {
 			const embed = this.createEmbed(ctx)
 				.setAuthor({
 					name: "User Settings  |  Overview",
-					iconURL: ctx.client.discord.user!.avatarURL()!
+					iconURL: ctx.client.discord.user.displayAvatarURL()
 				})
 				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
