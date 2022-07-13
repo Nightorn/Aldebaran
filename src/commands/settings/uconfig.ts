@@ -15,8 +15,9 @@ export default class UconfigCommand extends Command {
 					desc: "The setting you want to edit (or \"help\", \"list\" and \"view\" for more information)"
 				},
 				value: {
-					as: "string",
+					as: "expression",
 					desc: "The value to which you want to edit the setting you just selected, if any",
+					regex: /.+/,
 					optional: true
 				}
 			},
@@ -26,6 +27,7 @@ export default class UconfigCommand extends Command {
 
 	async run(ctx: DiscordMessageContext) {
 		const args = ctx.args as { setting: string, value?: string };
+		console.log(args);
 		const parameters = SettingsModel.user;
 		if (args.setting === "help") {
 			const embed = this.createEmbed(ctx)

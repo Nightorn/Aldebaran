@@ -17,8 +17,9 @@ export default class GconfigCommand extends Command {
 					desc: "The setting you want to edit (or \"help\", \"list\" and \"view\" for more information)"
 				},
 				value: {
-					as: "string",
+					as: "expression",
 					desc: "The value to which you want to edit the setting you just selected, if any",
+					regex: /.+/,
 					optional: true
 				}
 			},

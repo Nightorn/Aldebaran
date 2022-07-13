@@ -60,6 +60,7 @@ export function parseArgs(split: string[], argsMetadata: Args) {
 		&& Object.values(argsMetadata)[0].as === "string") {
 		return { [Object.keys(argsMetadata)[0]]: split.join(" ") };
 	}
+
 	const deconstructed: Deconstructed = []; // All arguments and their type
 	for (let i = 0; i < split.length; i++) {
 		// if the argument is between double quotes, then concatenate what needs to be concatenated
