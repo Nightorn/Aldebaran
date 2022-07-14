@@ -2,7 +2,6 @@ import { MessageEmbed } from "discord.js";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
-import Client from "../../structures/Client.js";
 import { drpgXpBases } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
@@ -67,8 +66,8 @@ function calcXPNeeded(base: number, lvl: number) {
 }
 
 export default class WallsCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays user's wall progression",
 			example: "246302641930502145",
 			args: { user: {
@@ -82,7 +81,7 @@ export default class WallsCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const userId = (ctx.args as { user: string }).user || ctx.author.id;
-		const user = await ctx.client.users.fetchDiscord(userId);
+		const user = await ctx.fetchUser(userId);
 
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${user.id}`,

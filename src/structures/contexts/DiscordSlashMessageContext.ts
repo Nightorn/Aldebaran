@@ -1,29 +1,25 @@
 import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message, InteractionReplyOptions, TextBasedChannel } from "discord.js";
 import Command from "../../groups/Command.js";
 import { CommandMode, If } from "../../utils/Constants";
-import Client from "../Client.js";
+import DiscordClient from "../DiscordClient.js";
 import Server from "../models/DiscordServer.js";
 import User from "../models/DiscordUser.js";
-import MessageContext from "./MessageContext.js";
+import DiscordContext from "./DiscordContext.js";
 
 type M = Promise<Message<boolean>>;
 export default class DiscordSlashMessageContext
-	<InGuild extends boolean = false> extends MessageContext<InGuild>
+	<InGuild extends boolean = false> extends DiscordContext<InGuild>
 {
 	private interaction: CommandInteraction;
-	public author: User;
 	public command: Command;
-	public server: If<InGuild, Server>;
 
 	constructor(
-		client: Client,
+		client: DiscordClient,
 		interaction: CommandInteraction,
 		author: User,
 		server: If<InGuild, Server>
 	) {
-		super(client);
-		this.author = author;
-		this.server = server;
+		super(author, client, server);
 		this.interaction = interaction;
 		
 		const subcommand = interaction.options.getSubcommand(false);

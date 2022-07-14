@@ -1,12 +1,11 @@
 import request from "request";
 import Command from "../../groups/ImageCommand.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { MessageEmbed } from "discord.js";
 
 export default class RandimalCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows a random animal picture or GIF"
 		});
 	}

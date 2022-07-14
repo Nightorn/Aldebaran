@@ -1,10 +1,9 @@
 import Command from "../../groups/Command.js";
-import MessageContext from "../../structures/contexts/MessageContext.js";
-import Client from "../../structures/Client.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
 
 export default class AvatarCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays the avatar of the specified user",
 			example: "320933389513523220",
 			aliases: ["pfp"],
@@ -17,9 +16,9 @@ export default class AvatarCommand extends Command {
 		});
 	}
 
-	run(ctx: MessageContext) {
+	run(ctx: DiscordContext) {
 		const args = ctx.args as { user?: string };
-		ctx.client.users.fetchDiscord(args.user || ctx.author.id).then(user => {
+		ctx.fetchUser(args.user || ctx.author.id).then(user => {
 			const embed = this.createEmbed(ctx)
 				.setAuthor({ name: user.username, iconURL: user.avatarURL })
 				.setTitle(`${user.username}'s Avatar`)

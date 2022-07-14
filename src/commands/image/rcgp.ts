@@ -1,12 +1,11 @@
 import request from "request";
 import Command from "../../groups/ImageCommand.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { MessageEmbed } from "discord.js";
 
 export default class RCGPCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays a random cute anime girl holding a programming book"
 		});
 	}

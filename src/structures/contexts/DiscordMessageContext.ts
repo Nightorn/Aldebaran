@@ -1,34 +1,30 @@
 import { GuildMember, Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
-import MessageContext from "./MessageContext.js";
+import DiscordContext from "./DiscordContext.js";
 import Server from "../models/DiscordServer.js";
 import User from "../models/DiscordUser.js";
 import { parseArgs, parseInput } from "../../utils/Args.js";
-import Client from "../Client.js";
+import DiscordClient from "../DiscordClient.js";
 import Command from "../../groups/Command.js";
 import { If } from "../../utils/Constants.js";
 
 export default class DiscordMessageContext
-	<InGuild extends boolean = false> extends MessageContext<InGuild>
+	<InGuild extends boolean = false> extends DiscordContext<InGuild>
 {
 	private _splitArgs: string[];
 	private message: Message;
 	public command?: Command;
-	public author: User;
-	public server: If<InGuild, Server>;
 
 	constructor(
-		client: Client,
-		message: Message,
 		author: User,
+		client: DiscordClient,
+		message: Message,
 		server: If<InGuild, Server>
 	) {
-		super(client);
-		this.author = author;
-		this.server = server;
+		super(author, client, server);
 		this.message = message;
 
 		const parsedInput = parseInput(
-			client,
+			this.client,
 			this.content,
 			this.mode,
 			this.prefix,

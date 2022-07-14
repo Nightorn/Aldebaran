@@ -2,14 +2,13 @@ import { MessageEmbed } from "discord.js";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { getTimeString } from "../../utils/Methods.js";
-import Client from "../../structures/Client.js";
 import { drpgLocationdb } from "../../utils/Constants.js";
 import { User } from "../../interfaces/DiscordRPG.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class StatsCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays a DiscordRPG user's character and pet infos",
 			example: "141610251299454976",
 			args: { user: {
@@ -22,7 +21,7 @@ export default class StatsCommand extends Command {
 
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.users.fetchDiscord(args.user || ctx.author.id).then(user => {
+		ctx.fetchUser(args.user || ctx.author.id).then(user => {
 			request({
 				uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
 				headers: { Authorization: process.env.API_DISCORDRPG }

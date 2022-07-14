@@ -1,8 +1,8 @@
 import { MessageActionRow, MessageButton, MessageComponentInteraction } from "discord.js";
 import Command from "../../groups/GamesCommand.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
-import Client from "../../structures/Client.js";
 
 const win = {
 	"🪨": "✂️",
@@ -17,8 +17,8 @@ const words = {
 };
 
 export default class RpsCommand extends Command {
-	constructor(client: Client) {
-		super(client, { 
+	constructor() {
+		super({ 
 			description: "Rock. Paper. Scissors!",
 			args: {
 				user: { as: "user", desc: "The user you want to play with" }
@@ -27,9 +27,9 @@ export default class RpsCommand extends Command {
 		});
 	}
 
-	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
+	async run(ctx: DiscordContext) {
 		const args = ctx.args as { user: string };
-		const target = await ctx.client.users.fetchDiscord(args.user);
+		const target = await ctx.fetchUser(args.user);
 
 		if (target.user.bot) {
 			return ctx.reply("You can't play this game against a bot.");
@@ -50,7 +50,7 @@ export default class RpsCommand extends Command {
 		const opt = { embeds: [introEmbed], components: [row] };
 		const msg = ctx instanceof DiscordSlashMessageContext
 			? await ctx.reply(opt, false, true)
-			: await ctx.reply(opt);
+			: await (ctx as DiscordMessageContext).reply(opt);
 
 		const filter = (i: MessageComponentInteraction) => i.user.id === target.id;
 		msg.awaitMessageComponent({ filter }).then(async interaction => {
@@ -74,7 +74,7 @@ export default class RpsCommand extends Command {
 			const startOpt = { embeds: [startEmbed], components: [actionRow] };
 			const game = ctx instanceof DiscordSlashMessageContext
 				? await ctx.followUp(startOpt, false, true)
-				: await ctx.reply(startOpt);
+				: await (ctx as DiscordMessageContext).reply(startOpt);
 
 			const [authorPlay, targetPlay] = await Promise.all([
 				game.awaitMessageComponent({ filter: i => i.user.id === ctx.author.id }),

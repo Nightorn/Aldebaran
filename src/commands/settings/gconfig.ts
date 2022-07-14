@@ -1,12 +1,11 @@
 import { MessageEmbed } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
-import Client from "../../structures/Client.js";
 import { ServerSettingKey, Setting, SettingsModel } from "../../utils/Constants.js";
-import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
 
 export default class GconfigCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Manages the settings of your server",
 			example: "adventureTimer on",
 			perms: { discord: ["MANAGE_GUILD"] },
@@ -27,15 +26,12 @@ export default class GconfigCommand extends Command {
 		});
 	}
 
-	async run(ctx: DiscordMessageContext<true>) {
+	async run(ctx: DiscordContext<true>) {
 		const args = ctx.args as { setting: string, value?: string };
 		const parameters = SettingsModel.guild;
 		if (args.setting === "help") {
 			const embed = new MessageEmbed()
-				.setAuthor({
-					name: "User Settings",
-					iconURL: ctx.client.discord.user.displayAvatarURL()
-				})
+				.setTitle("User Settings")
 				.setDescription(
 					`Welcome to your server settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}gconfig list\`, and your current settings are shown in \`${ctx.prefix}gconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}gconfig property value\`, and one example is \`${ctx.prefix}gconfig adventureTimer on\`.`
 				);
@@ -72,10 +68,7 @@ export default class GconfigCommand extends Command {
 				list += `**${s.key}** - \`${s.value}\`\n`;
 			});
 			const embed = this.createEmbed(ctx)
-				.setAuthor({
-					name: "Guild Settings  |  Overview",
-					iconURL: ctx.client.discord.user.displayAvatarURL()
-				})
+				.setTitle("Guild Settings  |  Overview")
 				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
 		} else if (Object.keys(parameters).includes(args.setting) && args.value) {

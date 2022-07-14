@@ -2,14 +2,13 @@
 import { MessageEmbed, WebhookClient } from "discord.js";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import Client from "../../structures/Client.js";
 
 const id = process.env.WEBHOOK_SUGGESTIONS_ID || "";
 const token = process.env.WEBHOOK_SUGGESTIONS_TOKEN || "";
 
 export default class BugreportCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Sends a bug report",
 			example: "ur bot doesnt work",
 			args: { report: {

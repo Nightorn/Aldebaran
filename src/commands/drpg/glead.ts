@@ -6,9 +6,8 @@ import { Attribute, Guild as DGuild, Item, Skill, User as DUser } from "../../in
 import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { paginate, timeSince } from "../../utils/Methods.js";
-import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
-import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
 import { MessageEmbed } from "discord.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
 
 export type Guild = DGuild & { users: User[], lastUpdate: number };
 export type User = DUser & { lastUpdate: number };
@@ -79,8 +78,8 @@ async function getGuild(userData: User, bot: Client) {
 }
 
 export default class GleadCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays a DiscordRPG user's guild leaderboard",
 			help: "These are the attributes you can use as the \"attribute\" argument: `level`, `item name`, `gold`, `xp`, `lux`, `deaths`, `kills`, `points`, `questPoints`, `mine`, `chop`, `fish`, `forage`, `crits`, `defense`, `goldBoost`, `lumberBoost`, `mineBoost`, `reaping`, `salvaging`, `scavenge`, `strength`, `taming`, `xpBoost`, `lastseen` and `location`.",
 			example: "141610251299454976 showid --desc lastseen",
@@ -112,7 +111,7 @@ export default class GleadCommand extends Command {
 		});
 	}
 
-	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
+	async run(ctx: DiscordContext) {
 		const args = ctx.args as {
 			user?: string,
 			showid?: boolean,

@@ -1,7 +1,6 @@
 import request from "request";
 import parser from "xml2js";
 import Command from "../../groups/ImageCommand.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { MessageEmbed } from "discord.js";
 
@@ -16,8 +15,8 @@ type ExpectedResponse = {
 };
 
 export default class CatCommand extends Command {
-	constructor(client: Client) {
-		super(client, { description: "Meowwwwwwwwwww" });
+	constructor() {
+		super({ description: "Meowwwwwwwwwww" });
 	}
 
 	run(ctx: MessageContext) {

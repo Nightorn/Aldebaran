@@ -1,12 +1,11 @@
 import { evaluate } from "mathjs";
 import Command from "../../groups/DRPGCommand.js";
-import Client from "../../structures/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class PlantcalcCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays estimated plant harvest based on time and level given",
 			example: "3600 24 \"Olive Seed\"",
 			args: {

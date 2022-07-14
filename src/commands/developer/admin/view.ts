@@ -1,22 +1,20 @@
 import util from "util";
 import { MessageEmbed } from "discord.js";
 import Command from "../../../groups/DeveloperCommand.js";
-import Client from "../../../structures/Client.js";
-import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
+import DiscordContext from "../../../structures/contexts/DiscordContext.js";
 
 export default class ViewSubcommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows detailled information about the specified user or guild",
 			perms: { aldebaran: ["EDIT_USERS"] },
-			platforms: ["DISCORD"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
-	async run(ctx: DiscordMessageContext) {
-		const args = ctx.args as string[];
-		const id = ctx.mentions.users.first()?.id ?? args[0];
-		ctx.client.users.fetchDiscord(id).then(async user => {
+	async run(ctx: DiscordContext) {
+		const [id] = ctx.args as string[];
+		ctx.fetchUser(id).then(async user => {
 			const guilds = [];
 			const embed = new MessageEmbed()
 				.setAuthor({
@@ -41,7 +39,7 @@ export default class ViewSubcommand extends Command {
 			if (guilds.length > 0) embed.addField("Servers", guilds.join("\n"));
 			ctx.reply(embed);
 		}).catch(async () => {
-			const guild = await ctx.client.guilds.fetchDiscord(id);
+			const guild = await ctx.fetchServer(id);
 			const settings = guild.base.settings;
 			if (ctx.server) {
 				const owner = await ctx.server.guild.fetchOwner();

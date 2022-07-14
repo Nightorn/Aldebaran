@@ -1,12 +1,11 @@
 import { MessageEmbed } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
-import Client from "../../structures/Client.js";
 import { SettingsModel, Setting, UserSettingKey, ServerSettingKey } from "../../utils/Constants.js";
-import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
 
 export default class UconfigCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Manages your personal settings",
 			example: "adventureTimer on",
 			args: {
@@ -25,16 +24,12 @@ export default class UconfigCommand extends Command {
 		});
 	}
 
-	async run(ctx: DiscordMessageContext) {
+	async run(ctx: DiscordContext) {
 		const args = ctx.args as { setting: string, value?: string };
-		console.log(args);
 		const parameters = SettingsModel.user;
 		if (args.setting === "help") {
 			const embed = this.createEmbed(ctx)
-				.setAuthor({
-					name: "User Settings",
-					iconURL: ctx.client.discord.user.displayAvatarURL()
-				})
+				.setTitle("User Settings")
 				.setDescription(
 					`Welcome to your user settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}uconfig list\`, and your current settings are shown in \`${ctx.prefix}uconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}uconfig property value\`, and one example is \`${ctx.prefix}uconfig adventureTimer on\`.`
 				)
@@ -78,10 +73,7 @@ export default class UconfigCommand extends Command {
 			const list = ctx.author.base.settings
 				.reduce((acc, x) => `${acc}**${x.key}** - \`${x.value}\`\n`, "");
 			const embed = this.createEmbed(ctx)
-				.setAuthor({
-					name: "User Settings  |  Overview",
-					iconURL: ctx.client.discord.user.displayAvatarURL()
-				})
+				.setTitle("User Settings  |  Overview")
 				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
 		} else if (Object.keys(parameters).includes(args.setting) && args.value) {

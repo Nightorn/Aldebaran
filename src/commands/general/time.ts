@@ -1,12 +1,11 @@
 import moment from "moment-timezone";
 import Command from "../../groups/Command.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { MessageEmbed } from "discord.js";
 
 export default class TimeCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Prints a user's time based on their configured timezone",
 			example: "<@143026985763864576>",
 			args: {
@@ -27,8 +26,7 @@ export default class TimeCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, clean?: boolean };
-		const user = await ctx.client.users
-			.fetchDiscord(args.user || ctx.author.id);
+		const user = await ctx.fetchUser(args.user || ctx.author.id);
 		let timezone = user.base.getSetting("timezone");
 		if (timezone !== undefined) {
 			if (!timezone.includes("/")) {

@@ -1,11 +1,10 @@
 import { ColorResolvable, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
 import Command from "../groups/Command.js";
-import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
-import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
 import Client from "../structures/Client.js";
 import { Args } from "../utils/Args";
 import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
+import DiscordContext from "../structures/contexts/DiscordContext.js";
 
 export interface CommandMetadata {
 	aliases?: string[],
@@ -30,14 +29,12 @@ export interface CommandMetadata {
 
 export type Context<T extends boolean | undefined = false> =
 	MessageContext<T extends boolean ? T : false>
-	| DiscordMessageContext<T extends boolean ? T : false>
-	| DiscordSlashMessageContext;
+	| DiscordContext<T extends boolean ? T : false>;
 
 export interface ICommand {
 	aliases: string[];
 	category: string;
 	color: ColorResolvable;
-	client: Client;
 	example: string;
 	hidden: boolean;
 	metadata: CommandMetadata;

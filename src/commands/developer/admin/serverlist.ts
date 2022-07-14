@@ -1,22 +1,20 @@
 import { Collection, Guild } from "discord.js";
 import Command from "../../../groups/DeveloperCommand.js";
-import Client from "../../../structures/Client.js";
 import { paginate } from "../../../utils/Methods.js";
-import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
-import DiscordSlashMessageContext from "../../../structures/contexts/DiscordSlashMessageContext.js";
+import DiscordContext from "../../../structures/contexts/DiscordContext.js";
 
 type Guilds = Collection<string, Guild>[];
 
 export default class ServerlistSubcommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Lists the servers the bot is in",
 			perms: { aldebaran: ["VIEW_SERVERLIST"] },
 			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
-	async run(ctx: DiscordMessageContext | DiscordSlashMessageContext) {
+	async run(ctx: DiscordContext) {
 		const shard = ctx.client.discord.shard;
 		const guilds = shard
 			? (await shard.fetchClientValues("guilds.cache") as Guilds)

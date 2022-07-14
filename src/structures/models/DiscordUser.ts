@@ -1,10 +1,10 @@
 import { User as DjsUser } from "discord.js";
 import { DataTypes, Model } from "sequelize";
-import ContextAuthor from "../../interfaces/ContextAuthor.js";
+import ContextUser from "../../interfaces/ContextUser.js";
 import { tableConf } from "../../utils/Methods.js";
 import User from "./User.js";
 
-export default class DiscordUser extends Model implements ContextAuthor {
+export default class DiscordUser extends Model implements ContextUser {
 	declare private _id: number;
 	declare public snowflake: string;
 	declare public userId: number;
@@ -20,6 +20,10 @@ export default class DiscordUser extends Model implements ContextAuthor {
 
 	get avatarURL() {
 		return this.user.displayAvatarURL();
+	}
+
+	get createdAt() {
+		return new Date(this.user.createdTimestamp);
 	}
 
 	get id() {

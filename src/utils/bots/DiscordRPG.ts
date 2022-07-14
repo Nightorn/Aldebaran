@@ -26,7 +26,7 @@ const emojiColor = (percentage: number) => {
 const checkPlayer = (ctx: DiscordMessageContext, username: string) => {
 	const match = ctx.channel.messages.cache
 		.filter(m => m.author.username === username).first();
-	return match ? ctx.client.users.fetchDiscord(match.author.id) : null;
+	return match ? ctx.fetchUser(match.author.id) : null;
 };
 
 const general = (

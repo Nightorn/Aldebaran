@@ -1,11 +1,10 @@
 import Command from "../../groups/Command.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { Platform } from "../../utils/Constants.js";
 
 export default class CommandsCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Lists all the available commands",
 			args: {
 				showHidden: {
@@ -45,11 +44,7 @@ export default class CommandsCommand extends Command {
 			}
 		}
 
-		const embed = this.createEmbed(ctx)
-			.setAuthor({
-				name: `${ctx.client.name}  |  List of ${count} commands`,
-				iconURL: ctx.client.discord.user.displayAvatarURL()
-			});
+		const embed = this.createEmbed(ctx).setTitle(`List of ${count} commands`);
 		if (!args.showHidden && !args.hideAliases) {
 			embed.setFooter({
 				text: "Use --showhidden to view all commands and --hidealiases to hide aliases."

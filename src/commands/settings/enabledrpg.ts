@@ -1,11 +1,9 @@
 import { Message, MessageActionRow, MessageButton, MessageEmbed, TextChannel } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
-import Client from "../../structures/Client.js";
 import { ServerSettingKey, UserSettingKey } from "../../utils/Constants.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
-import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
 
-type Context = DiscordMessageContext<true> | DiscordSlashMessageContext<true>;
 type SettingParameters<T> = { name: T, description: string }[];
 
 const guildParameters: SettingParameters<ServerSettingKey> = [
@@ -32,8 +30,8 @@ const userParameters: SettingParameters<UserSettingKey> = [
 ];
 
 export default class EnableDRPGCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			aliases: ["edrpg"],
 			description:
 				"Utility command to enable configuration values for DiscordRPG usage",
@@ -42,7 +40,7 @@ export default class EnableDRPGCommand extends Command {
 		});
 	}
 
-	configuringEmbed(ctx: Context, type: string) {
+	configuringEmbed(ctx: DiscordContext<true>, type: string) {
 		const parameters = type === "user" ? userParameters : guildParameters;
 		const list = (parameters as SettingParameters<string>)
 			.reduce((p, c) => `${p}${`${c.description} - \`${c.name}\``}\n`, "");
@@ -54,7 +52,7 @@ export default class EnableDRPGCommand extends Command {
 			.setColor("BLUE");
 	}
 
-	setSettings(ctx: Context, type: "user" | "guild", followUp = false) {
+	setSettings(ctx: DiscordContext<true>, type: "user" | "guild", followUp = false) {
 		return new Promise(resolve => {
 			const embed = this.configuringEmbed(ctx, type);
 			const button = new MessageButton()
@@ -70,7 +68,7 @@ export default class EnableDRPGCommand extends Command {
 			} else if (ctx instanceof DiscordSlashMessageContext) {
 				message = ctx.reply(opt, true, true);
 			} else {
-				message = ctx.reply(opt);
+				message = (ctx as DiscordSlashMessageContext).reply(opt);
 			}
 
 			message.then(msg => {
@@ -93,7 +91,7 @@ export default class EnableDRPGCommand extends Command {
 		});
 	}
 
-	done(ctx: Context, followUp = false) {
+	done(ctx: DiscordContext<true>, followUp = false) {
 		const embed = new MessageEmbed()
 			.setTitle("Done!")
 			.setDescription(
@@ -108,7 +106,7 @@ export default class EnableDRPGCommand extends Command {
 		}
 	}
 
-	noPermissions(ctx: Context) {
+	noPermissions(ctx: DiscordContext<true>) {
 		const embed = new MessageEmbed()
 			.setTitle("Oops!")
 			.setDescription(
@@ -118,7 +116,7 @@ export default class EnableDRPGCommand extends Command {
 		ctx.reply(embed);
 	}
 
-	async run(ctx: Context) {
+	async run(ctx: DiscordContext<true>) {
 		const isAdmin = ctx.member
 			.permissionsIn(ctx.channel as TextChannel)
 			.has("MANAGE_GUILD");

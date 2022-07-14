@@ -63,6 +63,9 @@ export type UserSettingKey = CommonSettingKey | keyof typeof UserSettingsModel;
 export type ServerSettingKey = CommonSettingKey
 	| keyof typeof ServerSettingsModel;
 
+export type ServerCacheMap<K, T> = Map<K, { server: T, expires: number }>;
+export type UserCacheMap<K, T> = Map<K, { user: T, expires: number }>;
+
 export type UserSettings = { [key in UserSettingKey]?: string };
 export type ServerSettings = { [key in ServerSettingKey]?: string };
 

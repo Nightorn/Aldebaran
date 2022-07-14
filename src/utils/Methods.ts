@@ -4,6 +4,7 @@ import moment from "moment-timezone";
 import { NekoRequestResults } from "nekos.life";
 import DatabaseProvider from "../handlers/DatabaseProvider.js";
 import Setting from "../interfaces/Setting.js";
+import DiscordContext from "../structures/contexts/DiscordContext.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
 
@@ -121,7 +122,7 @@ export async function paginate(
 	list: string[],
 	pageSize: number,
 	headerText: string,
-	ctx: DiscordMessageContext | DiscordSlashMessageContext,
+	ctx: DiscordContext,
 	codeblock?: string,
 	embed: MessageEmbed = new MessageEmbed()
 ) {
@@ -152,7 +153,7 @@ export async function paginate(
 	const opt = { embeds: [embed], components: maxPage > 1 ? [buttonRow] : [] };
 	const reply = ctx instanceof DiscordSlashMessageContext
 		? await ctx.reply(opt, false, true)
-		: await ctx.reply(opt);
+		: await (ctx as DiscordMessageContext).reply(opt);
 
 	// Keep collecting interactions as long as there's pages to paginate.
 	while (maxPage > 1) {

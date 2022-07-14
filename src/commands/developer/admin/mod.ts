@@ -1,11 +1,10 @@
 import MessageContext from "../../../structures/contexts/MessageContext.js";
 import Command from "../../../groups/DeveloperCommand.js";
-import Client from "../../../structures/Client.js";
 import { SettingsModel, ServerSettingKey, UserSettingKey } from "../../../utils/Constants.js";
 
 export default class ModSubcommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Changes the settings of the specified user or guild",
 			perms: { aldebaran: ["EDIT_USERS"] }
 		});
@@ -19,7 +18,7 @@ export default class ModSubcommand extends Command {
 				|| Object.keys(SettingsModel.user).includes(args[1]))
 			) {
 				if (args[3]) {
-					ctx.client.users.fetchDiscord(args[0]).then(async user => {
+					ctx.fetchUser(args[0]).then(async user => {
 						user.base.setSetting(args[1] as UserSettingKey, args[2]);
 						const embed = this.createEmbed(ctx)
 							.setTitle("Changes Done")
@@ -27,7 +26,7 @@ export default class ModSubcommand extends Command {
 							.setColor("GREEN");
 						ctx.reply(embed);
 					}).catch(async () => {
-						const guild = await ctx.client.guilds.fetchDiscord(args[0]);
+						const guild = await ctx.fetchServer(args[0]);
 						if (guild) {
 							guild.base.setSetting(args[1] as ServerSettingKey, args[2]);
 							const embed = this.createEmbed(ctx)

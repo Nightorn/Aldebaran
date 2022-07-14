@@ -1,10 +1,8 @@
-import { ColorResolvable, Message, MessageEmbed } from "discord.js";
+import { ColorResolvable, MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
-import Client from "../../structures/Client.js";
-import MessageContext from "../../structures/contexts/MessageContext.js";
-import { Platform } from "../../utils/Constants.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../../structures/contexts/DiscordSlashMessageContext.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
 
 const messages = {
 	good: [
@@ -25,25 +23,23 @@ const messages = {
 };
 
 export default class PingCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays the bot's current ping to Discord",
 			aliases: ["pong"],
 			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
-	async run(ctx: MessageContext, platform: Platform) {
+	async run(ctx: DiscordContext) {
 		const embed = new MessageEmbed()
 			.addField("WebSocket Heartbeat", `${Math.floor(ctx.client.discord.ws.ping)} ms`, true)
 			.addField(`${ctx.client.name} Ping`, "Computing...", true)
 			.setColor("BLUE");
-		let msg: Message<boolean>;
-		if (platform === "DISCORD") {
-			msg = await (ctx as DiscordMessageContext).reply(embed);
-		} else {
-			msg = await (ctx as DiscordSlashMessageContext).reply(embed, false, true);
-		}
+
+		const msg = ctx instanceof DiscordSlashMessageContext
+			? await ctx.reply(embed, false, true)
+			: await (ctx as DiscordMessageContext).reply(embed);
 		const ping = msg.createdTimestamp - ctx.createdTimestamp;
 		let color: ColorResolvable = "BLUE";
 		let desc = "Hi.";

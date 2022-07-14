@@ -1,11 +1,10 @@
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import Client from "../../structures/Client.js";
 import { formatNumber } from "../../utils/Methods.js";
 
 export default class GoldCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays the estimated gold per kill at a certain level",
 			example: "323 18 10",
 			args: {

@@ -1,12 +1,11 @@
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import Client from "../../structures/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
 import { Item, Weapon } from "../../interfaces/DiscordRPG.js";
 
 export default class WeaponCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Recommends you the best weapons for your level",
 			example: "150",
 			args: { level: { as: "number", desc: "The level you want your weapon to be at" } }

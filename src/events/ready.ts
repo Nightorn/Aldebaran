@@ -1,7 +1,7 @@
 import { formatNumber } from "../utils/Methods.js";
-import Client from "../structures/Client.js";
+import DiscordClient from "../structures/DiscordClient.js";
 
-export default (client: Client) => {
+export default (client: DiscordClient) => {
 	const devMode = process.argv[2] === "dev"
 		? " The developer mode has been enabled." : "";
 	console.log(

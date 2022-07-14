@@ -1,13 +1,12 @@
 import { ColorResolvable, MessageEmbed } from "discord.js";
 import moment from "moment";
 import Command from "../../groups/Command.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { zodiacName } from "../../utils/Methods.js";
 
 export default class ProfileCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows your Aldebaran social profile",
 			example: "320933389513523220",
 			args: { user: {
@@ -20,7 +19,7 @@ export default class ProfileCommand extends Command {
 
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.users.fetchDiscord(args.user || ctx.author.id)
+		ctx.fetchUser(args.user || ctx.author.id)
 			.then(async user => {
 				const profile = await user.base.getProfile();
 				if (profile.name) {

@@ -1,5 +1,4 @@
 import Command from "../../groups/SettingsCommand.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const sectionMatches: { [key: string]: string } = {
@@ -13,8 +12,8 @@ const sectionMatches: { [key: string]: string } = {
 };
 
 export default class SetprofileCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Changes your profile information",
 			example: "aboutme My name is Xxx_FortnitePro_xxX!",
 			args: {

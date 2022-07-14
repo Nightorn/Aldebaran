@@ -1,11 +1,10 @@
 import { MessageEmbed } from "discord.js";
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import Client from "../../structures/Client.js";
 
 export default class UpgradecalcCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays the number of upgrades you need for your weapon",
 			example: "400 386 7283 7408 1050 1.56 2",
 			args: {

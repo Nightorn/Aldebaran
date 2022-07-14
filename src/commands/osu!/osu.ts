@@ -1,6 +1,5 @@
 import { Mode, User } from "nodesu";
 import Command from "../../groups/OsuCommand.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode, osuModeChoices } from "../../utils/Constants.js";
 import { MessageEmbed } from "discord.js";
@@ -19,8 +18,8 @@ const t = (x: number) => {
 };
 
 export default class OsuCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows the osu! stats of the user specified",
 			help: "Run the command with the osu! username of the user you want to see the stats of, or maybe their user ID and the according mode (osu, mania, taiko, ctb).\n**Supported Modes** : **osu!standard** : (by default), --osu; **osu!taiko**: --taiko; **osu!ctb**: --ctb; **osu!mania**: --mania.",
 			example: "Ciborn --mania",

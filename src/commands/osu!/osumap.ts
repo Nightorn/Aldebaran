@@ -3,7 +3,6 @@ import ojsama from "ojsama";
 import retrieveBeatmapFile from "../../utils/osu!/retrieveBeatmapFile.js";
 import ppv2Results from "../../utils/osu!/ppv2Results.js";
 import Command from "../../groups/OsuCommand.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { osuModeChoices } from "../../utils/Constants.js";
 
@@ -19,8 +18,8 @@ const returnDuration = (x: number) => (x > 60
 	: `${Math.floor(x)}s`);
 
 export default class OsumapCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows the information of the specified map",
 			help: "First, you have to send the link of the beatmap you want to see the information of, or you also use its ID. After that, you can choose the mode to show the information from, note that the default mode is standard. See more information below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps.",
 			example: "1097541 --taiko +HD 97% 100x 69m",

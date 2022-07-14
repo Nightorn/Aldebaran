@@ -1,10 +1,9 @@
 import { CommandMetadata } from "../interfaces/Command.js";
-import Client from "../structures/Client.js";
 import C from "./Command.js";
 
 export default abstract class Command extends C {
-	constructor(client: Client, metadata: CommandMetadata) {
-		super(client, metadata);
+	constructor(metadata: CommandMetadata) {
+		super(metadata);
 		this.category = "Games";
 		this.color = "PURPLE";
 	}

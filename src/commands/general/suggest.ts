@@ -1,15 +1,14 @@
 // Command Developed with the help of Akashic Bearer#2305
 import { MessageEmbed, WebhookClient } from "discord.js";
 import Command from "../../groups/Command.js";
-import Client from "../../structures/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const id = process.env.WEBHOOK_SUGGESTIONS_ID || "";
 const token = process.env.WEBHOOK_SUGGESTIONS_TOKEN || "";
 
 export default class SuggestCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Sends a suggestion",
 			example: "more nsfw commands",
 			args: { suggestion: {

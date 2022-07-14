@@ -1,14 +1,14 @@
 import { ColorResolvable, MessageEmbed, PermissionString as DJSPermission, TextChannel } from "discord.js";
-import Client from "../structures/Client.js";
 import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
 import { CommandMetadata, Context, ICommand } from "../interfaces/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
+
+const name = process.env.NAME || "Aldebaran";
 
 export default abstract class Command implements ICommand {
 	aliases: string[];
 	category = "General";
 	color: ColorResolvable = "BLUE";
-	client: Client;
 	example: string;
 	hidden = false;
 	metadata: CommandMetadata;
@@ -22,7 +22,7 @@ export default abstract class Command implements ICommand {
 	/**
    	* Command abstract class, extend it to build a command
    	*/
-	constructor(client: Client, metadata: CommandMetadata) {
+	constructor(metadata: CommandMetadata) {
 		if (metadata.perms !== undefined) {
 			if (metadata.perms.discord !== undefined) {
 				if (!(metadata.perms.discord instanceof Array)) { throw new TypeError("The Discord permissions metadata are invalid"); } else this.perms.discord = metadata.perms.discord;
@@ -32,7 +32,6 @@ export default abstract class Command implements ICommand {
 			}
 		}
 		this.aliases = metadata.aliases || [];
-		this.client = client;
 		this.example = !metadata.example ? "" : `\`${metadata.example}\``;
 		this.metadata = metadata;
 	}
@@ -100,10 +99,6 @@ export default abstract class Command implements ICommand {
 
 	toHelpEmbed(prefix = "&") {
 		const embed = new MessageEmbed()
-			.setAuthor({
-				name: `${this.client.name}  |  Command Help  |  ${this.name}`,
-				iconURL: this.client.discord.user.displayAvatarURL()
-			})
 			.setTitle(this.metadata.description)
 			.addField("Category", this.category, true)
 			.addField("Example", `${prefix}${this.name} ${this.example}`, true)
@@ -117,7 +112,7 @@ export default abstract class Command implements ICommand {
 		if (this.perms.discord.length > 0)
 			embed.addField("Discord Perms", this.perms.discord.join(", "), true);
 		if (this.perms.aldebaran.length > 0)
-			embed.addField(`${this.client.name} Perms`, this.perms.aldebaran.join(", "), true);
+			embed.addField(`${name} Perms`, this.perms.aldebaran.join(", "), true);
 		if (this.metadata.args !== undefined) {
 			let args = "";
 			let usage = "";
@@ -138,9 +133,9 @@ export default abstract class Command implements ICommand {
 		return embed;
 	}
 
-	registerSubcommands(...subcommands: { new(c: Client): Command }[]) {
+	registerSubcommands(...subcommands: { new(): Command }[]) {
 		subcommands.forEach(Structure => {
-			const command = new Structure(this.client);
+			const command = new Structure();
 			const name = command.constructor.name
 				.replace("Subcommand", "").toLowerCase();
 			command.name = name;

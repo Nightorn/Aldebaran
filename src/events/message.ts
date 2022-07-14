@@ -1,5 +1,5 @@
 import { Message, MessageEmbed } from "discord.js";
-import Client from "../structures/Client.js";
+import DiscordClient from "../structures/DiscordClient.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 
 import DiscordRPG from "../utils/bots/DiscordRPG.js";
@@ -10,17 +10,17 @@ import Command from "../groups/Command.js";
 
 const drpgIDs = ["170915625722576896", "891614347015626762"];
 
-export default async (client: Client, message: Message) => {
+export default async (client: DiscordClient, message: Message) => {
 	if (message.webhookId) return;
 
 	const guild = message.guild
-		? await client.guilds.fetchDiscord(message.guild.id)
+		? await client.servers.fetchDiscord(message.guild.id)
 		: null;
 
 	let prefix = guild?.base.prefix || "";
 
 	const author = await client.users.fetchDiscord(message.author.id);
-	const ctx = new DiscordMessageContext(client, message, author, guild);
+	const ctx = new DiscordMessageContext(author, client, message, guild);
 
 	if (guild && drpgIDs.includes(ctx.author.id)) {
 		DiscordRPG(ctx);

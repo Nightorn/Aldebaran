@@ -2,11 +2,10 @@ import MessageContext from "../../../structures/contexts/MessageContext.js";
 import { PermissionString } from "../../../utils/Constants.js";
 import Command from "../../../groups/DeveloperCommand.js";
 import AldebaranPermissions from "../../../structures/AldebaranPermissions.js";
-import Client from "../../../structures/Client.js";
 
 export default class SetpermSubcommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Set permissions of the specific user",
 			perms: { aldebaran: ["MANAGE_PERMISSIONS"] }
 		});
@@ -42,7 +41,7 @@ export default class SetpermSubcommand extends Command {
 				.setColor("ORANGE");
 			return ctx.reply(embed);
 		}
-		return ctx.client.users.fetchDiscord(args[0]).then(async user => {
+		return ctx.fetchUser(args[0]).then(async user => {
 			const permissions = args.slice(2).filter(permission => Object
 				.keys(AldebaranPermissions.FLAGS)
 				.includes(permission)) as PermissionString[];

@@ -1,13 +1,12 @@
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
-import Client from "../../structures/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class SkillsCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays users' skills information",
 			example: "246302641930502145",
 			args: { user: {
@@ -20,7 +19,7 @@ export default class SkillsCommand extends Command {
 
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.users.fetchDiscord(args.user || ctx.author.id).then(user => {
+		ctx.fetchUser(args.user || ctx.author.id).then(user => {
 			request({ uri: `http://api.discorddungeons.me/v3/user/${user.id}`, headers: { Authorization: process.env.API_DISCORDRPG } }, (err, response, body) => {
 				if (err) throw err;
 				if (response.statusCode === 404) {

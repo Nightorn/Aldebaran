@@ -1,13 +1,12 @@
 import Command from "../../groups/Command.js";
-import Client from "../../structures/Client.js";
 import { categories, Platform } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const emoji = ":small_blue_diamond:";
 
 export default class HelpCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays detailled help about the bot's commands",
 			args: { query: {
 				as: "string",
@@ -29,10 +28,6 @@ export default class HelpCommand extends Command {
 						&& c.supports(platform))
 					.reduce((acc, c) => `${acc}${emoji} **${c.name}** : ${c.shortDesc}\n`, "");
 				const categoryEmbed = this.createEmbed(ctx)
-					.setAuthor({
-						name: "Category Help",
-						iconURL: ctx.client.discord.user.displayAvatarURL()
-					})
 					.setTitle(`${category.title} - ${category.description}`)
 					.setDescription(list)
 					.setColor(this.color);
@@ -45,10 +40,7 @@ export default class HelpCommand extends Command {
 			}
 		} else {
 			const embed = this.createEmbed(ctx)
-				.setAuthor({
-					name: `${ctx.client.name}'s Help Pages`,
-					iconURL: ctx.client.discord.user.displayAvatarURL()
-				});
+				.setTitle(`${ctx.client.name}'s Help Pages`);
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {
 				if (data.name !== "Developer"  && typeof data !== "string")

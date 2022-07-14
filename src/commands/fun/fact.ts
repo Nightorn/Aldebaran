@@ -1,11 +1,10 @@
 import { MessageEmbed } from "discord.js";
 import Command from "../../groups/FunCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import Client from "../../structures/Client.js";
 
 export default class FactCommand extends Command {
-	constructor(client: Client) {
-		super(client, { description: "Get a random fact!" });
+	constructor() {
+		super({ description: "Get a random fact!" });
 	}
 
 	async run(ctx: MessageContext) {
@@ -16,7 +15,7 @@ export default class FactCommand extends Command {
 			.setDescription(`*${data.fact}*`)
 			.setFooter({
 				text: "Powered by nekos.life",
-				iconURL: ctx.client.discord.user.displayAvatarURL()
+				iconURL: "https://avatars.githubusercontent.com/u/34457007"
 			});
 		ctx.reply(embed);
 	}

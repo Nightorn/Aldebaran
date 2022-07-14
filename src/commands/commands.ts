@@ -1,6 +1,4 @@
 import CommandHandler from "../handlers/CommandHandler.js";
-import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
-import Client from "../structures/Client.js";
 import executeSocial from "../utils/executeSocial.js";
 
 // Developer
@@ -83,6 +81,7 @@ import TickleCommand from "./social/tickle.js";
 // Utilities
 import CurconvCommand from "./utilities/curconv.js";
 import MathCommand from "./utilities/math.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
 
 export default () => {
 	const commandHandler = CommandHandler.getInstance();
@@ -106,20 +105,19 @@ export default () => {
 	};
 	for (const [name, description] of Object.entries(socialCommands)) {
 		commandHandler.register(class Command extends SocialCommand {
-			constructor(client: Client) {
-				super(client, {
+			constructor() {
+				super({
 					name,
 					description,
 					args: { user: {
 						as: "user",
 						desc: "The user you want to socialize with",
 						optional: true
-					} },
-					platforms: ["DISCORD", "DISCORD_SLASH"]
+					} }
 				});
 			}
 
-			run(ctx: DiscordMessageContext) {
+			run(ctx: MessageContext) {
 				executeSocial(ctx);
 			}
 		});

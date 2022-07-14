@@ -1,10 +1,9 @@
 import Command from "../../groups/FunCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import Client from "../../structures/Client.js";
 
 export default class EightballCommand extends Command {
-	constructor(client: Client) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Ask the magic 8ball a question, you will be given the right answer",
 			example: "Should Allen get a hug?",
 			name: "8ball",
@@ -24,7 +23,7 @@ export default class EightballCommand extends Command {
 				.setImage(data.url)
 				.setFooter({
 					text: "Powered by nekos.life",
-					iconURL: ctx.client.discord.user.displayAvatarURL()
+					iconURL: "https://avatars.githubusercontent.com/u/34457007"
 				});
 			ctx.reply(embed);
 		}

@@ -1,18 +1,15 @@
 import { MessageEmbed } from "discord.js";
 import Command from "../groups/SocialCommand.js";
-import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
-import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
 import { actionText, imageUrls } from "./Constants.js";
 
-export default async (
-	ctx: DiscordMessageContext | DiscordSlashMessageContext
-) => {
+export default async (ctx: MessageContext) => {
 	const args = ctx.args as { user: string };
 	const user = args.user || ctx.author.id;
-	ctx.client.discord.users.fetch(user).then(() => {
+	ctx.fetchUser(user).then(() => {
 		const command = (ctx.command as Command).name;
 		const target = `<@${user}>`;
-		const sender = ctx.author.user.username;
+		const sender = ctx.author.username;
 
 		let comment = "";
 		let randNumber = null;
@@ -29,7 +26,7 @@ export default async (
 
 		const embed = new MessageEmbed()
 			.setAuthor({
-				name: ctx.author.user.username,
+				name: ctx.author.username,
 				iconURL: ctx.author.avatarURL
 			})
 			.setColor("AQUA")
