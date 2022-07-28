@@ -18,8 +18,9 @@ export default class EightballCommand extends Command {
 		const { question } = ctx.args as { question: string };
 		const data = await ctx.client.nekoslife.eightBall({ text: question });
 		if (data.url) {
+			const asked = `${ctx.author} asked: *${question}*`;
 			const embed = this.createEmbed()
-				.setDescription(`**${data.response}**`)
+				.setDescription(`${asked}\n**${data.response}**`)
 				.setImage(data.url)
 				.setFooter({
 					text: "Powered by nekos.life",
