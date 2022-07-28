@@ -44,13 +44,13 @@ const general = (
 		const desc = `${emojiColor(playerHP)} **${playerHP}%**`;
 		embed.addField("__Character Health__", desc, true);
 	}
-	if (selection !== "character") {
+	if (selection !== "character" && !isNaN(petHP)) {
 		const color = emojiColor(petHP);
 		const desc = petHP === 0 ? "**DEAD**" : `${color} **${petHP}%**`;
 		embed.addField("__Pet Health__", desc, true);
 	}
 
-	ctx.reply(embed);
+	ctx.channel.send({ embeds: [embed] });
 };
 
 const playerWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
@@ -60,7 +60,8 @@ const playerWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 		.setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
 		.setImage(senddeath)
 		.setFooter({ text: "Pay attention to your health or you are going to die!" });
-	ctx.reply(embed).then(msg => setTimeout(() => msg.delete(), 60000));
+	ctx.channel.send({ embeds: [embed] })
+		.then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
 const petWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
@@ -72,7 +73,8 @@ const petWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 		.setDescription(desc)
 		.setImage(senddeath)
 		.setFooter({ text: footer });
-	ctx.reply(embed).then(msg => setTimeout(() => msg.delete(), 60000));
+	ctx.channel.send({ embeds: [embed] })
+		.then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
 async function percentageCheck(
@@ -120,7 +122,8 @@ export default async (ctx: DiscordMessageContext) => {
 			if (user) {
 				const hpMatches = content.match(/(Dead|[\d.]+% HP)/g);
 				if (hpMatches) {
-					const deadPet = hpMatches[1] === "Dead";
+					console.log(hpMatches);
+					const deadPet = hpMatches.length === 1 || hpMatches[1] === "Dead";
 					const playerHP = Number(hpMatches[0].split(" ")[0]);
 					const petHP = deadPet ? 0 : Number(hpMatches[1].split(" ")[0]);
 					return percentageCheck(user, ctx, playerHP, petHP);
