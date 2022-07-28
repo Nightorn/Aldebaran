@@ -20,9 +20,13 @@ export default class BugreportCommand extends Command {
 
 	run(ctx: MessageContext) {
 		const { report } = ctx.args as { report: string };
+
+		if (!report) return ctx.reply("Your report cannot be empty.");
+		
 		const embed = new MessageEmbed()
 			.setDescription(report)
 			.setFooter({ text: `User: ${ctx.author.tag} [ID: ${ctx.author.id}]` });
+
 		new WebhookClient({ id, token }).send({
 			username: ctx.author.username,
 			avatarURL: ctx.author.avatarURL,
@@ -30,6 +34,7 @@ export default class BugreportCommand extends Command {
 		}).then(() => {
 			ctx.reply("Your bug report has been sent to the main server!");
 		});
+
 		return true;
 	}
 }

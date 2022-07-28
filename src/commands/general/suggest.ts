@@ -20,9 +20,13 @@ export default class SuggestCommand extends Command {
 
 	run(ctx: MessageContext) {
 		const { suggestion } = ctx.args as { suggestion: string };
+
+		if (!suggestion) return ctx.reply("Your suggestion cannot be empty.");
+
 		const embed = new MessageEmbed()
 			.setDescription(suggestion)
 			.setFooter({ text: `User: ${ctx.author.tag} [ID: ${ctx.author.id}]` });
+
 		new WebhookClient({ id, token }).send({
 			username: ctx.author.username,
 			avatarURL: ctx.author.avatarURL,
@@ -30,6 +34,7 @@ export default class SuggestCommand extends Command {
 		}).then(() => {
 			ctx.reply("Your suggestion has been sent to the main server!");
 		});
+
 		return true;
 	}
 }
