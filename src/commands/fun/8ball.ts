@@ -18,7 +18,7 @@ export default class EightballCommand extends Command {
 		const { question } = ctx.args as { question: string };
 		const data = await ctx.client.nekoslife.eightBall({ text: question });
 		if (data.url) {
-			const embed = this.createEmbed(ctx)
+			const embed = this.createEmbed()
 				.setDescription(`**${data.response}**`)
 				.setImage(data.url)
 				.setFooter({

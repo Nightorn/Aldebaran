@@ -2,7 +2,7 @@ import { Mode, User } from "nodesu";
 import Command from "../../groups/OsuCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode, osuModeChoices } from "../../utils/Constants.js";
-import { MessageEmbed } from "discord.js";
+import Embed from "../../structures/Embed.js";
 
 const f = (x: number | string) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const t = (x: number) => {
@@ -59,7 +59,7 @@ export default class OsuCommand extends Command {
 				const rank = user.pp !== 0
 					? `#${f(user.rank)} (${f(user.pp.toFixed(2))}pp)`
 					: "Unranked";
-				const embed = new MessageEmbed()
+				const embed = new Embed()
 					.setColor(this.color)
 					.setAuthor({
 						name: `${user.username}  |  ${rank}  |  osu!${mode === "osu" ? "" : mode}`,

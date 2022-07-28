@@ -72,7 +72,7 @@ export default class TrapCommand extends Command {
 									items += `- Between **${min}** and **${max} ${itemName}**\n`;
 							}
 						});
-						const embed = this.createEmbed(ctx)
+						const embed = this.createEmbed()
 							.setAuthor({
 								name: `${target.username}  |  Trap information  |  ${drpgItems[trap.id].name} @ ${drpgLocationdb[trapId]}`,
 								iconURL: target.avatarURL
@@ -94,7 +94,7 @@ export default class TrapCommand extends Command {
 						if (trap.id !== "")
 							traps += `\`[${location}]\` **${drpgItems[trap.id].name}** @ **${drpgLocationdb[location]}** - ${getDate(trap.time, true)}\n`;
 					}
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setAuthor({
 							name: `${target.username}  |  Trap information`,
 							iconURL: target.avatarURL

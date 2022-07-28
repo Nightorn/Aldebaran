@@ -116,7 +116,7 @@ export default class CurConvCommand extends Command implements ICommand {
 
 			const str = `**${value.toFixed(2)} ${fromCurrency}** is equal to **${valueInTarget.toFixed(2)} ${toCurrency}** as of ${getDate(data.timestamp * 1000)}, with a **${rate.toFixed(2)} rate**.`;
 
-			const embed = this.createEmbed(ctx)
+			const embed = this.createEmbed()
 				.setTitle(`Conversion from ${fromCurrency} to ${toCurrency}`)
 				.setDescription(str);
 			ctx.reply(embed);

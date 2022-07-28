@@ -1,3 +1,4 @@
+import { ImageSize } from "@discordjs/rest";
 import { User as DjsUser } from "discord.js";
 import { DataTypes, Model } from "sequelize";
 import ContextUser from "../../interfaces/ContextUser.js";
@@ -19,7 +20,7 @@ export default class DiscordUser extends Model implements ContextUser {
 	} = { adventure: null, padventure: null, sides: null };
 
 	get avatarURL() {
-		return this.user.displayAvatarURL();
+		return this.getAvatarURL();
 	}
 
 	get createdAt() {
@@ -36,6 +37,10 @@ export default class DiscordUser extends Model implements ContextUser {
 
 	get username() {
 		return this.user.username;
+	}
+
+	public getAvatarURL(size: ImageSize = 32) {
+		return this.user.displayAvatarURL({ size });
 	}
 
 	public toString() {

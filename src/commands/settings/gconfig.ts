@@ -1,6 +1,7 @@
-import { MessageEmbed } from "discord.js";
 import Command from "../../groups/SettingsCommand.js";
 import { ServerSettingKey, Setting, SettingsModel } from "../../utils/Constants.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 import DiscordContext from "../../structures/contexts/DiscordContext.js";
 
 export default class GconfigCommand extends Command {
@@ -21,16 +22,15 @@ export default class GconfigCommand extends Command {
 					regex: /.+/,
 					optional: true
 				}
-			},
-			platforms: ["DISCORD", "DISCORD_SLASH"]
+			}
 		});
 	}
 
-	async run(ctx: DiscordContext<true>) {
+	async run(ctx: MessageContext<true>) {
 		const args = ctx.args as { setting: string, value?: string };
 		const parameters = SettingsModel.guild;
 		if (args.setting === "help") {
-			const embed = new MessageEmbed()
+			const embed = new Embed()
 				.setTitle("User Settings")
 				.setDescription(
 					`Welcome to your server settings! This command allows you to customize ${ctx.client.name} to your needs. The available properties are listed in \`${ctx.prefix}gconfig list\`, and your current settings are shown in \`${ctx.prefix}gconfig view\`. To change a property, you need to use this command like that: \`${ctx.prefix}gconfig property value\`, and one example is \`${ctx.prefix}gconfig adventureTimer on\`.`
@@ -40,7 +40,7 @@ export default class GconfigCommand extends Command {
 			const list: { [key: string]: { [key in ServerSettingKey]?: Setting } } = {};
 			for (const [key, data] of Object.entries(parameters)) {
 				if (!list[data.category]) list[data.category] = {};
-				if ("showOnlyIfBotIsInGuild" in data) {
+				if ("showOnlyIfBotIsInGuild" in data && ctx instanceof DiscordContext) {
 					try {
 						await ctx.server.guild.members.fetch(data.showOnlyIfBotIsInGuild);
 						list[data.category][key as ServerSettingKey] = data;
@@ -50,7 +50,7 @@ export default class GconfigCommand extends Command {
 				}
 			}
 
-			const embed = this.createEmbed(ctx)
+			const embed = this.createEmbed()
 				.setTitle("Config Command Help Page");
 			for (const [category, params] of Object.entries(list)) {
 				let entries = "";
@@ -67,7 +67,7 @@ export default class GconfigCommand extends Command {
 			ctx.server.base.settings.forEach(s => {
 				list += `**${s.key}** - \`${s.value}\`\n`;
 			});
-			const embed = this.createEmbed(ctx)
+			const embed = this.createEmbed()
 				.setTitle("Guild Settings  |  Overview")
 				.setDescription(list === "" ? "None" : list);
 			ctx.reply(embed);
@@ -75,7 +75,7 @@ export default class GconfigCommand extends Command {
 			const setting = args.setting.toLowerCase() as ServerSettingKey;
 			if (parameters[setting].support(args.value)) {
 				ctx.server.base.setSetting(setting, args.value).then(() => {
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setTitle("Settings successfully changed")
 						.setDescription(
 							`The property **\`${
@@ -87,7 +87,7 @@ export default class GconfigCommand extends Command {
 						.setColor("GREEN");
 					ctx.reply(embed);
 				}).catch(err => {
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setTitle("An Error Occured")
 						.setDescription(
 							"An error occured and we could not change your settings. Please retry later."

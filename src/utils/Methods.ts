@@ -1,5 +1,4 @@
 import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import { readFileSync } from "fs";
 import moment from "moment-timezone";
 import { NekoRequestResults } from "nekos.life";
 import DatabaseProvider from "../handlers/DatabaseProvider.js";
@@ -7,14 +6,13 @@ import Setting from "../interfaces/Setting.js";
 import DiscordContext from "../structures/contexts/DiscordContext.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import DiscordSlashMessageContext from "../structures/contexts/DiscordSlashMessageContext.js";
-
-const timeNames = moment.tz.names();
+import Embed from "../structures/Embed.js";
 
 export async function createNekosEmbed(
 	desc: string,
 	endpoint: () => Promise<NekoRequestResults>
 ) {
-	return new MessageEmbed()
+	return new Embed()
 		.setDescription(desc)
 		.setFooter({
 			text: "Powered by nekos.life",
@@ -82,9 +80,6 @@ export const getTimeString = (timeInMs: number, format: string) => {
 	format = format.replace("SS", seconds < 10 ? `0${seconds.toString()}` : seconds.toString());
 	return format;
 };
-
-export const importAssets = (path: string) => JSON
-	.parse(readFileSync(path).toString());
 
 export const lightOrDark = (color: string) => {
 	let r;
@@ -205,14 +200,6 @@ export function timeSince(timestamp: number) {
 
 	return str;
 }
-
-export const timezoneSupport = (value: string) => {
-	if (/((UTC)|(GMT))(\+|-)\d{1,2}/i.test(value)) {
-		return true;
-	} if (timeNames.indexOf(value) !== -1) {
-		return true;
-	} return false;
-};
 
 export function tableConf(modelName: string) {
 	return { modelName, sequelize: DatabaseProvider.getInstance() };

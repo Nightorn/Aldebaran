@@ -1,8 +1,9 @@
-import { MessageEmbed, ShardClientUtil, version } from "discord.js";
+import { ShardClientUtil, version } from "discord.js";
 import Command from "../../groups/Command.js";
 import { formatNumber } from "../../utils/Methods.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import DiscordContext from "../../structures/contexts/DiscordContext.js";
+import Embed from "../../structures/Embed.js";
 
 type ClientProperty = "channels" | "guilds" | "users";
 async function getShardData(shard: ShardClientUtil, prop: ClientProperty) {
@@ -24,7 +25,7 @@ export default class InfoCommand extends Command {
 			if (member.acknowledgements.includes("DEVELOPER")) { adminMentions += `<@${id}>, ${member.text}\n`; }
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setAuthor({
 				name: `${ctx.client.name} v${ctx.client.version}`,
 				url: process.env.HOMEPAGE

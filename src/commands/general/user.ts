@@ -1,7 +1,7 @@
-import { MessageEmbed } from "discord.js";
 import { getDateWithTimezone } from "../../utils/Methods.js";
 import Command from "../../groups/Command.js";
-import MessageContext from "../../structures/contexts/MessageContext.js";
+import DiscordContext from "../../structures/contexts/DiscordContext.js";
+import Embed from "../../structures/Embed.js";
 
 export default class UserCommand extends Command {
 	constructor() {
@@ -17,7 +17,7 @@ export default class UserCommand extends Command {
 		});
 	}
 
-	run(ctx: MessageContext) {
+	run(ctx: DiscordContext) {
 		const args = ctx.args as { user: string };
 		ctx.fetchUser(args.user || ctx.author.id).then(async user => {
 			const allRoles = new Map();
@@ -67,14 +67,17 @@ export default class UserCommand extends Command {
 			const guild = ctx.server
 				? `${ctx.server.name}  |  Member Details`
 				: "User Details";
-			const embed = new MessageEmbed()
+			const color = ctx.member
+				? ctx.member.displayColor.toString(16)
+				: this.color;
+			const embed = new Embed()
 				.setAuthor({
 					name: `${user.tag}  |  ${guild}`,
 					iconURL: user.avatarURL
 				})
 				.setDescription(`**User ID** ${user.id}\n${memberNick !== null ? `**Nickname** ${memberNick}\n` : ""}`)
 				.setThumbnail(user.avatarURL)
-				.setColor(ctx.member ? ctx.member.displayColor : this.color)
+				.setColor(color)
 				.setFooter({ text: "User account created on" })
 				.setTimestamp(user.createdAt);
 			if (mjd !== null)

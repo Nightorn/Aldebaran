@@ -67,7 +67,7 @@ export default class SkillsCommand extends Command {
 						const maxMax = max + Math.floor(maxpoints / 125);
 						return `With your current mining boosts skills, you would get between **${minMin} and ${minMax} skill XP**.\nWith the highest mining boosts skills, you would get between **${maxMin} and ${maxMax} skill XP**.`;
 					};
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setAuthor({
 							name: `${user.username}  |  Skills`,
 							iconURL: user.avatarURL

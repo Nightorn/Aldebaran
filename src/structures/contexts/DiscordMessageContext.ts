@@ -6,12 +6,13 @@ import { parseArgs, parseInput } from "../../utils/Args.js";
 import DiscordClient from "../DiscordClient.js";
 import Command from "../../groups/Command.js";
 import { If } from "../../utils/Constants.js";
+import Embed from "../Embed.js";
 
 export default class DiscordMessageContext
 	<InGuild extends boolean = false> extends DiscordContext<InGuild>
 {
-	private _splitArgs: string[];
 	private message: Message;
+	protected _splitArgs: string[];
 	public command?: Command;
 
 	constructor(
@@ -42,6 +43,17 @@ export default class DiscordMessageContext
 		return this._args;
 	}
 
+	get mode() {
+		if (this.message.content?.indexOf(`${this.prefix}#`) === 0) return "ADMIN";
+		if (this.message.content?.indexOf(`${this.prefix}?`) === 0) return "HELP";
+		if (this.message.content?.indexOf(`${this.prefix}-`) === 0) return "IMAGE";
+		return "NORMAL";
+	}
+
+	get prefix() {
+		return this.server?.base.prefix || "";
+	}
+
 	get channel() {
 		return this.message.channel;
 	}
@@ -50,8 +62,8 @@ export default class DiscordMessageContext
 		return this.message.content;
 	}
 
-	get createdTimestamp() {
-		return this.message.createdTimestamp;
+	get createdAt() {
+		return new Date(this.message.createdTimestamp);
 	}
 
 	get embeds() {
@@ -64,17 +76,6 @@ export default class DiscordMessageContext
 
 	get mentions() {
 		return this.message.mentions;
-	}
-
-	get mode() {
-		if (this.message.content.indexOf(`${this.prefix}#`) === 0) return "ADMIN";
-		if (this.message.content.indexOf(`${this.prefix}?`) === 0) return "HELP";
-		if (this.message.content.indexOf(`${this.prefix}-`) === 0) return "IMAGE";
-		return "NORMAL";
-	}
-
-	get prefix() {
-		return this.server?.base.prefix || "";
 	}
 
 	async delete(delay?: number): Promise<Message<boolean> | false> {
@@ -94,9 +95,13 @@ export default class DiscordMessageContext
 		return false;
 	}
 
-	async reply(content: string | MessageOptions | MessageEmbed) {
-		return content instanceof MessageEmbed
-			? this.message.channel.send({ embeds: [content] })
-			: this.message.channel.send(content);
+	async reply(content: string | Embed | MessageOptions | MessageEmbed) {
+		if (content instanceof Embed) {
+			return this.message.reply({ embeds: [content.toDiscordEmbed()] });
+		} else if (content instanceof MessageEmbed) {
+			return this.message.reply({ embeds: [content] });
+		} else {
+			return this.message.reply(content);
+		}
 	}
 }

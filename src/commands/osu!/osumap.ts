@@ -102,7 +102,7 @@ export default class OsumapCommand extends Command {
 					}
 					const combo = comboArg || beatmap.maxCombo;
 
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setAuthor({
 							name: beatmap.creator,
 							iconURL: `https://a.ppy.sh/${beatmap.mapperId}`,

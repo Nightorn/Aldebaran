@@ -1,6 +1,6 @@
-import { MessageEmbed } from "discord.js";
 import Command from "../groups/SocialCommand.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
+import Embed from "../structures/Embed.js";
 import { actionText, imageUrls } from "./Constants.js";
 
 export default async (ctx: MessageContext) => {
@@ -24,12 +24,8 @@ export default async (ctx: MessageContext) => {
 		const number = Math.floor(Math.random() * imageUrls[command].length);
 		const image = imageUrls[command][number];
 
-		const embed = new MessageEmbed()
-			.setAuthor({
-				name: ctx.author.username,
-				iconURL: ctx.author.avatarURL
-			})
-			.setColor("AQUA")
+		const embed = new Embed()
+			.setColor("#1abc9c")
 			.setDescription(comment)
 			.setImage(image);
 		ctx.reply(embed);

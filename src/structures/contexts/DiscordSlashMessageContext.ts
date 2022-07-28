@@ -2,11 +2,13 @@ import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message,
 import Command from "../../groups/Command.js";
 import { CommandMode, If } from "../../utils/Constants";
 import DiscordClient from "../DiscordClient.js";
+import Embed from "../Embed.js";
 import Server from "../models/DiscordServer.js";
 import User from "../models/DiscordUser.js";
 import DiscordContext from "./DiscordContext.js";
 
 type M = Promise<Message<boolean>>;
+type DefaultMessage = string | Embed | MessageEmbed;
 export default class DiscordSlashMessageContext
 	<InGuild extends boolean = false> extends DiscordContext<InGuild>
 {
@@ -47,8 +49,8 @@ export default class DiscordSlashMessageContext
 		return this.interaction.channel as TextBasedChannel;
 	}
 
-	get createdTimestamp() {
-		return this.interaction.createdTimestamp;
+	get createdAt() {
+		return new Date(this.interaction.createdTimestamp);
 	}
 
 	get member() {
@@ -82,19 +84,22 @@ export default class DiscordSlashMessageContext
 		}
 	}
 
-	async reply(content: string | MessageOptions | MessageEmbed): Promise<never>;
+	async reply(content: DefaultMessage | MessageOptions): Promise<never>;
 	async reply<B extends boolean>(
-		content: string | InteractionReplyOptions | MessageEmbed,
+		content: DefaultMessage | InteractionReplyOptions,
 		ephemeral?: boolean,
 		fetchReply?: B
 	): Promise<B extends true ? Message<boolean> : void>; 
 
 	async reply(
-		content: string | MessageOptions | InteractionReplyOptions | MessageEmbed,
+		content: DefaultMessage | MessageOptions | InteractionReplyOptions,
 		ephemeral = false,
 		fetchReply = false
 	) {
-		if (content instanceof MessageEmbed) {
+		if (content instanceof Embed) {
+			const embed = content.toDiscordEmbed();
+			return this.interaction.reply({ embeds: [embed], ephemeral, fetchReply });
+		} else if (content instanceof MessageEmbed) {
 			return this.interaction.reply({ embeds: [content], ephemeral, fetchReply });
 		} else if (typeof content === "string") {
 			return this.interaction.reply({ content, ephemeral, fetchReply });

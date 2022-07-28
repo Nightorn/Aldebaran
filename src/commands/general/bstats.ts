@@ -17,7 +17,7 @@ export default class BStatsCommand extends Command {
 		const loadPC = Math.round(load * (100 / 4)) / 100;
 
 		const uptime = getTimeString(process.uptime() * 1000, "DD day(s), HH:MM:SS");
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle("Bot Statistics")
 			.setDescription(
 				`Data about ${ctx.client.name} are shown on this page, mainly the used resources and the global usage statistics.`

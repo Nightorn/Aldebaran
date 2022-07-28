@@ -26,10 +26,10 @@ export default class ServerlistSubcommand extends Command {
 			list.push(`\`${guild.id}\` **${guild.name}** - **${guild.memberCount}** members`);
 		});
 			
-		const embed = this.createEmbed(ctx).setAuthor({
+		const embed = this.createEmbed().setAuthor({
 			name: `${ctx.client.name}  |  Server List`,
 			iconURL: ctx.client.discord.user.displayAvatarURL()
-		});
+		}).toDiscordEmbed();
 		paginate(list, 15, "Server List", ctx, undefined, embed);
 	}
 }

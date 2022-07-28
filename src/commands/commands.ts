@@ -1,5 +1,6 @@
 import CommandHandler from "../handlers/CommandHandler.js";
 import executeSocial from "../utils/executeSocial.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
 
 // Developer
 import AdminCommand from "./developer/admin.js";
@@ -56,7 +57,6 @@ import NekoCommand from "./image/neko.js";
 import PandaCommand from "./image/panda.js";
 import PepeCommand from "./image/pepe.js";
 import RandimalCommand from "./image/randimal.js";
-import RCGPCommand from "./image/rcgp.js";
 
 // NSFW
 import LewdCommand from "./nsfw/lewd.js";
@@ -81,7 +81,6 @@ import TickleCommand from "./social/tickle.js";
 // Utilities
 import CurconvCommand from "./utilities/curconv.js";
 import MathCommand from "./utilities/math.js";
-import MessageContext from "../structures/contexts/MessageContext.js";
 
 export default () => {
 	const commandHandler = CommandHandler.getInstance();
@@ -113,7 +112,7 @@ export default () => {
 						as: "user",
 						desc: "The user you want to socialize with",
 						optional: true
-					} }
+					} },
 				});
 			}
 
@@ -149,7 +148,6 @@ export default () => {
 		LizardCommand,
 		NekoCommand,
 		PandaCommand,
-		RCGPCommand,
 		LewdCommand,
 		EnabledrpgCommand,
 		GconfigCommand,

@@ -1,5 +1,5 @@
 import Command from "../../groups/Command.js";
-import DiscordContext from "../../structures/contexts/DiscordContext.js";
+import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class AvatarCommand extends Command {
 	constructor() {
@@ -11,18 +11,16 @@ export default class AvatarCommand extends Command {
 				as: "user",
 				desc: "The user whose avatar you want to see",
 				optional: true
-			} },
-			platforms: ["DISCORD", "DISCORD_SLASH"]
+			} }
 		});
 	}
 
-	run(ctx: DiscordContext) {
+	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string };
 		ctx.fetchUser(args.user || ctx.author.id).then(user => {
-			const embed = this.createEmbed(ctx)
-				.setAuthor({ name: user.username, iconURL: user.avatarURL })
+			const embed = this.createEmbed()
 				.setTitle(`${user.username}'s Avatar`)
-				.setImage(user.user.displayAvatarURL({ size: 2048 }));
+				.setImage(user.getAvatarURL(4096));
 			ctx.reply(embed);
 		}).catch(() => {
 			ctx.reply("The ID of the user you specified is invalid. Please retry by mentionning him or by getting their right ID.");

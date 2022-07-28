@@ -1,9 +1,9 @@
-import { MessageEmbed } from "discord.js";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
 import { drpgXpBases } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 
 function calcWall(
 	lvl: number | string,
@@ -106,8 +106,8 @@ export default class WallsCommand extends Command {
 			const xpNeeded = calcXPNeeded(drpgXpBases[baseLvl], baseLvl);
 			const wallProgress = xpNeeded - data.xp;
 
-			const embed = new MessageEmbed()
-				.setColor(0x00ae86)
+			const embed = new Embed()
+				.setColor("#00ae86")
 				.setAuthor({
 					name: `${user.username}  |  DiscordRPG Walls`,
 					iconURL: user.avatarURL

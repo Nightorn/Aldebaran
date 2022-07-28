@@ -1,7 +1,7 @@
-import { ColorResolvable, MessageEmbed } from "discord.js";
 import moment from "moment";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 import { zodiacName } from "../../utils/Methods.js";
 
 export default class ProfileCommand extends Command {
@@ -35,12 +35,12 @@ export default class ProfileCommand extends Command {
 						userDetails += `**Age**: ${age}\n**Zodiac Sign**: ${zodiac}\n`;
 					}
 					if (profile.gender) userDetails += `**Gender**: ${profile.gender}\n`;
-					const embed = new MessageEmbed()
+					const embed = new Embed()
 						.setAuthor({
 							name: `${user.username}'s Profile`,
 							iconURL: user.avatarURL
 						})
-						.setColor(profile.profileColor as ColorResolvable);
+						.setColor(profile.profileColor);
 					if (profile.dmFriendly) embed.setFooter({
 						text: `${profile.dmFriendly ? "My DMs are open." : "My DMs are not open."} | Currently has ${profile.fortunePoints} Fortune points.`
 					});
@@ -54,7 +54,7 @@ export default class ProfileCommand extends Command {
 					if (profile.socialLinks) embed.addField("__**Social Network(s) Link**__", profile.socialLinks);
 					ctx.reply(embed);
 				} else {
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setTitle("No Profile Found")
 						.setDescription(`Please use \`${ctx.prefix}setprofile name <yournamehere>\` to create your profile`)
 						.setColor("RED");

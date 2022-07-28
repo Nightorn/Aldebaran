@@ -24,7 +24,7 @@ export default class MathCommand extends Command {
 		} catch (err) {
 			result = "The specified math expression is invalid.";
 		}
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle("Math Expression Evaluation")
 			.addField("Result", `\`\`\`${formatNumber(result)}\`\`\``);
 		ctx.reply(embed);

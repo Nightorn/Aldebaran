@@ -1,10 +1,10 @@
-import { MessageEmbed } from "discord.js";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { getTimeString } from "../../utils/Methods.js";
 import { drpgLocationdb } from "../../utils/Constants.js";
 import { User } from "../../interfaces/DiscordRPG.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 
 export default class StatsCommand extends Command {
 	constructor() {
@@ -41,9 +41,9 @@ export default class StatsCommand extends Command {
 						for (const [key, value] of Object.entries(data.attributes))
 							if (value !== 0) attributes.push(`**${key[0].toUpperCase() + key.slice(1)}** ${format(value)} Points`);
 					const location = data.location ? drpgLocationdb[data.location.current] : "The Abyss";
-					const embed = new MessageEmbed()
+					const embed = new Embed()
 						.setAuthor({ name: data.name, iconURL: user.avatarURL })
-						.setColor(data.donate ? "GOLD" : 0x00ae86)
+						.setColor(data.donate ? "GOLD" : "#00ae86")
 						.setDescription(`Currently In **${location || "The Abyss"}**`)
 						.addField(
 							`Level ${format(data.level)}`,
@@ -65,9 +65,7 @@ export default class StatsCommand extends Command {
 						.setFooter({
 							text: `${data.donate ? "Donator, " : ""}Last seen ${getTimeString(Date.now() - data.lastseen, "DD day(s), HH hour(s), MM minute(s) and SS second(s)")} ago`
 						});
-					if (data.quest
-								&& (data.quest.current || data.quest.completed)
-					) {
+					if (data.quest && (data.quest.current || data.quest.completed)) {
 						embed.addField(
 							"Quests",
 							`${

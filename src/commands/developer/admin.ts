@@ -22,7 +22,7 @@ export default class AdminCommand extends Command {
 	}
 
 	async run(ctx: MessageContext) {
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle("Warning")
 			.setDescription("The admin action specified is invalid.")
 			.setColor("ORANGE");

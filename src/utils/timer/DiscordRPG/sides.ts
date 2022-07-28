@@ -41,10 +41,6 @@ export default async (ctx: DiscordMessageContext<true>) => {
 			}, 299250);
 
 			const timerEmbed = new MessageEmbed()
-				.setAuthor({
-					name: ctx.author.username,
-					iconURL: ctx.author.avatarURL
-				})
 				.setColor(0x00ae86)
 				.setDescription("React with 🚫 to cancel timer.");
 			ctx.reply(timerEmbed).then(mesg => {
@@ -68,7 +64,6 @@ export default async (ctx: DiscordMessageContext<true>) => {
 					} else if (ctx.author.timers.sides) {
 						const embed1 = new MessageEmbed()
 							.setDescription("Timer Cancelled")
-							.setAuthor({ name: ctx.author.username })
 							.setColor("RED");
 
 						clearTimeout(ctx.author.timers.sides);

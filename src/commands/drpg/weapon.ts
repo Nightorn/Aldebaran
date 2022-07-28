@@ -39,7 +39,7 @@ export default class WeaponCommand extends Command {
 			}
 		}
 
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle(`Obtainable Weapons Available At Level ${level}`)
 			.setDescription("Will display weapon available at level specfied, unless none exist which will return close matches above and below level specfied.");
 

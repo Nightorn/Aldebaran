@@ -1,10 +1,11 @@
-import { ColorResolvable, MessageEmbed, PermissionString as DJSPermission } from "discord.js";
+import { PermissionString as DJSPermission } from "discord.js";
 import Command from "../groups/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
 import Client from "../structures/Client.js";
 import { Args } from "../utils/Args";
 import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
 import DiscordContext from "../structures/contexts/DiscordContext.js";
+import Embed from "../structures/Embed.js";
 
 export interface CommandMetadata {
 	aliases?: string[],
@@ -34,7 +35,7 @@ export type Context<T extends boolean | undefined = false> =
 export interface ICommand {
 	aliases: string[];
 	category: string;
-	color: ColorResolvable;
+	color: string;
 	example: string;
 	hidden: boolean;
 	metadata: CommandMetadata;
@@ -42,15 +43,15 @@ export interface ICommand {
 	perms: { discord: DJSPermission[], aldebaran: AldebaranPermission[] };
 	subcommands: Map<string, ICommand>;
 
-	check(ctx: MessageContext): Promise<boolean>;
+	check(ctx: MessageContext, platform: Platform): Promise<boolean>;
 	execute(ctx: MessageContext, platform: Platform): object | void;
 	guildCheck(ctx: MessageContext): boolean;
-	permsCheck(ctx: MessageContext): Promise<boolean>;
+	permsCheck(ctx: MessageContext, platform: Platform): Promise<boolean>;
 	registerSubcommands(...subcommands: { new(c: Client): Command }[]): void;
 	run(
 		this: ICommand,
 		ctx: Context<typeof this.metadata.requiresGuild>,
 		platform: Platform
 	): void;
-	toHelpEmbed(command: string, prefix: string): MessageEmbed;
+	toHelpEmbed(command: string, prefix: string): Embed;
 }

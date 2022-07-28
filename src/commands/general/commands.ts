@@ -30,7 +30,10 @@ export default class CommandsCommand extends Command {
 			.filter(c => c.supports(platform));
 		let count = 0;
 		for (const command of commands) {
-			if (args.showHidden || (await command.check(ctx) && !command.hidden)) {
+			if (
+				args.showHidden
+				|| (await command.check(ctx, platform) && !command.hidden)
+			) {
 				if (!categories[command.category]) {
 					categories[command.category] = [];
 				}
@@ -44,7 +47,7 @@ export default class CommandsCommand extends Command {
 			}
 		}
 
-		const embed = this.createEmbed(ctx).setTitle(`List of ${count} commands`);
+		const embed = this.createEmbed().setTitle(`List of ${count} commands`);
 		if (!args.showHidden && !args.hideAliases) {
 			embed.setFooter({
 				text: "Use --showhidden to view all commands and --hidealiases to hide aliases."

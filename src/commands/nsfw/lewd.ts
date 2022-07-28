@@ -1,7 +1,7 @@
 import Command from "../../groups/NSFWCommand.js";
 import { imageUrls } from "../../utils/Constants.js";
-import { MessageEmbed } from "discord.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 
 export default class LewdCommand extends Command {
 	constructor() {
@@ -17,7 +17,7 @@ export default class LewdCommand extends Command {
 		const sendlewds = imageUrls
 			.lewd[Math.floor(Math.random() * imageUrls.lewd.length)];
 		ctx.fetchUser(args.user).then(target => {
-			const embed = new MessageEmbed()
+			const embed = new Embed()
 				.setColor(this.color)
 				.setDescription(`${ctx.author} is being lewd towards ${target}`)
 				.setImage(sendlewds);

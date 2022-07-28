@@ -4,7 +4,7 @@ import ppv2Results, { Result } from "../../utils/osu!/ppv2Results.js";
 import Command from "../../groups/OsuCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode, osuModeChoices } from "../../utils/Constants.js";
-import { MessageEmbed } from "discord.js";
+import Embed from "../../structures/Embed.js";
 
 type Score = {
 	id: number,
@@ -126,7 +126,7 @@ export default class OsubestCommand extends Command {
 						for (const s of scores) {
 							description += `[__${s.artist} - **${s.title}**__ [${s.diff}]](${s.link}) (${s.mapper}) [**${s.sr}★${s.mods !== "" ? ` +${s.mods}` : ""}**]\n**\`[${s.rank}]\`** (${mode === "osu" ? `**${s.acc}%**, ` : ""}**x${s.combo}**${["osu", "ctb"].includes(mode) ? `/${s.maxcombo}` : ""}) - **${f(s.pp)}pp** - \`${s.n300}\` 300, \`${s.n100}\` 100, \`${s.n50}\` 50, \`${s.nmiss}\` miss\n\n`;
 						}
-						const embed = new MessageEmbed()
+						const embed = new Embed()
 							.setColor(this.color)
 							.setAuthor({
 								name: `${user.username}  |  Top 5 Best Plays  |  osu!${mode === "osu" ? "" : mode}`,
@@ -134,9 +134,9 @@ export default class OsubestCommand extends Command {
 								url: `https://osu.ppy.sh/users/${user.userId}`
 							})
 							.setDescription(description);
-						if (mode !== "osu") embed.setFooter({
-							text: "Because this is not an osu!standard map, some information about the scores are unavailable."
-						});
+						if (mode !== "osu") {
+							embed.setFooter("Because this is not an osu!standard map, some information about the scores are unavailable.");
+						}
 						ctx.reply(embed);
 					});
 				});

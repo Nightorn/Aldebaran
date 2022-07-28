@@ -37,7 +37,7 @@ export default class GoldCommand extends Command {
 			1 + (Math.floor(attrib / 10) + equipment) / 100)
 			+ level) * ring);
 
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle("Average Obtained Gold")
 			.setDescription(
 				`**Please note all infomation about Gold are estimations!**\nYou have a +${equipment}% Gold Boost on your equipment, and you have ${attrib} points in the Gold Boost attribute.`

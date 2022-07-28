@@ -6,8 +6,8 @@ import { Attribute, Guild as DGuild, Item, Skill, User as DUser } from "../../in
 import Client from "../../structures/Client.js";
 import { drpgItems, drpgLocationdb } from "../../utils/Constants.js";
 import { paginate, timeSince } from "../../utils/Methods.js";
-import { MessageEmbed } from "discord.js";
 import DiscordContext from "../../structures/contexts/DiscordContext.js";
+import Embed from "../../structures/Embed.js";
 
 export type Guild = DGuild & { users: User[], lastUpdate: number };
 export type User = DUser & { lastUpdate: number };
@@ -232,7 +232,7 @@ export default class GleadCommand extends Command {
 				`${guildData.name} Lead ${index}`,
 				ctx,
 				"md",
-				new MessageEmbed().setColor(this.color).setFooter({ text })
+				new Embed().setColor(this.color).setFooter({ text }).toDiscordEmbed()
 			);
 		} else {
 			ctx.reply("Unknown leaderboard index.");

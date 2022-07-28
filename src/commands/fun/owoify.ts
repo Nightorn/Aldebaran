@@ -12,7 +12,7 @@ export default class OwoifyCommand extends Command {
 
 	run(ctx: MessageContext) {
 		const { text } = ctx.args as { text: string };
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle("owoifier")
 			.setDescription(text.replace(/r|l/g, "w"));
 		ctx.reply(embed);

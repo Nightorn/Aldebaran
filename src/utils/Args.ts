@@ -2,6 +2,8 @@ import { APIApplicationCommandOptionChoice } from "discord-api-types/v10";
 import Client from "../structures/Client.js";
 import { CommandMode, Platform } from "./Constants";
 
+const userRegex = /\d{17,19}|[0-9ABCDEFGHJKMNPQRSTVWXYZ]{26}/;
+
 type DefaultArg = {
 	desc: string,
 	optional?: boolean
@@ -42,7 +44,7 @@ export type Arg = BooleanArg
 export type Args = { [key: string]: Arg };
 
 export function checkArgType(element: string) {
-	if (element.match(/\d{17,19}/g)) return "user";
+	if (element.match(userRegex)) return "user";
 	if (element.match(/([-]{1,2}[\w]+)/g)) return "flag";
 	if (!Number.isNaN(Number(element))) return "number";
 	return "string";
@@ -86,7 +88,7 @@ export function parseArgs(split: string[], argsMetadata: Args) {
 		}
 		const type = checkArgType(split[i]);
 		if (type === "user") {
-			const match = split[i].match(/\d{17,19}/g);
+			const match = split[i].match(userRegex);
 			if (match) {
 				deconstructed.push({ user: match[0] });
 			}

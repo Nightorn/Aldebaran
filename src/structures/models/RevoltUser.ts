@@ -1,3 +1,4 @@
+import { User as RjsUser } from "revolt.js";
 import { DataTypes, Model } from "sequelize";
 import ContextUser from "../../interfaces/ContextUser.js";
 import { tableConf } from "../../utils/Methods.js";
@@ -8,25 +9,32 @@ export default class RevoltUser extends Model implements ContextUser {
 	declare public userId: number;
 
 	declare public base: User; // inclusion
+	declare public user: RjsUser;
 
-	get avatarURL(): string {
-		throw new Error("Method not implemented.");
+	get avatarURL() {
+		return this.getAvatarURL();
 	}
 
-	get createdAt(): Date {
-		throw new Error("Method not implemented.");
+	get createdAt() {
+		return new Date(this.user.createdAt);
 	}
 
-	get tag(): string {
-		throw new Error("Method not implemented.");
+	get tag() {
+		return this.user.username;
 	}
 	
-	get username(): string {
-		throw new Error("Method not implemented.");
+	get username() {
+		return this.user.username;
+	}
+
+	public getAvatarURL() {
+		return this.user.avatar
+			? `https://autumn.revolt.chat/avatars/${this.user.avatar._id}`
+			: this.user.defaultAvatarURL;
 	}
 	
-	toString(): string {
-		throw new Error("Method not implemented.");
+	public toString() {
+		return `<@${this.user._id}>`;
 	}
 }
 

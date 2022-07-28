@@ -1,7 +1,7 @@
 import moment from "moment-timezone";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { MessageEmbed } from "discord.js";
+import Embed from "../../structures/Embed.js";
 
 export default class TimeCommand extends Command {
 	constructor() {
@@ -45,7 +45,7 @@ export default class TimeCommand extends Command {
 			if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = `ETC/${timezone}`;
 			const time = moment().tz(timezone);
 			if (time === null) {
-				const embed = new MessageEmbed()
+				const embed = new Embed()
 					.setTitle(":x: Ooof!")
 					.setColor("RED")
 					.setDescription(`The timezone setting for ${user.username} seems to be invaild! Tell them to set it again with ${ctx.prefix}uconfig timezone!`)
@@ -56,7 +56,7 @@ export default class TimeCommand extends Command {
 			} else {
 				const date = time.format("dddd, Do of MMMM YYYY");
 				const subDate = time.format("hh:mm:ss A");
-				const embed = this.createEmbed(ctx)
+				const embed = this.createEmbed()
 					.setAuthor({
 						name: `${user.username}  |  Date and Time`,
 						iconURL: user.avatarURL

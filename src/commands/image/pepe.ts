@@ -1,7 +1,7 @@
 import tenor from "tenorjs";
 import Command from "../../groups/ImageCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { MessageEmbed } from "discord.js";
+import Embed from "../../structures/Embed.js";
 
 type Post = {
 	media: {
@@ -12,9 +12,7 @@ type Post = {
 
 export default class PepeCommand extends Command {
 	constructor() {
-		super({
-			description: "Shows a random GIF of pepe"
-		});
+		super({ description: "Shows a random GIF of pepe" });
 	}
 
 	run(ctx: MessageContext) {
@@ -27,10 +25,10 @@ export default class PepeCommand extends Command {
 		});
 		TenorClient.Search.Random("frog pepe", "1").then((results: Post[]) => {
 			results.forEach(post => {
-				const embed = new MessageEmbed()
+				const embed = new Embed()
 					.setColor(this.color)
 					.setImage(post.media[0].gif.url)
-					.setFooter({ text: post.url });
+					.setFooter(post.url);
 				ctx.reply(embed);
 			});
 		}).catch(console.error);

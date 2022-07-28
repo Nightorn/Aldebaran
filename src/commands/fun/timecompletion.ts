@@ -1,6 +1,6 @@
-import { MessageEmbed } from "discord.js";
 import Command from "../../groups/FunCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 
 export default class TimecompletionCommand extends Command {
 	constructor() {
@@ -33,7 +33,7 @@ export default class TimecompletionCommand extends Command {
 		const decadeCompletion = Math.round(1000
 			* (100 * (Date.now() - 1577836800000)
 			/ 315619200000)) / 1000;
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle("Time Completion")
 			.setColor(this.color)
 			.setDescription(`We are **${weekCompletion}%** through the week.\nWe are **${monthCompletion}%** through the month.\nWe are **${yearCompletion}%** through the year.\nWe are **${decadeCompletion}%** through the decade.`);

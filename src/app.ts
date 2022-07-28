@@ -1,9 +1,16 @@
-import dotenv from "dotenv";
 import { Shard, ShardingManager } from "discord.js";
+import RevoltClient from "./structures/RevoltClient.js";
 
-dotenv.config({ path: "./.env" });
+const discordOnly = process.argv.includes("--discord");
+const revoltOnly = process.argv.includes("--revolt");
+const discord = discordOnly || !revoltOnly;
+const revolt = revoltOnly || !discordOnly;
 
-if (process.env.DISCORD_TOKEN && process.env.DISCORD_SHARDS) {
+if (process.env.REVOLT_TOKEN && revolt) {
+	new RevoltClient();
+}
+
+if (process.env.DISCORD_TOKEN && process.env.DISCORD_SHARDS && discord) {
 	const manager = new ShardingManager("./src/bot.ts", {
 		token: process.env.DISCORD_TOKEN,
 		shardArgs: process.argv.slice(2, 4),

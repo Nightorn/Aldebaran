@@ -2,7 +2,7 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
 import { Client as DjsClient } from "discord.js";
 import interactionCreate from "../events/interactionCreate.js";
-import message from "../events/message.js";
+import { discordMessage } from "../events/message.js";
 import ready from "../events/ready.js";
 import Client from "./Client.js";
 import DiscordServerManager from "./models/managers/DiscordServerManager.js";
@@ -41,7 +41,7 @@ export default class DiscordClient extends Client {
 		}
 
 		this.discord.on("interactionCreate", int => interactionCreate(this, int));
-		this.discord.on("messageCreate", msg => message(this, msg));
+		this.discord.on("messageCreate", msg => discordMessage(this, msg));
 		this.discord.on("ready", () => ready(this));
 		this.discord.login()
 			.then(() => console.log(`\x1b[36m# Discord Client is logged in.\x1b[0m`));

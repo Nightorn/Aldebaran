@@ -4,7 +4,7 @@ import ppv2Results, { Result } from "../../utils/osu!/ppv2Results.js";
 import Command from "../../groups/OsuCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { OsuMode, osuModeChoices } from "../../utils/Constants.js";
-import { MessageEmbed } from "discord.js";
+import Embed from "../../structures/Embed.js";
 
 const ranks = {
 	SH: "S+",
@@ -83,7 +83,7 @@ export default class OsurecentCommand extends Command {
 					* 100 / (map.countNormal + map.countSlider + map.countSpinner))
 					.toFixed(2);
 
-				const embed = new MessageEmbed()
+				const embed = new Embed()
 					.setAuthor({
 						name: `${user.username}  |  Most Recent osu!${mode !== "osu" ? mode : ""} Play`,
 						iconURL: `https://a.ppy.sh/${user.userId}`,
@@ -93,7 +93,7 @@ export default class OsurecentCommand extends Command {
 					.setTitle(`__${map.artist} - **${map.title}**__ [${map.version}] (${map.creator}) [**${Number(map.difficultyRating).toFixed(2)}★${mods !== "" ? ` +${mods}` : ""}]**`)
 					.setURL(`https://osu.ppy.sh/b/${recent.beatmapId}`)
 					.setDescription(`**\`[${ranks[recent.rank as "XH" | "X" | "SH"] || recent.rank}]\`** (${score ? `**${score.accuracy}%**, ` : ""}**x${recent.maxCombo}**${["osu", "ctb"].includes(mode) ? `/${map.maxCombo}` : ""}) -${score ? ` **${score.pp.toFixed(2)}pp** -` : ""} \`${recent.count300}\` 300, \`${recent.count100}\` 100, \`${recent.count50}\` 50, \`${recent.countMiss}\` miss${recent.rank === "F" ? `\n**${completion}%** Map Completion` : ""}`)
-					.setFooter({ text: `Score set on ${parseDate(recent.date)}.` });
+					.setFooter(`Score set on ${parseDate(recent.date)}.`);
 				ctx.reply(embed);
 			}).catch(() => {
 				ctx.reply("the user you specified does not exist, or at least in the mode specified.");

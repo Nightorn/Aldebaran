@@ -1,7 +1,8 @@
-import { importAssets, timezoneSupport } from "./Methods.js";
+import { readFileSync } from "fs";
 import { XPBases, ItemList, LocationDB } from "../interfaces/DiscordRPG.js";
 import { Mode } from "nodesu";
 import { SlashCommandBooleanOption, SlashCommandIntegerOption, SlashCommandStringOption, SlashCommandUserOption } from "@discordjs/builders";
+import moment from "moment-timezone";
 
 type AldebaranTeam = { [key: string]: {
 	titles: string[],
@@ -35,6 +36,10 @@ type PackageFile = {
 type ActionText = { [key: string]: { self: string[], user: string[] } };
 type ImageURLs = { [key: string]: string[] };
 type Presences = { text: string, type: "PLAYING" | "STREAMING" | "LISTENING" | "WATCHING" | "COMPETING" }[];
+
+function importAssets(p: string) {
+	return JSON.parse(readFileSync(p).toString());
+}
 
 export const actionText: ActionText = importAssets("./assets/data/actiontext.json");
 export const aldebaranTeam: AldebaranTeam = importAssets("./config/aldebaranTeam.json");
@@ -75,6 +80,15 @@ export type Setting = {
 	showOnlyIfBotIsInGuild?: string,
 	support: (value: string) => boolean,
 };
+
+const timeNames = moment.tz.names();
+function timezoneSupport(value: string) {
+	if (/((UTC)|(GMT))(\+|-)\d{1,2}/i.test(value)) {
+		return true;
+	} if (timeNames.indexOf(value) !== -1) {
+		return true;
+	} return false;
+}
 
 const CommonSettingsModel = {
 	adventuretimer: {
@@ -213,7 +227,7 @@ export const Permissions = {
 };
 
 export type CommandMode = "ADMIN" | "HELP" | "IMAGE" | "NORMAL";
-export type Platform = "DISCORD" | "DISCORD_SLASH";
+export type Platform = "DISCORD" | "DISCORD_SLASH" | "REVOLT";
 export type SlashCommandOption = SlashCommandBooleanOption
 	| SlashCommandIntegerOption
 	| SlashCommandStringOption

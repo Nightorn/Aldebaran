@@ -1,6 +1,7 @@
 import User from "../User.js";
 import UserSetting from "../UserSetting.js";
 import { UserCacheMap } from "../../../utils/Constants.js";
+import { deduplicateSettings } from "../../../utils/Methods.js";
 
 export default class UserManager {
 	private userCache: UserCacheMap<number, User> = new Map();
@@ -26,6 +27,7 @@ export default class UserManager {
 				model: UserSetting
 			} });
 			if (u) {
+				u.settings = await deduplicateSettings(u.settings);
 				UserManager.cache(this.userCache, u);
 				return u;
 			} else {

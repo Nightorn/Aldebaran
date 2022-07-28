@@ -1,4 +1,5 @@
 import { ServerCacheMap } from "../../../utils/Constants.js";
+import RevoltClient from "../../RevoltClient.js";
 import RevoltServer from "../RevoltServer.js";
 import Server from "../Server.js";
 import ServerManager from "./ServerManager.js";
@@ -6,15 +7,23 @@ import ServerManager from "./ServerManager.js";
 export default class RevoltServerManager extends ServerManager {
 	private revoltCache: ServerCacheMap<string, RevoltServer> = new Map();
 
+	public client: RevoltClient;
+
+	public constructor(client: RevoltClient) {
+		super();
+		this.client = client;
+	}
+
 	public async cacheRevolt(server: RevoltServer, base: Server) {
 		server.base = base;
+		server.server = await this.client.revolt.servers.fetch(server.id);
 		RevoltServerManager.cache(this.revoltCache, server);
 		return server;
 	}
 
 	public async createRevolt(id: string) {
 		const server = await this.createGuild();
-		const s = await RevoltServer.create({ ulid: id, serverId: server.id });
+		const s = await RevoltServer.create({ id: id, serverId: server.id });
 		return this.cacheRevolt(s, server);
 	}
 

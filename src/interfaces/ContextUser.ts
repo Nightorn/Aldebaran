@@ -1,3 +1,4 @@
+import { ImageSize } from "@discordjs/rest";
 import User from "../structures/models/User.js";
 
 export default interface ContextUser {
@@ -9,5 +10,6 @@ export default interface ContextUser {
 	get tag(): string;
 	get username(): string;
 
+	getAvatarURL(size?: ImageSize): string;
 	toString(): string;
 }

@@ -1,13 +1,13 @@
-import { GuildMember, Message, MessageEmbed, TextBasedChannel } from "discord.js";
 import { ErrorString, Errors, CommandMode, If } from "../../utils/Constants.js";
 import Client from "../Client.js";
+import Embed from "../Embed.js";
 import Command from "../../groups/Command.js";
 import User from "../../interfaces/ContextUser.js";
 import Server from "../../interfaces/ContextServer.js";
 
 export default abstract class MessageContext<InGuild extends boolean = false> {
 	public abstract author: User;
-	public abstract server?: If<InGuild, Server>;
+	public abstract server: If<InGuild, Server>;
 
 	protected _args?: string[] | { [key: string]: string | boolean; };
 	public abstract client: Client;
@@ -16,16 +16,16 @@ export default abstract class MessageContext<InGuild extends boolean = false> {
 	abstract get args(): string[] | {
 		[key: string]: string | number | boolean | undefined;
 	};
-	abstract get channel(): TextBasedChannel;
-	abstract get createdTimestamp(): number;
-	abstract get member(): If<InGuild, GuildMember>;
+	abstract get channel(): unknown;
+	abstract get createdAt(): Date;
+	abstract get member(): If<InGuild, unknown>;
 	abstract get mode(): CommandMode;
 	abstract get prefix(): string;
 
-	abstract delete(delay?: number): Promise<Message<boolean> | false>;
+	abstract delete(delay?: number): Promise<unknown>;
 	abstract fetchServer(id: number | string): Promise<Server>;
 	abstract fetchUser(id: number | string): Promise<User>;
-	abstract reply(content: string | MessageEmbed): unknown;
+	abstract reply(content: string | Embed): unknown;
 
 	argsCheck() {
 		if (this.command && this.command.metadata.args) {
@@ -42,7 +42,7 @@ export default abstract class MessageContext<InGuild extends boolean = false> {
 		const title = Errors[type] && value
 			? Errors[type](value)
 			: "An error has occured.";
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(title)
 			.setColor("RED");
 

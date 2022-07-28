@@ -1,6 +1,6 @@
-import { MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 
 export default class CreditsCommand extends Command {
 	constructor() {
@@ -10,7 +10,7 @@ export default class CreditsCommand extends Command {
 	}
 
 	run(ctx: MessageContext) {
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(
 				"List of the People who contributed, in any way, to the development of Aldebaran"
 			)

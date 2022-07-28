@@ -38,7 +38,7 @@ export default class XpCommand extends Command {
 			return Math.round(xp * ring);
 		};
 
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle(`Average Xp Kill At Lvl. ${level}`)
 			.setDescription(
 				`**Please note all infomation about XP are estimations, and only works with dynamobs!**\nYou have a +${enchant}% XP Boost on your equipment, and you have ${attrib} points in your XP Boost attribute.`

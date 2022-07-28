@@ -12,7 +12,7 @@ export default class SayCommand extends Command {
 
 	run(ctx: MessageContext) {
 		const { text } = ctx.args as { text: string };
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setDescription(text);
 		ctx.reply(embed);
 	}

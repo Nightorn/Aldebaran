@@ -43,7 +43,7 @@ export default class SetprofileCommand extends Command {
 		profile.set({ [profiletarget]: args.input }).save().then(() => {
 			ctx.reply(`Your ${profiletarget} has been updated to \`${args.input}\`.`);
 		}).catch(() => {
-			const error = this.createEmbed(ctx)
+			const error = this.createEmbed()
 				.setTitle("Unknown Profile Section")
 				.setDescription("Please check to ensure this is a correct profile section. If you think the specified profile section was valid, please make sure the value is too.")
 				.setColor("RED");

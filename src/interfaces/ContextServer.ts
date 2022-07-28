@@ -1,4 +1,4 @@
-import Server from "../structures/models/Server";
+import Server from "../structures/models/Server.js";
 
 export default interface ContextServer {
 	base: Server;

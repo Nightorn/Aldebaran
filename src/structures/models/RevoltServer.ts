@@ -1,3 +1,4 @@
+import { Server as RjsServer } from "revolt.js";
 import { DataTypes, Model } from "sequelize";
 import ContextServer from "../../interfaces/ContextServer.js";
 import { tableConf } from "../../utils/Methods.js";
@@ -8,9 +9,10 @@ export default class RevoltServer extends Model implements ContextServer {
 	declare public serverId: number;
 
 	declare public base: Server; // inclusion
+	declare public server: RjsServer;
 	
-	get name(): string {
-		throw new Error("Method not implemented.");
+	get name() {
+		return this.server.name;
 	}
 }
 
