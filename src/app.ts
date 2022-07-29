@@ -11,10 +11,9 @@ if (process.env.REVOLT_TOKEN && revolt) {
 }
 
 if (process.env.DISCORD_TOKEN && process.env.DISCORD_SHARDS && discord) {
-	const manager = new ShardingManager("./src/bot.ts", {
+	const manager = new ShardingManager("dist/src/bot.js", {
 		token: process.env.DISCORD_TOKEN,
-		shardArgs: process.argv.slice(2, 4),
-		execArgv: ["--loader", process.argv.includes("dev") ? "ts-node/esm" : "ts-node/esm/transpile-only"]
+		shardArgs: process.argv.slice(2, 4)
 	});
 	manager.on("shardCreate", (shard: Shard) => console.log(`! Launched shard ${shard.id}`));
 	manager.spawn({

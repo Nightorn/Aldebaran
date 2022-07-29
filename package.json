@@ -24,7 +24,6 @@
     "revolt.js": "^6.0.6",
     "sequelize": "^6.21.2",
     "tenorjs": "^1.0.8",
-    "ts-node": "^10.8.2",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
@@ -41,9 +40,9 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "configure": "node bin/configure.js",
-    "dev": "node --require dotenv/config --loader=ts-node/esm src/app.ts dev !",
-    "start": "export TS_NODE_TRANSPILE_ONLY=true && node --loader=ts-node/esm/transpile-only src/app.ts"
+    "build": "npx tsc --build",
+    "dev": "node --require dotenv/config dist/src/app.js dev !",
+    "start": "node --require dotenv/config dist/src/app.js"
   },
   "repository": {
     "type": "git",
