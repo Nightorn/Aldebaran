@@ -13,6 +13,7 @@
     "env": {
         "es6": true
     },
+    "ignorePatterns": "dist/**/*",
     "rules": {
         "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
         "indent": ["warn", "tab", { "SwitchCase": 1 }],

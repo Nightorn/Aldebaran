@@ -7,9 +7,11 @@
     "@discordjs/builders": "^0.15.0",
     "@discordjs/rest": "^0.5.0",
     "axios": "^0.27.2",
+    "bufferutil": "^4.0.6",
     "discord-api-types": "^0.36.0",
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
+    "erlpack": "discord/erlpack",
     "form-data": "^4.0.0",
     "mariadb": "^3.0.0",
     "mathjs": "^10.6.4",
@@ -24,7 +26,9 @@
     "revolt.js": "^6.0.6",
     "sequelize": "^6.21.2",
     "tenorjs": "^1.0.8",
-    "xml2js": "^0.4.23"
+    "utf-8-validate": "^5.0.9",
+    "xml2js": "^0.4.23",
+    "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
@@ -35,8 +39,6 @@
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",
     "eslint": "^8.19.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
     "typescript": "^4.7.4"
   },
   "scripts": {
