@@ -42,7 +42,7 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "build": "npx tsc --build",
+    "build": "npx tsc",
     "dev": "node --require dotenv/config dist/src/app.js dev !",
     "start": "node --require dotenv/config dist/src/app.js"
   },

@@ -6,6 +6,7 @@ import Profile from "./Profile.js";
 import UserSetting from "./UserSetting.js";
 
 class User extends Model {
+	declare public profile?: Profile; // Sequelize inclusion
 	declare public settings: UserSetting[]; // Sequelize inclusion
 	declare public id: number;
 	declare public permissions: AldebaranPermissions;

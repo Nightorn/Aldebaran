@@ -3,6 +3,7 @@ import { User as DjsUser } from "discord.js";
 import { DataTypes, Model } from "sequelize";
 import ContextUser from "../../interfaces/ContextUser.js";
 import { tableConf } from "../../utils/Methods.js";
+import Embed from "../Embed.js";
 import User from "./User.js";
 
 export default class DiscordUser extends Model implements ContextUser {
@@ -41,6 +42,14 @@ export default class DiscordUser extends Model implements ContextUser {
 
 	public getAvatarURL(size: ImageSize = 32) {
 		return this.user.displayAvatarURL({ size });
+	}
+
+	public async send(content: string | Embed) {
+		if (content instanceof Embed) {
+			return this.user.send({ embeds: [content.toDiscordEmbed()] });
+		} else {
+			return this.user.send(content);
+		}
 	}
 
 	public toString() {

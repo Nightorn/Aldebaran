@@ -1,4 +1,5 @@
 import { ImageSize } from "@discordjs/rest";
+import Embed from "../structures/Embed.js";
 import User from "../structures/models/User.js";
 
 export default interface ContextUser {
@@ -11,5 +12,6 @@ export default interface ContextUser {
 	get username(): string;
 
 	getAvatarURL(size?: ImageSize): string;
+	send(content: string | Embed): Promise<unknown>;
 	toString(): string;
 }

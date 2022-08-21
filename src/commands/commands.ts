@@ -70,6 +70,7 @@ import OsurecentCommand from "./osu!/osurecent.js";
 // Settings
 import EnabledrpgCommand from "./settings/enabledrpg.js";
 import GconfigCommand from "./settings/gconfig.js";
+import MydataCommand from "./settings/mydata.js";
 import SetprofileCommand from "./settings/setprofile.js";
 import UconfigCommand from "./settings/uconfig.js";
 
@@ -151,6 +152,7 @@ export default () => {
 		LewdCommand,
 		EnabledrpgCommand,
 		GconfigCommand,
+		MydataCommand,
 		SetprofileCommand,
 		UconfigCommand,
 		PokeCommand,
