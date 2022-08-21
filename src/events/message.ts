@@ -4,14 +4,8 @@ import DiscordClient from "../structures/DiscordClient.js";
 import RevoltClient from "../structures/RevoltClient.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import RevoltMessageContext from "../structures/contexts/RevoltMessageContext.js";
-import DiscordRPG from "../utils/bots/DiscordRPG.js";
-import DRPGAdventure from "../utils/timer/DiscordRPG/adv.js";
-import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
-import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
 import Command from "../groups/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
-
-const drpgIDs = ["170915625722576896", "891614347015626762"];
 
 function log(ctx: MessageContext) {
 	const command = ctx.command as Command;
@@ -23,7 +17,7 @@ export async function discordMessage(
 	client: DiscordClient,
 	message: DjsMessage
 ) {
-	if (message.webhookId) return;
+	if (message.webhookId && !message.interaction) return;
 
 	const guild = message.guild
 		? await client.servers.fetchDiscord(message.guild.id)
@@ -33,25 +27,6 @@ export async function discordMessage(
 
 	const author = await client.users.fetchDiscord(message.author.id);
 	const ctx = new DiscordMessageContext(author, client, message, guild);
-
-	if (guild && drpgIDs.includes(ctx.author.id)) {
-		DiscordRPG(ctx);
-	} else if (guild && !author.user.bot) {
-		const drpgMatch = ctx.content.toLowerCase()
-			.match(/.+(?=stats|adv|padv|mine|forage|fish|chop)/);
-		if (drpgMatch) {
-			const filter = (msg: DjsMessage) => drpgIDs.includes(msg.author.id);
-			ctx.channel.awaitMessages({ filter, max: 1, time: 2000 }).then(() => {
-				if (!guild.base.getSetting("discordrpgprefix")) {
-					guild.base.setSetting("discordrpgprefix", drpgMatch[0]);
-				}
-			});
-			const serverCtx = ctx as unknown as DiscordMessageContext<true>;
-			DRPGAdventure(serverCtx);
-			DRPGSides(serverCtx);
-			DRPGPadventure(serverCtx);
-		}
-	}
 
 	if (author.user.bot) return;
 	if (!message.mentions.users.get(client.discord.user.id)) {

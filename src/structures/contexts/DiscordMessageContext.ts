@@ -70,6 +70,10 @@ export default class DiscordMessageContext
 		return this.message.embeds;
 	}
 
+	get interaction() {
+		return this.message.interaction;
+	}
+
 	get member() {
 		return this.message.member as If<InGuild, GuildMember>;
 	}

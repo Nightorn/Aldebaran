@@ -23,12 +23,6 @@ const emojiColor = (percentage: number) => {
 	return "🟢";
 };
 
-const checkPlayer = (ctx: DiscordMessageContext, username: string) => {
-	const match = ctx.channel.messages.cache
-		.filter(m => m.author.username === username).first();
-	return match ? ctx.fetchUser(match.author.id) : null;
-};
-
 const general = (
 	user: User,
 	playerHP: number,
@@ -111,23 +105,24 @@ async function percentageCheck(
 
 export default async (ctx: DiscordMessageContext) => {
 	const healthmonitor = ctx.server?.base.getSetting("healthmonitor");
-	if ((!healthmonitor && ctx.server) || healthmonitor === "off") return false;
+	if (
+		(!healthmonitor && ctx.server)
+		|| healthmonitor === "off"
+		|| !ctx.interaction) return false;
 
 	const content = ctx.content;
+	const user = await ctx.fetchUser(ctx.interaction.user.id);
 
 	if (ctx.content.includes(") | +")) {
 		const match = content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
 		if (match) {
-			const user = await checkPlayer(ctx, match[1]);
-			if (user) {
-				const hpMatches = content.match(/(Dead|[\d.]+% HP)/g);
-				if (hpMatches) {
-					console.log(hpMatches);
-					const deadPet = hpMatches.length === 1 || hpMatches[1] === "Dead";
-					const playerHP = Number(hpMatches[0].split(" ")[0]);
-					const petHP = deadPet ? 0 : Number(hpMatches[1].split(" ")[0]);
-					return percentageCheck(user, ctx, playerHP, petHP);
-				}
+			const hpMatches = content.match(/(Dead|[\d.]+% HP)/g);
+			if (hpMatches) {
+				console.log(hpMatches);
+				const deadPet = hpMatches.length === 1 || hpMatches[1] === "Dead";
+				const playerHP = Number(hpMatches[0].split(" ")[0]);
+				const petHP = deadPet ? 0 : Number(hpMatches[1].split(" ")[0]);
+				return percentageCheck(user, ctx, playerHP, petHP);
 			}
 		}
 	}
@@ -159,7 +154,7 @@ export default async (ctx: DiscordMessageContext) => {
 			pet.hp = Number(currentHP);
 			pet.maxHp = Number(maxHP);
 		}
-	} else if (ctx.embeds[0].author?.name.includes("Adventure")) {
+	} else if (ctx.embeds[0]?.author?.name.includes("Adventure")) {
 		const adventureEmbed = ctx.embeds[0];
 		const crit = adventureEmbed.fields[1].name === "Critical Hit!" ? 2 : 1;
 
@@ -179,8 +174,7 @@ export default async (ctx: DiscordMessageContext) => {
 		}
 	}
 
-	const user = await checkPlayer(ctx, player.name);
-	if (user?.base.getSetting("healthmonitor") === "on") {
+	if (user.base.getSetting("healthmonitor") === "on" && player.hp) {
 		const playerHP = Math.round((1000 * player.hp) / player.maxHp) / 10;
 		const petHP = Math.round((10 * pet.hp * 100) / pet.maxHp) / 10;
 		percentageCheck(user, ctx, playerHP, petHP);

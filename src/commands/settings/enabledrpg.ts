@@ -95,7 +95,7 @@ export default class EnableDRPGCommand extends Command {
 		const embed = new MessageEmbed()
 			.setTitle("Done!")
 			.setDescription(
-				`${ctx.client.name}'s DRPG features are now enabled. Feel free to use DRPG normally. ${ctx.client.name} will respond appropriately when your adventure and sides are ready, and when you have low health.\nYou can always turn off features in \`${ctx.prefix}uconfig\` and \`${ctx.prefix}gconfig\`.\n*If this guild has changed its DRPG prefix, it must also be set using \`${ctx.prefix}gconfig discordrpgPrefix <prefix>\`.*`
+				`${ctx.client.name}'s DRPG features are now enabled. Feel free to use DRPG normally. ${ctx.client.name} will respond appropriately when your adventure and sides are ready, and when you have low health.\nYou can always turn off features in \`${ctx.prefix}uconfig\` and \`${ctx.prefix}gconfig\`.\n`
 			)
 			.setColor("GREEN");
 

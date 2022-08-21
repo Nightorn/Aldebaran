@@ -181,12 +181,6 @@ const ServerSettingsModel = {
 		support: () => true,
 		help: `${process.env.NAME}'s Prefix - [& | Guild Customized]`,
 		category: process.env.NAME || "Aldebaran"
-	},
-	discordrpgprefix: {
-		support: () => true,
-		help: "Prefix",
-		showOnlyIfBotIsInGuild: "170915625722576896",
-		category: "DiscordRPG"
 	}
 };
 
