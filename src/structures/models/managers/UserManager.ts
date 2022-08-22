@@ -15,6 +15,7 @@ export default class UserManager {
 
 	public async createUser() {
 		const user = await User.create();
+		user.settings = [];
 		UserManager.cache(this.userCache, user);
 		return user;
 	}

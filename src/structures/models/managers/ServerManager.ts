@@ -15,6 +15,7 @@ export default class ServerManager {
 
 	public async createGuild() {
 		const server = await Server.create();
+		server.settings = [];
 		ServerManager.cache(this.serverCache, server);
 		return server;
 	}
