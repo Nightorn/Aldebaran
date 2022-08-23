@@ -1,7 +1,6 @@
 import request, { Response } from "request";
 import Command from "../../groups/UtilitiesCommand.js";
 import { ICommand } from "../../interfaces/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const fixerURL = "http://data.fixer.io/api";
@@ -9,14 +8,14 @@ const fixerURL = "http://data.fixer.io/api";
 type Currency = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BRL" | "BSD" | "BTC" | "BTN" | "BWP" | "BYR" | "BYN" | "BZD" | "CAD" | "CDF" | "CHF" | "CLF" | "CLP" | "CNY" | "COP" | "CRC" | "CUC" | "CUP" | "CVE" | "CZK" | "DJF" | "DKK" | "DOP" | "DZD" | "EGP" | "ERN" | "ETB" | "EUR" | "FJD" | "FKP" | "GBP" | "GEL" | "GGP" | "GHS" | "GIP" | "GMD" | "GNF" | "GTQ" | "GYD" | "HKD" | "HNL" | "HRK" | "HTG" | "HUF" | "IDR" | "ILS" | "IMP" | "INR" | "IQD" | "IRR" | "ISK" | "JEP" | "JMD" | "JOD" | "JPY" | "KES" | "KGS" | "KHR" | "KMF" | "KPW" | "KRW" | "KWD" | "KYD" | "KZT" | "LAK" | "LBP" | "LKR" | "LRD" | "LSL" | "LTL" | "LVL" | "LYD" | "MAD" | "MDL" | "MGA" | "MKD" | "MMK" | "MNT" | "MOP" | "MRO" | "MUR" | "MVR" | "MWK" | "MXN" | "MYR" | "MZN" | "NAD" | "NGN" | "NIO" | "NOK" | "NPR" | "NZD" | "OMR" | "PAB" | "PEN" | "PGK" | "PHP" | "PKR" | "PLN" | "PYG" | "QAR" | "RON" | "RSD" | "RUB" | "RWF" | "SAR" | "SBD" | "SCR" | "SDG" | "SEK" | "SGD" | "SHP" | "SLL" | "SOS" | "SRD" | "STD" | "SVC" | "SYP" | "SZL" | "THB" | "TJS" | "TMT" | "TND" | "TOP" | "TRY" | "TTD" | "TWD" | "TZS" | "UAH" | "UGX" | "USD" | "UYU" | "UZS" | "VEF" | "VND" | "VUV" | "WST" | "XAF" | "XAG" | "XAU" | "XCD" | "XDR" | "XOF" | "XPF" | "YER" | "ZAR" | "ZMK" | "ZMW" | "ZWL";
 type ExpectedResponse = {
 	error: { code: number, type: string },
-	rates: { [key in Currency]?: number }
+	rates: { [key in Currency]: number }
 	success: object,
 	timestamp: number
 };
 
 export default class CurConvCommand extends Command implements ICommand {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description:
 				"Converts from one currency unit to another, or lists currency equalivents",
 			example: "USD GBP 10",
@@ -58,7 +57,6 @@ export default class CurConvCommand extends Command implements ICommand {
 		);
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	doChecks(
 		err: Error,
 		data: ExpectedResponse,
@@ -104,11 +102,11 @@ export default class CurConvCommand extends Command implements ICommand {
 			const toCurrencyRate = data.rates[toCurrency];
 
 			// How much in the target currency is this amount of EUR worth?
-			const valueInTarget = value / fromCurrencyRate! * toCurrencyRate!;
+			const valueInTarget = value / fromCurrencyRate * toCurrencyRate;
 
 			// Rates to each other
 			// Find value of 1 target currency in the other currency
-			const rate = (1 / fromCurrencyRate!) * toCurrencyRate!;
+			const rate = (1 / fromCurrencyRate) * toCurrencyRate;
 
 			const f = (number: number) => String(number).length === 1 ? `0${number}` : number;
 			const getDate = (time: number) => {
@@ -118,7 +116,7 @@ export default class CurConvCommand extends Command implements ICommand {
 
 			const str = `**${value.toFixed(2)} ${fromCurrency}** is equal to **${valueInTarget.toFixed(2)} ${toCurrency}** as of ${getDate(data.timestamp * 1000)}, with a **${rate.toFixed(2)} rate**.`;
 
-			const embed = this.createEmbed(ctx)
+			const embed = this.createEmbed()
 				.setTitle(`Conversion from ${fromCurrency} to ${toCurrency}`)
 				.setDescription(str);
 			ctx.reply(embed);

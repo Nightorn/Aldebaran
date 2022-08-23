@@ -1,11 +1,10 @@
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 import { Platform } from "../../utils/Constants.js";
 
 export default class CommandsCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Lists all the available commands",
 			args: {
 				showHidden: {
@@ -24,7 +23,6 @@ export default class CommandsCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext, platform: Platform) {
 		const args = ctx.args as { showHidden: boolean, hideAliases: boolean };
 		const categories: { [key: string]: string[] } = {};
@@ -32,7 +30,10 @@ export default class CommandsCommand extends Command {
 			.filter(c => c.supports(platform));
 		let count = 0;
 		for (const command of commands) {
-			if (args.showHidden || (await command.check(ctx) && !command.hidden)) {
+			if (
+				args.showHidden
+				|| (await command.check(ctx, platform) && !command.hidden)
+			) {
 				if (!categories[command.category]) {
 					categories[command.category] = [];
 				}
@@ -46,11 +47,7 @@ export default class CommandsCommand extends Command {
 			}
 		}
 
-		const embed = this.createEmbed(ctx)
-			.setAuthor({
-				name: `${ctx.client.name}  |  List of ${count} commands`,
-				iconURL: ctx.client.user.avatarURL()!
-			});
+		const embed = this.createEmbed().setTitle(`List of ${count} commands`);
 		if (!args.showHidden && !args.hideAliases) {
 			embed.setFooter({
 				text: "Use --showhidden to view all commands and --hidealiases to hide aliases."

@@ -1,48 +1,51 @@
-import { GuildMember, Message, MessageEmbed, MessageOptions, TextBasedChannel } from "discord.js";
-import { ErrorString, Errors, CommandMode } from "../../utils/Constants.js";
-import Client from "../djs/Client.js";
+import { ErrorString, Errors, CommandMode, If } from "../../utils/Constants.js";
+import Client from "../Client.js";
+import Embed from "../Embed.js";
 import Command from "../../groups/Command.js";
-import User from "../djs/User.js";
-import Guild from "../djs/Guild.js";
+import User from "../../interfaces/ContextUser.js";
+import Server from "../../interfaces/ContextServer.js";
 
-export default abstract class MessageContext {
-	protected _args?: string[] | { [key: string]: string | boolean; };
+export default abstract class MessageContext<InGuild extends boolean = false> {
 	public abstract author: User;
-	public client: Client;
-	public abstract command?: Command;
-	public abstract guild?: Guild;
+	public abstract server: If<InGuild, Server>;
 
-	constructor(client: Client) {
-		this.client = client;
-	}
+	protected _args?: string[] | { [key: string]: string | boolean; };
+	public abstract client: Client;
+	public abstract command?: Command;
 
 	abstract get args(): string[] | {
 		[key: string]: string | number | boolean | undefined;
 	};
-	abstract get channel(): TextBasedChannel;
-	abstract get createdTimestamp(): number;
-	abstract get member(): GuildMember | null;
+	abstract get channel(): unknown;
+	abstract get createdAt(): Date;
+	abstract get member(): If<InGuild, unknown>;
 	abstract get mode(): CommandMode;
 	abstract get prefix(): string;
 
-	abstract delete(delay?: number): Promise<Message<boolean> | false>;
-	
+	abstract delete(delay?: number): Promise<unknown>;
+	abstract fetchServer(id: number | string): Promise<Server>;
+	abstract fetchUser(id: number | string): Promise<User>;
+	abstract reply(content: string | Embed): unknown;
+
 	argsCheck() {
 		if (this.command && this.command.metadata.args) {
-			const mandatory = Object.keys(this.command.metadata.args)
-				.filter(k => !this.command!.metadata.args![k].optional);
+			const args = this.command.metadata.args;
+			const mandatory = Object.keys(args).filter(k => !args[k].optional);
 			const mandatoryFound = Object.keys(this.args)
-				.filter(k => mandatory.includes(k));
+				.filter(a => mandatory.includes(a));
 			return mandatory.length === mandatoryFound.length;
 		}
 		return true;
 	}
 
 	async error(type: ErrorString, desc?: string, value?: string) {
-		const title = Errors[type] ? Errors[type](value!) : "An error has occured.";
-		const embed = new MessageEmbed()
+		const title = Errors[type] && value
+			? Errors[type](value)
+			: "An error has occured.";
+		const embed = new Embed()
 			.setTitle(title)
 			.setColor("RED");
+
 		if (type === "UNEXPECTED_BEHAVIOR") {
 			embed.setDescription(`${desc}\nPlease contact the developers or fill a bug report using the \`bugreport\` command.`);
 		} else if (type === "INVALID_USER") {
@@ -50,8 +53,7 @@ export default abstract class MessageContext {
 		} else if (desc) {
 			embed.setDescription(desc);
 		}
+	
 		return this.reply(embed);
 	}
-
-	abstract reply(content: string | MessageOptions | MessageEmbed): any;
 }

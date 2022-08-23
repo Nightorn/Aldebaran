@@ -1,9 +1,8 @@
 import { Mode, User } from "nodesu";
 import Command from "../../groups/OsuCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { OsuMode } from "../../utils/Constants.js";
-import { MessageEmbed } from "discord.js";
+import { OsuMode, osuModeChoices } from "../../utils/Constants.js";
+import Embed from "../../structures/Embed.js";
 
 const f = (x: number | string) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const t = (x: number) => {
@@ -19,8 +18,8 @@ const t = (x: number) => {
 };
 
 export default class OsuCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows the osu! stats of the user specified",
 			help: "Run the command with the osu! username of the user you want to see the stats of, or maybe their user ID and the according mode (osu, mania, taiko, ctb).\n**Supported Modes** : **osu!standard** : (by default), --osu; **osu!taiko**: --taiko; **osu!ctb**: --ctb; **osu!mania**: --mania.",
 			example: "Ciborn --mania",
@@ -29,7 +28,7 @@ export default class OsuCommand extends Command {
 				user: { as: "string", desc: "Username/UserID", optional: true },
 				mode: {
 					as: "mode",
-					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
+					choices: osuModeChoices,
 					desc: "osu! Mode",
 					optional: true
 				}
@@ -39,12 +38,12 @@ export default class OsuCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, mode?: string };
-		const client = ctx.client.nodesu!;
-		const mode = (args.mode || ctx.author.settings.osumode || "osu") as OsuMode;
-		if (Mode[mode] !== undefined) {
+		const client = ctx.client.nodesu;
+		const mode = (args.mode || ctx.author.base.getSetting("osumode") || "osu") as OsuMode;
+		if (client && Mode[mode] !== undefined) {
 			client.user.get(
 				args.user
-				|| ctx.author.settings.osuusername
+				|| ctx.author.base.getSetting("osuusername")
 				|| ctx.author.username,
 				Mode[mode]
 			).then(data => {
@@ -60,7 +59,7 @@ export default class OsuCommand extends Command {
 				const rank = user.pp !== 0
 					? `#${f(user.rank)} (${f(user.pp.toFixed(2))}pp)`
 					: "Unranked";
-				const embed = new MessageEmbed()
+				const embed = new Embed()
 					.setColor(this.color)
 					.setAuthor({
 						name: `${user.username}  |  ${rank}  |  osu!${mode === "osu" ? "" : mode}`,

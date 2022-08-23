@@ -1,10 +1,9 @@
-import { MessageEmbed } from "discord.js";
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgXpBases } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 
 function calcWall(
 	lvl: number | string,
@@ -67,22 +66,22 @@ function calcXPNeeded(base: number, lvl: number) {
 }
 
 export default class WallsCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays user's wall progression",
 			example: "246302641930502145",
 			args: { user: {
 				as: "user",
 				desc: "The user whose walls progression you want to see",
 				optional: true
-			} }
+			} },
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const userId = (ctx.args as { user: string }).user || ctx.author.id;
-		const user = await ctx.client.users.fetch(userId);
+		const user = await ctx.fetchUser(userId);
 
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
@@ -107,11 +106,11 @@ export default class WallsCommand extends Command {
 			const xpNeeded = calcXPNeeded(drpgXpBases[baseLvl], baseLvl);
 			const wallProgress = xpNeeded - data.xp;
 
-			const embed = new MessageEmbed()
-				.setColor(0x00ae86)
+			const embed = new Embed()
+				.setColor("#00ae86")
 				.setAuthor({
 					name: `${user.username}  |  DiscordRPG Walls`,
-					iconURL: user.displayAvatarURL()
+					iconURL: user.avatarURL
 				})
 				.addField(
 					`Base at Level ${baseLvl}`,

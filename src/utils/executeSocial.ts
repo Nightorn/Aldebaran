@@ -1,12 +1,13 @@
-import { MessageEmbed } from "discord.js";
-import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
+import Command from "../groups/SocialCommand.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
+import Embed from "../structures/Embed.js";
 import { actionText, imageUrls } from "./Constants.js";
 
-export default async (ctx: DiscordMessageContext) => {
+export default async (ctx: MessageContext) => {
 	const args = ctx.args as { user: string };
 	const user = args.user || ctx.author.id;
-	ctx.client.users.fetch(user).then(() => {
-		const [command] = ctx.content.slice(ctx.prefix.length).split(" ");
+	ctx.fetchUser(user).then(() => {
+		const command = (ctx.command as Command).name;
 		const target = `<@${user}>`;
 		const sender = ctx.author.username;
 
@@ -23,12 +24,8 @@ export default async (ctx: DiscordMessageContext) => {
 		const number = Math.floor(Math.random() * imageUrls[command].length);
 		const image = imageUrls[command][number];
 
-		const embed = new MessageEmbed()
-			.setAuthor({
-				name: ctx.author.username,
-				iconURL: ctx.author.avatarURL
-			})
-			.setColor("AQUA")
+		const embed = new Embed()
+			.setColor("#1abc9c")
 			.setDescription(comment)
 			.setImage(image);
 		ctx.reply(embed);

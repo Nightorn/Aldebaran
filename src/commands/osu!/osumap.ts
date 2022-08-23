@@ -3,8 +3,8 @@ import ojsama from "ojsama";
 import retrieveBeatmapFile from "../../utils/osu!/retrieveBeatmapFile.js";
 import ppv2Results from "../../utils/osu!/ppv2Results.js";
 import Command from "../../groups/OsuCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import { osuModeChoices } from "../../utils/Constants.js";
 
 const supportedMods = ["NF", "EZ", "HT", "SO", "HR", "DT", "NC", "HD", "FL"];
 const d = (x: number | string) => (x.toString().length === 1 ? `0${x}` : x);
@@ -18,8 +18,8 @@ const returnDuration = (x: number) => (x > 60
 	: `${Math.floor(x)}s`);
 
 export default class OsumapCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows the information of the specified map",
 			help: "First, you have to send the link of the beatmap you want to see the information of, or you also use its ID. After that, you can choose the mode to show the information from, note that the default mode is standard. See more information below. You can also specify with which mods you want to play, by adding `+` before, like that : `+HDDT`, specify the combo you want like `x666` or your accuracy with `69%`. The most completed command would be `osumap https://osu.ppy.sh/beatmapsets/627629#osu/1322507 +HDDT x2000 90%`. This command does not work with beatmapsets or by the name of beatmaps.",
 			example: "1097541 --taiko +HD 97% 100x 69m",
@@ -27,7 +27,7 @@ export default class OsumapCommand extends Command {
 				map: { as: "expression", regex: /\d+$/, desc: "Beatmap URL / ID" },
 				mode: {
 					as: "mode",
-					choices: [["osu!", "osu"], ["osu!mania", "mania"], ["osu!ctb", "ctb"], ["osu!taiko", "taiko"]],
+					choices: osuModeChoices,
 					desc: "Game Mode (--osu, --mania, --ctb, --taiko)",
 					optional: true
 				},
@@ -68,8 +68,8 @@ export default class OsumapCommand extends Command {
 			combo?: string,
 			nmiss?: string
 		};
-		const client = ctx.client.nodesu!;
-		if (args.map === undefined) {
+		const client = ctx.client.nodesu;
+		if (!client || args.map === undefined) {
 			return ctx.reply(
 				"You need to send a link of the beatmap or its ID. Check `&?osumap` for more information."
 			);
@@ -101,26 +101,8 @@ export default class OsumapCommand extends Command {
 							approvalStatus = key[0].toUpperCase() + key.slice(1);
 					}
 					const combo = comboArg || beatmap.maxCombo;
-					let results = null;
-					let resultsAcc = null;
-					if (mode === "osu") {
-						results = await ppv2Results(
-							beatmap.id,
-							ojsama.modbits.from_string(stringMods),
-							beatmap.maxCombo,
-							100,
-							0
-						);
-						resultsAcc = await ppv2Results(
-							beatmap.id,
-							ojsama.modbits.from_string(stringMods),
-							undefined,
-							Number(accuracy),
-							Number(nmiss)
-						);
-					}
 
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setAuthor({
 							name: beatmap.creator,
 							iconURL: `https://a.ppy.sh/${beatmap.mapperId}`,
@@ -167,12 +149,28 @@ export default class OsumapCommand extends Command {
 								beatmap.setId
 							}/covers/cover.jpg`
 						);
+					let results = null;
+					let resultsAcc = null;
 					if (mode === "osu") {
+						results = await ppv2Results(
+							beatmap.id,
+							ojsama.modbits.from_string(stringMods),
+							beatmap.maxCombo,
+							100,
+							0
+						);
+						resultsAcc = await ppv2Results(
+							beatmap.id,
+							ojsama.modbits.from_string(stringMods),
+							undefined,
+							Number(accuracy),
+							Number(nmiss)
+						);
 						embed.addField(
 							"Estimated PPs",
-							`**FC 100%** : ${r(results!.pp)}pp\n**${
+							`**FC 100%** : ${r(results.pp)}pp\n**${
 								combo === beatmap.maxCombo ? "FC " : ""
-							}${accuracy}%** : ${r(resultsAcc!.pp)}pp`,
+							}${accuracy}%** : ${r(resultsAcc.pp)}pp`,
 							true
 						);
 					}
@@ -192,13 +190,13 @@ export default class OsumapCommand extends Command {
 								? Math.round(beatmap.bpm * 1.5)
 								: beatmap.bpm
 						} **BPM** ${
-							mode === "osu" ? `| **CS** ${r(results!.cs)} ` : ""
+							results ? `| **CS** ${r(results.cs)} ` : ""
 						}${mode === "ctb" ? `| **CS** ${r(beatmap.diffSize)} ` : ""}${
 							mode === "mania" ? `| **KA** ${beatmap.diffSize} ` : ""
-						}${mode === "osu" ? `| **AR** ${r(results!.ar)} ` : ""}${
+						}${results ? `| **AR** ${r(results.ar)} ` : ""}${
 							mode === "ctb" ? `| **AR** ${r(beatmap.diffApproach)} ` : ""}| **HP** ${
 							r(results === null ? beatmap.diffDrain : results.hp)
-						} | **${mode === "osu" ? "OD" : "AC"}** ${r(results === null ? beatmap.diffOverall : results.od)}`
+						} | **${mode === "osu" ? "OD" : "AC"}** ${r(results ? results.od : beatmap.diffOverall)}`
 					);
 					if (beatmap.source) {
 						embed.setFooter({ text: `Source: ${beatmap.source}` });

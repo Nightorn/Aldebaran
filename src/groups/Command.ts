@@ -1,31 +1,39 @@
-import { Client, ColorResolvable, MessageEmbed, PermissionString as DJSPermission, TextChannel } from "discord.js";
-import AldebaranClient from "../structures/djs/Client.js";
-import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants";
-import { CommandMetadata, ICommand } from "../interfaces/Command.js";
+import {
+	GuildMember as DiscordMember,
+	PermissionString as DiscordPermission,
+	TextChannel as DiscordChannel
+} from "discord.js";
+import {
+	Member as RevoltMember,
+	Permission as RevoltPermission,
+	Channel as RevoltChannel
+} from "revolt.js";
+import { PermissionString as AldebaranPermission, Platform } from "../utils/Constants.js";
+import { CommandMetadata, Context, ICommand } from "../interfaces/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
+import Embed from "../structures/Embed.js";
+
+const name = process.env.NAME || "Aldebaran";
 
 export default abstract class Command implements ICommand {
 	aliases: string[];
-	category: string = "General";
-	color: ColorResolvable = "BLUE";
-	client: AldebaranClient;
+	category = "General";
+	color = "#3498db";
 	example: string;
-	hidden: boolean = false;
+	hidden = false;
 	metadata: CommandMetadata;
-	name: string = "dummy";
-	perms: { discord: DJSPermission[], aldebaran: AldebaranPermission[] };
+	name = "dummy";
+	perms: {
+		aldebaran: AldebaranPermission[],
+		discord: DiscordPermission[],
+		revolt: (keyof typeof RevoltPermission)[]
+	} = { aldebaran: [], discord: [], revolt: [] };
 	subcommands: Map<string, Command> = new Map();
 
 	/**
    	* Command abstract class, extend it to build a command
    	*/
-	constructor(client: AldebaranClient, metadata: CommandMetadata) {
-		if (!(client instanceof Client)) { throw new TypeError("The specified Client is invalid"); }
-		if (metadata === undefined) throw new TypeError("The metadata are invalid");
-		this.perms = {
-			discord: [],
-			aldebaran: []
-		};
+	constructor(metadata: CommandMetadata) {
 		if (metadata.perms !== undefined) {
 			if (metadata.perms.discord !== undefined) {
 				if (!(metadata.perms.discord instanceof Array)) { throw new TypeError("The Discord permissions metadata are invalid"); } else this.perms.discord = metadata.perms.discord;
@@ -35,39 +43,51 @@ export default abstract class Command implements ICommand {
 			}
 		}
 		this.aliases = metadata.aliases || [];
-		this.client = client;
 		this.example = !metadata.example ? "" : `\`${metadata.example}\``;
 		this.metadata = metadata;
 	}
 
 	guildCheck(ctx: MessageContext) {
-		return this.metadata.requiresGuild ? !!ctx.guild : true;
+		return this.metadata.requiresGuild ? !!ctx.server : true;
 	}
 
 	/**
    	* Checks if the context of execution is valid
    	*/
-	async permsCheck(ctx: MessageContext) {
+	async permsCheck(ctx: MessageContext, platform: Platform) {
 		let check = true;
-		if (this.perms.discord && this.guildCheck(ctx)) {
-			check = this.perms.discord
-				.every(p => ctx.member!.permissionsIn(ctx.channel as TextChannel).has(p));
+		if (
+			platform.includes("DISCORD")
+			&& this.perms.discord
+			&& this.guildCheck(ctx)
+		) {
+			check = this.perms.discord.every(p => (ctx.member as DiscordMember)
+				.permissionsIn(ctx.channel as DiscordChannel)
+				.has(p));
 		}
-		if (this.perms.aldebaran && check) {
+		if (
+			platform === "REVOLT"
+			&& check
+			&& this.perms.revolt
+			&& this.guildCheck(ctx)
+		) {
+			const channel = ctx.channel as RevoltChannel;
+			const member = ctx.member as RevoltMember;
+			check = member.hasPermission(channel, ...this.perms.revolt);
+		}
+		if (check && this.perms.aldebaran) {
 			check = this.perms.aldebaran
-				.every(perm => ctx.author.hasPermission(perm));
+				.every(perm => ctx.author.base.hasPermission(perm));
 		}
 		return check;
 	}
 
-	async check(ctx: MessageContext) {
-		return await this.permsCheck(ctx) && this.guildCheck(ctx);
+	async check(ctx: MessageContext, platform: Platform) {
+		return await this.permsCheck(ctx, platform) && this.guildCheck(ctx);
 	}
 
-	createEmbed(ctx: MessageContext) {
-		return new MessageEmbed()
-			.setAuthor({ name: ctx.author.username, iconURL: ctx.author.avatarURL })
-			.setColor(this.color);
+	createEmbed() {
+		return new Embed().setColor(this.color);
 	}
 
 	/**
@@ -76,7 +96,7 @@ export default abstract class Command implements ICommand {
 	async execute(ctx: MessageContext, platform: Platform): Promise<void> {
 		const guild = this.guildCheck(ctx);
 		if (!guild) throw new Error("NOT_IN_GUILD");
-		const perms = await this.permsCheck(ctx);
+		const perms = await this.permsCheck(ctx, platform);
 		if (!perms) throw new Error("MISSING_PERMS");
 		if (!ctx.argsCheck()) throw new Error("INVALID_ARGS");
 		return this.run(ctx, platform);
@@ -89,7 +109,10 @@ export default abstract class Command implements ICommand {
 		return this.name === name || this.aliases.includes(name);
 	}
 
-	abstract run(ctx: MessageContext, platform: Platform): void;
+	abstract run(
+		ctx: Context<typeof this.metadata.requiresGuild>,
+		platform: Platform
+	): void;
 
 	/**
 	 * Whether this command supports the platform in parameter
@@ -99,11 +122,7 @@ export default abstract class Command implements ICommand {
 	}
 
 	toHelpEmbed(prefix = "&") {
-		const embed = new MessageEmbed()
-			.setAuthor({
-				name: `${this.client.name}  |  Command Help  |  ${this.name}`,
-				iconURL: this.client.user!.avatarURL()!
-			})
+		const embed = new Embed()
 			.setTitle(this.metadata.description)
 			.addField("Category", this.category, true)
 			.addField("Example", `${prefix}${this.name} ${this.example}`, true)
@@ -117,7 +136,7 @@ export default abstract class Command implements ICommand {
 		if (this.perms.discord.length > 0)
 			embed.addField("Discord Perms", this.perms.discord.join(", "), true);
 		if (this.perms.aldebaran.length > 0)
-			embed.addField(`${this.client.name} Perms`, this.perms.aldebaran.join(", "), true);
+			embed.addField(`${name} Perms`, this.perms.aldebaran.join(", "), true);
 		if (this.metadata.args !== undefined) {
 			let args = "";
 			let usage = "";
@@ -138,9 +157,9 @@ export default abstract class Command implements ICommand {
 		return embed;
 	}
 
-	registerSubcommands<T extends typeof Command>(...subcommands: T[]) {
-		subcommands.forEach((Structure: any) => {
-			const command = new Structure(this.client);
+	registerSubcommands(...subcommands: { new(): Command }[]) {
+		subcommands.forEach(Structure => {
+			const command = new Structure();
 			const name = command.constructor.name
 				.replace("Subcommand", "").toLowerCase();
 			command.name = name;

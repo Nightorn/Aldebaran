@@ -1,11 +1,10 @@
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import { formatNumber } from "../../utils/Methods.js";
 
 export default class GoldCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays the estimated gold per kill at a certain level",
 			example: "323 18 10",
 			args: {
@@ -24,7 +23,6 @@ export default class GoldCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { level: number, boost: number, points?: number };
 		const { level } = args;
@@ -39,7 +37,7 @@ export default class GoldCommand extends Command {
 			1 + (Math.floor(attrib / 10) + equipment) / 100)
 			+ level) * ring);
 
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle("Average Obtained Gold")
 			.setDescription(
 				`**Please note all infomation about Gold are estimations!**\nYou have a +${equipment}% Gold Boost on your equipment, and you have ${attrib} points in the Gold Boost attribute.`

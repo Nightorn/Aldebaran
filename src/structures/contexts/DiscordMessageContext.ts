@@ -1,26 +1,31 @@
-import { Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
-import MessageContext from "./MessageContext.js";
-import Guild from "../djs/Guild.js";
-import User from "../djs/User.js";
+import { GuildMember, Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
+import DiscordContext from "./DiscordContext.js";
+import Server from "../models/DiscordServer.js";
+import User from "../models/DiscordUser.js";
 import { parseArgs, parseInput } from "../../utils/Args.js";
-import Client from "../djs/Client.js";
+import DiscordClient from "../DiscordClient.js";
 import Command from "../../groups/Command.js";
+import { If } from "../../utils/Constants.js";
+import Embed from "../Embed.js";
 
-export default class DiscordMessageContext extends MessageContext {
-	private _splitArgs: string[];
+export default class DiscordMessageContext
+	<InGuild extends boolean = false> extends DiscordContext<InGuild>
+{
 	private message: Message;
+	protected _splitArgs: string[];
 	public command?: Command;
-	public author: User;
-	public guild?: Guild;
 
-	constructor(client: Client, message: Message, author: User, guild?: Guild) {
-		super(client);
-		this.author = author;
-		this.guild = guild;
+	constructor(
+		author: User,
+		client: DiscordClient,
+		message: Message,
+		server: If<InGuild, Server>
+	) {
+		super(author, client, server);
 		this.message = message;
 
 		const parsedInput = parseInput(
-			client,
+			this.client,
 			this.content,
 			this.mode,
 			this.prefix,
@@ -38,6 +43,19 @@ export default class DiscordMessageContext extends MessageContext {
 		return this._args;
 	}
 
+	get mode() {
+		if (this.message.content?.indexOf(`${this.prefix}#`) === 0) return "ADMIN";
+		if (this.message.content?.indexOf(`${this.prefix}?`) === 0) return "HELP";
+		if (this.message.content?.indexOf(`${this.prefix}-`) === 0) return "IMAGE";
+		return "NORMAL";
+	}
+
+	get prefix() {
+		return this.message.mentions.users.has(this.client.discord.user.id)
+			? this.content.trim().substring(0, this.content.indexOf(">") + 1)
+			: this.server?.base.prefix || "";
+	}
+
 	get channel() {
 		return this.message.channel;
 	}
@@ -46,36 +64,29 @@ export default class DiscordMessageContext extends MessageContext {
 		return this.message.content;
 	}
 
-	get createdTimestamp() {
-		return this.message.createdTimestamp;
+	get createdAt() {
+		return new Date(this.message.createdTimestamp);
 	}
 
 	get embeds() {
 		return this.message.embeds;
 	}
 
+	get interaction() {
+		return this.message.interaction;
+	}
+
 	get member() {
-		return this.message.member;
+		return this.message.member as If<InGuild, GuildMember>;
 	}
 
 	get mentions() {
 		return this.message.mentions;
 	}
 
-	get mode() {
-		if (this.message.content.indexOf(`${this.prefix}#`) === 0) return "ADMIN";
-		if (this.message.content.indexOf(`${this.prefix}?`) === 0) return "HELP";
-		if (this.message.content.indexOf(`${this.prefix}-`) === 0) return "IMAGE";
-		return "NORMAL";
-	}
-
-	get prefix() {
-		return this.guild?.prefix ?? "";
-	}
-
 	async delete(delay?: number): Promise<Message<boolean> | false> {
-		const hasPermission = this.guild && (this.channel as TextChannel)
-			.permissionsFor(this.client.user.id)?.has("MANAGE_MESSAGES");
+		const hasPermission = this.server && (this.channel as TextChannel)
+			.permissionsFor(this.client.discord.user.id)?.has("MANAGE_MESSAGES");
 
 		if (hasPermission) {
 			if (delay) {
@@ -90,9 +101,13 @@ export default class DiscordMessageContext extends MessageContext {
 		return false;
 	}
 
-	async reply(content: string | MessageOptions | MessageEmbed) {
-		return content instanceof MessageEmbed
-			? this.message.channel.send({ embeds: [content] })
-			: this.message.channel.send(content);
+	async reply(content: string | Embed | MessageOptions | MessageEmbed) {
+		if (content instanceof Embed) {
+			return this.message.reply({ embeds: [content.toDiscordEmbed()] });
+		} else if (content instanceof MessageEmbed) {
+			return this.message.reply({ embeds: [content] });
+		} else {
+			return this.message.reply(content);
+		}
 	}
 }

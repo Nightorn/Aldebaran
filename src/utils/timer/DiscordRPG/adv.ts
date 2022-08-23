@@ -1,44 +1,37 @@
 import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
 
-export default async (ctx: DiscordMessageContext) => {
-	if (!ctx.guild) return;
-	if (
-		ctx.author.timers.adventure !== null
-		|| ctx.guild!.settings.adventuretimer === "off"
-		|| ctx.guild!.settings.adventuretimer === undefined
-		|| ctx.author.settings.adventuretimer === "off"
-		|| ctx.author.settings.adventuretimer === undefined
+function isEnabled(setting?: string) {
+	return setting ? ["on", "random"].includes(setting) : false;
+}
+
+export default async (ctx: DiscordMessageContext<true>) => {
+	if (!ctx.interaction) return;
+	const author = await ctx.fetchUser(ctx.interaction.user.id);
+
+	const deleteSetting = ctx.server.base.getSetting("autodelete");
+	const serverSetting = ctx.server.base.getSetting("adventuretimer");
+	const timerSetting = author.base.getSetting("timerping");
+	const userSetting = author.base.getSetting("adventuretimer");
+
+	if (author.timers.adventure
+		|| !isEnabled(serverSetting)
+		|| !isEnabled(userSetting)
 	) return;
-	const content = ctx.content.toLowerCase();
-	let prefix = null;
-	for (const element of [
-		"discordrpg ",
-		"#!",
-		"<@170915625722576896> ",
-		ctx.guild!.settings.discordrpgprefix
-	]) {
-		if (element && content.indexOf(`${element}adv`) === 0) {
-			prefix = element;
-		}
+
+	if (deleteSetting === "on") {
+		ctx.delete(1000).catch(() => {});
 	}
-	if (prefix) {
-		if (ctx.guild!.settings.autodelete === "on") {
-			ctx.delete(1000).catch(() => {});
-		}
-		const delay = ctx.author.settings.adventuretimer === "random"
-			? Math.random() * 3000
-			: 0;
-		ctx.author.timers.adventure = setTimeout(() => {
-			const ping = ctx.author.settings.timerping === "adventure"
-				|| ctx.author.settings.timerping === "on"
-				? `<@${ctx.author.id}>`
-				: `${ctx.author.username},`;
-			ctx.reply(`${ping} adventure time! :crossed_swords:`).then(msg => {
-				if (ctx.guild!.settings.autodelete === "on") {
-					setTimeout(() => msg.delete(), 10000);
-				}
-			});
-			ctx.author.timers.adventure = null;
-		}, 13900 + delay);
-	}
+
+	const delay = userSetting === "random" ? Math.random() * 3000 : 0;
+	author.timers.adventure = setTimeout(() => {
+		const ping = timerSetting === "adventure" || timerSetting === "on"
+			? `<@${author.id}>,`
+			: `${author.username},`;
+		ctx.channel.send(`${ping} adventure time! :crossed_swords:`).then(msg => {
+			if (deleteSetting === "on") {
+				setTimeout(() => msg.delete(), 10000);
+			}
+		});
+		author.timers.adventure = null;
+	}, 13900 + delay);
 };

@@ -1,11 +1,19 @@
 import Command from "../../groups/SettingsCommand.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { SocialProfileProperty } from "../../utils/Constants.js";
+
+const sectionMatches: { [key: string]: string } = {
+	profilepicturelink: "profilePictureLink",
+	favoritegames: "favoriteGames",
+	profilecolor: "profileColor",
+	favoritemusic: "favoriteMusic",
+	sociallinks: "socialLinks",
+	zodiacname: "zodiacName",
+	flavortext: "flavorText"
+};
 
 export default class SetprofileCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Changes your profile information",
 			example: "aboutme My name is Xxx_FortnitePro_xxX!",
 			args: {
@@ -21,32 +29,25 @@ export default class SetprofileCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { section: string, input: string };
-		const profile = await ctx.author.profile();
-		const sectionMatches = {
-			profilepicturelink: "profilePictureLink",
-			favoritegames: "favoriteGames",
-			profilecolor: "profileColor",
-			favoritemusic: "favoriteMusic",
-			sociallinks: "socialLinks",
-			zodiacname: "zodiacName",
-			flavortext: "flavorText"
-		};
+		
+		let profile = await ctx.author.base.getProfile();
+		if (!profile) {
+			profile = await ctx.author.base.createProfile();
+		}
 
 		const section = args.section.toLowerCase();
-		const profiletarget = (sectionMatches[section as keyof typeof sectionMatches]
-			|| section) as SocialProfileProperty;
+		const profiletarget = sectionMatches[section] || section;
 
-		profile.changeProperty(profiletarget, args.input).then(() => {
+		profile.set({ [profiletarget]: args.input }).save().then(() => {
 			ctx.reply(`Your ${profiletarget} has been updated to \`${args.input}\`.`);
 		}).catch(() => {
-			const error = this.createEmbed(ctx)
+			const error = this.createEmbed()
 				.setTitle("Unknown Profile Section")
 				.setDescription("Please check to ensure this is a correct profile section. If you think the specified profile section was valid, please make sure the value is too.")
 				.setColor("RED");
-			ctx.reply({ embeds: [error] });
+			ctx.reply(error);
 		});
 		return true;
 	}

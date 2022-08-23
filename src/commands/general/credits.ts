@@ -1,18 +1,16 @@
-import { MessageEmbed } from "discord.js";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
+import Embed from "../../structures/Embed.js";
 
 export default class CreditsCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Lists the people who contributed to Aldebaran, its codebase, and its forks"
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(
 				"List of the People who contributed, in any way, to the development of Aldebaran"
 			)

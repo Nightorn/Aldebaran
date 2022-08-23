@@ -1,12 +1,11 @@
 import moment from "moment-timezone";
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import { MessageEmbed } from "discord.js";
+import Embed from "../../structures/Embed.js";
 
 export default class TimeCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Prints a user's time based on their configured timezone",
 			example: "<@143026985763864576>",
 			args: {
@@ -27,9 +26,8 @@ export default class TimeCommand extends Command {
 
 	async run(ctx: MessageContext) {
 		const args = ctx.args as { user?: string, clean?: boolean };
-		const user = await ctx.client.customUsers
-			.fetch(args.user || ctx.author.id);
-		let { timezone } = user.settings;
+		const user = await ctx.fetchUser(args.user || ctx.author.id);
+		let timezone = user.base.getSetting("timezone");
 		if (timezone !== undefined) {
 			if (!timezone.includes("/")) {
 				const symbol = timezone[3];
@@ -47,7 +45,7 @@ export default class TimeCommand extends Command {
 			if (/^GMT(\+|-)\d{1,2}/i.test(timezone)) timezone = `ETC/${timezone}`;
 			const time = moment().tz(timezone);
 			if (time === null) {
-				const embed = new MessageEmbed()
+				const embed = new Embed()
 					.setTitle(":x: Ooof!")
 					.setColor("RED")
 					.setDescription(`The timezone setting for ${user.username} seems to be invaild! Tell them to set it again with ${ctx.prefix}uconfig timezone!`)
@@ -58,10 +56,10 @@ export default class TimeCommand extends Command {
 			} else {
 				const date = time.format("dddd, Do of MMMM YYYY");
 				const subDate = time.format("hh:mm:ss A");
-				const embed = this.createEmbed(ctx)
+				const embed = this.createEmbed()
 					.setAuthor({
 						name: `${user.username}  |  Date and Time`,
-						iconURL: user.user.displayAvatarURL()
+						iconURL: user.avatarURL
 					})
 					.setDescription(`${date}\n**${subDate}**`);
 				if (!args.clean)
@@ -70,7 +68,7 @@ export default class TimeCommand extends Command {
 					});
 				ctx.reply(embed);
 			}
-		} else if (user.user.equals(ctx.author.user)) {
+		} else if (user.id === ctx.author.id) {
 			ctx.reply(
 				`it seems that you do not have configured your timezone. Please check \`${
 					ctx.prefix

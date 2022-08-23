@@ -1,11 +1,10 @@
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import { formatNumber } from "../../utils/Methods.js";
 
 export default class XpCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays estimated XP per kill at a certain level",
 			example: "323 18 max",
 			args: {
@@ -24,7 +23,6 @@ export default class XpCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { level: number, boost: number, points?: number };
 		const { level } = args;
@@ -40,7 +38,7 @@ export default class XpCommand extends Command {
 			return Math.round(xp * ring);
 		};
 
-		const embed = this.createEmbed(ctx)
+		const embed = this.createEmbed()
 			.setTitle(`Average Xp Kill At Lvl. ${level}`)
 			.setDescription(
 				`**Please note all infomation about XP are estimations, and only works with dynamobs!**\nYou have a +${enchant}% XP Boost on your equipment, and you have ${attrib} points in your XP Boost attribute.`

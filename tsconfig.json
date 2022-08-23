@@ -13,9 +13,9 @@
 		"lib": ["ESNext"],
 		"module": "es6",
 		"moduleResolution": "node",
+		"outDir": "dist/",
 		"preserveConstEnums": true,
 		"removeComments": true,
-		"resolveJsonModule": true,
 		"rootDir": ".",
 		"skipLibCheck": true,
 		"target": "es2020"

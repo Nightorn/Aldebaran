@@ -1,13 +1,12 @@
 import Command from "../../groups/Command.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import { categories, Platform } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 const emoji = ":small_blue_diamond:";
 
 export default class HelpCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays detailled help about the bot's commands",
 			args: { query: {
 				as: "string",
@@ -28,26 +27,20 @@ export default class HelpCommand extends Command {
 					.filter(c => (c.category === category.name || c.matches(command))
 						&& c.supports(platform))
 					.reduce((acc, c) => `${acc}${emoji} **${c.name}** : ${c.shortDesc}\n`, "");
-				const categoryEmbed = this.createEmbed(ctx)
-					.setAuthor({
-						name: "Category Help",
-						iconURL: ctx.client.user.avatarURL()!
-					})
+				const categoryEmbed = this.createEmbed()
 					.setTitle(`${category.title} - ${category.description}`)
 					.setDescription(list)
 					.setColor(this.color);
-				ctx.reply({ embeds: [categoryEmbed] });
+				ctx.reply(categoryEmbed);
 			} else if (ctx.client.commands.exists(command, platform)) {
-				ctx.reply(ctx.client.commands.get(command, platform)!.toHelpEmbed());
+				const cmd = ctx.client.commands.get(command, platform) as Command;
+				ctx.reply(cmd.toHelpEmbed());
 			} else {
 				ctx.error("NOT_FOUND", "You are trying to find help for a command or a category that does not exist. Make sure you did not make a typo in your request.");
 			}
 		} else {
-			const embed = this.createEmbed(ctx)
-				.setAuthor({
-					name: `${ctx.client.name}'s Help Pages`,
-					iconURL: ctx.client.user.avatarURL()!
-				});
+			const embed = this.createEmbed()
+				.setTitle(`${ctx.client.name}'s Help Pages`);
 			let categoriesList = "";
 			for (const [, data] of Object.entries(categories)) {
 				if (data.name !== "Developer"  && typeof data !== "string")

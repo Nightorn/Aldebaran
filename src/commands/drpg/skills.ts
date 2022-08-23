@@ -1,13 +1,12 @@
 import request from "request";
 import Command from "../../groups/DRPGCommand.js";
 import { formatNumber } from "../../utils/Methods.js";
-import AldebaranClient from "../../structures/djs/Client.js";
 import { drpgItems } from "../../utils/Constants.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
 export default class SkillsCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays users' skills information",
 			example: "246302641930502145",
 			args: { user: {
@@ -18,10 +17,9 @@ export default class SkillsCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as { user: string };
-		ctx.client.users.fetch(args.user || ctx.author.id).then(user => {
+		ctx.fetchUser(args.user || ctx.author.id).then(user => {
 			request({ uri: `http://api.discorddungeons.me/v3/user/${user.id}`, headers: { Authorization: process.env.API_DISCORDRPG } }, (err, response, body) => {
 				if (err) throw err;
 				if (response.statusCode === 404) {
@@ -69,10 +67,10 @@ export default class SkillsCommand extends Command {
 						const maxMax = max + Math.floor(maxpoints / 125);
 						return `With your current mining boosts skills, you would get between **${minMin} and ${minMax} skill XP**.\nWith the highest mining boosts skills, you would get between **${maxMin} and ${maxMax} skill XP**.`;
 					};
-					const embed = this.createEmbed(ctx)
+					const embed = this.createEmbed()
 						.setAuthor({
 							name: `${user.username}  |  Skills`,
-							iconURL: user.displayAvatarURL()
+							iconURL: user.avatarURL
 						})
 						.addField("Mining", `**Level ${skillinfo.mine.level}** (${formatNumber(skillinfo.mine.xp)} XP)\nWith your **current** mining boost skills, you would get **${miningCurrent} ores or essences**.\nWith the **highest** mining boost skills, you would get **${miningMax} ores**, or between **${essenceMax} and ${miningMax} essences**.\n${mineXp(skillinfo.mine.level)}`)
 						.addField("Chopping", `**Level ${skillinfo.chop.level}** (${formatNumber(skillinfo.chop.xp)} XP)\nWith your **current** lumber boost skills, you would get **${lumbercurrent} logs**.\nWith the **highest** lumber boost skills, you would get **${lumbermax} logs**.\n${xp(skillinfo.chop.level)}`)

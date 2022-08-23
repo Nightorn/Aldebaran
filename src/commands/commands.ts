@@ -1,7 +1,6 @@
 import CommandHandler from "../handlers/CommandHandler.js";
-import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
-import AldebaranClient from "../structures/djs/Client.js";
 import executeSocial from "../utils/executeSocial.js";
+import MessageContext from "../structures/contexts/MessageContext.js";
 
 // Developer
 import AdminCommand from "./developer/admin.js";
@@ -58,15 +57,9 @@ import NekoCommand from "./image/neko.js";
 import PandaCommand from "./image/panda.js";
 import PepeCommand from "./image/pepe.js";
 import RandimalCommand from "./image/randimal.js";
-import RCGPCommand from "./image/rcgp.js";
 
 // NSFW
 import LewdCommand from "./nsfw/lewd.js";
-import XboobsCommand from "./nsfw/xboobs.js";
-import XkittyCommand from "./nsfw/xkitty.js";
-import XlesbianCommand from "./nsfw/xlesbian.js";
-import XnekoCommand from "./nsfw/xneko.js";
-import XrandomCommand from "./nsfw/xrandom.js";
 
 // osu!
 import OsuCommand from "./osu!/osu.js";
@@ -77,6 +70,7 @@ import OsurecentCommand from "./osu!/osurecent.js";
 // Settings
 import EnabledrpgCommand from "./settings/enabledrpg.js";
 import GconfigCommand from "./settings/gconfig.js";
+import MydataCommand from "./settings/mydata.js";
 import SetprofileCommand from "./settings/setprofile.js";
 import UconfigCommand from "./settings/uconfig.js";
 
@@ -111,8 +105,8 @@ export default () => {
 	};
 	for (const [name, description] of Object.entries(socialCommands)) {
 		commandHandler.register(class Command extends SocialCommand {
-			constructor(client: AldebaranClient) {
-				super(client, {
+			constructor() {
+				super({
 					name,
 					description,
 					args: { user: {
@@ -120,12 +114,10 @@ export default () => {
 						desc: "The user you want to socialize with",
 						optional: true
 					} },
-					platforms: ["DISCORD"]
 				});
 			}
 
-			// eslint-disable-next-line class-methods-use-this
-			run(ctx: DiscordMessageContext) {
+			run(ctx: MessageContext) {
 				executeSocial(ctx);
 			}
 		});
@@ -157,15 +149,10 @@ export default () => {
 		LizardCommand,
 		NekoCommand,
 		PandaCommand,
-		RCGPCommand,
 		LewdCommand,
-		XboobsCommand,
-		XkittyCommand,
-		XlesbianCommand,
-		XnekoCommand,
-		XrandomCommand,
 		EnabledrpgCommand,
 		GconfigCommand,
+		MydataCommand,
 		SetprofileCommand,
 		UconfigCommand,
 		PokeCommand,

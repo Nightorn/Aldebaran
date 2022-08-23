@@ -1,11 +1,10 @@
-import { MessageEmbed } from "discord.js";
 import Command from "../../groups/DRPGCommand.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
-import AldebaranClient from "../../structures/djs/Client.js";
+import Embed from "../../structures/Embed.js";
 
 export default class UpgradecalcCommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Displays the number of upgrades you need for your weapon",
 			example: "400 386 7283 7408 1050 1.56 2",
 			args: {
@@ -29,7 +28,6 @@ export default class UpgradecalcCommand extends Command {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	run(ctx: MessageContext) {
 		const args = ctx.args as {
 			charLevel: string,
@@ -58,14 +56,14 @@ export default class UpgradecalcCommand extends Command {
 		const cost = Math.floor((minWeaponDMG + maxWeaponDMG)
 			/ 6.5 * 50 * upgrades * (upgrades + 1)
 			* ((2 * upgrades + 1) / 6) + 500 * upgrades);
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle("Upgrade Cost")
 			.setColor(this.color)
 			.setDescription(`**Character's Weapon Stats** (Lv**${charLevel.toLocaleString()}**): Deals between **${minWeaponDMG.toLocaleString()}** and **${maxWeaponDMG.toLocaleString()}** damage\n**Pet Stats** (Lv**${petLevel.toLocaleString()}**): Deals between **${minPetDMG.toLocaleString()}** and **${maxPetDMG.toLocaleString()}** damage`)
 			.addField("Upgrades Needed", `**${upgrades}** Upgrades`, true)
 			.addField("Required Strength", `**${(upgrades * 15).toLocaleString()}** Points`, true)
 			.addField("Upgrades Cost", `**${cost.toLocaleString()}** Gold`, true)
-			.setFooter({ text: "Credits to Kalle#5105 for the upgradecalc blargbot tag!" });
+			.setFooter("Credits to Kalle#5105 for the upgradecalc blargbot tag!");
 		ctx.reply(embed);
 	}
 }

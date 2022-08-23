@@ -1,34 +1,30 @@
 import util from "util";
 import { MessageEmbed } from "discord.js";
 import Command from "../../../groups/DeveloperCommand.js";
-import AldebaranClient from "../../../structures/djs/Client.js";
-import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
+import DiscordContext from "../../../structures/contexts/DiscordContext.js";
 
 export default class ViewSubcommand extends Command {
-	constructor(client: AldebaranClient) {
-		super(client, {
+	constructor() {
+		super({
 			description: "Shows detailled information about the specified user or guild",
 			perms: { aldebaran: ["EDIT_USERS"] },
-			platforms: ["DISCORD"]
+			platforms: ["DISCORD", "DISCORD_SLASH"]
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
-	async run(ctx: DiscordMessageContext) {
-		const args = ctx.args as string[];
-		const id = ctx.mentions.members!.size === 1
-			? ctx.mentions.members!.first()!.id : args[0];
-		ctx.client.customUsers.fetch(id).then(async user => {
+	async run(ctx: DiscordContext) {
+		const [id] = ctx.args as string[];
+		ctx.fetchUser(id).then(async user => {
 			const guilds = [];
 			const embed = new MessageEmbed()
 				.setAuthor({
-					name: `${user.user.tag} | ${user.id}`,
-					iconURL: user.user.displayAvatarURL()
+					name: `${user.tag} | ${user.id}`,
+					iconURL: user.avatarURL
 				});
-			if (Object.entries(user.settings).length !== 0) {
-				embed.addField("Settings", `\`\`\`js\n${util.inspect(user.settings, false, null)}\`\`\``);
+			if (Object.entries(user.base.settings).length !== 0) {
+				embed.addField("Settings", `\`\`\`js\n${util.inspect(user.base.settings, false, null)}\`\`\``);
 			}
-			for (const [guildId, data] of ctx.client.guilds.cache) {
+			for (const [guildId, data] of ctx.client.discord.guilds.cache) {
 				const member = await data.members.fetch(user.id);
 				if (member) {
 					let elevation = null;
@@ -43,16 +39,16 @@ export default class ViewSubcommand extends Command {
 			if (guilds.length > 0) embed.addField("Servers", guilds.join("\n"));
 			ctx.reply(embed);
 		}).catch(async () => {
-			const guild = await ctx.client.customGuilds.fetch(id);
-			const settings = guild.settings;
-			if (ctx.guild) {
-				const owner = await ctx.guild.guild.fetchOwner();
+			const guild = await ctx.fetchServer(id);
+			const settings = guild.base.settings;
+			if (ctx.server) {
+				const owner = await ctx.server.guild.fetchOwner();
 				const embed = new MessageEmbed()
 					.setAuthor({
-						name: `${ctx.guild.guild.name} | ${ctx.guild.id}`,
-						iconURL: ctx.guild.guild.iconURL()!
+						name: `${ctx.server.guild.name} | ${ctx.server.id}`,
+						iconURL: ctx.server.guild.iconURL() || undefined
 					})
-					.setDescription(`**Owner** : <@${ctx.guild.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${guild.guild.memberCount} Members`);
+					.setDescription(`**Owner** : <@${ctx.server.guild.ownerId}> **\`[${owner.user.tag}]\`**\n**Member Count** : ${guild.guild.memberCount} Members`);
 				if (Object.entries(settings).length !== 0) {
 					embed.addField("Settings", `\`\`\`js\n${util.inspect(settings, false, null)}\`\`\``);
 				}
