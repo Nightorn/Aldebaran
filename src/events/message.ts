@@ -13,29 +13,26 @@ function log(ctx: MessageContext) {
 	console.log(`\x1b[34m- COMMAND: ${command.name} | ${user}\x1b[0m`);
 }
 
+const allowNonSlash = process.env.ALLOW_NON_SLASH_COMMANDS;
+
 export async function discordMessage(
 	client: DiscordClient,
 	message: DjsMessage
 ) {
-	if (message.webhookId && !message.interaction) return;
+	if (
+		(!message.mentions.users.has(client.discord.user.id) && !allowNonSlash)
+		|| (message.webhookId && !message.interaction)
+		|| message.author.bot
+	) return;
 
 	const guild = message.guild
 		? await client.servers.fetchDiscord(message.guild.id)
 		: null;
 
-	let prefix = guild?.base.prefix || "";
-
 	const author = await client.users.fetchDiscord(message.author.id);
 	const ctx = new DiscordMessageContext(author, client, message, guild);
 
-	if (author.user.bot) return;
-	if (!message.mentions.users.get(client.discord.user.id)) {
-		if (ctx.content.indexOf(prefix) !== 0) return;
-		if (ctx.content.slice(prefix.length)[0] === " ") return;
-	} else {
-		prefix = ctx.content.trim().substring(0, ctx.content.indexOf(">") + 1);
-	}
-
+	if (ctx.content.indexOf(ctx.prefix) !== 0) return;
 	if (ctx.command && ctx.mode === "HELP") {
 		ctx.reply(ctx.command.toHelpEmbed(ctx.prefix));
 	} else if (ctx.command) {

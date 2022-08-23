@@ -51,7 +51,9 @@ export default class DiscordMessageContext
 	}
 
 	get prefix() {
-		return this.server?.base.prefix || "";
+		return this.message.mentions.users.has(this.client.discord.user.id)
+			? this.content.trim().substring(0, this.content.indexOf(">") + 1)
+			: this.server?.base.prefix || "";
 	}
 
 	get channel() {

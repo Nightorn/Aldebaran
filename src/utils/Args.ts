@@ -147,7 +147,8 @@ export function parseInput(
 	prefix: string,
 	platform: Platform
 ) {
-	const split = content.slice(prefix.length + +(mode !== "NORMAL")).split(" ");
+	const modeChar = mode !== "NORMAL" ? 1 : 0;
+	const split = content.slice(prefix.length + modeChar).trim().split(" ");
 	let command = client.commands.get(split.shift() || "", platform);
 
 	while (command && command.subcommands.get(split[0])) {
