@@ -77,6 +77,8 @@ export const packageFile: PackageFile = importAssets("./package.json");
 
 export type OsuMode = keyof typeof Mode;
 
+export const drpgIDs = ["170915625722576896", "891614347015626762"];
+
 export const osuModeChoices = [
 	{ name: "osu!", value: "osu" },
 	{ name: "osu!mania", value: "mania" },

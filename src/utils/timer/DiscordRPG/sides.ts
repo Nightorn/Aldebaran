@@ -10,13 +10,13 @@ export default async (ctx: DiscordMessageContext<true>) => {
 	const deleteSetting = ctx.server.base.getSetting("autodelete");
 	const serverSetting = ctx.server.base.getSetting("adventuretimer");
 	const timerSetting = author.base.getSetting("timerping");
-	const userSetting = author.base.getSetting("adventuretimer");
+	const userSetting = author.base.getSetting("adventuretimer") || "off";
 	const primaryAction = userSetting === "on" ? "mine" : userSetting;
 
 	if (
-		userSetting !== "on"
+		userSetting === "off"
 		|| serverSetting !== "on"
-		|| author.timers.sides !== null
+		|| author.timers.sides
 	) return;
 
 	if (deleteSetting === "on") {

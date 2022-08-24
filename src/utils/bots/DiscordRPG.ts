@@ -118,7 +118,6 @@ export default async (ctx: DiscordMessageContext) => {
 		if (match) {
 			const hpMatches = content.match(/(Dead|[\d.]+% HP)/g);
 			if (hpMatches) {
-				console.log(hpMatches);
 				const deadPet = hpMatches.length === 1 || hpMatches[1] === "Dead";
 				const playerHP = Number(hpMatches[0].split(" ")[0]);
 				const petHP = deadPet ? 0 : Number(hpMatches[1].split(" ")[0]);
