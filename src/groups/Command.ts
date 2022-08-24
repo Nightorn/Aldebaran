@@ -12,6 +12,7 @@ import { PermissionString as AldebaranPermission, Platform } from "../utils/Cons
 import { CommandMetadata, Context, ICommand } from "../interfaces/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
 import Embed from "../structures/Embed.js";
+import ContextUser from "../interfaces/ContextUser.js";
 
 const name = process.env.NAME || "Aldebaran";
 
@@ -51,10 +52,15 @@ export default abstract class Command implements ICommand {
 		return this.metadata.requiresGuild ? !!ctx.server : true;
 	}
 
+	log(author: ContextUser) {
+		const user = `USER: ${author.tag} (${author.id})`;
+		console.log(`\x1b[34m- COMMAND: ${this.name} | ${user}\x1b[0m`);
+	}
+
 	/**
    	* Checks if the context of execution is valid
    	*/
-	async permsCheck(ctx: MessageContext, platform: Platform) {
+	permsCheck(ctx: MessageContext, platform: Platform) {
 		let check = true;
 		if (
 			platform.includes("DISCORD")
@@ -83,7 +89,7 @@ export default abstract class Command implements ICommand {
 	}
 
 	async check(ctx: MessageContext, platform: Platform) {
-		return await this.permsCheck(ctx, platform) && this.guildCheck(ctx);
+		return this.permsCheck(ctx, platform) && this.guildCheck(ctx);
 	}
 
 	createEmbed() {
@@ -93,12 +99,30 @@ export default abstract class Command implements ICommand {
 	/**
 	 * Executes the specified command
 	 */
-	async execute(ctx: MessageContext, platform: Platform): Promise<void> {
+	execute(ctx: MessageContext, platform: Platform): unknown {
 		const guild = this.guildCheck(ctx);
-		if (!guild) throw new Error("NOT_IN_GUILD");
-		const perms = await this.permsCheck(ctx, platform);
-		if (!perms) throw new Error("MISSING_PERMS");
-		if (!ctx.argsCheck()) throw new Error("INVALID_ARGS");
+		if (!guild) {
+			const embed = new Embed()
+				.setTitle("You cannot do this here.")
+				.setDescription(`This command needs to be run in a Discord server.`)
+				.setColor("Red");
+			return ctx.reply(embed);
+		}
+
+		const perms = this.permsCheck(ctx, platform);
+		if (!perms) {
+			const embed = new Embed()
+				.setTitle("You are not allowed to use this.")
+				.setDescription(`This command requires permissions that you do not currently have. Please check \`${ctx.prefix}?${(ctx.command as Command).name}\` for more information about the requirements to use this command.`)
+				.setColor("Red");
+			return ctx.reply(embed);
+		}
+
+		if (!ctx.argsCheck()) {
+			return ctx.error("INVALID_ARGS", `Please check \`${ctx.prefix}?${(ctx.command as Command).name}\` for more information on how to use this command.`);
+		}
+
+		this.log(ctx.author);
 		return this.run(ctx, platform);
 	}
 
