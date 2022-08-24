@@ -25,22 +25,22 @@ const messages = {
 };
 
 function createEmbed(ctx: MessageContext, ping: number, wsPing: number) {
-	let color = "BLUE";
+	let color = "Blue";
 	let content = "Hi.";
 
 	if (ping < 0) {
-		color = "PURPLE";
+		color = "Purple";
 		content = messages.negative[
 			Math.floor(Math.random() * messages.negative.length)
 		];
 	} else if (ping <= 500) {
-		color = "GREEN";
+		color = "Green";
 		content = messages.good[Math.floor(Math.random() * messages.good.length)];
 	} else if (ping > 1000) {
-		color = "RED";
+		color = "Red";
 		content = messages.bad[Math.floor(Math.random() * messages.bad.length)];
 	} else if (ping > 500) {
-		color = "ORANGE";
+		color = "Orange";
 		content = messages.average[
 			Math.floor(Math.random() * messages.average.length)
 		];
@@ -70,7 +70,7 @@ export default class PingCommand extends Command {
 		const starterEmbed = new Embed()
 			.addField("WebSocket Heartbeat", `${Math.floor(wsPing)} ms`, true)
 			.addField(`${ctx.client.name} Ping`, "Computing...", true)
-			.setColor("BLUE");
+			.setColor("Blue");
 
 		if (ctx instanceof DiscordContext) {
 			const message = ctx instanceof DiscordSlashMessageContext

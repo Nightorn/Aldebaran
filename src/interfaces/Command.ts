@@ -1,4 +1,4 @@
-import { PermissionString as DJSPermission } from "discord.js";
+import { PermissionsString as DJSPermission } from "discord.js";
 import Command from "../groups/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
 import Client from "../structures/Client.js";

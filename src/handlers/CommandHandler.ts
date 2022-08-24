@@ -1,6 +1,6 @@
 import Client from "../structures/Client.js";
 import Command from "../groups/Command.js";
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder } from "discord.js";
 import { Arg } from "../utils/Args.js";
 import { Platform, SlashCommandOption as Option } from "../utils/Constants.js";
 

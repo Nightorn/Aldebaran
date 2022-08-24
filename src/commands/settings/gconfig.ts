@@ -9,7 +9,7 @@ export default class GconfigCommand extends Command {
 		super({
 			description: "Manages the settings of your server",
 			example: "adventureTimer on",
-			perms: { discord: ["MANAGE_GUILD"] },
+			perms: { discord: ["ManageGuild"] },
 			requiresGuild: true,
 			args: {
 				setting: {
@@ -84,7 +84,7 @@ export default class GconfigCommand extends Command {
 								args.value
 							}\`**.`
 						)
-						.setColor("GREEN");
+						.setColor("Green");
 					ctx.reply(embed);
 				}).catch(err => {
 					const embed = this.createEmbed()
@@ -92,7 +92,7 @@ export default class GconfigCommand extends Command {
 						.setDescription(
 							"An error occured and we could not change your settings. Please retry later."
 						)
-						.setColor("RED");
+						.setColor("Red");
 					ctx.reply(embed);
 					throw err;
 				});

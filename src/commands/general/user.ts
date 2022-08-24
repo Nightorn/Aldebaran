@@ -29,7 +29,7 @@ export default class UserCommand extends Command {
 				mjd = new Date(ctx.member.joinedTimestamp || 0);
 				memberNick = ctx.member.nickname === undefined
 					? null : ctx.member.nickname;
-				if (ctx.member.permissions.has("ADMINISTRATOR"))
+				if (ctx.member.permissions.has("Administrator"))
 					allPermissions.push("Administrator");
 				else {
 					for (const [name, value] of Object.entries(

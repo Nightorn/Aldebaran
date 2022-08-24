@@ -46,7 +46,7 @@ export default class SetprofileCommand extends Command {
 			const error = this.createEmbed()
 				.setTitle("Unknown Profile Section")
 				.setDescription("Please check to ensure this is a correct profile section. If you think the specified profile section was valid, please make sure the value is too.")
-				.setColor("RED");
+				.setColor("Red");
 			ctx.reply(error);
 		});
 		return true;

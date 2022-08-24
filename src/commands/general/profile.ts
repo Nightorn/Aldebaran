@@ -57,7 +57,7 @@ export default class ProfileCommand extends Command {
 					const embed = this.createEmbed()
 						.setTitle("No Profile Found")
 						.setDescription(`Please use \`${ctx.prefix}setprofile name <yournamehere>\` to create your profile`)
-						.setColor("RED");
+						.setColor("Red");
 					ctx.reply(embed);
 				}
 			}).catch(() => {

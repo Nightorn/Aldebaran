@@ -47,7 +47,7 @@ export default class TimeCommand extends Command {
 			if (time === null) {
 				const embed = new Embed()
 					.setTitle(":x: Ooof!")
-					.setColor("RED")
+					.setColor("Red")
 					.setDescription(`The timezone setting for ${user.username} seems to be invaild! Tell them to set it again with ${ctx.prefix}uconfig timezone!`)
 					.addField(":information_source:", `${
 						user.username

@@ -1,7 +1,7 @@
-import { MessageEmbed } from "discord.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import { imageUrls } from "../../utils/Constants.js";
 import User from "../../structures/models/DiscordUser.js";
+import Embed from "../../structures/Embed.js";
 
 const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
 const namePattern = /\+ (.*) has [\d,]+\/[\d,]+ HP left\./;
@@ -10,10 +10,10 @@ const senddeath = imageUrls
 	.deathimage[Math.floor(Math.random() * imageUrls.deathimage.length)];
 
 const embedColor = (playerPercentage: number) => {
-	if (playerPercentage <= 20) return "RED";
-	if (playerPercentage <= 40) return "ORANGE";
-	if (playerPercentage <= 60) return "YELLOW";
-	return "GREEN";
+	if (playerPercentage <= 20) return "Red";
+	if (playerPercentage <= 40) return "Orange";
+	if (playerPercentage <= 60) return "Yellow";
+	return "Green";
 };
 
 const emojiColor = (percentage: number) => {
@@ -29,7 +29,7 @@ const general = (
 	petHP: number,
 	ctx: DiscordMessageContext
 ) => {
-	const embed = new MessageEmbed()
+	const embed = new Embed()
 		.setAuthor({ name: user.username, iconURL: user.avatarURL })
 		.setColor(embedColor(playerHP));
 
@@ -44,30 +44,30 @@ const general = (
 		embed.addField("__Pet Health__", desc, true);
 	}
 
-	ctx.channel.send({ embeds: [embed] });
+	ctx.channel.send({ embeds: [embed.toDiscordEmbed()] });
 };
 
 const playerWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
-	const embed = new MessageEmbed()
+	const embed = new Embed()
 		.setTitle(`__${user.username} Health Warning!!! - ${hp}%__`)
-		.setColor(0xff0000)
+		.setColor("#ff0000")
 		.setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
 		.setImage(senddeath)
 		.setFooter({ text: "Pay attention to your health or you are going to die!" });
-	ctx.channel.send({ embeds: [embed] })
+	ctx.channel.send({ embeds: [embed.toDiscordEmbed()] })
 		.then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
 const petWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 	const desc = `**${user}** your pet is at __**${hp}%**__ health!!!\n`;
 	const footer = "Your pet is getting very weak, take care of it quickly!";
-	const embed = new MessageEmbed()
+	const embed = new Embed()
 		.setTitle(`${user.username} PET Health Warning!!! - ${hp}%__`)
-		.setColor(0xff0000)
+		.setColor("#ff0000")
 		.setDescription(desc)
 		.setImage(senddeath)
 		.setFooter({ text: footer });
-	ctx.channel.send({ embeds: [embed] })
+	ctx.channel.send({ embeds: [embed.toDiscordEmbed()] })
 		.then(msg => setTimeout(() => msg.delete(), 60000));
 };
 

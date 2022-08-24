@@ -5,6 +5,6 @@ export default abstract class Command extends C {
 	constructor(metadata: CommandMetadata) {
 		super(metadata);
 		this.category = "DiscordRPG";
-		this.color = "GREEN";
+		this.color = "Green";
 	}
 }

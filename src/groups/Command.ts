@@ -1,6 +1,6 @@
 import {
 	GuildMember as DiscordMember,
-	PermissionString as DiscordPermission,
+	PermissionsString as DiscordPermission,
 	TextChannel as DiscordChannel
 } from "discord.js";
 import {

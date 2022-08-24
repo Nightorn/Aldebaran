@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import DiscordMessageContext from "../../../structures/contexts/DiscordMessageContext.js";
 
 const emoji = ["🥕", "🍋", "🥔", "🐟"];
@@ -38,7 +38,7 @@ export default async (ctx: DiscordMessageContext<true>) => {
 			author.timers.sides = null;
 		}, 299250);
 
-		const timerEmbed = new MessageEmbed()
+		const timerEmbed = new EmbedBuilder()
 			.setColor(0x00ae86)
 			.setDescription("React with 🚫 to cancel timer.");
 		ctx.channel.send({ embeds: [timerEmbed] }).then(mesg => {
@@ -50,7 +50,7 @@ export default async (ctx: DiscordMessageContext<true>) => {
 			}).then(reactions => {
 				setTimeout(() => mesg.delete(), 5000);
 				if (reactions.get("🚫") === undefined) {
-					const embed = new MessageEmbed()
+					const embed = new EmbedBuilder()
 						.setAuthor({
 							name: "Your sides timer has been set!",
 							iconURL: author.avatarURL
@@ -60,9 +60,9 @@ export default async (ctx: DiscordMessageContext<true>) => {
 						setTimeout(() => timerset.delete(), 5000);
 					});
 				} else if (author.timers.sides) {
-					const embed1 = new MessageEmbed()
+					const embed1 = new EmbedBuilder()
 						.setDescription("Timer Cancelled")
-						.setColor("RED");
+						.setColor("Red");
 
 					clearTimeout(author.timers.sides);
 					author.timers.sides = null;

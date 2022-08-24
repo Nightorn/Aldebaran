@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import moment from "moment-timezone";
 import { NekoRequestResults } from "nekos.life";
 import DatabaseProvider from "../handlers/DatabaseProvider.js";
@@ -111,7 +111,7 @@ export const lightOrDark = (color: string) => {
  * @param {Number} pageSize Number of rows to be displayed per page
  * @param {String} headerText Title of the embed
  * @param {Message} message The discord.js Message that triggered the command
- * @param {MessageEmbed} embed A Discord.js MessageEmbed with extra properties defined
+ * @param {EmbedBuilder} embed A Discord.js EmbedBuilder with extra properties defined
  */
 export async function paginate(
 	list: string[],
@@ -119,33 +119,34 @@ export async function paginate(
 	headerText: string,
 	ctx: DiscordContext,
 	codeblock?: string,
-	embed: MessageEmbed = new MessageEmbed()
+	embed: Embed = new Embed()
 ) {
-	const emojiButton = (emoji: string) => new MessageButton()
+	const emojiButton = (emoji: string) => new ButtonBuilder()
 		.setEmoji(emoji)
-		.setStyle("SECONDARY")
+		.setStyle(ButtonStyle.Secondary)
 		.setCustomId(emoji);
 	const [leftButton, xButton, rightButton] = ["⬅️", "❌", "➡️"].map(emojiButton);
-	const buttonRow = new MessageActionRow();
+	const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 	const maxPage = Math.ceil(list.length / pageSize);
 	let page = 1;
 
 	function updateEmbed() {
-		embed.title = `${headerText} (page ${page}/${maxPage})`;
+		embed.setTitle(`${headerText} (page ${page}/${maxPage})`);
 		const description = list
 			.slice((page - 1) * pageSize, page * pageSize)
 			.join("\n")
 			.trim() || "Err";
-		embed.description = codeblock
+		embed.setDescription(codeblock
 			? `\`\`\`${codeblock}\n${description}\n\`\`\``
-			: description;
+			: description);
 		leftButton.setDisabled(page === 1);
 		rightButton.setDisabled(page === maxPage);
 		buttonRow.setComponents([leftButton, xButton, rightButton]);
 	}
 	updateEmbed();
 
-	const opt = { embeds: [embed], components: maxPage > 1 ? [buttonRow] : [] };
+	const dEmbed = embed.toDiscordEmbed();
+	const opt = { embeds: [dEmbed], components: maxPage > 1 ? [buttonRow] : [] };
 	const reply = ctx instanceof DiscordSlashMessageContext
 		? await ctx.reply(opt, false, true)
 		: await (ctx as DiscordMessageContext).reply(opt);
@@ -165,7 +166,7 @@ export async function paginate(
 		if (interaction.customId === "⬅️") page--;
 		if (interaction.customId === "➡️") page++;
 		updateEmbed();
-		await interaction.update({ embeds: [embed], components: [buttonRow] });
+		await interaction.update({ embeds: [dEmbed], components: [buttonRow] });
 	}
 }
 

@@ -44,7 +44,7 @@ export default abstract class MessageContext<InGuild extends boolean = false> {
 			: "An error has occured.";
 		const embed = new Embed()
 			.setTitle(title)
-			.setColor("RED");
+			.setColor("Red");
 
 		if (type === "UNEXPECTED_BEHAVIOR") {
 			embed.setDescription(`${desc}\nPlease contact the developers or fill a bug report using the \`bugreport\` command.`);

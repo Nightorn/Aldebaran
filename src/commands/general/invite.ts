@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageButton } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import Command from "../../groups/Command.js";
 import DiscordContext from "../../structures/contexts/DiscordContext.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
@@ -20,15 +20,15 @@ export default class InviteCommand extends Command {
 			.setColor(this.color);
 
 		if (ctx instanceof DiscordContext) {
-			const botButton = new MessageButton()
-				.setStyle("LINK")
+			const botButton = new ButtonBuilder()
+				.setStyle(ButtonStyle.Link)
 				.setLabel("Bot invite link")
 				.setURL(botInvite);
-			const serverButton = new MessageButton()
-				.setStyle("LINK")
+			const serverButton = new ButtonBuilder()
+				.setStyle(ButtonStyle.Link)
 				.setLabel("Support server link")
 				.setURL(serverInvite);
-			const actionRow = new MessageActionRow()
+			const actionRow = new ActionRowBuilder<ButtonBuilder>()
 				.setComponents([botButton, serverButton]);
 			ctx.reply({ embeds: [embed.toDiscordEmbed()], components: [actionRow] });
 		} else {

@@ -23,7 +23,7 @@ export default class ModSubcommand extends Command {
 						const embed = this.createEmbed()
 							.setTitle("Changes Done")
 							.setDescription("The changes have successfully been applied. Please note that this command does not check for valid properties/values, make sure the user modded has the correct settings.")
-							.setColor("GREEN");
+							.setColor("Green");
 						ctx.reply(embed);
 					}).catch(async () => {
 						const guild = await ctx.fetchServer(args[0]);
@@ -32,13 +32,13 @@ export default class ModSubcommand extends Command {
 							const embed = this.createEmbed()
 								.setTitle("Changes Done")
 								.setDescription("The changes have successfully been applied. Please note that this command does not check for valid properties/values, make sure the guild modded has the correct settings.")
-								.setColor("GREEN");
+								.setColor("Green");
 							ctx.reply(embed);
 						} else {
 							const embed = this.createEmbed()
 								.setTitle("Warning")
 								.setDescription(`The ID specified does not correspond to a valid user or a guild where ${ctx.client.name} is.`)
-								.setColor("ORANGE");
+								.setColor("Orange");
 							ctx.reply(embed);
 						}
 					});
@@ -46,21 +46,21 @@ export default class ModSubcommand extends Command {
 					const embed = this.createEmbed()
 						.setTitle("Warning")
 						.setDescription("You need to specify the value of the settings you want to change.")
-						.setColor("ORANGE");
+						.setColor("Orange");
 					ctx.reply(embed);
 				}
 			} else {
 				const embed = this.createEmbed()
 					.setTitle("Warning")
 					.setDescription("You need to specify the property of the settings you want to change.")
-					.setColor("ORANGE");
+					.setColor("Orange");
 				ctx.reply(embed);
 			}
 		} else {
 			const embed = this.createEmbed()
 				.setTitle("Warning")
 				.setDescription("You need to specify the ID of the user or the guild you want to change the settings of.")
-				.setColor("ORANGE");
+				.setColor("Orange");
 			ctx.reply(embed);
 		}
 	}
