@@ -35,9 +35,15 @@ export default class RpsCommand extends Command {
 			return ctx.reply("You can't play this game against a bot.");
 		}
 
+		if (target.id === ctx.author.id) {
+			return ctx instanceof DiscordSlashMessageContext
+				? ctx.reply("You can't play with yourself!", true, false)
+				: ctx.reply("You can't play with yourself!");
+		}
+
 		const introEmbed = this.createEmbed()
 			.setTitle("Rock. Paper. Scissors.")
-			.setDescription("The person you want to play with has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.");
+			.setDescription(`${target} has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.`);
 		
 		const acceptButton = new ButtonBuilder()
 			.setStyle(ButtonStyle.Success)
@@ -50,7 +56,7 @@ export default class RpsCommand extends Command {
 			: await (ctx as DiscordMessageContext).reply(opt);
 
 		const filter = (i: MessageComponentInteraction) => i.user.id === target.id;
-		msg.awaitMessageComponent({ filter }).then(async interaction => {
+		msg.awaitMessageComponent({ filter, time: 60000 }).then(async interaction => {
 			interaction.deferUpdate();
 
 			const startEmbed = this.createEmbed()
@@ -88,7 +94,7 @@ export default class RpsCommand extends Command {
 
 			let content;
 			if (authorResponse === targetResponse) {
-				content = `Both users played ${targetResponse}, retry!`;
+				content = `Both players played ${targetResponse}, retry!`;
 			} else if (win[authorResponse] === targetResponse) {
 				content = this.createEmbed()
 					.setAuthor({
@@ -108,9 +114,14 @@ export default class RpsCommand extends Command {
 			ctx instanceof DiscordSlashMessageContext
 				? ctx.reply(content, false, true)
 				: ctx.reply(content);
-		}).catch(error => {
-			ctx.reply("An error occured with this RPS game.");
-			throw error;
+		}).catch(() => {
+			const embed = this.createEmbed()
+				.setAuthor({
+					name: ctx.author.username,
+					iconURL: ctx.author.avatarURL
+				})
+				.setDescription(`${target} has declined your invitation.`);
+			ctx.reply(embed);
 		});
 	}
 }
