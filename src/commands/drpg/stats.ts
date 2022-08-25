@@ -43,7 +43,7 @@ export default class StatsCommand extends Command {
 					const location = data.location ? drpgLocationdb[data.location.current] : "The Abyss";
 					const embed = new Embed()
 						.setAuthor({ name: data.name, iconURL: user.avatarURL })
-						.setColor(data.donate ? "GOLD" : "#00ae86")
+						.setColor(data.donate ? "Gold" : "#00ae86")
 						.setDescription(`Currently In **${location || "The Abyss"}**`)
 						.addField(
 							`Level ${format(data.level)}`,
