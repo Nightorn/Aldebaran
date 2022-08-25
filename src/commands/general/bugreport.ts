@@ -3,8 +3,8 @@ import { EmbedBuilder, WebhookClient } from "discord.js";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const id = process.env.WEBHOOK_SUGGESTIONS_ID || "";
-const token = process.env.WEBHOOK_SUGGESTIONS_TOKEN || "";
+const id = process.env.WEBHOOK_BUGREPORTS_ID || "";
+const token = process.env.WEBHOOK_BUGREPORTS_TOKEN || "";
 
 export default class BugreportCommand extends Command {
 	constructor() {
