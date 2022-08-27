@@ -28,7 +28,8 @@ export default class DiscordClient extends Client {
 				"Guilds",
 				"GuildMessages",
 				"GuildMessageReactions",
-				"GuildWebhooks"
+				"GuildWebhooks",
+				"MessageContent"
 			],
 			partials: [Partials.Channel]
 		});

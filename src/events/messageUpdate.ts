@@ -23,12 +23,11 @@ export default async (
 
 	const drpgCommand = ctx.interaction?.commandName;
 	const serverCtx = ctx as unknown as DiscordMessageContext<true>;
-	if (drpgCommand) {
+	if (drpgCommand === "adv") {
 		DiscordRPG(ctx);
-		if (drpgCommand === "adv") {
-			DRPGAdventure(serverCtx);
-		} else if (drpgCommand === "padv")  {
-			DRPGPadventure(serverCtx);
-		}
+		DRPGAdventure(serverCtx);
+	} else if (drpgCommand === "padv") {
+		DiscordRPG(ctx);
+		DRPGPadventure(serverCtx);
 	}
 };
