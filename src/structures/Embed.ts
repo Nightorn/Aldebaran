@@ -1,6 +1,6 @@
 import axios from "axios";
 import FormData from "form-data";
-import { ColorResolvable, MessageEmbed } from "discord.js";
+import { ColorResolvable, EmbedBuilder } from "discord.js";
 
 type Author = { iconURL?: string, name: string, url?: string };
 type Field = { title: string, content: string, inline?: boolean };
@@ -71,7 +71,7 @@ export default class Embed {
 	}
 
 	toDiscordEmbed() {
-		const embed = new MessageEmbed();
+		const embed = new EmbedBuilder();
 		if (this.author) embed.setAuthor(this.author);
 		if (this.color) embed.setColor(this.color as ColorResolvable);
 		if (this.description) embed.setDescription(this.description);
@@ -81,8 +81,10 @@ export default class Embed {
 		if (this.thumbnail) embed.setThumbnail(this.thumbnail);
 		if (this.timestamp) embed.setTimestamp(this.timestamp);
 		if (this.url) embed.setURL(this.url);
-		this.fields.forEach(f => embed.addField(f.title, f.content, f.inline));
-		return embed;
+		embed.addFields(...this.fields.map(f => {
+			return { name: f.title, value: f.content, inline: f.inline };
+		}));
+		return embed.toJSON();
 	}
 
 	async toRevoltEmbed() {

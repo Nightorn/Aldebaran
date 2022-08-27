@@ -1,6 +1,6 @@
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v10";
-import { Client as DjsClient } from "discord.js";
+import { Client as DjsClient, Partials } from "discord.js";
 import interactionCreate from "../events/interactionCreate.js";
 import messageUpdate from "../events/messageUpdate.js";
 import { discordMessage } from "../events/message.js";
@@ -22,15 +22,16 @@ export default class DiscordClient extends Client {
 
 		this.discord = new DjsClient({
 			intents: [
-				"DIRECT_MESSAGES",
-				"DIRECT_MESSAGE_REACTIONS",
-				"GUILD_EMOJIS_AND_STICKERS",
-				"GUILDS",
-				"GUILD_MESSAGES",
-				"GUILD_MESSAGE_REACTIONS",
-				"GUILD_WEBHOOKS"
+				"DirectMessages",
+				"DirectMessageReactions",
+				"GuildEmojisAndStickers",
+				"Guilds",
+				"GuildMessages",
+				"GuildMessageReactions",
+				"GuildWebhooks",
+				"MessageContent"
 			],
-			partials: ["CHANNEL"]
+			partials: [Partials.Channel]
 		});
 
 		if (process.env.DEPLOY_SLASH && this.id && discordToken) {

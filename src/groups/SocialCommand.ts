@@ -11,6 +11,6 @@ export default abstract class Command extends C {
 			...metadata
 		});
 		this.category = "Action";
-		this.color = "AQUA";
+		this.color = "Aqua";
 	}
 }

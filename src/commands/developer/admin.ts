@@ -25,7 +25,7 @@ export default class AdminCommand extends Command {
 		const embed = this.createEmbed()
 			.setTitle("Warning")
 			.setDescription("The admin action specified is invalid.")
-			.setColor("ORANGE");
+			.setColor("Orange");
 		ctx.reply(embed);
 	}
 }

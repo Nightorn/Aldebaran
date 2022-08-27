@@ -1,10 +1,10 @@
 // Command Developed with the help of Akashic Bearer#2305
-import { MessageEmbed, WebhookClient } from "discord.js";
+import { EmbedBuilder, WebhookClient } from "discord.js";
 import Command from "../../groups/Command.js";
 import MessageContext from "../../structures/contexts/MessageContext.js";
 
-const id = process.env.WEBHOOK_SUGGESTIONS_ID || "";
-const token = process.env.WEBHOOK_SUGGESTIONS_TOKEN || "";
+const id = process.env.WEBHOOK_BUGREPORTS_ID || "";
+const token = process.env.WEBHOOK_BUGREPORTS_TOKEN || "";
 
 export default class BugreportCommand extends Command {
 	constructor() {
@@ -23,7 +23,7 @@ export default class BugreportCommand extends Command {
 
 		if (!report) return ctx.reply("Your report cannot be empty.");
 		
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setDescription(report)
 			.setFooter({ text: `User: ${ctx.author.tag} [ID: ${ctx.author.id}]` });
 

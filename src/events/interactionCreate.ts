@@ -3,7 +3,7 @@ import Context from "../structures/contexts/DiscordSlashMessageContext.js";
 import DiscordClient from "../structures/DiscordClient.js";
 
 export default async (client: DiscordClient, interaction: Interaction) => {
-	if (interaction.isCommand()) {
+	if (interaction.isChatInputCommand()) {
 		const guild = interaction.guild
 			? await client.servers.fetchDiscord(interaction.guild.id)
 			: null;

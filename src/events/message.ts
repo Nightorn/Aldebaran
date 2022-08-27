@@ -1,28 +1,28 @@
-import { Message as DjsMessage, MessageEmbed } from "discord.js";
+import { Message as DjsMessage } from "discord.js";
 import { Message as RjsMessage } from "revolt.js";
 import DiscordClient from "../structures/DiscordClient.js";
 import RevoltClient from "../structures/RevoltClient.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
 import RevoltMessageContext from "../structures/contexts/RevoltMessageContext.js";
-import Command from "../groups/Command.js";
-import MessageContext from "../structures/contexts/MessageContext.js";
-
-function log(ctx: MessageContext) {
-	const command = ctx.command as Command;
-	const user = `USER: ${ctx.author.tag} (${ctx.author.id})`;
-	console.log(`\x1b[34m- COMMAND: ${command.name} | ${user}\x1b[0m`);
-}
+import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
+import { drpgIDs } from "../utils/Constants.js";
 
 const allowNonSlash = process.env.ALLOW_NON_SLASH_COMMANDS;
+const drpgCommands = ["mine", "forage", "fish", "chop"];
 
 export async function discordMessage(
 	client: DiscordClient,
 	message: DjsMessage
 ) {
+	const isDrpgCommand = drpgIDs.includes(message.author.id)
+		&& message.interaction?.commandName
+		&& drpgCommands.includes(message.interaction?.commandName);
+
+	const hasMention = message.mentions.users.has(client.discord.user.id);
 	if (
-		(!message.mentions.users.has(client.discord.user.id) && !allowNonSlash)
+		(!hasMention && !allowNonSlash && !isDrpgCommand)
 		|| (message.webhookId && !message.interaction)
-		|| message.author.bot
+		|| (message.author.bot && !isDrpgCommand)
 	) return;
 
 	const guild = message.guild
@@ -32,27 +32,16 @@ export async function discordMessage(
 	const author = await client.users.fetchDiscord(message.author.id);
 	const ctx = new DiscordMessageContext(author, client, message, guild);
 
+	if (isDrpgCommand) {
+		return DRPGSides(ctx as unknown as DiscordMessageContext<true>);
+	}
+
 	if (ctx.content.indexOf(ctx.prefix) !== 0) return;
+
 	if (ctx.command && ctx.mode === "HELP") {
 		ctx.reply(ctx.command.toHelpEmbed(ctx.prefix));
 	} else if (ctx.command) {
-		ctx.command.execute(ctx, "DISCORD").then(() => log(ctx)).catch(err => {
-			if (err.message === "INVALID_PERMISSIONS") {
-				const embed = new MessageEmbed()
-					.setTitle("You are not allowed to use this.")
-					.setDescription(`This command requires permissions that you do not currently have. Please check \`${ctx.prefix}?${(ctx.command as Command).name}\` for more information about the requirements to use this command.`)
-					.setColor("RED");
-				ctx.reply(embed);
-			} else if (err.message === "NOT_NSFW_CHANNEL") {
-				const embed = new MessageEmbed()
-					.setTitle("You are using this command incorrectly.")
-					.setDescription("As this command shows NSFW content, you need to use this command in a NSFW channel.")
-					.setColor("RED");
-				ctx.reply(embed);
-			} else if (err.message === "INVALID_ARGS") {
-				ctx.error("INVALID_ARGS", `Please check \`${ctx.prefix}?${(ctx.command as Command).name}\` for more information on how to use this command.`);
-			}
-		});
+		ctx.command.execute(ctx, "DISCORD");
 	}
 }
 
@@ -71,14 +60,6 @@ export async function revoltMessage(
 	if (ctx.command && ctx.mode === "HELP") {
 		ctx.reply("Support for help has not yet been implemented.");
 	} else if (ctx.command) {
-		ctx.command.execute(ctx, "REVOLT").then(() => log(ctx)).catch(err => {
-			if (err.message === "INVALID_PERMISSIONS") {
-				ctx.reply("You are not allowed to use this.");
-			} else if (err.message === "NOT_NSFW_CHANNEL") {
-				ctx.reply("You cannot use an NSFW command in a non-NSFW channel.");
-			} else if (err.message === "INVALID_ARGS") {
-				ctx.error("INVALID_ARGS", `Please check \`${ctx.prefix}?${(ctx.command as Command).name}\` for more information on how to use this command.`);
-			}
-		});
+		ctx.command.execute(ctx, "REVOLT");
 	}
 }

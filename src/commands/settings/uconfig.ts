@@ -93,7 +93,7 @@ export default class UconfigCommand extends Command {
 								args.value
 							}\`**.`
 						)
-						.setColor("GREEN");
+						.setColor("Green");
 					ctx.reply(embed);
 				}).catch(err => {
 					const embed = this.createEmbed()
@@ -101,7 +101,7 @@ export default class UconfigCommand extends Command {
 						.setDescription(
 							"An error occured and we could not change your settings. Please retry later."
 						)
-						.setColor("RED");
+						.setColor("Red");
 					ctx.reply(embed);
 					throw err;
 				});
@@ -109,14 +109,14 @@ export default class UconfigCommand extends Command {
 				const embed = new Embed()
 					.setTitle("Not supported")
 					.setDescription(`This value is not vaild. Please check \`${ctx.prefix}uconfig list\` for the vaild values for this setting.`)
-					.setColor("RED");
+					.setColor("Red");
 				ctx.reply(embed);
 			}
 		} else {
 			const embed = new Embed()
 				.setTitle("Invalid key")
 				.setDescription(`This key does not exist. Check \`${ctx.prefix}uconfig list\` for the keys accepted.`)
-				.setColor("RED");
+				.setColor("Red");
 			ctx.reply(embed);
 		}
 	}

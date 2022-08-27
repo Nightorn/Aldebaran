@@ -2,11 +2,9 @@ import { Message, PartialMessage } from "discord.js";
 import DiscordClient from "../structures/DiscordClient.js";
 import DiscordRPG from "../utils/bots/DiscordRPG.js";
 import DRPGAdventure from "../utils/timer/DiscordRPG/adv.js";
-import DRPGSides from "../utils/timer/DiscordRPG/sides.js";
 import DRPGPadventure from "../utils/timer/DiscordRPG/padv.js";
 import DiscordMessageContext from "../structures/contexts/DiscordMessageContext.js";
-
-const drpgIDs = ["170915625722576896", "891614347015626762"];
+import { drpgIDs } from "../utils/Constants.js";
 
 export default async (
 	client: DiscordClient,
@@ -25,15 +23,11 @@ export default async (
 
 	const drpgCommand = ctx.interaction?.commandName;
 	const serverCtx = ctx as unknown as DiscordMessageContext<true>;
-	if (drpgCommand) {
-		if (drpgCommand === "adv") {
-			DiscordRPG(ctx);
-			DRPGAdventure(serverCtx);
-		} else if (drpgCommand === "padv")  {
-			DiscordRPG(ctx);
-			DRPGPadventure(serverCtx);
-		} else if (["mine", "forage", "fish", "chop"].includes(drpgCommand)) {
-			DRPGSides(serverCtx);
-		}
+	if (drpgCommand === "adv") {
+		DiscordRPG(ctx);
+		DRPGAdventure(serverCtx);
+	} else if (drpgCommand === "padv") {
+		DiscordRPG(ctx);
+		DRPGPadventure(serverCtx);
 	}
 };

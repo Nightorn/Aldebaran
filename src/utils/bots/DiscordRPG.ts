@@ -1,8 +1,10 @@
-import { MessageEmbed } from "discord.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
 import { imageUrls } from "../../utils/Constants.js";
 import User from "../../structures/models/DiscordUser.js";
+import Embed from "../../structures/Embed.js";
 
+const adv3Regex = /'s Adventure ]======!\n% Rolled a \d\n[+-] /;
+const adv3HealthRegex = /([\d.]+)% HP \(-[\d.]+%\) +\|/g;
 const healthMessagePattern = /( has [\d,]+\/[\d,]+ HP left\.)|(used .+? and got [\d,]+?HP\. \([\d,]+\/[\d,]+HP\))|(Health: [\d,]+\/[\d,]+HP\.)/;
 const namePattern = /\+ (.*) has [\d,]+\/[\d,]+ HP left\./;
 
@@ -10,10 +12,10 @@ const senddeath = imageUrls
 	.deathimage[Math.floor(Math.random() * imageUrls.deathimage.length)];
 
 const embedColor = (playerPercentage: number) => {
-	if (playerPercentage <= 20) return "RED";
-	if (playerPercentage <= 40) return "ORANGE";
-	if (playerPercentage <= 60) return "YELLOW";
-	return "GREEN";
+	if (playerPercentage <= 20) return "Red";
+	if (playerPercentage <= 40) return "Orange";
+	if (playerPercentage <= 60) return "Yellow";
+	return "Green";
 };
 
 const emojiColor = (percentage: number) => {
@@ -29,7 +31,7 @@ const general = (
 	petHP: number,
 	ctx: DiscordMessageContext
 ) => {
-	const embed = new MessageEmbed()
+	const embed = new Embed()
 		.setAuthor({ name: user.username, iconURL: user.avatarURL })
 		.setColor(embedColor(playerHP));
 
@@ -44,30 +46,30 @@ const general = (
 		embed.addField("__Pet Health__", desc, true);
 	}
 
-	ctx.channel.send({ embeds: [embed] });
+	ctx.channel.send({ embeds: [embed.toDiscordEmbed()] });
 };
 
 const playerWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
-	const embed = new MessageEmbed()
+	const embed = new Embed()
 		.setTitle(`__${user.username} Health Warning!!! - ${hp}%__`)
-		.setColor(0xff0000)
+		.setColor("#ff0000")
 		.setDescription(`**${user.username}** is at __**${hp}%**__ health!!!\n`)
 		.setImage(senddeath)
 		.setFooter({ text: "Pay attention to your health or you are going to die!" });
-	ctx.channel.send({ embeds: [embed] })
+	ctx.channel.send({ embeds: [embed.toDiscordEmbed()] })
 		.then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
 const petWarning = (user: User, hp: number, ctx: DiscordMessageContext) => {
 	const desc = `**${user}** your pet is at __**${hp}%**__ health!!!\n`;
 	const footer = "Your pet is getting very weak, take care of it quickly!";
-	const embed = new MessageEmbed()
+	const embed = new Embed()
 		.setTitle(`${user.username} PET Health Warning!!! - ${hp}%__`)
-		.setColor(0xff0000)
+		.setColor("#ff0000")
 		.setDescription(desc)
 		.setImage(senddeath)
 		.setFooter({ text: footer });
-	ctx.channel.send({ embeds: [embed] })
+	ctx.channel.send({ embeds: [embed.toDiscordEmbed()] })
 		.then(msg => setTimeout(() => msg.delete(), 60000));
 };
 
@@ -110,31 +112,25 @@ export default async (ctx: DiscordMessageContext) => {
 		|| healthmonitor === "off"
 		|| !ctx.interaction) return false;
 
-	const content = ctx.content;
 	const user = await ctx.fetchUser(ctx.interaction.user.id);
 
-	if (ctx.content.includes(") | +")) {
-		const match = content.match(/Rolled a \d\n[+-] (.*): *[\d.]+% HP/);
-		if (match) {
-			const hpMatches = content.match(/(Dead|[\d.]+% HP)/g);
-			if (hpMatches) {
-				console.log(hpMatches);
-				const deadPet = hpMatches.length === 1 || hpMatches[1] === "Dead";
-				const playerHP = Number(hpMatches[0].split(" ")[0]);
-				const petHP = deadPet ? 0 : Number(hpMatches[1].split(" ")[0]);
-				return percentageCheck(user, ctx, playerHP, petHP);
-			}
+	if (ctx.content.includes(") | +") && ctx.content.match(adv3Regex)) {
+		const hpMatches = [...ctx.content.matchAll(adv3HealthRegex)];
+		if (hpMatches) {
+			const playerHP = Number(hpMatches[0][1]);
+			const petHP = hpMatches[1][1] ? Number(hpMatches[1][1]) : 0;
+			return percentageCheck(user, ctx, playerHP, petHP);
 		}
 	}
 
 	const player = { hp: 0, maxHp: 0, name: "null" };
 	const pet = { hp: 0, maxHp: 0 };
 
-	if (ctx.embeds.length === 0 && content.includes(" Adventure ")) {
-		const healthMessage = content.match(healthMessagePattern);
-		if (healthMessage && content.match(namePattern)) {
+	if (ctx.embeds.length === 0 && ctx.content.includes(" Adventure ")) {
+		const healthMessage = ctx.content.match(healthMessagePattern);
+		if (healthMessage && ctx.content.match(namePattern)) {
 			const nums = healthMessage[0].match(/([\d,]+)\/([\d,]+)/);
-			const name = content.match(namePattern);
+			const name = ctx.content.match(namePattern);
 			if (nums && name) {
 				player.name = name[1];
 				player.hp = Number(nums[1].replace(/,/g, ""));
@@ -142,7 +138,7 @@ export default async (ctx: DiscordMessageContext) => {
 			}
 		}
 
-		const messageArray = content.split("\n");
+		const messageArray = ctx.content.split("\n");
 		const dealtLine = messageArray.findIndex(l => l.includes(" dealt "));
 		const tookLine = messageArray.findIndex(l => l.includes(" took "));
 		if (tookLine === dealtLine + 1) {

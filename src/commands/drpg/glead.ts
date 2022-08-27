@@ -232,7 +232,7 @@ export default class GleadCommand extends Command {
 				`${guildData.name} Lead ${index}`,
 				ctx,
 				"md",
-				new Embed().setColor(this.color).setFooter({ text }).toDiscordEmbed()
+				new Embed().setColor(this.color).setFooter({ text })
 			);
 		} else {
 			ctx.reply("Unknown leaderboard index.");

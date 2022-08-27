@@ -17,28 +17,28 @@ export default class SetpermSubcommand extends Command {
 			const embed = this.createEmbed()
 				.setTitle("Warning")
 				.setDescription("You need to specify the ID of the user you want to change the permissions of.")
-				.setColor("ORANGE");
+				.setColor("Orange");
 			return ctx.reply(embed);
 		}
 		if (args[1] === undefined) {
 			const embed = this.createEmbed()
 				.setTitle("Warning")
 				.setDescription("You need to specify the operation you want to perform (ADD or REMOVE)")
-				.setColor("ORANGE");
+				.setColor("Orange");
 			return ctx.reply(embed);
 		}
 		if (args[1].toLowerCase() !== "add" && args[1].toLowerCase() !== "remove") {
 			const embed = this.createEmbed()
 				.setTitle("Warning")
 				.setDescription("You need to specify either ADD or REMOVE as the operation.")
-				.setColor("ORANGE");
+				.setColor("Orange");
 			return ctx.reply(embed);
 		}
 		if (args[2] === undefined) {
 			const embed = this.createEmbed()
 				.setTitle("Warning")
 				.setDescription(`You need to specify the ${ctx.client.name} permissions you want to set (seperated by spaces). (See \`assets/data/aldebaranPermissions.json\` for valid flags.)`)
-				.setColor("ORANGE");
+				.setColor("Orange");
 			return ctx.reply(embed);
 		}
 		return ctx.fetchUser(args[0]).then(async user => {
@@ -48,7 +48,7 @@ export default class SetpermSubcommand extends Command {
 			const embedFailure = (error: Error) => this.createEmbed()
 				.setTitle("Warning")
 				.setDescription(`Something went wrong: \n\`${error}\``)
-				.setColor("ORANGE");
+				.setColor("Orange");
 			switch (args[1].toLowerCase()) {
 				case "add":
 					try {
@@ -56,7 +56,7 @@ export default class SetpermSubcommand extends Command {
 						const embedAddSuccess = this.createEmbed()
 							.setTitle("Success")
 							.setDescription(`Successfully added:\n\`${permissions.join(", ")}\`\n to ${user.username}.`)
-							.setColor("GREEN");
+							.setColor("Green");
 						ctx.reply(embedAddSuccess);
 					} catch (err) {
 						console.log(err);
@@ -69,7 +69,7 @@ export default class SetpermSubcommand extends Command {
 						const embedRemoveSuccess = this.createEmbed()
 							.setTitle("Success")
 							.setDescription(`Successfully removed:\n\`${permissions.join(", ")}\`\n from ${user.username}.`)
-							.setColor("GREEN");
+							.setColor("Green");
 						ctx.reply(embedRemoveSuccess);
 					} catch (err) {
 						console.log(err);
@@ -83,7 +83,7 @@ export default class SetpermSubcommand extends Command {
 			const embed = this.createEmbed()
 				.setTitle("Warning")
 				.setDescription("The ID specified does not correspond to a valid user.")
-				.setColor("ORANGE");
+				.setColor("Orange");
 			ctx.reply(embed);
 		});
 	}

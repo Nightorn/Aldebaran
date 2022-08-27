@@ -22,7 +22,7 @@ export default class CreditsCommand extends Command {
 				"Other Contributions",
 				"**`[RagingLink#9469]`** Contributor to Aldebaran, maintainer of [Andromeda](https://github.com/RagingLink/Aldebaran)\n**`[Akashic Bearer#2305]`** Development Help\n**`[RagingLink#9469]`** Development Help\n**`[sudojunior#8318]`** Development Help\n**`[Gyth8#8778]`** Ex-Support\n**`[Ryudragon98#1337]`** Ex-Administrator and Support"
 			)
-			.setColor("PURPLE");
+			.setColor("Purple");
 		ctx.reply(embed);
 	}
 }

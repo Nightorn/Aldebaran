@@ -1,4 +1,4 @@
-import { GuildMember, Message, MessageEmbed, MessageOptions, TextChannel } from "discord.js";
+import { GuildMember, Message, EmbedBuilder, MessagePayload, TextChannel, ReplyMessageOptions } from "discord.js";
 import DiscordContext from "./DiscordContext.js";
 import Server from "../models/DiscordServer.js";
 import User from "../models/DiscordUser.js";
@@ -7,6 +7,8 @@ import DiscordClient from "../DiscordClient.js";
 import Command from "../../groups/Command.js";
 import { If } from "../../utils/Constants.js";
 import Embed from "../Embed.js";
+
+type NoEmbedMessage = string | MessagePayload | ReplyMessageOptions;
 
 export default class DiscordMessageContext
 	<InGuild extends boolean = false> extends DiscordContext<InGuild>
@@ -86,7 +88,7 @@ export default class DiscordMessageContext
 
 	async delete(delay?: number): Promise<Message<boolean> | false> {
 		const hasPermission = this.server && (this.channel as TextChannel)
-			.permissionsFor(this.client.discord.user.id)?.has("MANAGE_MESSAGES");
+			.permissionsFor(this.client.discord.user.id)?.has("ManageMessages");
 
 		if (hasPermission) {
 			if (delay) {
@@ -101,10 +103,10 @@ export default class DiscordMessageContext
 		return false;
 	}
 
-	async reply(content: string | Embed | MessageOptions | MessageEmbed) {
+	async reply(content: Embed | EmbedBuilder | NoEmbedMessage) {
 		if (content instanceof Embed) {
 			return this.message.reply({ embeds: [content.toDiscordEmbed()] });
-		} else if (content instanceof MessageEmbed) {
+		} else if (content instanceof EmbedBuilder) {
 			return this.message.reply({ embeds: [content] });
 		} else {
 			return this.message.reply(content);

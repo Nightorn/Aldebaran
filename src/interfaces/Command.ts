@@ -1,4 +1,4 @@
-import { PermissionString as DJSPermission } from "discord.js";
+import { PermissionsString as DJSPermission } from "discord.js";
 import Command from "../groups/Command.js";
 import MessageContext from "../structures/contexts/MessageContext.js";
 import Client from "../structures/Client.js";
@@ -44,9 +44,9 @@ export interface ICommand {
 	subcommands: Map<string, ICommand>;
 
 	check(ctx: MessageContext, platform: Platform): Promise<boolean>;
-	execute(ctx: MessageContext, platform: Platform): object | void;
+	execute(ctx: MessageContext, platform: Platform): unknown;
 	guildCheck(ctx: MessageContext): boolean;
-	permsCheck(ctx: MessageContext, platform: Platform): Promise<boolean>;
+	permsCheck(ctx: MessageContext, platform: Platform): boolean;
 	registerSubcommands(...subcommands: { new(c: Client): Command }[]): void;
 	run(
 		this: ICommand,

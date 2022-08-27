@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { XPBases, ItemList, LocationDB } from "../interfaces/DiscordRPG.js";
 import { Mode } from "nodesu";
-import { SlashCommandBooleanOption, SlashCommandIntegerOption, SlashCommandStringOption, SlashCommandUserOption } from "@discordjs/builders";
+import { ActivityType, SlashCommandBooleanOption, SlashCommandIntegerOption, SlashCommandStringOption, SlashCommandUserOption } from "discord.js";
 import moment from "moment-timezone";
 
 type AldebaranTeam = { [key: string]: {
@@ -35,11 +35,36 @@ type PackageFile = {
 
 type ActionText = { [key: string]: { self: string[], user: string[] } };
 type ImageURLs = { [key: string]: string[] };
-type Presences = { text: string, type: "PLAYING" | "STREAMING" | "LISTENING" | "WATCHING" | "COMPETING" }[];
 
 function importAssets(p: string) {
 	return JSON.parse(readFileSync(p).toString());
 }
+
+type PresenceList = { text: string, type: ActivityType.Watching
+	| ActivityType.Listening
+	| ActivityType.Playing
+}[];
+export const presences: PresenceList = [
+	{ "text": "{NSERVERS} servers playing", "type": ActivityType.Watching },
+	{ "text": "{NUSERS} users' keyboard", "type": ActivityType.Listening },
+	{ "text": "version {VERSION}", "type": ActivityType.Playing },
+	{ "text": "you.", "type": ActivityType.Watching },
+	{ "text": "all your demands", "type": ActivityType.Listening },
+	{ "text": "DiscordRPG", "type": ActivityType.Playing },
+	{ "text": "osu!", "type": ActivityType.Playing },
+	{ "text": "with some {PREFIX}math", "type": ActivityType.Playing },
+	{ "text": "you type.", "type": ActivityType.Watching },
+	{ "text": "cib's Spotify playlist", "type": ActivityType.Listening },
+	{ "text": "my {PREFIX}plant growing", "type": ActivityType.Watching },
+	{ "text": "items falling in my {PREFIX}trap", "type": ActivityType.Listening },
+	{ "text": "Nightmare lurking everywhere", "type": ActivityType.Watching },
+	{ "text": "Willard cosplaying as Herobrine", "type": ActivityType.Watching },
+	{ "text": "mount2010 asking for {PREFIX}pat", "type": ActivityType.Listening },
+	{ "text": "my new {PREFIX}osubest 2pp play", "type": ActivityType.Watching },
+	{ "text": "my {PREFIX}profile", "type": ActivityType.Watching },
+	{ "text": "{PREFIX}presence entries", "type": ActivityType.Watching },
+	{ "text": "{PREFIX}neko pictures from nekos.life", "type": ActivityType.Watching }
+];
 
 export const actionText: ActionText = importAssets("./assets/data/actiontext.json");
 export const aldebaranTeam: AldebaranTeam = importAssets("./config/aldebaranTeam.json");
@@ -49,9 +74,10 @@ export const drpgItems: ItemList = importAssets("./assets/data/drpg/itemList.jso
 export const drpgLocationdb: LocationDB = importAssets("./assets/data/drpg/locations.json");
 export const imageUrls: ImageURLs = importAssets("./assets/data/imageurls.json");
 export const packageFile: PackageFile = importAssets("./package.json");
-export const presences: Presences = importAssets("./config/presence.json");
 
 export type OsuMode = keyof typeof Mode;
+
+export const drpgIDs = ["170915625722576896", "891614347015626762"];
 
 export const osuModeChoices = [
 	{ name: "osu!", value: "osu" },

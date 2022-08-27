@@ -1,7 +1,7 @@
 import util from "util";
-import { MessageEmbed } from "discord.js";
 import Command from "../../../groups/DeveloperCommand.js";
 import DiscordContext from "../../../structures/contexts/DiscordContext.js";
+import Embed from "../../../structures/Embed.js";
 
 export default class ViewSubcommand extends Command {
 	constructor() {
@@ -16,7 +16,7 @@ export default class ViewSubcommand extends Command {
 		const [id] = ctx.args as string[];
 		ctx.fetchUser(id).then(async user => {
 			const guilds = [];
-			const embed = new MessageEmbed()
+			const embed = new Embed()
 				.setAuthor({
 					name: `${user.tag} | ${user.id}`,
 					iconURL: user.avatarURL
@@ -30,7 +30,7 @@ export default class ViewSubcommand extends Command {
 					let elevation = null;
 					if (data.ownerId === user.id) {
 						elevation = "(Owner)";
-					} else if (member.permissions.has("ADMINISTRATOR")) {
+					} else if (member.permissions.has("Administrator")) {
 						elevation = "(Admin)";
 					}
 					guilds.push(`\`${guildId}\` **${data.name}** ${elevation !== null ? elevation : ""}`);
@@ -43,7 +43,7 @@ export default class ViewSubcommand extends Command {
 			const settings = guild.base.settings;
 			if (ctx.server) {
 				const owner = await ctx.server.guild.fetchOwner();
-				const embed = new MessageEmbed()
+				const embed = new Embed()
 					.setAuthor({
 						name: `${ctx.server.guild.name} | ${ctx.server.id}`,
 						iconURL: ctx.server.guild.iconURL() || undefined

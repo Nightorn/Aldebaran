@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageButton, MessageComponentInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageComponentInteraction } from "discord.js";
 import Command from "../../groups/GamesCommand.js";
 import DiscordContext from "../../structures/contexts/DiscordContext.js";
 import DiscordMessageContext from "../../structures/contexts/DiscordMessageContext.js";
@@ -35,22 +35,28 @@ export default class RpsCommand extends Command {
 			return ctx.reply("You can't play this game against a bot.");
 		}
 
+		if (target.id === ctx.author.id) {
+			return ctx instanceof DiscordSlashMessageContext
+				? ctx.reply("You can't play with yourself!", true, false)
+				: ctx.reply("You can't play with yourself!");
+		}
+
 		const introEmbed = this.createEmbed()
 			.setTitle("Rock. Paper. Scissors.")
-			.setDescription("The person you want to play with has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.");
+			.setDescription(`${target} has to accept your invitation by clicking the **Accept** button on this message.\nHere is how this game is going to go: once your opponent accepts your invitation, three buttons will appear; choose the winning one. The results will be sent to the channel where the game has begun.`);
 		
-		const acceptButton = new MessageButton()
-			.setStyle("SUCCESS")
+		const acceptButton = new ButtonBuilder()
+			.setStyle(ButtonStyle.Success)
 			.setLabel("Accept")
 			.setCustomId("ok");
-		const row = new MessageActionRow().setComponents([acceptButton]);
+		const row = new ActionRowBuilder<ButtonBuilder>().addComponents(acceptButton);
 		const opt = { embeds: [introEmbed.toDiscordEmbed()], components: [row] };
 		const msg = ctx instanceof DiscordSlashMessageContext
 			? await ctx.reply(opt, false, true)
 			: await (ctx as DiscordMessageContext).reply(opt);
 
 		const filter = (i: MessageComponentInteraction) => i.user.id === target.id;
-		msg.awaitMessageComponent({ filter }).then(async interaction => {
+		msg.awaitMessageComponent({ filter, time: 60000 }).then(async interaction => {
 			interaction.deferUpdate();
 
 			const startEmbed = this.createEmbed()
@@ -60,12 +66,12 @@ export default class RpsCommand extends Command {
 				})
 				.setDescription("And the fun begins now! Use the buttons below, and discover the winner once both of you have made their choice!");
 			
-			const emojiButton = (emoji: string) => new MessageButton()
-				.setStyle("SECONDARY")
+			const emojiButton = (emoji: string) => new ButtonBuilder()
+				.setStyle(ButtonStyle.Secondary)
 				.setEmoji(emoji)
 				.setCustomId(emoji);
 			const [rock, paper, scissors] = ["🪨", "🧻", "✂️"].map(emojiButton);
-			const actionRow = new MessageActionRow()
+			const actionRow = new ActionRowBuilder<ButtonBuilder>()
 				.setComponents([rock, paper, scissors]);
 			
 			const startOpt = {
@@ -73,7 +79,7 @@ export default class RpsCommand extends Command {
 				components: [actionRow]
 			};
 			const game = ctx instanceof DiscordSlashMessageContext
-				? await ctx.followUp(startOpt, false, true)
+				? await ctx.reply(startOpt, false, true)
 				: await (ctx as DiscordMessageContext).reply(startOpt);
 
 			const [authorPlay, targetPlay] = await Promise.all([
@@ -88,31 +94,34 @@ export default class RpsCommand extends Command {
 
 			let content;
 			if (authorResponse === targetResponse) {
-				content = `Both users played ${targetResponse}, retry!`;
+				content = `Both players played ${targetResponse}, retry!`;
 			} else if (win[authorResponse] === targetResponse) {
 				content = this.createEmbed()
 					.setAuthor({
 						name: `${ctx.author.username} won!`,
 						iconURL: ctx.author.avatarURL
 					})
-					.setDescription(`They played ${words[authorResponse]}, while **${target.username}** played ${words[targetResponse]}.`)
-					.toDiscordEmbed();
+					.setDescription(`They played ${words[authorResponse]}, while **${target.username}** played ${words[targetResponse]}.`);
 			} else {
 				content = this.createEmbed()
 					.setAuthor({
 						name: `${target.username} won!`,
 						iconURL: target.avatarURL
 					})
-					.setDescription(`They played ${words[targetResponse]}, while ${ctx.author.username} played ${words[authorResponse]}.`)
-					.toDiscordEmbed();
+					.setDescription(`They played ${words[targetResponse]}, while ${ctx.author.username} played ${words[authorResponse]}.`);
 			}
 
 			ctx instanceof DiscordSlashMessageContext
-				? ctx.followUp(content, false, true)
+				? ctx.reply(content, false, true)
 				: ctx.reply(content);
-		}).catch(error => {
-			ctx.reply("An error occured with this RPS game.");
-			throw error;
+		}).catch(() => {
+			const embed = this.createEmbed()
+				.setAuthor({
+					name: ctx.author.username,
+					iconURL: ctx.author.avatarURL
+				})
+				.setDescription(`${target} has declined your invitation.`);
+			ctx.reply(embed);
 		});
 	}
 }

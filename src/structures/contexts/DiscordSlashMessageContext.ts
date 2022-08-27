@@ -1,4 +1,4 @@
-import { MessageOptions, MessageEmbed, CommandInteraction, GuildMember, Message, InteractionReplyOptions, TextBasedChannel } from "discord.js";
+import { EmbedBuilder, ChatInputCommandInteraction, GuildMember, Message, InteractionReplyOptions, TextBasedChannel, MessagePayload, InteractionResponse } from "discord.js";
 import Command from "../../groups/Command.js";
 import { CommandMode, If } from "../../utils/Constants";
 import DiscordClient from "../DiscordClient.js";
@@ -7,23 +7,23 @@ import Server from "../models/DiscordServer.js";
 import User from "../models/DiscordUser.js";
 import DiscordContext from "./DiscordContext.js";
 
-type M = Promise<Message<boolean>>;
-type DefaultMessage = string | Embed | MessageEmbed;
+type DefaultMessage = string | Embed | EmbedBuilder | MessagePayload;
 export default class DiscordSlashMessageContext
 	<InGuild extends boolean = false> extends DiscordContext<InGuild>
 {
-	private interaction: CommandInteraction;
+	private interaction: ChatInputCommandInteraction;
 	public command: Command;
 
 	constructor(
 		client: DiscordClient,
-		interaction: CommandInteraction,
+		interaction: ChatInputCommandInteraction,
 		author: User,
 		server: If<InGuild, Server>
 	) {
 		super(author, client, server);
 		this.interaction = interaction;
 		
+		interaction.options.data
 		const subcommand = interaction.options.getSubcommand(false);
 		if (subcommand) {
 			this.command = (client.commands
@@ -69,43 +69,32 @@ export default class DiscordSlashMessageContext
 		return false;
 	}
 
-	async followUp(
-		content: string | InteractionReplyOptions | MessageEmbed,
-		ephemeral = false,
-		fetchReply = false
-	) {
-		if (content instanceof MessageEmbed) {
-			return this.interaction
-				.followUp({ embeds: [content], ephemeral, fetchReply }) as M;
-		} else if (typeof content === "string") {
-			return this.interaction.followUp({ content, fetchReply }) as M;
-		} else {
-			return this.interaction.followUp({ ...content, fetchReply }) as M;
-		}
-	}
-
-	async reply(content: DefaultMessage | MessageOptions): Promise<never>;
+	async reply(content: DefaultMessage): Promise<never>;
 	async reply<B extends boolean>(
-		content: DefaultMessage | InteractionReplyOptions,
+		content: DefaultMessage |  InteractionReplyOptions,
 		ephemeral?: boolean,
 		fetchReply?: B
-	): Promise<B extends true ? Message<boolean> : void>; 
+	): Promise<B extends true ? Message<boolean> : InteractionResponse<boolean>>; 
 
 	async reply(
-		content: DefaultMessage | MessageOptions | InteractionReplyOptions,
+		content: DefaultMessage | InteractionReplyOptions,
 		ephemeral = false,
 		fetchReply = false
 	) {
+		const replyMethod = this.interaction.replied
+			? this.interaction.followUp.bind(this.interaction)
+			: this.interaction.reply.bind(this.interaction);
+
 		if (content instanceof Embed) {
 			const embed = content.toDiscordEmbed();
-			return this.interaction.reply({ embeds: [embed], ephemeral, fetchReply });
-		} else if (content instanceof MessageEmbed) {
-			return this.interaction.reply({ embeds: [content], ephemeral, fetchReply });
+			return replyMethod({ embeds: [embed], ephemeral, fetchReply });
+		} else if (content instanceof EmbedBuilder) {
+			return replyMethod({ embeds: [content], ephemeral, fetchReply });
 		} else if (typeof content === "string") {
-			return this.interaction.reply({ content, ephemeral, fetchReply });
+			return replyMethod({ content, ephemeral, fetchReply });
 		} else {
 			const args = { ...content, ephemeral, fetchReply };
-			return this.interaction.reply(args as InteractionReplyOptions);
+			return replyMethod(args as InteractionReplyOptions);
 		}
 	}
 }
