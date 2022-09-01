@@ -24,7 +24,7 @@ export default async (ctx: DiscordMessageContext<true>) => {
 		const ping = timerSetting === "adventure" || timerSetting === "on"
 			? `<@${author.id}>`
 			: `${author.username},`;
-		ctx.channel.send(`${ping} party adventure time! :crossed_swords:`).then(msg => {
+		ctx.channel.send(`${ping} party adventure time! :crossed_swords: </padv:1010513953903874069>`).then(msg => {
 			if (deleteSetting === "on") {
 				setTimeout(() => msg.delete(), 10000);
 			}

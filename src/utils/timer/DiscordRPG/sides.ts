@@ -30,7 +30,7 @@ export default async (ctx: DiscordMessageContext<true>) => {
 				? `<@${author.id}>`
 				: `${author.username},`;
 			const randomemoji = emoji[Math.floor(Math.random() * emoji.length)];
-			ctx.channel.send(`${ping} sides time! ${randomemoji}`).then(msg => {
+			ctx.channel.send(`${ping} sides time! ${randomemoji} </mine:1010513953903874076> </chop:1010513953903874072> </forage:1010513953903874075> </fish:1010513953903874074>`).then(msg => {
 				if (deleteSetting === "on") {
 					setTimeout(() => msg.delete(), 180000);
 				}
