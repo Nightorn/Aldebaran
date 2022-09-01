@@ -118,7 +118,7 @@ export default async (ctx: DiscordMessageContext) => {
 		const hpMatches = [...ctx.content.matchAll(adv3HealthRegex)];
 		if (hpMatches) {
 			const playerHP = Number(hpMatches[0][1]);
-			const petHP = hpMatches[1][1] ? Number(hpMatches[1][1]) : 0;
+			const petHP = hpMatches[1] ? Number(hpMatches[1][1]) : 0;
 			return percentageCheck(user, ctx, playerHP, petHP);
 		}
 	}

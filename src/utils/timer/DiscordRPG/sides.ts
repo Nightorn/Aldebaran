@@ -34,7 +34,7 @@ export default async (ctx: DiscordMessageContext<true>) => {
 				if (deleteSetting === "on") {
 					setTimeout(() => msg.delete(), 180000);
 				}
-			});
+			}).catch(() => {});
 			author.timers.sides = null;
 		}, 299250);
 
@@ -72,6 +72,6 @@ export default async (ctx: DiscordMessageContext<true>) => {
 					});
 				}
 			});
-		});
+		}).catch(() => {});
 	}
 };
