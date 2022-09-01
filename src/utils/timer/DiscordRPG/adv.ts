@@ -37,7 +37,7 @@ export default async (ctx: MessageContext) => {
 				|| user.settings.timerping === "on"
 				? `<@${ctx.message.author.id}>`
 				: `${ctx.message.author.username},`;
-			ctx.reply(`${ping} adventure time! :crossed_swords:`).then(msg => {
+			ctx.reply(`${ping} adventure time! :crossed_swords: </adv:1010513953815806044>`).then(msg => {
 				if (guild.settings.autodelete === "on") {
 					setTimeout(() => msg.delete(), 10000);
 				}

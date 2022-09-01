@@ -65,7 +65,7 @@ export default async (ctx: MessageContext) => {
 										|| user.settings.timerping === "sides"
 										? `<@${user.id}>`
 										: `${user.username},`;
-									ctx.reply(`${ping} sides time! ${randomemoji}`).then(msg => {
+									ctx.reply(`${ping} sides time! ${randomemoji} </mine:1010513953903874076> </chop:1010513953903874072> </forage:1010513953903874075> </fish:1010513953903874074>`).then(msg => {
 										if (guild.settings.autodelete === "on") {
 											setTimeout(() => msg.delete(), 180000);
 										}
