@@ -3,6 +3,7 @@ import RevoltServerManager from "./models/managers/RevoltServerManager.js";
 import RevoltUserManager from "./models/managers/RevoltUserManager.js";
 import Client from "./Client.js";
 import { revoltMessage } from "../events/message.js";
+import { revoltReady } from "../events/ready.js";
 
 export default class RevoltClient extends Client {
 	revolt: RjsClient;
@@ -15,6 +16,7 @@ export default class RevoltClient extends Client {
 		this.revolt = new RjsClient();
 
 		this.revolt.on("message", msg => revoltMessage(this, msg));
+		this.revolt.on("ready", () => revoltReady(this));
 		this.revolt.loginBot(process.env.REVOLT_TOKEN || "").then(() => {
 			console.log(`\x1b[36m# Revolt Client is logged in.\x1b[0m`)
 		});

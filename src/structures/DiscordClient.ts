@@ -4,7 +4,7 @@ import { Client as DjsClient, Partials } from "discord.js";
 import interactionCreate from "../events/interactionCreate.js";
 import messageUpdate from "../events/messageUpdate.js";
 import { discordMessage } from "../events/message.js";
-import ready from "../events/ready.js";
+import { discordReady } from "../events/ready.js";
 import Client from "./Client.js";
 import DiscordServerManager from "./models/managers/DiscordServerManager.js";
 import DiscordUserManager from "./models/managers/DiscordUserManager.js";
@@ -45,7 +45,7 @@ export default class DiscordClient extends Client {
 		this.discord.on("interactionCreate", int => interactionCreate(this, int));
 		this.discord.on("messageCreate", msg => discordMessage(this, msg));
 		this.discord.on("messageUpdate", msg => messageUpdate(this, msg));
-		this.discord.on("ready", () => ready(this));
+		this.discord.on("ready", () => discordReady(this));
 		this.discord.login()
 			.then(() => console.log(`\x1b[36m# Discord Client is logged in.\x1b[0m`));
 	}

@@ -1,6 +1,6 @@
 {
   "name": "aldebaran",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "description": "Utility",
   "main": "src/app.ts",
   "dependencies": {
