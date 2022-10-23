@@ -122,7 +122,7 @@ export default class Embed {
 
 		return {
 			colour: this.color,
-			description: `${titleBit}${description}${footer}`,
+			description: `${titleBit}${description}${footer ? `\n\n${footer}` : ""}`,
 			icon_url: this.author?.iconURL,
 			media: imageURL,
 			title: this.author?.name,
