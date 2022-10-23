@@ -20,6 +20,16 @@ export default class Embed {
 	public timestamp?: Date;
 	public url?: string;
 
+	static async sendToAutumn(imageURL: string) {
+		const image = await axios.get(imageURL, { responseType: "stream" });
+
+		const form = new FormData();
+		form.append("file", image.data);
+		const id = await axios.post(autumnUploadURL, form);
+
+		return id.data.id as string;
+	}
+
 	addField(title: string, content: string, inline?: boolean) {
 		this.fields.push({ title, content, inline });
 		return this;
@@ -106,21 +116,15 @@ export default class Embed {
 			: `${footerBit || ""}${timestampBit || ""}`;
 
 		// attachments need to be uploaded to Autumn, Revolt's file server
-		if (this.imageURL) {
-			const image = await axios.get(this.imageURL, { responseType: "stream" });
-
-			const form = new FormData();
-			form.append("file", image.data);
-			const id = await axios.post(autumnUploadURL, form);
-
-			this.imageURL = id.data.id;
-		}
+		const imageURL = this.imageURL
+			? await Embed.sendToAutumn(this.imageURL)
+			: null;
 
 		return {
 			colour: this.color,
 			description: `${titleBit}${description}${footer}`,
 			icon_url: this.author?.iconURL,
-			media: this.imageURL,
+			media: imageURL,
 			title: this.author?.name,
 			url: this.author?.url
 		};
