@@ -57,6 +57,8 @@ export async function revoltMessage(
 		: null;
 	const ctx = new RevoltMessageContext(author, client, message, guild);
 
+	if ((ctx.content as string).indexOf(ctx.prefix) !== 0) return;
+
 	if (ctx.command && ctx.mode === "HELP") {
 		ctx.reply("Support for help has not yet been implemented.");
 	} else if (ctx.command) {
