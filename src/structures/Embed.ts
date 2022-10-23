@@ -88,18 +88,22 @@ export default class Embed {
 	}
 
 	async toRevoltEmbed() {
-		let description = this.description ? `${this.description}` : "";
-		for (const field of this.fields) {
-			description += `\n> \\> **${field.title}**\n> ${field.content}\n`;
-		}
+		const fields = this.fields
+			.map(f => `### ${f.title}\n${f.content.trim()}`)
+			.join("\n###### ‎\n");
 
+		const description = this.description && fields
+			? `${this.description || ""}\n###### ‎\n${fields}`.trim()
+			: `${this.description || ""}${fields}`.trim();
+
+		const title = this.url ? `[${this.title}](${this.url})` : this.title || "";
+		const titleBit = title ? `### ${title}\n` : "";
+		
 		const timestampBit = this.timestamp?.toLocaleDateString();
 		const footerBit = this.footer ? `##### ${this.footer.text}` : "";
 		const footer = timestampBit && footerBit
 			? `${footerBit} 🞄 ${timestampBit}`
 			: `${footerBit || ""}${timestampBit || ""}`;
-		const title = this.url ? `[${this.title}](${this.url})` : this.title;
-		const titleBit = title ? `### ${title}` : "";
 
 		// attachments need to be uploaded to Autumn, Revolt's file server
 		if (this.imageURL) {
@@ -114,7 +118,7 @@ export default class Embed {
 
 		return {
 			colour: this.color,
-			description: `${titleBit}\n${description}\n${footer}`,
+			description: `${titleBit}${description}${footer}`,
 			icon_url: this.author?.iconURL,
 			media: this.imageURL,
 			title: this.author?.name,
