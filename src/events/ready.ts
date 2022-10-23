@@ -5,6 +5,10 @@ import axios from "axios";
 
 const apiUrl = "https://api.revolt.chat/";
 
+function replace(text: string, values: { [key: string]: string | number }) {
+	return text.replace(/{([A-Z]+)}/g, (_, key) => String(values[key]));
+}
+
 async function updateRevoltStatus(text: string) {
 	await axios.patch(`${apiUrl}/users/@me`,
 		{ status: { text, presence: "Online" } },
@@ -26,49 +30,35 @@ export async function discordReady(client: DiscordClient) {
 		`\x1b[36m# ${client.discord.user.username} has started!${devMode}\x1b[0m`
 	);
 
-	const users = client.discord.users.cache.size;
-	const channels = client.discord.channels.cache.size;
-	const guilds = client.discord.guilds.cache.size;
-	console.log(
-		`\x1b[36m# ${users} users, ${channels} channels, ${guilds} servers\x1b[0m`
-	);
-
-	const parseText = (value: string) => {
-		let text = value;
-		text = text.replace("{NSERVERS}", formatNumber(guilds))
-			.replace("{NUSERS}", formatNumber(users))
-			.replace("{VERSION}", client.version)
-			.replace("{PREFIX}", process.env.PREFIX || "&");
-		return text;
-	};
-
 	client.discord.user.setActivity("for a few seconds now");
 
 	const { presence } = client.config;
 	setInterval(() => {
 		const { text, type } = presence[Math.floor(Math.random() * presence.length)];
-		client.discord.user.setActivity(parseText(text), { type });
+		const activity = replace(text, {
+			"NSERVERS": formatNumber(client.discord.guilds.cache.size),
+			"NUSERS": formatNumber(client.discord.users.cache.size),
+			"PREFIX": process.env.PREFIX || "&",
+			"VERSION": client.version
+		});
+
+		client.discord.user.setActivity(activity, { type });
 	}, 30000);
 }
 
 export async function revoltReady(client: RevoltClient) {
-	const users = client.revolt.users.size;
-	const servers = client.revolt.servers.size;
-
-	const parseText = (value: string) => {
-		let text = value;
-		text = text.replace("{NSERVERS}", formatNumber(servers))
-			.replace("{NUSERS}", formatNumber(users))
-			.replace("{VERSION}", client.version)
-			.replace("{PREFIX}", process.env.PREFIX || "&");
-		return text;
-	};
-
 	updateRevoltStatus("Online!");
 
 	const { presence } = client.config;
 	setInterval(() => {
 		const { text, type } = presence[Math.floor(Math.random() * presence.length)];
-		updateRevoltStatus(`${activityType[type]} ${parseText(text)}`);
+		const activity = replace(text, {
+			"NSERVERS": formatNumber(client.revolt.servers.size),
+			"NUSERS": formatNumber(client.revolt.users.size),
+			"PREFIX": process.env.PREFIX || "&",
+			"VERSION": client.version
+		});
+
+		updateRevoltStatus(`${activityType[type]} ${activity}`);
 	}, 30000);
 }

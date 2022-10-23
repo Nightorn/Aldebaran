@@ -62,7 +62,6 @@ export const presences: PresenceList = [
 	{ "text": "mount2010 asking for {PREFIX}pat", "type": ActivityType.Listening },
 	{ "text": "my new {PREFIX}osubest 2pp play", "type": ActivityType.Watching },
 	{ "text": "my {PREFIX}profile", "type": ActivityType.Watching },
-	{ "text": "{PREFIX}presence entries", "type": ActivityType.Watching },
 	{ "text": "{PREFIX}neko pictures from nekos.life", "type": ActivityType.Watching }
 ];
 
