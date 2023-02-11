@@ -145,7 +145,7 @@ const UserSettingsModel = {
 		category: "DiscordRPG"
 	},
 	sidestimer: {
-		support: sidestimerValues.includes,
+		support: (value: string) => sidestimerValues.includes(value),
 		help: "Sides Timer - [on | off | primaryAction (mine, forage...)]",
 		showOnlyIfBotIsInGuild: "170915625722576896",
 		category: "DiscordRPG"
@@ -162,7 +162,7 @@ const UserSettingsModel = {
 		category: "DiscordRPG"
 	},
 	timezone: {
-		support: timezoneSupport,
+		support: (value: string) => timezoneSupport(value),
 		help:
 	"Sets your timezone - [GMT, UTC, or [tz database timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)]",
 		category: process.env.NAME || "Aldebaran"

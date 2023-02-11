@@ -108,7 +108,7 @@ export default class UconfigCommand extends Command {
 			} else {
 				const embed = new Embed()
 					.setTitle("Not supported")
-					.setDescription(`This value is not vaild. Please check \`${ctx.prefix}uconfig list\` for the vaild values for this setting.`)
+					.setDescription(`This value is not valid. Please check \`${ctx.prefix}uconfig list\` for the vaild values for this setting.`)
 					.setColor("Red");
 				ctx.reply(embed);
 			}
