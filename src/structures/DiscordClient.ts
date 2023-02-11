@@ -42,11 +42,20 @@ export default class DiscordClient extends Client {
 				.catch(console.error);
 		}
 
-		this.discord.on("interactionCreate", int => interactionCreate(this, int));
-		this.discord.on("messageCreate", msg => discordMessage(this, msg));
-		this.discord.on("messageUpdate", msg => messageUpdate(this, msg));
-		this.discord.on("ready", () => discordReady(this));
-		this.discord.login()
-			.then(() => console.log(`\x1b[36m# Discord Client is logged in.\x1b[0m`));
+		this.discord
+			.on("interactionCreate", int => interactionCreate(this, int))
+			.on("messageCreate", msg => discordMessage(this, msg))
+			.on("messageUpdate", msg => messageUpdate(this, msg))
+			.on("ready", () => discordReady(this));
+		this.login();
+	}
+
+	private login() {
+		this.discord.login().then(() => {
+			console.log(`\x1b[36m# Discord Client is logged in.\x1b[0m`)
+		}).catch(err => {
+			console.error(`Could not connect to the Discord API. Retrying in 5 minutes.\n${err}"`);
+			setTimeout(() => this.login(), 300000);
+		})
 	}
 }

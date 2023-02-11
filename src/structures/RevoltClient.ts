@@ -10,15 +10,21 @@ export default class RevoltClient extends Client {
 	servers = new RevoltServerManager(this);
 	users = new RevoltUserManager(this);
 
+	private login() {
+		this.revolt.loginBot(process.env.REVOLT_TOKEN || "").then(() => {
+			console.log(`\x1b[36m# Revolt Client is logged in.\x1b[0m`)
+		}).catch(err => {
+			console.error(`Could not connect to the Revolt API. Retrying in 5 minutes.\n${err}"`);
+			setTimeout(() => this.login(), 300000);
+		});
+	}
+
 	public constructor() {
 		super();
 
-		this.revolt = new RjsClient();
-
-		this.revolt.on("message", msg => revoltMessage(this, msg));
-		this.revolt.on("ready", () => revoltReady(this));
-		this.revolt.loginBot(process.env.REVOLT_TOKEN || "").then(() => {
-			console.log(`\x1b[36m# Revolt Client is logged in.\x1b[0m`)
-		});
+		this.revolt = new RjsClient()
+			.on("message", msg => revoltMessage(this, msg))
+			.on("ready", () => revoltReady(this));
+		this.login();
 	}
 }
