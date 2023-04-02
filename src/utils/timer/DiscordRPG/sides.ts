@@ -8,9 +8,9 @@ export default async (ctx: DiscordMessageContext<true>) => {
 	const author = await ctx.fetchUser(ctx.interaction.user.id);
 
 	const deleteSetting = ctx.server.base.getSetting("autodelete");
-	const serverSetting = ctx.server.base.getSetting("adventuretimer");
+	const serverSetting = ctx.server.base.getSetting("sidestimer");
 	const timerSetting = author.base.getSetting("timerping");
-	const userSetting = author.base.getSetting("adventuretimer") || "off";
+	const userSetting = author.base.getSetting("sidestimer") || "off";
 	const primaryAction = userSetting === "on" ? "mine" : userSetting;
 
 	if (
