@@ -23,7 +23,7 @@
     "os": "^0.1.2",
     "request": "^2.88.2",
     "revolt.js": "^6.0.13",
-    "sequelize": "^6.21.4",
+    "sequelize": "^6.29.0",
     "tenorjs": "^1.0.10",
     "utf-8-validate": "^5.0.9",
     "xml2js": "^0.4.23",
