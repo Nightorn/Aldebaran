@@ -1,12 +1,25 @@
-FROM node:16-alpine
+FROM node:19-alpine
 
+# Preparing the distribution
 RUN apk update
 RUN apk add gcc git g++ make musl-dev pkgconfig python3
 
+# Let the fun begin
 WORKDIR /app
 
-COPY package*.json ./
+# Dependencies installation
+COPY package.json ./
+COPY yarn.lock ./
 RUN yarn install
-COPY . .
 
+# Compiling TS code
+COPY tsconfig.json ./
+RUN tsc
+
+# Copying files
+COPY assets/ assets/
+COPY config/ config/
+COPY src/ src/
+
+# Running Aldebaran
 CMD npm start
