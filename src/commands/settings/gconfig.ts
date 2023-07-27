@@ -40,7 +40,11 @@ export default class GconfigCommand extends Command {
 			const list: { [key: string]: { [key in ServerSettingKey]?: Setting } } = {};
 			for (const [key, data] of Object.entries(parameters)) {
 				if (!list[data.category]) list[data.category] = {};
-				if ("showOnlyIfBotIsInGuild" in data && ctx instanceof DiscordContext) {
+				if (
+					"showOnlyIfBotIsInGuild" in data
+					&& ctx.server
+					&& ctx instanceof DiscordContext
+				) {
 					try {
 						await ctx.server.guild.members.fetch(data.showOnlyIfBotIsInGuild);
 						list[data.category][key as ServerSettingKey] = data;

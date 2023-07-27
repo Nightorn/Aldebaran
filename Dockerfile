@@ -1,25 +1,39 @@
-FROM node:19-alpine
+# ========== Stage 1: Base Image ========== #
+# Note: zlib-sync only compiles with node<=18
+FROM node:18-alpine AS base
 
-# Preparing the distribution
-RUN apk update
-RUN apk add gcc git g++ make musl-dev pkgconfig python3
-
-# Let the fun begin
 WORKDIR /app
-
-# Dependencies installation
 COPY package.json ./
+
+
+# ========= Stage 2: Dependencies ========= #
+FROM base AS dependencies
+
+RUN apk update
+RUN apk add --no-cache git g++ make musl-dev python3
+
+RUN git config --global url."https://".insteadOf ssh://
+
 COPY yarn.lock ./
-RUN yarn install
+RUN yarn install --production
 
-# Compiling TS code
+
+# ============= Stage 3: Build ============ #
+FROM dependencies AS build
+
+COPY src/ src/
 COPY tsconfig.json ./
-RUN tsc
 
-# Copying files
+RUN yarn install
+RUN yarn build
+
+
+# ========== Stage 4: Production ========== #
+FROM base AS production
+
+COPY --from=dependencies /app/node_modules node_modules/
+COPY --from=build /app/dist dist/
 COPY assets/ assets/
 COPY config/ config/
-COPY src/ src/
 
-# Running Aldebaran
-CMD npm start
+CMD yarn start
