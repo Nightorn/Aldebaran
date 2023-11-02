@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  db:
+    ports:
+      - 3307:3306
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
+      MARIADB_DATABASE: aldebaran
+      MARIADB_USER: aldebaran
+      MARIADB_PASSWORD: aldebaran
