@@ -23,7 +23,8 @@ export default class DatabaseProvider {
 						freezeTableName: true,
 						initialAutoIncrement: "10",
 						underscored: true
-					}
+					},
+					port: process.env.MYSQL_PORT ? parseInt(process.env.MYSQL_PORT) : 3306,
 				}
 			);
 		}
