@@ -15,6 +15,8 @@ RUN apk add --no-cache git g++ make musl-dev python3
 RUN git config --global url."https://".insteadOf ssh://
 
 COPY yarn.lock ./
+
+RUN yarn global add node-gyp
 RUN yarn install --production
 
 
