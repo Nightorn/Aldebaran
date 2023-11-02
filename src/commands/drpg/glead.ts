@@ -16,14 +16,14 @@ function apiFetch(endpoint: string) {
 	return new Promise((resolve, reject) => {
 		request({
 			uri: `https://api.discorddungeons.me/v3/${endpoint}`,
-			headers: { Authorization: process.env.API_DISCORDRPG }
+			headers: { Authorization: `X-Api-Key: ${process.env.API_DISCORDRPG}` },
 		}, (err, response, body) => {
 			if (err) {
 				reject(err);
 			} else if (response.statusCode !== 200) {
 				reject(`Unable to access API. Response code ${response.statusCode}`);
 			} else {
-				resolve(JSON.parse(body).data);
+				resolve(JSON.parse(body));
 			}
 		});
 	});

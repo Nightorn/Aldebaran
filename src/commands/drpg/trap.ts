@@ -45,7 +45,7 @@ export default class TrapCommand extends Command {
 
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${userid}`,
-			headers: { Authorization: process.env.API_DISCORDRPG }
+			headers: { Authorization: `X-Api-Key: ${process.env.API_DISCORDRPG}` },
 		}, async (err, response, body) => {
 			if (err) throw err;
 			if (response.statusCode === 404) {
@@ -55,7 +55,7 @@ export default class TrapCommand extends Command {
 			}
 			
 			const target = await ctx.fetchUser(userid);
-			const user = JSON.parse(body).data as User;
+			const user = JSON.parse(body) as User;
 			let luck = isMax ? user.level * 5 : user.attributes.salvaging;
 			if (luck === 0) luck = 1;
 			const data = user.location.traps;

@@ -30,13 +30,13 @@ export default class StatsCommand extends Command {
 		ctx.fetchUser(args.user || ctx.author.id).then(user => {
 			request({
 				uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
-				headers: { Authorization: process.env.API_DISCORDRPG }
+				headers: { Authorization: `X-Api-Key: ${process.env.API_DISCORDRPG}` },
 			}, (err, response, body) => {
 				if (err) throw err;
 				if (response.statusCode === 404) {
 					ctx.reply("it looks like the user you specified has not started his adventure on DiscordRPG yet.");
 				} else if (response.statusCode === 200) {
-					const data = JSON.parse(body).data as User;
+					const data = JSON.parse(body) as User;
 
 					const skills = [];
 					for (const [key, value] of Object.entries(data.skills)) {

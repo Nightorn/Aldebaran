@@ -31,14 +31,14 @@ export default class PlantCommand extends Command {
 		const plantId = args.plant || null;
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${userid}`,
-			headers: { Authorization: process.env.API_DISCORDRPG }
+			headers: { Authorization: `X-Api-Key: ${process.env.API_DISCORDRPG}` },
 		}, async (err, response, body) => {
 			if (err) throw err;
 			if (response.statusCode === 404) {
 				return ctx.reply("it looks like the user you specified has not started his adventure on DiscordRPG yet.");
 			} else if (response.statusCode === 200) {
 				ctx.fetchUser(userid).then(target => {
-					const { data } = JSON.parse(body) as { data: User };
+					const data = JSON.parse(body) as User;
 					if (data.location === undefined) return ctx.reply(`Hey **${data.name}**, travel somewhere and set a trap on your way!`);
 					if (data.location.saplings === null || data.location.saplings === undefined) return ctx.reply(`Hey **${data.name}**, please plant some saplings at your purchased fields before!`);
 					const f = (number: number) => String(number).length === 1 ? `0${number}` : number;

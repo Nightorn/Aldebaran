@@ -85,8 +85,8 @@ export default class WallsCommand extends Command {
 
 		request({
 			uri: `http://api.discorddungeons.me/v3/user/${user.id}`,
-			headers: { Authorization: process.env.API_DISCORDRPG }
-		}, (err, _, body) => {
+			headers: { Authorization: `X-Api-Key: ${process.env.API_DISCORDRPG}` },
+		}, (err, response, body) => {
 			if (err) throw err;
 			let data;
 			try {
@@ -95,11 +95,10 @@ export default class WallsCommand extends Command {
 				ctx.reply("the DiscordRPG API seems down, please retry later.");
 				return;
 			}
-			if (data.status === 404) {
+			if (response.statusCode === 404) {
 				ctx.reply("It looks like the player you mentioned hasn't started their adventure on DiscordRPG.");
 				return;
 			}
-			data = data.data;
 
 			const [wall, baseLvl] = userWall(ctx, data.level);
 			const userAtWall = data.level === baseLvl;
