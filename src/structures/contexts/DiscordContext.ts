@@ -3,7 +3,7 @@ import MessageContext from "./MessageContext.js";
 import DiscordClient from "../DiscordClient.js";
 import DiscordUser from "../models/DiscordUser.js";
 import DiscordServer from "../models/DiscordServer.js";
-import { GuildMember, Message, EmbedBuilder, MessagePayload, ReplyMessageOptions } from "discord.js";
+import { GuildMember, Message, EmbedBuilder, MessagePayload, BaseMessageOptions } from "discord.js";
 import Embed from "../Embed.js";
 
 export default abstract class DiscordContext
@@ -27,7 +27,7 @@ export default abstract class DiscordContext
 	abstract get member(): If<InGuild, GuildMember>;
 
 	abstract reply(
-		content: string | Embed | MessagePayload | ReplyMessageOptions | EmbedBuilder
+		content: string | Embed | MessagePayload | BaseMessageOptions | EmbedBuilder
 	): Promise<Message<boolean>>;
 
 	async fetchServer(id: string) {

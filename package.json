@@ -1,6 +1,6 @@
 {
   "name": "aldebaran",
-  "version": "4.2.5",
+  "version": "4.2.6",
   "description": "Utility",
   "main": "src/app.ts",
   "dependencies": {
@@ -8,7 +8,7 @@
     "axios": "^0.27.2",
     "bufferutil": "^4.0.6",
     "discord-api-types": "^0.37.4",
-    "discord.js": "^14.3.0",
+    "discord.js": "^14.14.1",
     "dotenv": "^16.0.1",
     "erlpack": "discord/erlpack",
     "form-data": "^4.0.0",
@@ -38,7 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",
     "eslint": "^8.22.0",
-    "typescript": "^4.7.4"
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "build": "npx tsc",

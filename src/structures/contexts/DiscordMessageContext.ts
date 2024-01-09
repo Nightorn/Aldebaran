@@ -1,4 +1,4 @@
-import { GuildMember, Message, EmbedBuilder, MessagePayload, TextChannel, ReplyMessageOptions } from "discord.js";
+import { GuildMember, Message, EmbedBuilder, MessagePayload, TextChannel, BaseMessageOptions } from "discord.js";
 import DiscordContext from "./DiscordContext.js";
 import Server from "../models/DiscordServer.js";
 import User from "../models/DiscordUser.js";
@@ -8,7 +8,7 @@ import Command from "../../groups/Command.js";
 import { If } from "../../utils/Constants.js";
 import Embed from "../Embed.js";
 
-type NoEmbedMessage = string | MessagePayload | ReplyMessageOptions;
+type NoEmbedMessage = string | MessagePayload | BaseMessageOptions;
 
 export default class DiscordMessageContext
 	<InGuild extends boolean = false> extends DiscordContext<InGuild>
